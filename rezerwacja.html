@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rezerwacja — Umów wizytę online | Car Service Nikol Jastrowo</title>
+  <meta name="description" content="Umów wizytę w Car Service Nikol. Formularz online: imię, telefon, marka auta, usługa, data. Po wysłaniu otwiera się WhatsApp z wiadomością. Sobota 8–18, niedziela 10–16. Jastrowo 64-500.">
+  <link rel="canonical" href="https://carservicenikol.pl/rezerwacja.html">
+  <link rel="alternate" hreflang="pl" href="https://carservicenikol.pl/rezerwacja.html">
+  <link rel="alternate" hreflang="ru" href="https://carservicenikol.pl/ru/rezerwacja.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">Car Service <span>Nikol</span></a>
+      <button class="menu-toggle" aria-label="Menu">☰</button>
+      <nav class="nav-main">
+        <a href="index.html">Strona główna</a>
+        <a href="uslugi.html">Usługi</a>
+        <a href="cennik.html">Cennik</a>
+        <a href="rezerwacja.html">Rezerwacja</a>
+        <a href="kontakt.html">Kontakt</a>
+        <div class="lang-switcher">
+          <a href="rezerwacja.html" class="active">PL</a>
+          <a href="ru/rezerwacja.html">RU</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Umów wizytę online</h1>
+        <p>Wypełnij formularz i kliknij „Wyślij do WhatsApp” — otworzy się rozmowa z uzupełnioną wiadomością. Potwierdzimy termin.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="booking-box">
+          <p><strong>Godziny otwarcia:</strong> sobota 8:00–18:00, niedziela 10:00–16:00. Wernisazowa 21, Jastrowo 64-500.</p>
+          <form id="rezerwacja-form" class="booking-form">
+            <label for="rezerwacja-imie">Imię / nazwa</label>
+            <input type="text" id="rezerwacja-imie" name="imie" placeholder="np. Jan Kowalski" required>
+            <label for="rezerwacja-tel">Telefon</label>
+            <input type="tel" id="rezerwacja-tel" name="telefon" placeholder="+48 ..." required>
+            <label for="rezerwacja-marka">Marka auta</label>
+            <input type="text" id="rezerwacja-marka" name="marka" placeholder="np. VW, BMW, Toyota">
+            <label for="rezerwacja-usluga">Wybór usługi</label>
+            <select id="rezerwacja-usluga" name="usluga">
+              <option value="">— wybierz —</option>
+              <option value="Programowanie kluczy">Programowanie kluczy</option>
+              <option value="Wulkanizacja / opony">Wulkanizacja / opony</option>
+              <option value="Dojazd mistrza">Dojazd mistrza</option>
+              <option value="Diagnostyka">Diagnostyka</option>
+              <option value="Wymiana oleju i filtrów">Wymiana oleju i filtrów</option>
+              <option value="Hamulce / zawieszenie">Hamulce / zawieszenie</option>
+              <option value="Inne">Inne</option>
+            </select>
+            <label for="rezerwacja-dzien">Żądana data / dzień</label>
+            <input type="text" id="rezerwacja-dzien" name="dzien" placeholder="np. sobota 14.03, niedziela 15.03">
+            <label for="rezerwacja-opis">Krótki opis (usterka / usługa)</label>
+            <textarea id="rezerwacja-opis" name="opis" rows="3" placeholder="np. wymiana oleju, diagnostyka, wymiana opon..."></textarea>
+            <button type="submit" class="btn btn-whatsapp">Wyślij do WhatsApp</button>
+          </form>
+          <p class="text-center" style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 1rem;">Albo zadzwoń: <a href="tel:+48794935734">+48 794 935 734</a> · E-mail: <a href="mailto:nikolcarservice@gmail.com">nikolcarservice@gmail.com</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo">Car Service <span>Nikol</span></span>
+          <p>Wernisazowa 21, Jastrowo 64-500 (Szamotuły)<br>Tel. <a href="tel:+48794935734">+48 794 935 734</a><br>E-mail: <a href="mailto:nikolcarservice@gmail.com">nikolcarservice@gmail.com</a></p>
+        </div>
+        <div class="footer-nav">
+          <h4>Nawigacja</h4>
+          <ul>
+            <li><a href="index.html">Strona główna</a></li>
+            <li><a href="uslugi.html">Usługi</a></li>
+            <li><a href="cennik.html">Cennik</a></li>
+            <li><a href="rezerwacja.html">Rezerwacja</a></li>
+            <li><a href="kontakt.html">Kontakt</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav">
+          <h4>Kontakt</h4>
+          <ul>
+            <li><a href="https://wa.me/48794935734">WhatsApp</a></li>
+            <li><a href="tel:+48794935734">Zadzwoń</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>© Car Service Nikol. Jastrowo (Szamotuły).</p></div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/48794935734" class="whatsapp-float" aria-label="Napisz na WhatsApp">💬</a>
+  <script src="js/main.js"></script>
+  <script>
+    (function() {
+      var form = document.getElementById('rezerwacja-form');
+      var btn = form.querySelector('button[type="submit"]');
+      var apiUrl = window.BOOKING_API_URL || '/api/booking';
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var imie = document.getElementById('rezerwacja-imie').value.trim();
+        var tel = document.getElementById('rezerwacja-tel').value.trim();
+        var marka = document.getElementById('rezerwacja-marka').value.trim();
+        var usluga = document.getElementById('rezerwacja-usluga').value;
+        var dzien = document.getElementById('rezerwacja-dzien').value.trim();
+        var opis = document.getElementById('rezerwacja-opis').value.trim();
+
+        var payload = {
+          name: imie,
+          phone: tel,
+          car: marka,
+          service: usluga,
+          date: dzien,
+          message: opis,
+          lang: 'pl'
+        };
+
+        var msg = 'Dzień dobry, chciałbym umówić wizytę.%0AImię: ' + encodeURIComponent(imie) + '%0ATelefon: ' + encodeURIComponent(tel);
+        if (marka) msg += '%0AMarka auta: ' + encodeURIComponent(marka);
+        if (usluga) msg += '%0AUsługa: ' + encodeURIComponent(usluga);
+        if (dzien) msg += '%0AŻądana data: ' + encodeURIComponent(dzien);
+        if (opis) msg += '%0AOpis: ' + encodeURIComponent(opis);
+
+        var originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Wysyłanie…';
+
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function() { btn.textContent = 'Wysłano. Otwieram WhatsApp…'; })
+          .catch(function() { btn.textContent = originalText; })
+          .finally(function() {
+            window.open('https://wa.me/48794935734?text=' + msg, '_blank');
+            setTimeout(function() {
+              btn.disabled = false;
+              btn.textContent = originalText;
+            }, 2000);
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/booking.js", "use": "@vercel/node" },
+    { "src": "api/prices.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/booking", "dest": "/api/booking.js" },
+    { "src": "/api/prices", "dest": "/api/prices.js" }
+  ]
+}

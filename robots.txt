@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://carservicenikol.pl/sitemap.xml

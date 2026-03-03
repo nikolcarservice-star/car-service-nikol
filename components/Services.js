@@ -23,16 +23,30 @@ const iconMap = {
   keys: Key,
 };
 
-// Obrazki dopasowane do każdej usługi (zawieszenie, olej, hamulce, diagnostyka, rozrząd, opony, serwis mobilny, klucze)
 const imageMap = {
-  suspension: 'https://images.unsplash.com/photo-1530046339160-ce3e5b0c7a2f?q=80&w=800',
-  oil: 'https://images.unsplash.com/photo-1552656967-7a0991a13906?q=80&w=800',
-  brakes: 'https://images.unsplash.com/photo-1581235707960-efe48126860a?q=80&w=800',
-  diagnostics: 'https://images.unsplash.com/photo-1621213344654-e91e6b377b75?q=80&w=800',
-  timing: 'https://images.unsplash.com/photo-1486006396193-c71f3012c3f6?q=80&w=800',
-  tires: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=800',
-  mobileService: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0c?q=80&w=800',
-  keys: 'https://images.unsplash.com/photo-1605281317010-fe5ffe798156?q=80&w=800',
+  // Zawieszenie (Ходовая)
+  suspension:
+    'https://img.freepik.com/free-photo/close-up-car-tyre-break-disc_1353-288.jpg?w=800&auto=format&fit=crop',
+  // Oleje i filtry (Масла и фильтры)
+  oil: 'https://img.freepik.com/free-photo/mechanic-pouring-oil-into-car-engine_1353-285.jpg?w=800&auto=format&fit=crop',
+  // Hamulce (Тормоза)
+  brakes:
+    'https://img.freepik.com/free-photo/car-repair-garage_1353-285.jpg?w=800&auto=format&fit=crop',
+  // Diagnostyka (Диагностика)
+  diagnostics:
+    'https://img.freepik.com/free-photo/hands-mechanic-using-diagnostic-tool_1353-278.jpg?w=800&auto=format&fit=crop',
+  // Rozrząd (ГРМ)
+  timing:
+    'https://img.freepik.com/free-photo/repair-man-making-car-service_23-2148884688.jpg?w=800&auto=format&fit=crop',
+  // Opony (Шиномонтаж)
+  tires:
+    'https://img.freepik.com/free-photo/mechanic-changing-tires-car-service_23-2148884727.jpg?w=800&auto=format&fit=crop',
+  // Serwis Mobilny (Выезд мастера)
+  mobileService:
+    'https://img.freepik.com/free-photo/emergency-auto-mechanic-changing-flat-tire-road_23-2149107469.jpg?w=800&auto=format&fit=crop',
+  // Klucze (Ключи)
+  keys:
+    'https://img.freepik.com/free-photo/high-angle-hand-holding-car-key_23-2149916368.jpg?w=800&auto=format&fit=crop',
 };
 
 export default function Services({ t }) {
@@ -86,7 +100,7 @@ export default function Services({ t }) {
                   <div className="relative h-48 w-full overflow-hidden border-b border-white/10 bg-slate-900/60">
                     <img
                       src={imageUrl}
-                      alt=""
+                      alt={`${service.name} (${service.nameRu})`}
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                       loading="lazy"
                       decoding="async"

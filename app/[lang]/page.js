@@ -2,6 +2,7 @@ import Hero from '../../components/Hero';
 import Services from '../../components/Services';
 import BookingForm from '../../components/BookingForm';
 import LocationSection from '../../components/LocationSection';
+import Reviews from '../../components/Reviews';
 import { getTranslations, normalizeLang } from '../../constants/translations';
 
 export function generateMetadata({ params }) {
@@ -53,6 +54,7 @@ export default function LangHomePage({ params }) {
       <Services t={t} />
       <BookingForm lang={lang} />
       <LocationSection lang={lang} />
+      <Reviews />
     </>
   );
 }

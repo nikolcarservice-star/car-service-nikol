@@ -10,6 +10,7 @@ const STORAGE_KEYS = {
   vehicles: 'nikol_vehicles',
   reminders: 'nikol_reminders',
   bookingRequests: 'nikol_booking_requests',
+  users: 'nikol_users',
   passwords: 'nikol_passwords'
 };
 
@@ -36,6 +37,7 @@ let clients = loadJson(STORAGE_KEYS.clients, []);
 let vehicles = loadJson(STORAGE_KEYS.vehicles, []);
 let reminders = loadJson(STORAGE_KEYS.reminders, []);
 let bookingRequests = loadJson(STORAGE_KEYS.bookingRequests, []);
+let dynamicUsers = loadJson(STORAGE_KEYS.users, []);
 
 // Подмешиваем новые дефолтные услуги в существующий каталог (без перезаписи цен)
 const existingIds = new Set(services.map((s) => String(s.id)));
@@ -56,6 +58,7 @@ function persistAll() {
   saveJson(STORAGE_KEYS.vehicles, vehicles);
   saveJson(STORAGE_KEYS.reminders, reminders);
   saveJson(STORAGE_KEYS.bookingRequests, bookingRequests);
+  saveJson(STORAGE_KEYS.users, dynamicUsers);
 }
 
 function nextId() {
@@ -155,6 +158,19 @@ const USERS = [
 
 let currentUser = null;
 let adminSelectedOrderId = null;
+
+// Восстанавливаем пользователя из localStorage, чтобы не выбрасывало при перезагрузке
+try {
+  const saved = localStorage.getItem('nikol_current_user');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    if (parsed && parsed.username && parsed.role) {
+      currentUser = parsed;
+    }
+  }
+} catch {
+  // игнорируем ошибки доступа
+}
 
 // Многоязычность
 const I18N = {
@@ -597,14 +613,35 @@ function renderLogin() {
     e.preventDefault();
     const u = userInput.value.trim();
     const p = passInput.value.trim();
-    const customPasswords = loadJson(STORAGE_KEYS.passwords, {});
-    const customMatch = customPasswords[u] !== undefined && customPasswords[u] === p;
-    const found = customMatch ? { username: u, role: USERS.find((usr) => usr.username === u)?.role || 'admin' } : USERS.find((usr) => usr.username === u && usr.password === p);
+
+    let found = null;
+
+    // 1) Пользователи, созданные в настройках (dynamicUsers)
+    const dyn = dynamicUsers.find((usr) => usr.username === u && usr.password === p);
+    if (dyn) {
+      found = { username: dyn.username, role: dyn.role };
+    } else {
+      // 2) Базовые пользователи с возможной сменой пароля
+      const customPasswords = loadJson(STORAGE_KEYS.passwords, {});
+      const base = USERS.find((usr) => usr.username === u);
+      if (base) {
+        const expected = customPasswords[u] !== undefined ? customPasswords[u] : base.password;
+        if (p === expected) {
+          found = { username: base.username, role: base.role };
+        }
+      }
+    }
+
     if (!found) {
       errorBox.textContent = t('wrong_credentials');
       return;
     }
     currentUser = { username: found.username, role: found.role };
+    try {
+      localStorage.setItem('nikol_current_user', JSON.stringify(currentUser));
+    } catch {
+      // если localStorage недоступен — просто продолжаем без сохранения сессии
+    }
     renderAppShell();
   });
 
@@ -685,6 +722,11 @@ function renderAppShell(activeTab = 'order') {
   );
   logoutBtn.addEventListener('click', () => {
     currentUser = null;
+    try {
+      localStorage.removeItem('nikol_current_user');
+    } catch {
+      // ignore
+    }
     renderLogin();
   });
 
@@ -705,38 +747,40 @@ function renderAppShell(activeTab = 'order') {
     }`;
 
   const orderTab = createEl('button', tabClass('order'), [t('new_order')]);
-  const adminOrdersTab = createEl('button', tabClass('admin_orders'), [t('orders')]);
-  const clientsTab = createEl('button', tabClass('clients'), [t('tab_clients')]);
-  const vehiclesTab = createEl('button', tabClass('vehicles'), [t('tab_vehicles')]);
-  const bookingTab = createEl('button', tabClass('booking'), [t('tab_booking')]);
-  const remindersTab = createEl('button', tabClass('reminders'), [t('tab_reminders')]);
-  const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
-  const adminSettingsTab = createEl('button', tabClass('admin'), [t('settings')]);
-
-  if (currentUser.role !== 'admin') {
-    [adminOrdersTab, clientsTab, vehiclesTab, bookingTab, remindersTab, analyticsTab, adminSettingsTab].forEach((b) => {
-      b.disabled = true;
-      b.classList.add('opacity-40', 'cursor-not-allowed');
-    });
-  }
-
   orderTab.addEventListener('click', () => renderAppShell('order'));
-  adminOrdersTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('admin_orders'); });
-  clientsTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('clients'); });
-  vehiclesTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('vehicles'); });
-  bookingTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('booking'); });
-  remindersTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('reminders'); });
-  analyticsTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('analytics'); });
-  adminSettingsTab.addEventListener('click', () => { if (currentUser.role === 'admin') renderAppShell('admin'); });
-
   tabs.appendChild(orderTab);
-  tabs.appendChild(adminOrdersTab);
-  tabs.appendChild(clientsTab);
-  tabs.appendChild(vehiclesTab);
-  tabs.appendChild(bookingTab);
-  tabs.appendChild(remindersTab);
-  tabs.appendChild(analyticsTab);
-  tabs.appendChild(adminSettingsTab);
+
+  const isAdmin = currentUser.role === 'admin';
+  const isOwner = isAdmin && currentUser.username === 'admin';
+
+  if (isAdmin) {
+    const adminOrdersTab = createEl('button', tabClass('admin_orders'), [t('orders')]);
+    const clientsTab = createEl('button', tabClass('clients'), [t('tab_clients')]);
+    const vehiclesTab = createEl('button', tabClass('vehicles'), [t('tab_vehicles')]);
+    const bookingTab = createEl('button', tabClass('booking'), [t('tab_booking')]);
+    const remindersTab = createEl('button', tabClass('reminders'), [t('tab_reminders')]);
+    const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
+
+    adminOrdersTab.addEventListener('click', () => renderAppShell('admin_orders'));
+    clientsTab.addEventListener('click', () => renderAppShell('clients'));
+    vehiclesTab.addEventListener('click', () => renderAppShell('vehicles'));
+    bookingTab.addEventListener('click', () => renderAppShell('booking'));
+    remindersTab.addEventListener('click', () => renderAppShell('reminders'));
+    analyticsTab.addEventListener('click', () => renderAppShell('analytics'));
+
+    tabs.appendChild(adminOrdersTab);
+    tabs.appendChild(clientsTab);
+    tabs.appendChild(vehiclesTab);
+    tabs.appendChild(bookingTab);
+    tabs.appendChild(remindersTab);
+    tabs.appendChild(analyticsTab);
+
+    if (isOwner) {
+      const adminSettingsTab = createEl('button', tabClass('admin'), [t('settings')]);
+      adminSettingsTab.addEventListener('click', () => renderAppShell('admin'));
+      tabs.appendChild(adminSettingsTab);
+    }
+  }
 
   const content = createEl(
     'main',
@@ -2452,6 +2496,96 @@ function renderAdminScreen() {
   container.appendChild(settingsCard);
   container.appendChild(monitorCard);
   container.appendChild(passwordCard);
+
+  // Управление пользователями — только для главного администратора (логин admin)
+  if (currentUser.username === 'admin' && currentUser.role === 'admin') {
+    const usersCard = createEl('div', 'bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3');
+    usersCard.appendChild(createEl('h2', 'text-sm font-semibold text-slate-100', [settings.language === 'pl' ? 'Użytkownicy CRM' : 'Пользователи CRM']));
+
+    const listEl = createEl('div', 'space-y-1 text-xs');
+
+    function renderUsers() {
+      listEl.innerHTML = '';
+      // Базовые пользователи (только просмотр)
+      USERS.forEach((u) => {
+        const row = createEl('div', 'flex items-center justify-between gap-2 rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 opacity-80');
+        row.appendChild(createEl('div', '', [
+          createEl('div', 'text-slate-100', [u.username]),
+          createEl('div', 'text-[10px] text-slate-400', [u.role === 'admin' ? (settings.language === 'pl' ? 'Wbudowany administrator' : 'Встроенный админ') : (settings.language === 'pl' ? 'Wbudowany mistrz' : 'Встроенный мастер')])
+        ]));
+        row.appendChild(createEl('div', 'text-[10px] text-slate-500', ['system']));
+        listEl.appendChild(row);
+      });
+
+      if (dynamicUsers.length === 0) {
+        listEl.appendChild(createEl('div', 'text-[11px] text-slate-400', [settings.language === 'pl' ? 'Brak dodatkowych użytkowników.' : 'Дополнительных пользователей нет.']));
+        return;
+      }
+
+      dynamicUsers.forEach((u, idx) => {
+        const row = createEl('div', 'flex items-center justify-between gap-2 rounded-lg bg-slate-950 border border-slate-800 px-3 py-2');
+        row.appendChild(createEl('div', '', [
+          createEl('div', 'text-slate-100', [u.username]),
+          createEl('div', 'text-[10px] text-slate-400', [u.role === 'admin' ? (settings.language === 'pl' ? 'Admin' : 'Админ') : (settings.language === 'pl' ? 'Mistrz' : 'Мастер')])
+        ]));
+        const delBtn = createEl('button', 'text-[11px] px-2 py-0.5 rounded bg-slate-800 text-red-300 hover:bg-red-700 hover:text-white', [t('remove')]);
+        delBtn.type = 'button';
+        delBtn.addEventListener('click', () => {
+          if (!window.confirm(settings.language === 'pl' ? 'Usunąć użytkownika?' : 'Удалить пользователя?')) return;
+          dynamicUsers.splice(idx, 1);
+          persistAll();
+          renderUsers();
+        });
+        row.appendChild(delBtn);
+        listEl.appendChild(row);
+      });
+    }
+
+    const addForm = createEl('div', 'mt-3 border-t border-slate-800 pt-3 grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr_auto] gap-2 text-xs');
+    const loginInput = createEl('input', 'px-2 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100', []);
+    loginInput.placeholder = settings.language === 'pl' ? 'Login użytkownika' : 'Логин пользователя';
+    const passInputNew = createEl('input', 'px-2 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100', []);
+    passInputNew.type = 'password';
+    passInputNew.placeholder = settings.language === 'pl' ? 'Hasło' : 'Пароль';
+    const roleSelect = createEl('select', 'px-2 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100', []);
+    ['master', 'admin'].forEach((role) => {
+      const opt = document.createElement('option');
+      opt.value = role;
+      opt.textContent = role === 'admin' ? (settings.language === 'pl' ? 'Admin' : 'Админ') : (settings.language === 'pl' ? 'Mistrz' : 'Мастер');
+      roleSelect.appendChild(opt);
+    });
+    const addUserBtn = createEl('button', 'px-3 py-1.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-xs text-white', [settings.language === 'pl' ? 'Dodaj' : 'Добавить']);
+
+    addUserBtn.addEventListener('click', () => {
+      const login = (loginInput.value || '').trim();
+      const pwd = (passInputNew.value || '').trim();
+      const role = roleSelect.value === 'admin' ? 'admin' : 'master';
+      if (!login || !pwd) {
+        alert(settings.language === 'pl' ? 'Podaj login i hasło.' : 'Укажите логин и пароль.');
+        return;
+      }
+      if (USERS.some((u) => u.username === login) || dynamicUsers.some((u) => u.username === login)) {
+        alert(settings.language === 'pl' ? 'Taki login już istnieje.' : 'Такой логин уже существует.');
+        return;
+      }
+      dynamicUsers.push({ id: nextId(), username: login, password: pwd, role });
+      persistAll();
+      loginInput.value = '';
+      passInputNew.value = '';
+      renderUsers();
+    });
+
+    addForm.appendChild(loginInput);
+    addForm.appendChild(passInputNew);
+    addForm.appendChild(roleSelect);
+    addForm.appendChild(addUserBtn);
+
+    usersCard.appendChild(listEl);
+    usersCard.appendChild(addForm);
+    renderUsers();
+
+    container.appendChild(usersCard);
+  }
 
   return container;
 }

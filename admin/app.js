@@ -2903,6 +2903,10 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Старт
-renderLogin();
+// Старт: если пользователь сохранён, сразу открываем CRM, иначе форму входа
+if (currentUser) {
+  renderAppShell();
+} else {
+  renderLogin();
+}
 

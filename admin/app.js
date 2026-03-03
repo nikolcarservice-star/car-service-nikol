@@ -1321,10 +1321,22 @@ function renderOrderScreen() {
       master: currentUser?.username || null
     };
 
+    // Сохраняем локально (для оффлайна) и отправляем в общую базу (Supabase через /api/crm-orders)
     orders.push(order);
     upsertClientFromOrder(order);
     upsertVehicleFromOrder(order);
     persistAll();
+
+    try {
+      await fetch('/api/crm-orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order)
+      });
+    } catch {
+      // если сервер недоступен — оставляем только локально
+    }
+
     saveInfo.textContent = t('order_saved');
     setTimeout(() => { saveInfo.textContent = ''; }, 3000);
   });
@@ -1718,56 +1730,97 @@ function renderAdminOrdersScreen() {
     return container;
   }
 
-  const today = new Date().toDateString();
-  const todayCount = orders.filter((o) => new Date(o.createdAt).toDateString() === today).length;
-  const pendingCount = orders.filter((o) => (o.status || 'pending') === 'pending').length;
+  const loading = createEl('div', 'text-sm text-slate-400 py-2', [settings.language === 'pl' ? 'Ładowanie zleceń...' : 'Загружаем заказы...']);
+  container.appendChild(loading);
 
-  const dashboard = createEl('div', 'grid grid-cols-2 gap-2 mb-4');
-  dashboard.appendChild(createEl('div', 'bg-slate-900 rounded-xl p-3 text-center', [
-    createEl('div', 'text-2xl font-bold text-primary-400', [String(todayCount)]),
-    createEl('div', 'text-[11px] text-slate-400', [t('today_orders')])
-  ]));
-  dashboard.appendChild(createEl('div', 'bg-slate-900 rounded-xl p-3 text-center', [
-    createEl('div', 'text-2xl font-bold text-amber-400', [String(pendingCount)]),
-    createEl('div', 'text-[11px] text-slate-400', [t('pending_orders')])
-  ]));
-  container.appendChild(dashboard);
+  (async () => {
+    try {
+      const res = await fetch('/api/crm-orders');
+      const data = await res.json();
+      if (data && data.ok && Array.isArray(data.orders)) {
+        orders = data.orders.map((o) => ({
+          id: o.id,
+          createdAt: o.created_at,
+          status: o.status,
+          createdBy: o.created_by,
+          brand: o.brand,
+          model: o.model,
+          year: o.year,
+          comment: o.comment,
+          photoDataUrl: o.photo_url,
+          clientName: o.client_name,
+          clientPhone: o.client_phone,
+          vin: o.vin,
+          plate: o.plate,
+          total: Number(o.total) || 0,
+          paymentType: o.payment_type,
+          paid: o.paid,
+          timeIn: o.time_in,
+          timeOut: o.time_out,
+          master: o.master,
+          adminNote: o.admin_note,
+          services: []
+        }));
+        persistAll();
+      }
+    } catch {
+      // fallback: остаёмся на локальных orders
+    }
 
-  const list = createEl('div', 'space-y-2');
-  const sorted = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  if (sorted.length === 0) {
-    list.appendChild(createEl('div', 'text-sm text-slate-400 py-8 text-center', [t('no_orders')]));
-  } else {
-    sorted.forEach((o) => {
-      const row = createEl(
-        'div',
-        'bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center cursor-pointer hover:bg-slate-800'
-      );
-      row.addEventListener('click', () => {
-        adminSelectedOrderId = o.id;
-        renderAppShell('admin_orders');
+    container.removeChild(loading);
+
+    const today = new Date().toDateString();
+    const todayCount = orders.filter((o) => new Date(o.createdAt).toDateString() === today).length;
+    const pendingCount = orders.filter((o) => (o.status || 'pending') === 'pending').length;
+
+    const dashboard = createEl('div', 'grid grid-cols-2 gap-2 mb-4');
+    dashboard.appendChild(createEl('div', 'bg-slate-900 rounded-xl p-3 text-center', [
+      createEl('div', 'text-2xl font-bold text-primary-400', [String(todayCount)]),
+      createEl('div', 'text-[11px] text-slate-400', [t('today_orders')])
+    ]));
+    dashboard.appendChild(createEl('div', 'bg-slate-900 rounded-xl p-3 text-center', [
+      createEl('div', 'text-2xl font-bold text-amber-400', [String(pendingCount)]),
+      createEl('div', 'text-[11px] text-slate-400', [t('pending_orders')])
+    ]));
+    container.appendChild(dashboard);
+
+    const list = createEl('div', 'space-y-2');
+    const sorted = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    if (sorted.length === 0) {
+      list.appendChild(createEl('div', 'text-sm text-slate-400 py-8 text-center', [t('no_orders')]));
+    } else {
+      sorted.forEach((o) => {
+        const row = createEl(
+          'div',
+          'bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center cursor-pointer hover:bg-slate-800'
+        );
+        row.addEventListener('click', () => {
+          adminSelectedOrderId = o.id;
+          renderAppShell('admin_orders');
+        });
+        const left = createEl('div', '');
+        left.appendChild(createEl('div', 'text-sm font-medium text-white', [`${o.brand} ${o.model}, ${o.year}`]));
+        left.appendChild(createEl('div', 'text-[11px] text-slate-400', [new Date(o.createdAt).toLocaleString()]));
+        const statusBadge = createEl(
+          'span',
+          `text-[10px] px-2 py-0.5 rounded-full ${
+            (o.status || 'pending') === 'completed' ? 'bg-emerald-900 text-emerald-300' :
+            (o.status || 'pending') === 'in_progress' ? 'bg-amber-900 text-amber-300' :
+            (o.status || 'pending') === 'cancelled' ? 'bg-slate-700 text-slate-400' : 'bg-slate-700 text-slate-300'
+          }`,
+          [t('status_' + (o.status || 'pending'))]
+        );
+        const right = createEl('div', 'text-right');
+        right.appendChild(createEl('div', 'text-sm font-semibold text-primary-400', [formatPrice(getOrderTotal(o))]));
+        right.appendChild(statusBadge);
+        row.appendChild(left);
+        row.appendChild(right);
+        list.appendChild(row);
       });
-      const left = createEl('div', '');
-      left.appendChild(createEl('div', 'text-sm font-medium text-white', [`${o.brand} ${o.model}, ${o.year}`]));
-      left.appendChild(createEl('div', 'text-[11px] text-slate-400', [new Date(o.createdAt).toLocaleString()]));
-      const statusBadge = createEl(
-        'span',
-        `text-[10px] px-2 py-0.5 rounded-full ${
-          (o.status || 'pending') === 'completed' ? 'bg-emerald-900 text-emerald-300' :
-          (o.status || 'pending') === 'in_progress' ? 'bg-amber-900 text-amber-300' :
-          (o.status || 'pending') === 'cancelled' ? 'bg-slate-700 text-slate-400' : 'bg-slate-700 text-slate-300'
-        }`,
-        [t('status_' + (o.status || 'pending'))]
-      );
-      const right = createEl('div', 'text-right');
-      right.appendChild(createEl('div', 'text-sm font-semibold text-primary-400', [formatPrice(getOrderTotal(o))]));
-      right.appendChild(statusBadge);
-      row.appendChild(left);
-      row.appendChild(right);
-      list.appendChild(row);
-    });
-  }
-  container.appendChild(list);
+    }
+    container.appendChild(list);
+  })();
+
   return container;
 }
 

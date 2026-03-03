@@ -23,7 +23,9 @@ export default function Footer({ lang }) {
               {t.privacy}
             </a>
             <a
-              href="/admin/"
+              href="https://car-service-nikol-crm.vercel.app"
+              target="_blank"
+              rel="noreferrer"
               className="ml-3 inline-flex text-[11px] text-slate-500 hover:text-slate-400"
               title="CRM (dla personelu)"
             >

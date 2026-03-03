@@ -20,7 +20,7 @@ Wersje językowe: **PL** (główna, w katalogu głównym), **EN** (katalog `/en/
 - Schema.org `AutoRepair` (LocalBusiness) na stronie głównej PL
 - `hreflang` i `canonical` dla PL/EN/RU
 - `sitemap.xml` i `robots.txt`
-- Słowa kluczowe: Jastrowie, okolice Poznania, Piła, warsztat samochodowy, mechanik
+- Słowa kluczowe: Jastrowo, okolice Poznania, Piła, warsztat samochodowy, mechanik
 
 ## Przed wdrożeniem
 
@@ -52,7 +52,7 @@ Ważne: pliki muszą być w głównym katalogu tak, aby:
 
 ## Kontakt na stronie
 
-- **Adres:** Wernisazowa 21, 64-500 Jastrowie  
+- **Adres:** Wernisazowa 21, 64-500 Jastrowo  
 - **Tel:** +48 794 935 734  
 - **WhatsApp:** [wa.me/48794935734](https://wa.me/48794935734)
 

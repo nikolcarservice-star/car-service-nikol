@@ -1,7 +1,0 @@
-{
-  "name": "nikol-price-monitor",
-  "version": "1.0.0",
-  "description": "Мониторинг цен сервисов Познань и окрестности для CRM Nikol",
-  "type": "module",
-  "main": "run.js"
-}

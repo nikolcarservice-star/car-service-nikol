@@ -40,8 +40,8 @@ export default function AboutPage({ params }) {
           <Building2 className="h-6 w-6 text-orange-400" />
           <h1 className="text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">
             {lang === 'ru'
-              ? 'Car Service Nikol — современный автосервис в Познани'
-              : 'Car Service Nikol — nowoczesny serwis samochodowy w Poznaniu'}
+              ? 'Car Service Nikol — современный автосервис в Jastrowo'
+              : 'Car Service Nikol — nowoczesny serwis samochodowy w Jastrowo'}
           </h1>
         </div>
 

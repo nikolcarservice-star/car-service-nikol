@@ -1,19 +1,19 @@
 import { LANGUAGES, normalizeLang } from '../constants/translations';
 
-export const SERVICE_KEYS = ['suspension', 'oil', 'brakes', 'diagnostics', 'ac', 'timing'];
+export const SERVICE_KEYS = ['suspension', 'oil', 'brakes', 'diagnostics', 'timing'];
 
 export const servicesData = {
   suspension: {
-    slug: 'naprawa-zawieszenia-poznan',
+    slug: 'naprawa-zawieszenia-jastrowo',
     pl: {
       name: 'Naprawa zawieszenia',
       shortName: 'Zawieszenie',
-      h1: 'Naprawa zawieszenia Poznań - Car Service Nikol',
-      seoTitle: 'Naprawa zawieszenia w Poznaniu - Car Service Nikol',
+      h1: 'Naprawa zawieszenia Jastrowo - Car Service Nikol',
+      seoTitle: 'Naprawa zawieszenia w Jastrowo - Car Service Nikol',
       seoDescription:
-        'Profesjonalna naprawa zawieszenia w Poznaniu. Wymiana amortyzatorów, wahaczy, sworzni, tulei i sprężyn. Szybka diagnostyka, uczciwe ceny, gwarancja na wykonaną usługę.',
+        'Profesjonalna naprawa zawieszenia w Jastrowo. Wymiana amortyzatorów, wahaczy, sworzni, tulei i sprężyn. Szybka diagnostyka, uczciwe ceny, gwarancja na wykonaną usługę.',
       intro:
-        'Zawieszenie odpowiada za komfort jazdy, prowadzenie samochodu i bezpieczeństwo na drodze. W Car Service Nikol w Poznaniu diagnozujemy i naprawiamy zawieszenie w samochodach osobowych i dostawczych – od luźnych tulei po zużyte amortyzatory.',
+        'Zawieszenie odpowiada za komfort jazdy, prowadzenie samochodu i bezpieczeństwo na drodze. W Car Service Nikol w Jastrowo diagnozujemy i naprawiamy zawieszenie w samochodach osobowych i dostawczych – od luźnych tulei po zużyte amortyzatory.',
       process: [
         'Rozpoczynamy od dokładnej diagnostyki na ścieżce prób, podnośniku oraz podczas jazdy próbnej. Sprawdzamy stan amortyzatorów, sprężyn, wahaczy, sworzni, tulei, łączników stabilizatora i układu kierowniczego.',
         'Po diagnozie omawiamy z Tobą zakres naprawy i proponujemy kilka wariantów części – zamienniki dobrej jakości lub elementy OE. Z góry znasz orientacyjny koszt i czas wykonania usługi.',
@@ -29,10 +29,10 @@ export const servicesData = {
     ru: {
       name: 'Ремонт ходовой',
       shortName: 'Ходовая',
-      h1: 'Ремонт ходовой Познань - Car Service Nikol',
-      seoTitle: 'Ремонт ходовой в Познани - Car Service Nikol',
+      h1: 'Ремонт ходовой Jastrowo - Car Service Nikol',
+      seoTitle: 'Ремонт ходовой в Jastrowo - Car Service Nikol',
       seoDescription:
-        'Профессиональный ремонт ходовой части в Познани. Замена амортизаторов, рычагов, шаровых опор, сайлентблоков и пружин. Быстрая диагностика и честные цены.',
+        'Профессиональный ремонт ходовой части в Jastrowo. Замена амортизаторов, рычагов, шаровых опор, сайлентблоков и пружин. Быстрая диагностика и честные цены.',
       intro:
         'Ходовая часть напрямую влияет на устойчивость автомобиля и вашу безопасность. В Car Service Nikol мы проводим полную диагностику и ремонт подвески легковых и легких коммерческих автомобилей.',
       process: [
@@ -49,14 +49,14 @@ export const servicesData = {
     },
   },
   oil: {
-    slug: 'wymiana-oleju-i-filtrow-poznan',
+    slug: 'wymiana-oleju-i-filtrow-jastrowo',
     pl: {
       name: 'Wymiana oleju i filtrów',
       shortName: 'Oleje i filtry',
-      h1: 'Wymiana oleju i filtrów Poznań - Car Service Nikol',
-      seoTitle: 'Wymiana oleju i filtrów w Poznaniu - Car Service Nikol',
+      h1: 'Wymiana oleju i filtrów Jastrowo - Car Service Nikol',
+      seoTitle: 'Wymiana oleju i filtrów w Jastrowo - Car Service Nikol',
       seoDescription:
-        'Szybka wymiana oleju i filtrów w Poznaniu. Dobór odpowiedniego oleju, kontrola stanu silnika, uczciwe ceny i ekologiczna utylizacja zużytego oleju.',
+        'Szybka wymiana oleju i filtrów w Jastrowo. Dobór odpowiedniego oleju, kontrola stanu silnika, uczciwe ceny i ekologiczna utylizacja zużytego oleju.',
       intro:
         'Regularna wymiana oleju i filtrów to podstawa długiej i bezproblemowej pracy silnika. W naszym serwisie dobieramy olej zgodnie z zaleceniami producenta i stylu jazdy, a całą usługę wykonujemy zwykle w mniej niż godzinę.',
       process: [
@@ -74,10 +74,10 @@ export const servicesData = {
     ru: {
       name: 'Замена масла и фильтров',
       shortName: 'Масла и фильтры',
-      h1: 'Замена масла и фильтров Познань - Car Service Nikol',
-      seoTitle: 'Замена масла и фильтров в Познани - Car Service Nikol',
+      h1: 'Замена масла и фильтров Jastrowo - Car Service Nikol',
+      seoTitle: 'Замена масла и фильтров в Jastrowo - Car Service Nikol',
       seoDescription:
-        'Быстрая замена моторного масла и фильтров в Познани. Подбор масла по допускам производителя, проверка состояния двигателя и утилизация отработанного масла.',
+        'Быстрая замена моторного масла и фильтров в Jastrowo. Подбор масла по допускам производителя, проверка состояния двигателя и утилизация отработанного масла.',
       intro:
         'Своевременная замена масла и фильтров защищает двигатель от износа и перегрева. Мы подбираем масло по допускам производителя и вашему стилю езды, а работу выполняем быстро и аккуратно.',
       process: [
@@ -94,14 +94,14 @@ export const servicesData = {
     },
   },
   brakes: {
-    slug: 'serwis-hamulcow-poznan',
+    slug: 'serwis-hamulcow-jastrowo',
     pl: {
       name: 'Serwis hamulców',
       shortName: 'Hamulce',
-      h1: 'Serwis i naprawa hamulców Poznań - Car Service Nikol',
-      seoTitle: 'Wymiana klocków i tarcz hamulcowych Poznań - Car Service Nikol',
+      h1: 'Serwis i naprawa hamulców Jastrowo - Car Service Nikol',
+      seoTitle: 'Wymiana klocków i tarcz hamulcowych Jastrowo - Car Service Nikol',
       seoDescription:
-        'Serwis hamulców w Poznaniu: wymiana klocków, tarcz, płynu hamulcowego i przewodów. Profesjonalna diagnoza i krótkie terminy.',
+        'Serwis hamulców w Jastrowo: wymiana klocków, tarcz, płynu hamulcowego i przewodów. Profesjonalna diagnoza i krótkie terminy.',
       intro:
         'Sprawne hamulce to podstawa bezpieczeństwa. W naszym serwisie sprawdzamy skuteczność hamowania, stan klocków, tarcz, przewodów i płynu hamulcowego, a następnie proponujemy optymalne rozwiązanie.',
       process: [
@@ -119,10 +119,10 @@ export const servicesData = {
     ru: {
       name: 'Сервис тормозной системы',
       shortName: 'Тормоза',
-      h1: 'Ремонт и обслуживание тормозов Познань - Car Service Nikol',
-      seoTitle: 'Ремонт тормозов в Познани - Car Service Nikol',
+      h1: 'Ремонт и обслуживание тормозов Jastrowo - Car Service Nikol',
+      seoTitle: 'Ремонт тормозов в Jastrowo - Car Service Nikol',
       seoDescription:
-        'Обслуживание тормозной системы в Познани: замена колодок и дисков, тормозной жидкости и шлангов. Точная диагностика и гарантия на работы.',
+        'Обслуживание тормозной системы в Jastrowo: замена колодок и дисков, тормозной жидкости и шлангов. Точная диагностика и гарантия на работы.',
       intro:
         'От исправности тормозов зависит ваша безопасность. Мы диагностируем состояние колодок, дисков, суппортов и тормозной жидкости, а затем выполняем необходимый ремонт.',
       process: [
@@ -139,14 +139,14 @@ export const servicesData = {
     },
   },
   diagnostics: {
-    slug: 'diagnostyka-komputerowa-poznan',
+    slug: 'diagnostyka-komputerowa-jastrowo',
     pl: {
       name: 'Diagnostyka komputerowa',
       shortName: 'Diagnostyka',
-      h1: 'Diagnostyka komputerowa Poznań - Car Service Nikol',
-      seoTitle: 'Diagnostyka komputerowa samochodu w Poznaniu - Car Service Nikol',
+      h1: 'Diagnostyka komputerowa Jastrowo - Car Service Nikol',
+      seoTitle: 'Diagnostyka komputerowa samochodu w Jastrowo - Car Service Nikol',
       seoDescription:
-        'Zaawansowana diagnostyka komputerowa w Poznaniu. Odczyt błędów, analiza parametrów pracy silnika i elektroniki, jasna informacja o przyczynie usterki.',
+        'Zaawansowana diagnostyka komputerowa w Jastrowo. Odczyt błędów, analiza parametrów pracy silnika i elektroniki, jasna informacja o przyczynie usterki.',
       intro:
         'Nowoczesne samochody pełne są elektroniki. Dzięki profesjonalnym testerom diagnostycznym odczytujemy błędy sterowników i parametry pracy silnika, aby szybko znaleźć przyczynę problemu.',
       process: [
@@ -163,10 +163,10 @@ export const servicesData = {
     ru: {
       name: 'Компьютерная диагностика',
       shortName: 'Диагностика',
-      h1: 'Компьютерная диагностика Познань - Car Service Nikol',
-      seoTitle: 'Компьютерная диагностика автомобиля в Познани - Car Service Nikol',
+      h1: 'Компьютерная диагностика Jastrowo - Car Service Nikol',
+      seoTitle: 'Компьютерная диагностика автомобиля в Jastrowo - Car Service Nikol',
       seoDescription:
-        'Компьютерная диагностика автомобиля в Познани: считывание ошибок, проверка параметров работы двигателя и электроники, рекомендации по ремонту.',
+        'Компьютерная диагностика автомобиля в Jastrowo: считывание ошибок, проверка параметров работы двигателя и электроники, рекомендации по ремонту.',
       intro:
         'Электроника современного автомобиля требует точной диагностики. Мы используем профессиональные сканеры, чтобы быстро определить источник неисправности.',
       process: [
@@ -181,58 +181,15 @@ export const servicesData = {
       ],
     },
   },
-  ac: {
-    slug: 'serwis-klimatyzacji-poznan',
-    pl: {
-      name: 'Serwis klimatyzacji',
-      shortName: 'Klimatyzacja',
-      h1: 'Serwis klimatyzacji Poznań - Car Service Nikol',
-      seoTitle: 'Serwis i nabicie klimatyzacji w Poznaniu - Car Service Nikol',
-      seoDescription:
-        'Serwis klimatyzacji samochodowej w Poznaniu: odgrzybianie, nabicie czynnika, test szczelności i naprawa układu.',
-      intro:
-        'Sprawna klimatyzacja zapewnia komfort jazdy latem i suchość szyb zimą. Wykonujemy kompleksowy serwis klimatyzacji, od odgrzybiania wnętrza po uzupełnienie czynnika i oleju w układzie.',
-      process: [
-        'Sprawdzamy szczelność układu, stan przewodów, sprężarki i skraplacza, a także działanie wentylatorów.',
-        'Opróżniamy układ z czynnika, wykonujemy próżnię, uzupełniamy odpowiednią ilość czynnika i oleju.',
-        'Na końcu odgrzybiamy układ i wnętrze pojazdu, aby pozbyć się nieprzyjemnych zapachów i drobnoustrojów.',
-      ],
-      pricesIntro: 'Przykładowe ceny serwisu klimatyzacji:',
-      prices: [
-        { label: 'Serwis klimatyzacji z uzupełnieniem czynnika', value: 'od 260 zł' },
-        { label: 'Odgrzybianie klimatyzacji', value: 'od 120 zł' },
-      ],
-    },
-    ru: {
-      name: 'Сервис кондиционера',
-      shortName: 'Кондиционер',
-      h1: 'Сервис кондиционера Познань - Car Service Nikol',
-      seoTitle: 'Сервис и заправка кондиционера в Познани - Car Service Nikol',
-      seoDescription:
-        'Обслуживание автомобильного кондиционера в Познани: проверка герметичности, заправка фреоном, удаление запахов и бактерий.',
-      intro:
-        'Исправный кондиционер обеспечивает комфорт в жару и предотвращает запотевание стёкол. Мы выполняем полный сервис системы кондиционирования.',
-      process: [
-        'Проверяем систему на герметичность, оцениваем состояние шлангов, радиатора и компрессора.',
-        'Откачиваем старый фреон, создаём вакуум, затем заправляем систему нужным количеством хладагента и масла.',
-        'Проводим дезинфекцию испарителя и салона, чтобы удалить запахи и микроорганизмы.',
-      ],
-      pricesIntro: 'Примеры цен на сервис кондиционера:',
-      prices: [
-        { label: 'Полный сервис кондиционера с заправкой', value: 'от 260 zł' },
-        { label: 'Дезинфекция и удаление запахов', value: 'от 120 zł' },
-      ],
-    },
-  },
   timing: {
-    slug: 'wymiana-rozrzadu-poznan',
+    slug: 'wymiana-rozrzadu-jastrowo',
     pl: {
       name: 'Wymiana rozrządu',
       shortName: 'Rozrząd',
-      h1: 'Wymiana rozrządu Poznań - Car Service Nikol',
-      seoTitle: 'Wymiana paska rozrządu w Poznaniu - Car Service Nikol',
+      h1: 'Wymiana rozrządu Jastrowo - Car Service Nikol',
+      seoTitle: 'Wymiana paska rozrządu w Jastrowo - Car Service Nikol',
       seoDescription:
-        'Profesjonalna wymiana paska lub łańcucha rozrządu w Poznaniu. Kompletny serwis z pompą wody i napinaczami, zgodnie z zaleceniami producenta.',
+        'Profesjonalna wymiana paska lub łańcucha rozrządu w Jastrowo. Kompletny serwis z pompą wody i napinaczami, zgodnie z zaleceniami producenta.',
       intro:
         'Uszkodzony rozrząd może doprowadzić do poważnej awarii silnika. W naszym serwisie wymieniamy kompletne zestawy rozrządu, dbając o prawidłowe ustawienie faz rozrządu i momenty dokręcania.',
       process: [
@@ -249,10 +206,10 @@ export const servicesData = {
     ru: {
       name: 'Замена ГРМ',
       shortName: 'ГРМ',
-      h1: 'Замена ГРМ Познань - Car Service Nikol',
-      seoTitle: 'Замена ремня или цепи ГРМ в Познани - Car Service Nikol',
+      h1: 'Замена ГРМ Jastrowo - Car Service Nikol',
+      seoTitle: 'Замена ремня или цепи ГРМ в Jastrowo - Car Service Nikol',
       seoDescription:
-        'Профессиональная замена ремня или цепи ГРМ в Познани. Полный сервис с заменой роликов, натяжителей и помпы охлаждения.',
+        'Профессиональная замена ремня или цепи ГРМ в Jastrowo. Полный сервис с заменой роликов, натяжителей и помпы охлаждения.',
       intro:
         'Своевременная замена ГРМ защищает двигатель от серьёзных поломок. Мы работаем по заводским регламентам и используем комплектующие проверенных брендов.',
       process: [

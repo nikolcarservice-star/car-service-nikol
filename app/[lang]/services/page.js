@@ -8,16 +8,16 @@ export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
   if (lang === 'ru') {
     return {
-      title: 'Услуги автосервиса в Познани - Car Service Nikol',
+      title: 'Услуги автосервиса в Jastrowo - Car Service Nikol',
       description:
-        'Полный список услуг Car Service Nikol в Познани: ремонт ходовой, тормозов, замена масла, компьютерная диагностика, кондиционер и замена ГРМ.',
+        'Полный список услуг Car Service Nikol в Jastrowo: ремонт ходовой, тормозов, замена масла, компьютерная диагностика и замена ГРМ.',
     };
   }
 
   return {
-    title: 'Usługi serwisu samochodowego w Poznaniu - Car Service Nikol',
+    title: 'Usługi serwisu samochodowego w Jastrowo - Car Service Nikol',
     description:
-      'Pełna oferta Car Service Nikol w Poznaniu: naprawa zawieszenia, serwis hamulców, wymiana oleju, klimatyzacja, diagnostyka komputerowa i wymiana rozrządu.',
+      'Pełna oferta Car Service Nikol w Jastrowo: naprawa zawieszenia, serwis hamulców, wymiana oleju, diagnostyka komputerowa i wymiana rozrządu.',
   };
 }
 
@@ -48,8 +48,8 @@ export default function ServicesIndexPage({ params }) {
         </div>
         <p className="mb-6 max-w-2xl text-sm text-gray-300 sm:text-base">
           {lang === 'ru'
-            ? 'Ниже вы найдёте подробное описание основных услуг нашего автосервиса в Познани. Выберите раздел, чтобы узнать цену и этапы работ.'
-            : 'Poniżej znajdziesz szczegółowe opisy głównych usług naszego serwisu w Poznaniu. Wybierz interesującą Cię usługę, aby poznać ceny i etapy pracy.'}
+            ? 'Ниже вы найдёте подробное описание основных услуг нашего автосервиса в Jastrowo. Выберите раздел, чтобы узнать цену и этапы работ.'
+            : 'Poniżej znajdziesz szczegółowe opisy głównych usług naszego serwisu w Jastrowo. Wybierz interesującą Cię usługę, aby poznać ceny i etapy pracy.'}
         </p>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-slate-950 text-gray-100 antialiased;
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(circle at top left, rgba(249, 115, 22, 0.4), transparent 60%),
+    radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.9), transparent 60%);
+  z-index: -1;
+}
+

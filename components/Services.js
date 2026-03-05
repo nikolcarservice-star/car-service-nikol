@@ -24,29 +24,29 @@ const iconMap = {
 };
 
 const imageMap = {
-  // Zawieszenie (Ходовая)
+  // Zawieszenie (Ходовая) — zawieszenie, amortyzator
   suspension:
-    'https://img.freepik.com/free-photo/close-up-car-tyre-break-disc_1353-288.jpg?w=800&auto=format&fit=crop',
-  // Oleje i filtry (Масла и фильтры)
-  oil: 'https://img.freepik.com/free-photo/mechanic-pouring-oil-into-car-engine_1353-285.jpg?w=800&auto=format&fit=crop',
-  // Hamulce (Тормоза)
+    'https://images.unsplash.com/photo-1486262715619-67b85e0b08d9?w=800&q=80&fit=crop',
+  // Oleje i filtry (Масла и фильтры) — wymiana oleju
+  oil: 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=800&q=80&fit=crop',
+  // Hamulce (Тормоза) — tarcze hamulcowe
   brakes:
-    'https://img.freepik.com/free-photo/car-repair-garage_1353-285.jpg?w=800&auto=format&fit=crop',
-  // Diagnostyka (Диагностика)
+    'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&q=80&fit=crop',
+  // Diagnostyka (Диагностика) — komputer diagnostyczny
   diagnostics:
-    'https://img.freepik.com/free-photo/hands-mechanic-using-diagnostic-tool_1353-278.jpg?w=800&auto=format&fit=crop',
-  // Rozrząd (ГРМ)
+    'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80&fit=crop',
+  // Rozrząd (ГРМ) — silnik, pasek rozrządu
   timing:
-    'https://img.freepik.com/free-photo/repair-man-making-car-service_23-2148884688.jpg?w=800&auto=format&fit=crop',
-  // Opony (Шиномонтаж)
+    'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80&fit=crop',
+  // Opony (Шиномонтаж) — opona, koło
   tires:
-    'https://img.freepik.com/free-photo/mechanic-changing-tires-car-service_23-2148884727.jpg?w=800&auto=format&fit=crop',
-  // Serwis Mobilny (Выезд мастера)
+    'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80&fit=crop',
+  // Serwis Mobilny (Выезд мастера) — pomoc drogowa
   mobileService:
-    'https://img.freepik.com/free-photo/emergency-auto-mechanic-changing-flat-tire-road_23-2149107469.jpg?w=800&auto=format&fit=crop',
-  // Klucze (Ключи)
+    'https://images.unsplash.com/photo-1549317661-bd2c726f8f9d?w=800&q=80&fit=crop',
+  // Klucze (Ключи) — kluczyk samochodowy
   keys:
-    'https://img.freepik.com/free-photo/high-angle-hand-holding-car-key_23-2149916368.jpg?w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&fit=crop',
 };
 
 export default function Services({ t }) {

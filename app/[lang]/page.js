@@ -1,5 +1,6 @@
 import Hero from '../../components/Hero';
 import Services from '../../components/Services';
+import AboutBlock from '../../components/AboutBlock';
 import BookingForm from '../../components/BookingForm';
 import LocationSection from '../../components/LocationSection';
 import Reviews from '../../components/Reviews';
@@ -52,6 +53,7 @@ export default function LangHomePage({ params }) {
         </div>
       </section>
       <Services t={t} />
+      <AboutBlock t={t} />
       <BookingForm lang={lang} />
       <LocationSection lang={lang} />
       <Reviews />

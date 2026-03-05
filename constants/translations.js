@@ -124,6 +124,13 @@ export const translations = {
         },
       ],
     },
+    aboutBlock: {
+      title: 'O nas — Pasja i Profesjonalizm w Jastrowie',
+      paragraph1:
+        'Car Service Nikol powstał z myślą o kierowcach, którzy cenią swój czas i szukają niezawodnego mechanika w okolicy Szamotuł i Jastrowa. Wiemy, że awaria auta nie wybiera godziny, dlatego jako jedni z nielicznych jesteśmy do Twojej dyspozycji również w soboty i niedziele.',
+      paragraph2:
+        'Specjalizujemy się w kompleksowej mechanice: od diagnostyki komputerowej, przez serwis zawieszenia, aż po kodowanie kluczy. Nasz priorytet to uczciwe podejście — zawsze tłumaczymy zakres prac i dbamy o to, by Twój samochód wrócił na drogę w idealnym stanie.',
+    },
     booking: {
       title: 'Umów wizytę online',
       subtitle: 'Zostaw nam swoje dane – oddzwonimy i potwierdzimy termin wizyty w serwisie.',
@@ -286,6 +293,13 @@ export const translations = {
             'Восстановление и программирование ключей.',
         },
       ],
+    },
+    aboutBlock: {
+      title: 'О нас — Страсть и профессионализм в Ястрово',
+      paragraph1:
+        'Car Service Nikol был создан для водителей, которые ценят свое время и ищут надежного механика в районе Шамотулы и Ястрово. Мы знаем, что поломка случается неожиданно, поэтому мы — одни из немногих, кто доступен для вас также в субботу и воскресенье.',
+      paragraph2:
+        'Мы специализируемся на комплексной механике: от компьютерной диагностики и ремонта ходовой до программирования ключей. Наш приоритет — честность: мы всегда объясняем объем работ и заботимся о том, чтобы ваш автомобиль вернулся на дорогу в идеальном состоянии.',
     },
     booking: {
       title: 'Онлайн-запись в сервис',

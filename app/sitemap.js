@@ -1,4 +1,5 @@
 import { SERVICE_KEYS, servicesData } from '../data/services';
+import { getAllBlogSlugs } from '../data/blog';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
 const langs = ['pl', 'ru'];
@@ -21,6 +22,8 @@ export default function sitemap() {
     { path: '/ru/contact', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/pl/privacy', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/ru/privacy', priority: 0.5, changeFrequency: 'yearly' },
+    { path: '/pl/blog', priority: 0.7, changeFrequency: 'weekly' },
+    { path: '/ru/blog', priority: 0.7, changeFrequency: 'weekly' },
   ];
 
   const entries = routes.map(({ path, priority, changeFrequency }) => ({
@@ -38,6 +41,18 @@ export default function sitemap() {
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.7,
+      });
+    }
+  }
+
+  const blogSlugs = getAllBlogSlugs();
+  for (const lang of langs) {
+    for (const slug of blogSlugs) {
+      entries.push({
+        url: url(`/${lang}/blog/${slug}`),
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.6,
       });
     }
   }

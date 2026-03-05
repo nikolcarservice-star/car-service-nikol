@@ -81,6 +81,9 @@ export default function Header({ lang, t }) {
           <Link href={buildPath(currentLang, 'cennik')} className="hover:text-orange-400">
             {nav.cennik ?? 'Cennik'}
           </Link>
+          <Link href={buildPath(currentLang, 'blog')} className="hover:text-orange-400">
+            {nav.blog ?? 'Blog'}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">

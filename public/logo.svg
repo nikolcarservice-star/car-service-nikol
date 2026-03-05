@@ -1,61 +1,71 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none" role="img" aria-label="Car Service Nikol">
   <defs>
-    <linearGradient id="ribbon" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#1e293b" />
-      <stop offset="50%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#1e293b" />
+    <!-- Metallic bronze outer border -->
+    <linearGradient id="bronze" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c9a227" />
+      <stop offset="50%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#8b6914" />
     </linearGradient>
+    <!-- Dark blue ribbon -->
+    <linearGradient id="ribbon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e3a5f" />
+      <stop offset="50%" stop-color="#0f2744" />
+      <stop offset="100%" stop-color="#1e3a5f" />
+    </linearGradient>
+    <!-- Metallic pistons -->
     <linearGradient id="piston" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#94a3b8" />
-      <stop offset="100%" stop-color="#64748b" />
+      <stop offset="0%" stop-color="#c0c0c0" />
+      <stop offset="50%" stop-color="#a0a0a0" />
+      <stop offset="100%" stop-color="#707070" />
     </linearGradient>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.2" />
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.25" />
     </filter>
   </defs>
-  <!-- Hexagon outer -->
+  <!-- Outer hexagon - metallic bronze -->
   <path
-    d="M100 12 L178 62 L178 148 L100 208 L22 148 L22 62 Z"
-    stroke="#64748b"
-    stroke-width="2.5"
+    d="M100 10 L180 60 L180 150 L100 210 L20 150 L20 60 Z"
+    stroke="url(#bronze)"
+    stroke-width="3"
     fill="none"
   />
-  <!-- Hexagon inner -->
+  <!-- Inner hexagon - white border -->
   <path
-    d="M100 22 L168 64 L168 146 L100 198 L32 146 L32 64 Z"
-    stroke="#475569"
-    stroke-width="1"
+    d="M100 20 L170 62 L170 148 L100 200 L30 148 L30 62 Z"
+    stroke="#ffffff"
+    stroke-width="1.5"
     fill="none"
-    opacity="0.7"
   />
-  <!-- Ribbon -->
+  <!-- Ribbon - dark blue -->
   <path
-    d="M8 95 L50 95 L58 108 L100 95 L142 108 L150 95 L192 95 L185 108 L100 125 L15 108 Z"
+    d="M5 94 L48 94 L56 108 L100 94 L144 108 L152 94 L195 94 L188 108 L100 126 L12 108 Z"
     fill="url(#ribbon)"
-    stroke="#334155"
+    stroke="#0f2744"
     stroke-width="1"
     filter="url(#shadow)"
   />
-  <!-- Star above pistons -->
+  <!-- Star - gold/bronze -->
   <path
-    d="M100 52 L102 60 L110 60 L104 65 L106 73 L100 69 L94 73 L96 65 L90 60 L98 60 Z"
-    fill="#f97316"
+    d="M100 48 L102.5 57 L112 57 L105 63 L107 72 L100 67 L93 72 L95 63 L88 57 L97.5 57 Z"
+    fill="url(#bronze)"
   />
-  <!-- Crossed pistons -->
-  <g fill="url(#piston)" stroke="#475569" stroke-width="1.2" stroke-linejoin="round">
-    <path d="M58 72 L78 92 L92 78 L72 58 Z" />
-    <ellipse cx="75" cy="75" rx="20" ry="9" transform="rotate(-45 75 75)" />
-    <path d="M142 72 L122 92 L108 78 L128 58 Z" />
-    <ellipse cx="125" cy="75" rx="20" ry="9" transform="rotate(45 125 75)" />
+  <!-- Crossed pistons - metallic silver -->
+  <g fill="url(#piston)" stroke="#606060" stroke-width="1" stroke-linejoin="round">
+    <path d="M56 70 L76 90 L90 76 L70 56 Z" />
+    <ellipse cx="73" cy="73" rx="22" ry="10" transform="rotate(-45 73 73)" />
+    <path d="M144 70 L124 90 L110 76 L130 56 Z" />
+    <ellipse cx="127" cy="73" rx="22" ry="10" transform="rotate(45 127 73)" />
   </g>
   <!-- ESTD -->
-  <text x="52" y="92" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">ESTD</text>
+  <text x="48" y="90" font-family="Georgia, serif" font-size="11" font-weight="600" fill="#2c2c2c" text-anchor="middle">ESTD</text>
   <!-- 2024 -->
-  <text x="148" y="92" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="middle">2024</text>
+  <text x="152" y="90" font-family="Georgia, serif" font-size="11" font-weight="600" fill="#2c2c2c" text-anchor="middle">2024</text>
   <!-- CAR SERVICE NIKOL on ribbon -->
-  <text x="100" y="102" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#f8fafc" text-anchor="middle" letter-spacing="0.08em">CAR SERVICE NIKOL</text>
-  <!-- SERWIS SAMOCHODOWY -->
-  <text x="100" y="168" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#94a3b8" text-anchor="middle" letter-spacing="0.06em">SERWIS SAMOCHODOWY</text>
+  <text x="100" y="103" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#f0f4f8" text-anchor="middle" letter-spacing="0.06em">CAR SERVICE NIKOL</text>
+  <!-- SERWIS -->
+  <text x="100" y="158" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#2c2c2c" text-anchor="middle">SERWIS</text>
+  <!-- SAMOCHODOWY -->
+  <text x="100" y="170" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#2c2c2c" text-anchor="middle">SAMOCHODOWY</text>
   <!-- Small X at bottom -->
-  <path d="M97 198 L100 202 L103 198 M100 198 L100 202" stroke="#64748b" stroke-width="1" stroke-linecap="round" opacity="0.7" />
+  <path d="M97 200 L100 204 L103 200 M100 200 L100 204" stroke="#2c2c2c" stroke-width="1" stroke-linecap="round" opacity="0.8" />
 </svg>

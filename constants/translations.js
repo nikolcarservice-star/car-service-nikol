@@ -135,6 +135,8 @@ export const translations = {
     booking: {
       title: 'Umów wizytę online',
       subtitle: 'Zostaw nam swoje dane – oddzwonimy i potwierdzimy termin wizyty w serwisie.',
+      trustLine: 'Szybka odpowiedź · Termin dopasowany do Ciebie',
+      ctaSubtext: 'Odpowiemy w ciągu kilku godzin',
       nameLabel: 'Imię i nazwisko',
       phoneLabel: 'Telefon',
       carLabel: 'Model samochodu',
@@ -314,6 +316,8 @@ export const translations = {
       title: 'Онлайн-запись в сервис',
       subtitle:
         'Оставьте свои данные — мы перезвоним и согласуем удобное время посещения сервиса.',
+      trustLine: 'Быстрый ответ · Удобное для вас время',
+      ctaSubtext: 'Ответим в течение нескольких часов',
       nameLabel: 'Имя и фамилия',
       phoneLabel: 'Телефон',
       carLabel: 'Модель автомобиля',

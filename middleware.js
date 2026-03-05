@@ -4,8 +4,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl'
 
 export function middleware(request) {
   if (request.nextUrl.pathname === '/robots.txt') {
+    // Явно разрешаем индексацию всего сайта; запрещаем только служебные пути
     const body = `User-agent: *
 Allow: /
+
 Disallow: /admin/
 Disallow: /api/
 

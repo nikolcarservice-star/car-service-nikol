@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nikol-crm-cache-v3';
+const CACHE_NAME = 'nikol-crm-cache-v4';
 const OFFLINE_URLS = [
   '/admin/index.html',
   '/admin/app.js',

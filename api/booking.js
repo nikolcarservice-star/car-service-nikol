@@ -35,7 +35,7 @@ function corsHeaders(origin) {
     : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allowOrigin,
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json; charset=utf-8'
   };

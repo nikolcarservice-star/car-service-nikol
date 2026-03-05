@@ -11,6 +11,7 @@ export function generateMetadata({ params }) {
       title: 'Контакты Car Service Nikol – Jastrowo, Шамотулы',
       description:
         'Контакт с Car Service Nikol: адрес, телефон, WhatsApp, Telegram и форма записи. Сервис в Jastrowo и окрестностях Шамотул.',
+      alternates: { canonical: `/${lang}/contact` },
     };
   }
 
@@ -18,6 +19,7 @@ export function generateMetadata({ params }) {
     title: 'Kontakt - Car Service Nikol Jastrowo, Szamotuły',
     description:
       'Skontaktuj się z Car Service Nikol w Jastrowo. Adres ul. Wernisażowa 21, telefon, WhatsApp, Telegram oraz formularz umówienia wizyty.',
+    alternates: { canonical: `/${lang}/contact` },
   };
 }
 

@@ -11,6 +11,7 @@ export function generateMetadata({ params }) {
       title: 'Услуги автосервиса в Jastrowo - Car Service Nikol',
       description:
         'Полный список услуг Car Service Nikol в Jastrowo: ремонт ходовой, тормозов, замена масла, компьютерная диагностика и замена ГРМ.',
+      alternates: { canonical: `/${lang}/services` },
     };
   }
 
@@ -18,6 +19,7 @@ export function generateMetadata({ params }) {
     title: 'Usługi serwisu samochodowego w Jastrowo - Car Service Nikol',
     description:
       'Pełna oferta Car Service Nikol w Jastrowo: naprawa zawieszenia, serwis hamulców, wymiana oleju, diagnostyka komputerowa i wymiana rozrządu.',
+    alternates: { canonical: `/${lang}/services` },
   };
 }
 

@@ -10,12 +10,14 @@ export function generateMetadata({ params }) {
       title: 'Прайс-лист – Car Service Nikol Jastrowo',
       description:
         'Цены на услуги автосервиса в Jastrowo и близлежащих местностях. Масло, тормоза, диагностика, шиномонтаж, ключи.',
+      alternates: { canonical: `/${lang}/cennik` },
     };
   }
   return {
     title: 'Cennik usług – Car Service Nikol Jastrowo',
     description:
       'Cennik usług serwisu samochodowego w Jastrowo i okolicznych miejscowościach. Olej, hamulce, diagnostyka, opony, klucze.',
+    alternates: { canonical: `/${lang}/cennik` },
   };
 }
 

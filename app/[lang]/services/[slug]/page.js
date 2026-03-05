@@ -29,6 +29,7 @@ export function generateMetadata({ params }) {
   return {
     title: service.seoTitle,
     description: service.seoDescription,
+    alternates: { canonical: `/${lang}/services/${params.slug}` },
   };
 }
 

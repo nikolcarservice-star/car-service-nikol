@@ -9,6 +9,7 @@ export function generateMetadata({ params }) {
       title: 'О компании Car Service Nikol – автосервис Jastrowo',
       description:
         'Узнайте больше о Car Service Nikol в Jastrowo: опыт, оборудование, ценности сервиса, данные компании (NIP, REGON).',
+      alternates: { canonical: `/${lang}/about` },
     };
   }
 
@@ -16,6 +17,7 @@ export function generateMetadata({ params }) {
     title: 'O nas - Car Service Nikol Jastrowo, Szamotuły',
     description:
       'Poznaj Car Service Nikol w Jastrowo: doświadczenie, wyposażenie, wartości serwisu oraz dane firmy (NIP, REGON). Wystawiamy faktury VAT.',
+    alternates: { canonical: `/${lang}/about` },
   };
 }
 

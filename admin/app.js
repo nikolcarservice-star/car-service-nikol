@@ -1349,9 +1349,14 @@ function renderOrderScreen() {
   const conductBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white', [t('conduct_btn')]);
   const previewBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-slate-600 hover:bg-slate-500 text-sm font-medium text-slate-100', [t('preview_btn')]);
   const cancelBtn = createEl('button', 'px-4 py-2.5 rounded-lg border border-slate-600 hover:bg-slate-800 text-sm font-medium text-slate-300', [t('cancel_btn')]);
-  actionsRow.appendChild(conductBtn);
-  actionsRow.appendChild(previewBtn);
-  actionsRow.appendChild(cancelBtn);
+  const saveOnlyBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white', [t('save_order')]);
+  if (isMaster) {
+    actionsRow.appendChild(saveOnlyBtn);
+  } else {
+    actionsRow.appendChild(conductBtn);
+    actionsRow.appendChild(previewBtn);
+    actionsRow.appendChild(cancelBtn);
+  }
 
   if (!isMaster) {
     summaryCard.appendChild(summaryList);
@@ -1475,6 +1480,14 @@ function renderOrderScreen() {
     } catch (e) {
       saveInfo.textContent = (e && e.message) || 'PDF error';
     }
+  });
+
+  saveOnlyBtn.addEventListener('click', async () => {
+    const order = await buildOrderFromForm();
+    if (!order) return;
+    saveOrder(order);
+    saveInfo.textContent = t('order_saved');
+    setTimeout(() => { saveInfo.textContent = ''; }, 3000);
   });
 
   let previewOverlay = null;

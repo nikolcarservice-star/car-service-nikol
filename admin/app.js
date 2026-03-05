@@ -1965,6 +1965,28 @@ function renderBookingScreen() {
   container.appendChild(addBtn);
 
   const listEl = createEl('div', 'space-y-2');
+
+  async function loadFromApi() {
+    try {
+      const res = await fetch('/api/booking');
+      const data = await res.json();
+      if (data && data.ok && Array.isArray(data.bookings)) {
+        bookingRequests = data.bookings.map((r) => ({
+          id: r.id,
+          name: r.name,
+          phone: r.phone,
+          car: r.car,
+          service: r.service,
+          message: r.message,
+          createdAt: r.created_at
+        }));
+        persistAll();
+      }
+    } catch {
+      // если API недоступно – остаёмся на локальных данных
+    }
+  }
+
   function renderList() {
     listEl.innerHTML = '';
     const sorted = [...bookingRequests].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
@@ -2002,9 +2024,9 @@ function renderBookingScreen() {
     if (name == null) return;
     const phone = prompt(settings.language === 'pl' ? 'Telefon' : 'Телефон', '');
     const car = prompt(settings.language === 'pl' ? 'Pojazd (marka, model, rok)' : 'Авто (марка, модель, год)', '');
-    const service = prompt(settings.language === 'pl' ? 'Usługa' : 'Услуга', '');
+    const service = prompt(settings.language === 'pl' ? 'Usługa' : 'Услuga', '');
     const message = prompt(settings.language === 'pl' ? 'Wiadomość' : 'Сообщение', '');
-    bookingRequests.push({
+    const entry = {
       id: nextId(),
       name: (name || '').trim(),
       phone: (phone || '').trim(),
@@ -2012,13 +2034,28 @@ function renderBookingScreen() {
       service: (service || '').trim(),
       message: (message || '').trim(),
       createdAt: new Date().toISOString()
-    });
+    };
+    bookingRequests.push(entry);
     persistAll();
     renderList();
+    // Параллельно отправляем в API, чтобы заявка попала в Supabase
+    fetch('/api/booking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: entry.name,
+        phone: entry.phone,
+        car: entry.car,
+        service: entry.service,
+        message: entry.message,
+        date: '',
+        lang: settings.language
+      })
+    }).catch(() => {});
   });
 
   container.appendChild(listEl);
-  renderList();
+  loadFromApi().then(renderList).catch(renderList);
   return container;
 }
 

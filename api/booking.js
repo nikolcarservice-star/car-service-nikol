@@ -1,8 +1,24 @@
 /**
- * Vercel Serverless: приём заявок с формы записи и отправка в CRM.
- * В настройках Vercel задайте переменную CRM_WEBHOOK_URL (URL вашей CRM или Make/Zapier webhook).
- * Метод: POST, тело: JSON { name, phone, car, service, date, message, lang }
+ * Vercel Serverless: заявки с формы записи.
+ * POST: получает заявку, сохраняет в Supabase (booking_requests) и, при желании, шлёт webhook.
+ * GET: возвращает список заявок для CRM.
  */
+
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ||
+  process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabase = SUPABASE_URL && SUPABASE_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } })
+  : null;
 
 const ALLOWED_ORIGINS = [
   'https://carservicenikol.pl',
@@ -19,33 +35,50 @@ function corsHeaders(origin) {
     : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allowOrigin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json; charset=utf-8'
   };
 }
 
 export default async function handler(req, res) {
+  const origin = req.headers.origin || '';
+  const headers = corsHeaders(origin);
+
   if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+    res.setHeader('Access-Control-Allow-Methods', headers['Access-Control-Allow-Methods']);
+    res.setHeader('Access-Control-Allow-Headers', headers['Access-Control-Allow-Headers']);
     return res.status(204).end();
   }
 
-  if (req.method !== 'POST') {
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  if (!supabase) {
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+    return res.status(500).json({ ok: false, error: 'Supabase not configured' });
   }
 
-  const origin = req.headers.origin || '';
-  const headers = corsHeaders(origin);
+  if (req.method === 'GET') {
+    const { data, error } = await supabase
+      .from('booking_requests')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(200);
+
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.status(200).json({ ok: true, bookings: data || [] });
+  }
+
+  if (req.method !== 'POST') {
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  }
 
   let body = {};
   try {
     body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
   } catch (e) {
-    Object.assign(res, { statusCode: 400, headers });
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
     return res.status(400).json({ ok: false, error: 'Invalid JSON' });
   }
 
@@ -71,23 +104,32 @@ export default async function handler(req, res) {
     createdAt: new Date().toISOString()
   };
 
+  // Сохраняем в Supabase
+  const { error } = await supabase.from('booking_requests').insert({
+    name: payload.name,
+    phone: payload.phone,
+    car: payload.car,
+    service: payload.service,
+    date: payload.date,
+    message: payload.message,
+    lang: payload.lang
+  });
+
   const webhookUrl = process.env.CRM_WEBHOOK_URL || process.env.BOOKING_WEBHOOK_URL;
   if (webhookUrl) {
     try {
-      const response = await fetch(webhookUrl, {
+      await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      if (!response.ok) {
-        console.error('CRM webhook error:', response.status, await response.text());
-      }
-    } catch (err) {
-      console.error('CRM webhook fetch error:', err.message);
+    } catch {
+      // игнорируем ошибки вебхука
     }
   }
 
   res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  if (error) return res.status(500).json({ ok: false, error: error.message });
   return res.status(200).json({ ok: true, received: true });
 }

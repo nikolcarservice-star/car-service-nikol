@@ -44,6 +44,7 @@ let bookingRequests = loadJson(STORAGE_KEYS.bookingRequests, []);
 let dynamicUsers = loadJson(STORAGE_KEYS.users, []);
 let parts = loadJson(STORAGE_KEYS.parts, DEFAULT_PARTS);
 let stockMovements = loadJson(STORAGE_KEYS.stockMovements, []);
+let plannerView = { year: new Date().getFullYear(), month: new Date().getMonth() };
 
 // Подмешиваем новые дефолтные услуги в существующий каталог (без перезаписи цен)
 const existingIds = new Set(services.map((s) => String(s.id)));
@@ -322,6 +323,7 @@ const I18N = {
     tab_booking: 'Заявки',
     new_badge: 'новых',
     tab_reminders: 'Напоминания',
+    tab_planner: 'Планировщик',
     tab_analytics: 'Аналитика',
     tab_stock: 'Склад',
     stock_title: 'Склад запчастей',
@@ -371,6 +373,14 @@ const I18N = {
     reminder_due: 'Срок',
     reminder_note: 'Заметка',
     reminder_completed: 'Выполнено',
+    planner_title: 'Планировщик визитов',
+    planner_orders: 'Заказы',
+    planner_bookings: 'Заявки',
+    planner_reminders: 'Напоминания',
+    planner_no_events: 'Нет событий на эту дату',
+    planner_today: 'Сегодня',
+    planner_prev: '←',
+    planner_next: '→',
     booking_car: 'Авто',
     booking_service: 'Услуга',
     booking_date: 'Дата записи',
@@ -495,6 +505,7 @@ const I18N = {
     tab_booking: 'Zgłoszenia',
     new_badge: 'nowych',
     tab_reminders: 'Przypomnienia',
+    tab_planner: 'Planer wizyt',
     tab_analytics: 'Analityka',
     tab_stock: 'Magazyn',
     stock_title: 'Magazyn części',
@@ -544,6 +555,14 @@ const I18N = {
     reminder_due: 'Termin',
     reminder_note: 'Notatka',
     reminder_completed: 'Wykonane',
+    planner_title: 'Planer wizyt',
+    planner_orders: 'Zlecenia',
+    planner_bookings: 'Zgłoszenia',
+    planner_reminders: 'Przypomnienia',
+    planner_no_events: 'Brak wydarzeń w tym dniu',
+    planner_today: 'Dziś',
+    planner_prev: '←',
+    planner_next: '→',
     booking_car: 'Pojazd',
     booking_service: 'Usługa',
     booking_date: 'Data wizyty',
@@ -898,6 +917,7 @@ function renderAppShell(activeTab = 'order') {
     }
     const clientsVehiclesTab = createEl('button', tabClass('clients_vehicles'), [t('tab_clients_vehicles')]);
     const remindersTab = createEl('button', tabClass('reminders'), [t('tab_reminders')]);
+    const plannerTab = createEl('button', tabClass('planner'), [t('tab_planner')]);
     const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
     const stockTab = createEl('button', tabClass('stock'), [t('tab_stock')]);
 
@@ -911,6 +931,7 @@ function renderAppShell(activeTab = 'order') {
     });
     clientsVehiclesTab.addEventListener('click', () => renderAppShell('clients_vehicles'));
     remindersTab.addEventListener('click', () => renderAppShell('reminders'));
+    plannerTab.addEventListener('click', () => renderAppShell('planner'));
     analyticsTab.addEventListener('click', () => renderAppShell('analytics'));
     stockTab.addEventListener('click', () => renderAppShell('stock'));
 
@@ -918,6 +939,7 @@ function renderAppShell(activeTab = 'order') {
     tabs.appendChild(bookingTab);
     tabs.appendChild(clientsVehiclesTab);
     tabs.appendChild(remindersTab);
+    tabs.appendChild(plannerTab);
     tabs.appendChild(analyticsTab);
     tabs.appendChild(stockTab);
 
@@ -943,6 +965,8 @@ function renderAppShell(activeTab = 'order') {
     content.appendChild(renderBookingScreen());
   } else if (activeTab === 'reminders') {
     content.appendChild(renderRemindersScreen());
+  } else if (activeTab === 'planner') {
+    content.appendChild(renderVisitPlannerScreen());
   } else if (activeTab === 'analytics') {
     content.appendChild(renderAnalyticsScreen());
   } else if (activeTab === 'stock') {
@@ -2378,6 +2402,132 @@ function renderRemindersScreen() {
 
   container.appendChild(listEl);
   renderList();
+  return container;
+}
+
+function renderVisitPlannerScreen() {
+  const container = createEl('div', 'space-y-4');
+  const { year, month } = plannerView;
+  const locale = settings.language === 'pl' ? 'pl-PL' : 'ru-RU';
+  const monthTitle = new Date(year, month, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+  const navRow = createEl('div', 'flex items-center justify-between gap-2');
+  const prevBtn = createEl('button', 'p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200', [t('planner_prev')]);
+  const titleEl = createEl('div', 'text-base font-semibold text-slate-100 capitalize', [monthTitle]);
+  const nextBtn = createEl('button', 'p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200', [t('planner_next')]);
+  prevBtn.addEventListener('click', () => {
+    plannerView = { year: month === 0 ? year - 1 : year, month: month === 0 ? 11 : month - 1 };
+    renderAppShell('planner');
+  });
+  nextBtn.addEventListener('click', () => {
+    plannerView = { year: month === 11 ? year + 1 : year, month: month === 11 ? 0 : month + 1 };
+    renderAppShell('planner');
+  });
+  navRow.appendChild(prevBtn);
+  navRow.appendChild(titleEl);
+  navRow.appendChild(nextBtn);
+  container.appendChild(navRow);
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+
+  const weekdays = settings.language === 'pl'
+    ? ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd']
+    : ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  const table = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 overflow-hidden');
+  const headerRow = createEl('div', 'grid grid-cols-7 border-b border-slate-700 bg-slate-800/80');
+  weekdays.forEach((wd) => headerRow.appendChild(createEl('div', 'py-2 text-center text-xs font-medium text-slate-400', [wd])));
+  table.appendChild(headerRow);
+
+  const getDayKey = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const ordersByDay = {};
+  const bookingsByDay = {};
+  const remindersByDay = {};
+  orders.forEach((o) => {
+    const d = (o.timeIn || o.createdAt || '').slice(0, 10);
+    if (d) { ordersByDay[d] = (ordersByDay[d] || 0) + 1; }
+  });
+  bookingRequests.forEach((b) => {
+    const d = (b.preferredDate || b.createdAt || '').slice(0, 10);
+    if (d) { bookingsByDay[d] = (bookingsByDay[d] || 0) + 1; }
+  });
+  reminders.forEach((r) => {
+    if (!r.completed && r.dueDate) { remindersByDay[r.dueDate.slice(0, 10)] = (remindersByDay[r.dueDate.slice(0, 10)] || 0) + 1; }
+  });
+
+  const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+  const grid = createEl('div', 'grid grid-cols-7');
+  for (let i = 0; i < totalCells; i++) {
+    const cell = createEl('div', 'min-h-[4rem] p-1 border-b border-r border-slate-700/70 last:border-r-0 bg-slate-900');
+    if (i < startOffset || i >= startOffset + daysInMonth) {
+      cell.classList.add('bg-slate-950/50');
+      cell.appendChild(createEl('div', 'text-slate-600 text-sm', ['']));
+    } else {
+      const day = i - startOffset + 1;
+      const dayKey = getDayKey(year, month, day);
+      const oCount = ordersByDay[dayKey] || 0;
+      const bCount = bookingsByDay[dayKey] || 0;
+      const rCount = remindersByDay[dayKey] || 0;
+      cell.appendChild(createEl('div', 'text-slate-200 text-sm font-medium', [String(day)]));
+      const badges = createEl('div', 'flex flex-wrap gap-0.5 mt-0.5');
+      if (oCount) badges.appendChild(createEl('span', 'inline-block px-1.5 py-0.5 rounded text-[10px] bg-primary-600/80 text-white', [String(oCount)]));
+      if (bCount) badges.appendChild(createEl('span', 'inline-block px-1.5 py-0.5 rounded text-[10px] bg-sky-600/80 text-white', [String(bCount)]));
+      if (rCount) badges.appendChild(createEl('span', 'inline-block px-1.5 py-0.5 rounded text-[10px] bg-amber-600/80 text-white', [String(rCount)]));
+      cell.appendChild(badges);
+    }
+    grid.appendChild(cell);
+  }
+  table.appendChild(grid);
+  container.appendChild(table);
+
+  const legend = createEl('div', 'flex flex-wrap gap-4 text-xs text-slate-400');
+  legend.appendChild(createEl('span', 'flex items-center gap-1.5', [createEl('span', 'inline-block w-4 h-4 rounded bg-primary-600/80', []), t('planner_orders')]));
+  legend.appendChild(createEl('span', 'flex items-center gap-1.5', [createEl('span', 'inline-block w-4 h-4 rounded bg-sky-600/80', []), t('planner_bookings')]));
+  legend.appendChild(createEl('span', 'flex items-center gap-1.5', [createEl('span', 'inline-block w-4 h-4 rounded bg-amber-600/80', []), t('planner_reminders')]));
+  container.appendChild(legend);
+
+  const eventsList = createEl('div', 'mt-4 space-y-2');
+  const eventsTitle = createEl('h3', 'text-sm font-semibold text-slate-200', [monthTitle + ' — ' + (settings.language === 'pl' ? 'Wydarzenia' : 'События')]);
+  container.appendChild(eventsTitle);
+  container.appendChild(eventsList);
+
+  const events = [];
+  orders.forEach((o) => {
+    const d = (o.timeIn || o.createdAt || '').slice(0, 10);
+    if (d && d.startsWith(`${year}-${String(month + 1).padStart(2, '0')}`)) {
+      events.push({ date: d, type: 'order', label: (o.brand || '') + ' ' + (o.model || '') + ', ' + (o.clientName || '—'), id: o.id });
+    }
+  });
+  bookingRequests.forEach((b) => {
+    const d = (b.preferredDate || b.createdAt || '').slice(0, 10);
+    if (d && d.startsWith(`${year}-${String(month + 1).padStart(2, '0')}`)) {
+      events.push({ date: d, type: 'booking', label: (b.car || '') + ' — ' + (b.service || '—'), id: b.id });
+    }
+  });
+  reminders.forEach((r) => {
+    if (r.completed || !r.dueDate) return;
+    const d = r.dueDate.slice(0, 10);
+    if (d.startsWith(`${year}-${String(month + 1).padStart(2, '0')}`)) {
+      events.push({ date: d, type: 'reminder', label: r.note || t('reminder_note'), id: r.id });
+    }
+  });
+  events.sort((a, b) => a.date.localeCompare(b.date));
+
+  if (events.length === 0) {
+    eventsList.appendChild(createEl('div', 'text-sm text-slate-500 py-4', [t('planner_no_events')]));
+  } else {
+    events.forEach((ev) => {
+      const row = createEl('div', 'flex items-center gap-2 rounded-lg px-3 py-2 bg-slate-800/60 border border-slate-700/50');
+      const dateStr = new Date(ev.date + 'Z').toLocaleDateString(locale, { day: 'numeric', month: 'short' });
+      const typeColor = ev.type === 'order' ? 'bg-primary-600' : ev.type === 'booking' ? 'bg-sky-600' : 'bg-amber-600';
+      row.appendChild(createEl('span', 'text-xs text-slate-400 w-16 shrink-0', [dateStr]));
+      row.appendChild(createEl('span', 'inline-block w-2 h-2 rounded-full shrink-0 ' + typeColor, []));
+      row.appendChild(createEl('span', 'text-sm text-slate-200 truncate', [ev.label]));
+      eventsList.appendChild(row);
+    });
+  }
+
   return container;
 }
 

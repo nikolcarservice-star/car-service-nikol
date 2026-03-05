@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CalendarDays, Clock, PhoneCall } from 'lucide-react';
+import { CalendarDays, Check, Clock, PhoneCall } from 'lucide-react';
 import { PHONE_DISPLAY } from '../constants/translations';
 
 export default function Hero({ t }) {
@@ -67,26 +67,18 @@ export default function Hero({ t }) {
             </a>
           </div>
 
-          <div className="mt-4 grid gap-4 text-xs text-gray-100 sm:grid-cols-2 sm:text-sm">
-            <div className="rounded-2xl border border-white/15 bg-white/5 p-3 backdrop-blur-xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-200">
-                {hero.scheduleTitle}
-              </p>
-              <p className="mt-2 text-sm font-semibold text-orange-300">
-                {hero.saturday}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-emerald-400/80 bg-emerald-500/20 p-3 backdrop-blur-xl">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100">
-                  {hero.sunday}
-                </p>
-                <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-900">
-                  OPEN
-                </span>
-              </div>
-            </div>
-          </div>
+          {hero.trustSignals?.length > 0 && (
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-200 sm:text-sm" aria-label="Trust signals">
+              {hero.trustSignals.map((label, i) => (
+                <li key={i} className="inline-flex items-center gap-2">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400" aria-hidden>
+                    <Check className="h-3 w-3 stroke-[2.5]" />
+                  </span>
+                  <span>{label}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </motion.div>
 
         <motion.div

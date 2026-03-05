@@ -32,7 +32,7 @@ Wersje językowe: **PL** (główna, w katalogu głównym), **EN** (katalog `/en/
 
 2. **Mapa Google**  
    Na stronie Kontakt jest iframe z mapą. Aby wstawić dokładną mapę swojego miejsca:
-   - Otwórz [Google Maps](https://www.google.com/maps), znajdź „Wernisazowa 21, Jastrowie”
+   - Otwórz [Google Maps](https://www.google.com/maps), znajdź „Wernisażowa 21, Jastrowo”
    - Kliknij „Udostępnij” → „W osadź mapę” → skopiuj kod iframe
    - Wklej go w `kontakt.html` i w `en/contact.html`, `ru/kontakt.html` w sekcji `<div class="map-wrap">`
 

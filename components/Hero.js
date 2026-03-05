@@ -1,10 +1,14 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CalendarDays, Check, Clock, PhoneCall } from 'lucide-react';
 import { PHONE_DISPLAY } from '../constants/translations';
 
 export default function Hero({ t }) {
+  const pathname = usePathname() || '/pl';
+  const lang = (pathname.split('/').filter(Boolean)[0] === 'ru') ? 'ru' : 'pl';
   const hero = t.hero;
 
   const handleBookClick = () => {
@@ -58,13 +62,13 @@ export default function Hero({ t }) {
               <CalendarDays className="h-4 w-4" />
               <span>{hero.ctaPrimary}</span>
             </button>
-            <a
-              href={`tel:${PHONE_DISPLAY.replace(/[^+\d]/g, '')}`}
+            <Link
+              href={`/${lang}/contact`}
               className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/50 bg-transparent px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               <PhoneCall className="h-4 w-4" />
               <span>{hero.ctaSecondary}</span>
-            </a>
+            </Link>
           </div>
 
           {hero.trustSignals?.length > 0 && (

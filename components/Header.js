@@ -111,13 +111,14 @@ export default function Header({ lang, t }) {
             </Link>
           </div>
 
-          <a
-            href={`tel:${PHONE_DISPLAY.replace(/[^+\d]/g, '')}`}
+          <Link
+            href={buildPath(currentLang, 'contact')}
             className="hidden items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow-glow hover:bg-orange-400 md:inline-flex"
+            title={nav.phoneCta}
           >
             <Phone className="h-4 w-4" />
             <span>{PHONE_DISPLAY}</span>
-          </a>
+          </Link>
         </div>
       </div>
     </header>

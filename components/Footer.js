@@ -10,9 +10,6 @@ export default function Footer({ lang }) {
         <div className="grid gap-6 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <div className="space-y-1">
             <p className="text-sm font-semibold text-gray-100">Car Service Nikol</p>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">
-              {t.invoices}
-            </p>
             <Link
               href={`/${lang}/privacy`}
               className="mt-1 inline-flex text-[11px] text-orange-300 hover:text-orange-200"

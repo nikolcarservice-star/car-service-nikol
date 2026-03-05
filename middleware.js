@@ -1,0 +1,22 @@
+import { NextResponse } from 'next/server';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+
+export function middleware(request) {
+  if (request.nextUrl.pathname === '/robots.txt') {
+    const body = `User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: ${siteUrl}/sitemap.xml
+`;
+    return new NextResponse(body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
+    });
+  }
+  return NextResponse.next();
+}

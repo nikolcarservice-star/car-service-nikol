@@ -22,7 +22,7 @@ export function generateMetadata({ params }) {
   return {
     title: 'Car Service Nikol – serwis Jastrowo, Szamotuły',
     description:
-      'Car Service Nikol – serwis samochodowy Jastrowo, zaufany mechanik Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców, wymiana oleju i filtrów. Otwarte w niedzielę.',
+      'Car Service Nikol – serwis Jastrowo, mechanik Szamotuły. Weekendowy serwis, diagnostyka, hamulce, wymiana oleju. Otwarte w niedzielę.',
     keywords:
       'serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, mechanik Szamotuły, diagnostyka samochodowa Jastrowo, naprawa hamulców Szamotuły, wymiana oleju i filtrów Jastrowo, Car Service Nikol',
     alternates: { canonical: `/${lang}` },

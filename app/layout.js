@@ -53,7 +53,7 @@ const jsonLdOrganization = {
 
 const title = 'Car Service Nikol – serwis Jastrowo, Szamotuły';
 const description =
-  'Car Service Nikol – serwis samochodowy Jastrowo, zaufany mechanik Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców, wymiana oleju i filtrów. Otwarte w niedzielę.';
+  'Car Service Nikol – serwis Jastrowo, mechanik Szamotuły. Weekendowy serwis, diagnostyka, hamulce, wymiana oleju. Otwarte w niedzielę.';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),

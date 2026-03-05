@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
@@ -18,7 +19,7 @@ export default function BookingForm({ lang }) {
   } = useForm({
     defaultValues: {
       name: '',
-      phone: PHONE_DISPLAY,
+      phone: '+48',
       car: '',
       service: '',
       date: '',
@@ -50,7 +51,7 @@ export default function BookingForm({ lang }) {
       setStatus('success');
       reset({
         name: '',
-        phone: PHONE_DISPLAY,
+        phone: '+48',
         car: '',
         service: '',
         date: '',
@@ -241,12 +242,12 @@ export default function BookingForm({ lang }) {
                 {lang === LANGUAGES.RU
                   ? 'Также можете позвонить напрямую:'
                   : 'Możesz też zadzwonić bezpośrednio:'}{' '}
-                <a
-                  href={`tel:${PHONE_DISPLAY.replace(/[^+\d]/g, '')}`}
+                <Link
+                  href={`/${lang}/contact`}
                   className="text-orange-300 hover:text-orange-200"
                 >
                   {PHONE_DISPLAY}
-                </a>
+                </Link>
               </p>
             </div>
             <p>

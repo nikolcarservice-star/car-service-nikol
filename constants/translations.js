@@ -125,7 +125,7 @@ export const translations = {
       ],
     },
     aboutBlock: {
-      title: 'O nas — Pasja i Profesjonalizm w Jastrowie',
+      title: 'O nas — Pasja i Profesjonalizm w Jastrowo',
       paragraph1:
         'Car Service Nikol powstał z myślą o kierowcach, którzy cenią swój czas i szukają niezawodnego mechanika w okolicy Szamotuł i Jastrowa. Wiemy, że awaria auta nie wybiera godziny, dlatego jako jedni z nielicznych jesteśmy do Twojej dyspozycji również w soboty i niedziele.',
       paragraph2:

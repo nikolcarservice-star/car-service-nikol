@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getTranslations } from '../constants/translations';
 
 export default function Footer({ lang }) {
@@ -12,12 +13,12 @@ export default function Footer({ lang }) {
             <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">
               {t.invoices}
             </p>
-            <a
-              href="#privacy"
+            <Link
+              href={`/${lang}/privacy`}
               className="mt-1 inline-flex text-[11px] text-orange-300 hover:text-orange-200"
             >
               {t.privacy}
-            </a>
+            </Link>
             <a
               href="https://car-service-nikol-crm.vercel.app"
               target="_blank"

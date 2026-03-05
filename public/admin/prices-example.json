@@ -1,8 +1,0 @@
-[
-  { "id": "1", "basePrice": 100, "competitorAvgPrice": 120 },
-  { "id": "2", "basePrice": 250, "competitorAvgPrice": 300 },
-  { "id": "3", "basePrice": 100, "competitorAvgPrice": 120 },
-  { "id": "4", "basePrice": 120, "competitorAvgPrice": 140 },
-  { "id": "5", "basePrice": 50, "competitorAvgPrice": 60 }
-]
-

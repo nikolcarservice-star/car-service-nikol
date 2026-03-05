@@ -1968,7 +1968,8 @@ function renderBookingScreen() {
 
   async function loadFromApi() {
     try {
-      const res = await fetch('/api/booking');
+      // Берём заявки из основного сайта, где крутится API и Supabase
+      const res = await fetch('https://car-service-nikol.vercel.app/api/booking');
       const data = await res.json();
       if (data && data.ok && Array.isArray(data.bookings)) {
         bookingRequests = data.bookings.map((r) => ({
@@ -2039,7 +2040,7 @@ function renderBookingScreen() {
     persistAll();
     renderList();
     // Параллельно отправляем в API, чтобы заявка попала в Supabase
-    fetch('/api/booking', {
+    fetch('https://car-service-nikol.vercel.app/api/booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

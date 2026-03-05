@@ -69,6 +69,32 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true, bookings: data || [] });
   }
 
+  if (req.method === 'DELETE') {
+    const { id: queryId } = req.query || {};
+    let id = queryId;
+    if (!id && req.body) {
+      try {
+        const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+        id = body && body.id;
+      } catch {
+        // ignore JSON parse error, we'll handle missing id below
+      }
+    }
+
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+    if (!id) {
+      return res.status(400).json({ ok: false, error: 'Missing id' });
+    }
+
+    const { error } = await supabase
+      .from('booking_requests')
+      .delete()
+      .eq('id', id);
+
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.status(200).json({ ok: true, deleted: true });
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
     return res.status(405).json({ ok: false, error: 'Method not allowed' });

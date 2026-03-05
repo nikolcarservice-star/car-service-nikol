@@ -2009,9 +2009,18 @@ function renderBookingScreen() {
       });
       const delBtn = createEl('button', 'text-xs px-2 py-1 rounded-lg bg-slate-700 text-slate-300', [t('remove')]);
       delBtn.addEventListener('click', () => {
+        // Локально убираем заявку
         bookingRequests = bookingRequests.filter((x) => x.id !== r.id);
         persistAll();
         renderList();
+        // И сразу удаляем её из общей базы (Supabase через API основного сайта),
+        // чтобы она не возвращалась после перезагрузки
+        if (r.id) {
+          const url = 'https://car-service-nikol.vercel.app/api/booking?id=' + encodeURIComponent(r.id);
+          fetch(url, {
+            method: 'DELETE'
+          }).catch(() => {});
+        }
       });
       actions.appendChild(toOrderBtn);
       actions.appendChild(delBtn);

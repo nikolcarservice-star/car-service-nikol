@@ -36,6 +36,11 @@ export const translations = {
       scheduleTitle: 'Weekendowe godziny otwarcia',
       saturday: 'SOBOTA: 08:00 – 18:00',
       sunday: 'NIEDZIELA: 10:00 – 16:00',
+      trustSignals: [
+        'Gwarancja na części',
+        'Szybka diagnostyka',
+        'Konkurencyjne ceny',
+      ],
     },
     features: {
       title: 'Dlaczego warto wybrać nasz serwis',
@@ -194,6 +199,11 @@ export const translations = {
       scheduleTitle: 'График работы по выходным',
       saturday: 'СУББОТА: 08:00 – 18:00',
       sunday: 'ВОСКРЕСЕНЬЕ: 10:00 – 16:00',
+      trustSignals: [
+        'Гарантия на запчасти',
+        'Быстрая диагностика',
+        'Конкурентные цены',
+      ],
     },
     features: {
       title: 'Преимущества нашего сервиса',

@@ -191,6 +191,7 @@ const USERS = [
 
 let currentUser = null;
 let adminSelectedOrderId = null;
+let selectedBookingId = null;
 
 // Восстанавливаем пользователя из localStorage, чтобы не выбрасывало при перезагрузке
 try {
@@ -384,6 +385,10 @@ const I18N = {
     booking_car: 'Авто',
     booking_service: 'Услуга',
     booking_date: 'Дата записи',
+    confirm_booking: 'Подтвердить',
+    booking_confirmed: 'Подтверждено',
+    booking_detail: 'Заявка',
+    create_order_from_booking: 'Создать заказ',
     change_password: 'Сменить пароль',
     current_password: 'Текущий пароль',
     new_password: 'Новый пароль',
@@ -566,6 +571,10 @@ const I18N = {
     booking_car: 'Pojazd',
     booking_service: 'Usługa',
     booking_date: 'Data wizyty',
+    confirm_booking: 'Potwierdź',
+    booking_confirmed: 'Potwierdzone',
+    booking_detail: 'Zgłoszenie',
+    create_order_from_booking: 'Utwórz zlecenie',
     change_password: 'Zmień hasło',
     current_password: 'Obecne hasło',
     new_password: 'Nowe hasło',
@@ -2245,10 +2254,6 @@ function renderVehiclesScreen() {
 
 function renderBookingScreen() {
   const container = createEl('div', 'space-y-4');
-  const addBtn = createEl('button', 'w-full py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm text-white', [t('add_booking')]);
-  container.appendChild(addBtn);
-
-  const listEl = createEl('div', 'space-y-2');
 
   async function loadFromApi() {
     try {
@@ -2263,6 +2268,9 @@ function renderBookingScreen() {
           car: r.car,
           service: r.service,
           message: r.message,
+          date: r.date || r.preferred_date || '',
+          preferredDate: (r.date || r.preferred_date || '').slice(0, 10),
+          confirmed: !!r.confirmed,
           createdAt: r.created_at
         }));
         persistAll();
@@ -2272,6 +2280,70 @@ function renderBookingScreen() {
     }
   }
 
+  async function confirmBooking(r) {
+    if (!r.id) return;
+    try {
+      const res = await fetch('https://car-service-nikol.vercel.app/api/booking', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: r.id, confirmed: true })
+      });
+      const data = await res.json();
+      if (data && data.ok) {
+        const b = bookingRequests.find((x) => x.id === r.id);
+        if (b) b.confirmed = true;
+        persistAll();
+      }
+    } catch {}
+  }
+
+  if (selectedBookingId) {
+    const r = bookingRequests.find((b) => String(b.id) === String(selectedBookingId));
+    if (!r) {
+      selectedBookingId = null;
+      return renderBookingScreen();
+    }
+    const backBtn = createEl('button', 'text-sm text-slate-400 hover:text-slate-200 flex items-center gap-1', [t('back_btn') + ' ←']);
+    backBtn.addEventListener('click', () => { selectedBookingId = null; renderAppShell('booking'); });
+    container.appendChild(backBtn);
+    const card = createEl('div', 'bg-slate-900 border border-slate-700 rounded-xl p-4 space-y-3');
+    card.appendChild(createEl('div', 'text-xs font-medium text-slate-400 uppercase', [t('booking_detail')]));
+    card.appendChild(createEl('div', 'text-base font-medium text-white', [r.name || '—']));
+    card.appendChild(createEl('div', 'text-sm text-slate-300', [t('client_phone') + ': ' + (r.phone || '—')]));
+    card.appendChild(createEl('div', 'text-sm text-slate-300', [t('booking_car') + ': ' + (r.car || '—')]));
+    card.appendChild(createEl('div', 'text-sm text-slate-300', [t('booking_service') + ': ' + (r.service || '—')]));
+    if (r.date) card.appendChild(createEl('div', 'text-sm text-slate-300', [t('booking_date') + ': ' + r.date]));
+    if (r.message) card.appendChild(createEl('div', 'text-sm text-slate-500 border-t border-slate-700 pt-2', [r.message]));
+    const createdStr = r.createdAt ? new Date(r.createdAt).toLocaleString(settings.language === 'pl' ? 'pl-PL' : 'ru-RU') : '';
+    if (createdStr) card.appendChild(createEl('div', 'text-xs text-slate-500', [createdStr]));
+    if (r.confirmed) card.appendChild(createEl('div', 'inline-flex items-center px-2 py-1 rounded-lg bg-emerald-800/60 text-emerald-200 text-xs', [t('booking_confirmed')]));
+    const actions = createEl('div', 'flex flex-wrap gap-2 pt-2');
+    if (!r.confirmed) {
+      const confirmBtn = createEl('button', 'px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm', [t('confirm_booking')]);
+      confirmBtn.addEventListener('click', async () => { await confirmBooking(r); renderAppShell('booking'); });
+      actions.appendChild(confirmBtn);
+    }
+    const toOrderBtn = createEl('button', 'px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm', [t('create_order_from_booking')]);
+    toOrderBtn.addEventListener('click', () => { window.__bookingPrefill = r; selectedBookingId = null; renderAppShell('order'); });
+    const delBtn = createEl('button', 'px-4 py-2 rounded-lg border border-slate-600 hover:bg-slate-700 text-slate-300 text-sm', [t('remove')]);
+    delBtn.addEventListener('click', () => {
+      bookingRequests = bookingRequests.filter((x) => x.id !== r.id);
+      persistAll();
+      selectedBookingId = null;
+      if (r.id) fetch('https://car-service-nikol.vercel.app/api/booking?id=' + encodeURIComponent(r.id), { method: 'DELETE' }).catch(() => {});
+      renderAppShell('booking');
+    });
+    actions.appendChild(toOrderBtn);
+    actions.appendChild(delBtn);
+    card.appendChild(actions);
+    container.appendChild(card);
+    return container;
+  }
+
+  const addBtn = createEl('button', 'w-full py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm text-white', [t('add_booking')]);
+  container.appendChild(addBtn);
+  const listEl = createEl('div', 'space-y-2');
+
   function renderList() {
     listEl.innerHTML = '';
     const sorted = [...bookingRequests].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
@@ -2280,31 +2352,34 @@ function renderBookingScreen() {
       return;
     }
     sorted.forEach((r) => {
-      const row = createEl('div', 'bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-1');
-      row.appendChild(createEl('div', 'text-sm font-medium text-white', [r.name || '—']));
+      const row = createEl('div', 'bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-1 cursor-pointer hover:border-slate-600 transition');
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        selectedBookingId = r.id;
+        renderAppShell('booking');
+      });
+      const titleRow = createEl('div', 'flex items-center justify-between gap-2');
+      titleRow.appendChild(createEl('span', 'text-sm font-medium text-white', [r.name || '—']));
+      if (r.confirmed) titleRow.appendChild(createEl('span', 'text-[10px] px-1.5 py-0.5 rounded bg-emerald-800/60 text-emerald-200', [t('booking_confirmed')]));
+      row.appendChild(titleRow);
       row.appendChild(createEl('div', 'text-xs text-slate-400', [(r.phone || '') + ' · ' + (r.car || '—')]));
       row.appendChild(createEl('div', 'text-xs text-slate-300', [r.service || '—']));
-      if (r.message) row.appendChild(createEl('div', 'text-xs text-slate-500', [r.message]));
+      if (r.message) row.appendChild(createEl('div', 'text-xs text-slate-500 line-clamp-1', [r.message]));
       const actions = createEl('div', 'flex gap-2 mt-2');
+      if (!r.confirmed) {
+        const confirmBtn = createEl('button', 'text-xs px-2 py-1 rounded-lg bg-emerald-600 text-white', [t('confirm_booking')]);
+        confirmBtn.addEventListener('click', (e) => { e.stopPropagation(); confirmBooking(r).then(() => loadFromApi().then(renderList)); });
+        actions.appendChild(confirmBtn);
+      }
       const toOrderBtn = createEl('button', 'text-xs px-2 py-1 rounded-lg bg-primary-600 text-white', [t('convert_to_order')]);
-      toOrderBtn.addEventListener('click', () => {
-        window.__bookingPrefill = r;
-        renderAppShell('order');
-      });
+      toOrderBtn.addEventListener('click', (e) => { e.stopPropagation(); window.__bookingPrefill = r; renderAppShell('order'); });
       const delBtn = createEl('button', 'text-xs px-2 py-1 rounded-lg bg-slate-700 text-slate-300', [t('remove')]);
-      delBtn.addEventListener('click', () => {
-        // Локально убираем заявку
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         bookingRequests = bookingRequests.filter((x) => x.id !== r.id);
         persistAll();
         renderList();
-        // И сразу удаляем её из общей базы (Supabase через API основного сайта),
-        // чтобы она не возвращалась после перезагрузки
-        if (r.id) {
-          const url = 'https://car-service-nikol.vercel.app/api/booking?id=' + encodeURIComponent(r.id);
-          fetch(url, {
-            method: 'DELETE'
-          }).catch(() => {});
-        }
+        if (r.id) fetch('https://car-service-nikol.vercel.app/api/booking?id=' + encodeURIComponent(r.id), { method: 'DELETE' }).catch(() => {});
       });
       actions.appendChild(toOrderBtn);
       actions.appendChild(delBtn);
@@ -2328,6 +2403,7 @@ function renderBookingScreen() {
         car: values.car || '',
         service: values.service || '',
         message: values.message || '',
+        confirmed: false,
         createdAt: new Date().toISOString()
       };
       bookingRequests.push(entry);

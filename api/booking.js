@@ -1,7 +1,9 @@
 /**
  * Vercel Serverless: заявки с формы записи.
- * POST: получает заявку, сохраняет в Supabase (booking_requests) и, при желании, шлёт webhook.
+ * POST: получает заявку, сохраняет в Supabase (booking_requests).
  * GET: возвращает список заявок для CRM.
+ * PATCH: подтверждение заявки (body: { id, confirmed: true }). Нужна колонка: ALTER TABLE booking_requests ADD COLUMN IF NOT EXISTS confirmed boolean DEFAULT false;
+ * DELETE: удаление заявки по id.
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -35,7 +37,7 @@ function corsHeaders(origin) {
     : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allowOrigin,
-    'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,PATCH,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json; charset=utf-8'
   };
@@ -67,6 +69,34 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
     if (error) return res.status(500).json({ ok: false, error: error.message });
     return res.status(200).json({ ok: true, bookings: data || [] });
+  }
+
+  if (req.method === 'PATCH') {
+    let body = {};
+    try {
+      body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    } catch {
+      res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+      return res.status(400).json({ ok: false, error: 'Invalid JSON' });
+    }
+    const id = body.id || req.query?.id;
+    res.setHeader('Access-Control-Allow-Origin', headers['Access-Control-Allow-Origin']);
+    if (!id) return res.status(400).json({ ok: false, error: 'Missing id' });
+
+    const updates = {};
+    if (body.confirmed === true) updates.confirmed = true;
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ ok: false, error: 'Nothing to update' });
+    }
+
+    const { error } = await supabase
+      .from('booking_requests')
+      .update(updates)
+      .eq('id', id);
+
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.status(200).json({ ok: true, updated: true });
   }
 
   if (req.method === 'DELETE') {

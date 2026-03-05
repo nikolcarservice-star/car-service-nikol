@@ -1,6 +1,9 @@
 import './globals.css';
+import Script from 'next/script';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-8ZGESKN77X';
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -50,14 +53,14 @@ const jsonLdOrganization = {
 
 const title = 'Car Service Nikol – serwis Jastrowo, Szamotuły';
 const description =
-  'Car Service Nikol – Mechanik Jastrowo, serwis samochodowy Szamotuły. Naprawa aut Jastrowo, warsztat czynny w niedzielę. Zawieszenie, hamulce, olej.';
+  'Car Service Nikol – serwis samochodowy Jastrowo, zaufany mechanik Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców, wymiana oleju i filtrów. Otwarte w niedzielę.';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title,
   description,
   keywords:
-    'Mechanik Jastrowo, Serwis samochodowy Szamotuły, Naprawa aut Jastrowo, Warsztat samochodowy czynny w niedzielę, Car Service Nikol',
+    'serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, mechanik Szamotuły, diagnostyka samochodowa Jastrowo, naprawa hamulców Szamotuły, wymiana oleju i filtrów Jastrowo, Car Service Nikol',
   alternates: { canonical: '/pl' },
   authors: [{ name: 'Car Service Nikol', url: siteUrl }],
   creator: 'Car Service Nikol',
@@ -84,6 +87,9 @@ export const metadata = {
     description,
     images: ['/images/services/mechanic-changing-tires-car-service.jpg'],
   },
+  ...(googleSiteVerification && {
+    verification: { google: googleSiteVerification },
+  }),
 };
 
 export default function RootLayout({ children }) {
@@ -98,6 +104,17 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganization) }}
         />
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-config" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gaId}');`}
+            </Script>
+          </>
+        )}
         {children}
       </body>
     </html>

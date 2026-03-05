@@ -29,7 +29,7 @@ export const translations = {
     hero: {
       title: 'Naprawimy Twój samochód, gdy inni odpoczywają',
       subtitle:
-        'Twój zaufany serwis w Jastrowo. Specjalizujemy się w szybkiej diagnostyce i naprawach w weekendy.',
+        'Serwis samochodowy Jastrowo i Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców i wymiana oleju – Twój zaufany mechanik.',
       ctaPrimary: 'Umów wizytę online',
       ctaSecondary: 'Zadzwoń teraz',
       sundayBadge: 'Otwarte w niedziele!',
@@ -175,7 +175,7 @@ export const translations = {
       privacy: 'Polityka Prywatności (RODO)',
       invoices: 'Wystawiamy faktury VAT',
       seoKeywordsLine:
-        'Mechanik Jastrowo · Serwis samochodowy Szamotuły · Naprawa aut Jastrowo · Warsztat samochodowy czynny w niedzielę',
+        'Serwis samochodowy Jastrowo · Weekendowy serwis · Mechanik Szamotuły · Diagnostyka · Naprawa hamulców · Wymiana oleju i filtrów',
       rights: '© ' + new Date().getFullYear() + ' Car Service Nikol. Wszystkie prawa zastrzeżone.',
     },
   },

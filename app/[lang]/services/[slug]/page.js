@@ -111,12 +111,12 @@ export default function ServiceDetailPage({ params }) {
                   : 'Szybko powiemy, ile będzie kosztować naprawa w Twoim konkretnym przypadku.'}
               </p>
               <a
-                href="tel:+48600000600"
+                href="tel:+48794935734"
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-glow transition hover:bg-orange-400 sm:w-auto"
               >
                 <Phone className="h-4 w-4" />
                 <span>
-                  {lang === 'ru' ? 'Позвонить сейчас' : 'Zadzwoń teraz'} · +48 600 000 600
+                  {lang === 'ru' ? 'Позвонить сейчас' : 'Zadzwoń teraz'} · +48 794 935 734
                 </span>
               </a>
             </div>

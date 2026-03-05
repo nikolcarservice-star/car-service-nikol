@@ -23,30 +23,16 @@ const iconMap = {
   keys: Key,
 };
 
+// Локальные картинки из /public/images/services/ — подставь свои файлы под услуги
 const imageMap = {
-  // Zawieszenie (Ходовая) — zawieszenie, amortyzator
-  suspension:
-    'https://images.unsplash.com/photo-1486262715619-67b85e0b08d9?w=800&q=80&fit=crop',
-  // Oleje i filtry (Масла и фильтры) — wymiana oleju
-  oil: 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=800&q=80&fit=crop',
-  // Hamulce (Тормоза) — tarcze hamulcowe
-  brakes:
-    'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&q=80&fit=crop',
-  // Diagnostyka (Диагностика) — komputer diagnostyczny
-  diagnostics:
-    'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80&fit=crop',
-  // Rozrząd (ГРМ) — silnik, pasek rozrządu
-  timing:
-    'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80&fit=crop',
-  // Opony (Шиномонтаж) — opona, koło
-  tires:
-    'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80&fit=crop',
-  // Serwis Mobilny (Выезд мастера) — pomoc drogowa
-  mobileService:
-    'https://images.unsplash.com/photo-1549317661-bd2c726f8f9d?w=800&q=80&fit=crop',
-  // Klucze (Ключи) — kluczyk samochodowy
-  keys:
-    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&fit=crop',
+  suspension: '/images/services/suspension.jpg',
+  oil: '/images/services/oil.jpg',
+  brakes: '/images/services/brakes.jpg',
+  diagnostics: '/images/services/diagnostics.jpg',
+  timing: '/images/services/timing.jpg',
+  tires: '/images/services/mechanic-changing-tires-car-service.jpg',
+  mobileService: '/images/services/emergency-auto-mechanic-changing-flat-tire-road.jpg',
+  keys: '/images/services/high-angle-hand-holding-car-key.jpg',
 };
 
 export default function Services({ t }) {

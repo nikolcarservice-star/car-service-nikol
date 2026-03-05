@@ -5,8 +5,8 @@ export const LANGUAGES = {
 
 export const SUPPORTED_LANGS = [LANGUAGES.PL, LANGUAGES.RU];
 
-export const PHONE_DISPLAY = '+48 600 000 600';
-export const PHONE_RAW = '48600000600';
+export const PHONE_DISPLAY = '+48 794 935 734';
+export const PHONE_RAW = '48794935734';
 
 export const translations = {
   pl: {

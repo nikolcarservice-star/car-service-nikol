@@ -12,10 +12,6 @@ export default function Footer({ lang }) {
             <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">
               {t.invoices}
             </p>
-            <p className="mt-2 text-[11px] text-gray-400">
-              {t.nipLabel}: <span className="text-gray-200">{t.nipValue}</span> · {t.regonLabel}:{' '}
-              <span className="text-gray-200">{t.regonValue}</span>
-            </p>
             <a
               href="#privacy"
               className="mt-1 inline-flex text-[11px] text-orange-300 hover:text-orange-200"

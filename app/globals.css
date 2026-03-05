@@ -25,3 +25,9 @@ body {
   z-index: -1;
 }
 
+/* Ukrycie brandingu widżetu Elfsight („Free Google Reviews Widget”) */
+[data-elfsight-app-lazy] + *,
+[class*="elfsight-app"] a[href*="elfsight"] {
+  display: none !important;
+}
+

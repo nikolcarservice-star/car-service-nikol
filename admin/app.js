@@ -1,4 +1,4 @@
-import { BRAND_GROUPS, BRANDS, YEARS, DEFAULT_SERVICES, DEFAULT_SETTINGS, normalizeBrandName, CUSTOM_BRAND_ID, isCustomBrand, PROFESSIONAL_TERMS } from './data.js';
+import { BRAND_GROUPS, BRANDS, YEARS, DEFAULT_SERVICES, DEFAULT_PARTS, DEFAULT_SETTINGS, normalizeBrandName, CUSTOM_BRAND_ID, isCustomBrand, PROFESSIONAL_TERMS } from './data.js';
 
 // Простое "хранилище" на localStorage
 const STORAGE_KEYS = {
@@ -11,7 +11,9 @@ const STORAGE_KEYS = {
   reminders: 'nikol_reminders',
   bookingRequests: 'nikol_booking_requests',
   users: 'nikol_users',
-  passwords: 'nikol_passwords'
+  passwords: 'nikol_passwords',
+  parts: 'nikol_parts',
+  stockMovements: 'nikol_stock_movements'
 };
 
 function loadJson(key, fallback) {
@@ -38,6 +40,8 @@ let vehicles = loadJson(STORAGE_KEYS.vehicles, []);
 let reminders = loadJson(STORAGE_KEYS.reminders, []);
 let bookingRequests = loadJson(STORAGE_KEYS.bookingRequests, []);
 let dynamicUsers = loadJson(STORAGE_KEYS.users, []);
+let parts = loadJson(STORAGE_KEYS.parts, DEFAULT_PARTS);
+let stockMovements = loadJson(STORAGE_KEYS.stockMovements, []);
 
 // Подмешиваем новые дефолтные услуги в существующий каталог (без перезаписи цен)
 const existingIds = new Set(services.map((s) => String(s.id)));
@@ -59,6 +63,8 @@ function persistAll() {
   saveJson(STORAGE_KEYS.reminders, reminders);
   saveJson(STORAGE_KEYS.bookingRequests, bookingRequests);
   saveJson(STORAGE_KEYS.users, dynamicUsers);
+  saveJson(STORAGE_KEYS.parts, parts);
+  saveJson(STORAGE_KEYS.stockMovements, stockMovements);
 }
 
 function nextId() {
@@ -283,6 +289,21 @@ const I18N = {
     tab_booking: 'Заявки',
     tab_reminders: 'Напоминания',
     tab_analytics: 'Аналитика',
+    tab_stock: 'Склад',
+    stock_title: 'Склад запчастей',
+    stock_search: 'Поиск по названию, коду, полке…',
+    stock_add_part: 'Добавить запчасть',
+    stock_name: 'Название',
+    stock_sku: 'Код / артикул',
+    stock_brand: 'Марка/бренд',
+    stock_location: 'Полка / место',
+    stock_qty: 'Остаток',
+    stock_min_qty: 'Мин. остаток',
+    stock_purchase_price: 'Закупочная цена',
+    stock_sale_price: 'Розничная цена',
+    stock_in: 'Приход',
+    stock_out: 'Расход',
+    stock_history: 'История движений',
     add_client: 'Добавить клиента',
     add_vehicle: 'Добавить авто',
     add_booking: 'Добавить заявку',
@@ -433,6 +454,21 @@ const I18N = {
     tab_booking: 'Zgłoszenia',
     tab_reminders: 'Przypomnienia',
     tab_analytics: 'Analityka',
+    tab_stock: 'Magazyn',
+    stock_title: 'Magazyn części',
+    stock_search: 'Szukaj po nazwie, kodzie, półce…',
+    stock_add_part: 'Dodaj część',
+    stock_name: 'Nazwa',
+    stock_sku: 'Kod / numer',
+    stock_brand: 'Marka',
+    stock_location: 'Półka / miejsce',
+    stock_qty: 'Stan',
+    stock_min_qty: 'Min. stan',
+    stock_purchase_price: 'Cena zakupu',
+    stock_sale_price: 'Cena sprzedaży',
+    stock_in: 'Przychód',
+    stock_out: 'Rozchód',
+    stock_history: 'Historia ruchów',
     add_client: 'Dodaj klienta',
     add_vehicle: 'Dodaj pojazd',
     add_booking: 'Dodaj zgłoszenie',
@@ -766,6 +802,7 @@ function renderAppShell(activeTab = 'order') {
     const bookingTab = createEl('button', tabClass('booking'), [t('tab_booking')]);
     const remindersTab = createEl('button', tabClass('reminders'), [t('tab_reminders')]);
     const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
+    const stockTab = createEl('button', tabClass('stock'), [t('tab_stock')]);
 
     adminOrdersTab.addEventListener('click', () => renderAppShell('admin_orders'));
     clientsTab.addEventListener('click', () => renderAppShell('clients'));
@@ -773,6 +810,7 @@ function renderAppShell(activeTab = 'order') {
     bookingTab.addEventListener('click', () => renderAppShell('booking'));
     remindersTab.addEventListener('click', () => renderAppShell('reminders'));
     analyticsTab.addEventListener('click', () => renderAppShell('analytics'));
+    stockTab.addEventListener('click', () => renderAppShell('stock'));
 
     tabs.appendChild(adminOrdersTab);
     tabs.appendChild(clientsTab);
@@ -780,6 +818,7 @@ function renderAppShell(activeTab = 'order') {
     tabs.appendChild(bookingTab);
     tabs.appendChild(remindersTab);
     tabs.appendChild(analyticsTab);
+    tabs.appendChild(stockTab);
 
     if (isOwner) {
       const adminSettingsTab = createEl('button', tabClass('admin'), [t('settings')]);
@@ -807,6 +846,8 @@ function renderAppShell(activeTab = 'order') {
     content.appendChild(renderRemindersScreen());
   } else if (activeTab === 'analytics') {
     content.appendChild(renderAnalyticsScreen());
+  } else if (activeTab === 'stock') {
+    content.appendChild(renderStockScreen());
   } else {
     content.appendChild(renderAdminScreen());
   }
@@ -2127,6 +2168,153 @@ function renderRemindersScreen() {
     renderList();
   });
 
+  container.appendChild(listEl);
+  renderList();
+  return container;
+}
+
+function renderStockScreen() {
+  const container = createEl('div', 'space-y-4');
+
+  const header = createEl('div', 'flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3');
+  header.appendChild(createEl('h2', 'text-base font-semibold text-slate-100', [t('stock_title')]));
+
+  const controls = createEl('div', 'flex flex-col sm:flex-row gap-2 sm:items-center');
+  const searchInput = createEl('input', 'w-full sm:w-64 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  searchInput.placeholder = t('stock_search');
+  const addBtn = createEl('button', 'px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm text-white', ['+ ', t('stock_add_part')]);
+  controls.appendChild(searchInput);
+  controls.appendChild(addBtn);
+  header.appendChild(controls);
+
+  const listEl = createEl('div', 'space-y-2');
+
+  function renderList() {
+    const q = (searchInput.value || '').toLowerCase();
+    listEl.innerHTML = '';
+    const sorted = [...parts].sort((a, b) => (a.name_pl || a.name_ru || '').localeCompare(b.name_pl || b.name_ru || ''));
+    const filtered = sorted.filter((p) => {
+      if (!q) return true;
+      const langName = (settings.language === 'pl' ? (p.name_pl || p.name_ru) : (p.name_ru || p.name_pl)) || '';
+      const hay = [langName, p.sku, p.location, p.brand].map((x) => (x || '').toLowerCase()).join(' ');
+      return hay.includes(q);
+    });
+    if (!filtered.length) {
+      listEl.appendChild(createEl('div', 'text-sm text-slate-400 py-6 text-center', ['—']));
+      return;
+    }
+    filtered.forEach((p) => {
+      const isLow = typeof p.minQty === 'number' && typeof p.qty === 'number' && p.qty <= p.minQty;
+      const row = createEl('div', 'rounded-2xl bg-slate-900/80 border border-slate-800 px-3 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2');
+      const left = createEl('div', 'space-y-1');
+      const name = (settings.language === 'pl' ? (p.name_pl || p.name_ru) : (p.name_ru || p.name_pl)) || '';
+      left.appendChild(createEl('div', 'text-sm font-medium text-slate-100', [name || t('stock_name')]));
+      const meta = createEl('div', 'text-[11px] text-slate-400 flex flex-wrap gap-x-3 gap-y-1');
+      if (p.sku) meta.appendChild(createEl('span', '', [t('stock_sku') + ': ' + p.sku]));
+      if (p.brand) meta.appendChild(createEl('span', '', [t('stock_brand') + ': ' + p.brand]));
+      if (p.location) meta.appendChild(createEl('span', '', [t('stock_location') + ': ' + p.location]));
+      left.appendChild(meta);
+
+      const right = createEl('div', 'flex flex-col sm:items-end gap-2 text-xs');
+      const qtyLine = createEl('div', 'flex items-center gap-2');
+      const qtyBadge = createEl('span', 'inline-flex items-center px-2 py-1 rounded-full text-[11px] ' + (isLow ? 'bg-red-900/60 text-red-200 border border-red-700' : 'bg-slate-800 text-slate-100 border border-slate-700'), [
+        t('stock_qty') + ': ' + (p.qty ?? 0)
+      ]);
+      qtyLine.appendChild(qtyBadge);
+      if (typeof p.minQty === 'number') {
+        qtyLine.appendChild(createEl('span', 'text-[11px] text-slate-500', [t('stock_min_qty') + ': ' + p.minQty]));
+      }
+      right.appendChild(qtyLine);
+
+      const prices = createEl('div', 'text-[11px] text-slate-400');
+      if (p.purchasePrice != null) prices.appendChild(createEl('div', '', [t('stock_purchase_price') + ': ' + formatPrice(p.purchasePrice)]));
+      if (p.salePrice != null) prices.appendChild(createEl('div', '', [t('stock_sale_price') + ': ' + formatPrice(p.salePrice)]));
+      right.appendChild(prices);
+
+      const actions = createEl('div', 'flex items-center gap-2');
+      const inBtn = createEl('button', 'text-xs px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white', [t('stock_in')]);
+      const outBtn = createEl('button', 'text-xs px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100', [t('stock_out')]);
+      actions.appendChild(inBtn);
+      actions.appendChild(outBtn);
+      right.appendChild(actions);
+
+      inBtn.addEventListener('click', () => {
+        const qtyStr = prompt('+' + t('stock_qty'), '1');
+        if (qtyStr == null) return;
+        const qn = parseFloat(qtyStr);
+        if (isNaN(qn) || qn <= 0) return;
+        p.qty = (p.qty || 0) + qn;
+        stockMovements.push({
+          id: nextId(),
+          partId: p.id,
+          type: 'in',
+          qty: qn,
+          createdAt: new Date().toISOString()
+        });
+        persistAll();
+        renderList();
+      });
+
+      outBtn.addEventListener('click', () => {
+        const qtyStr = prompt('-' + t('stock_qty'), '1');
+        if (qtyStr == null) return;
+        const qn = parseFloat(qtyStr);
+        if (isNaN(qn) || qn <= 0) return;
+        p.qty = (p.qty || 0) - qn;
+        if (p.qty < 0) p.qty = 0;
+        stockMovements.push({
+          id: nextId(),
+          partId: p.id,
+          type: 'out',
+          qty: qn,
+          createdAt: new Date().toISOString()
+        });
+        persistAll();
+        renderList();
+      });
+
+      row.appendChild(left);
+      row.appendChild(right);
+      listEl.appendChild(row);
+    });
+  }
+
+  searchInput.addEventListener('input', () => renderList());
+
+  addBtn.addEventListener('click', () => {
+    const name = prompt(settings.language === 'pl' ? 'Nazwa części' : 'Название запчасти', '');
+    if (name == null || !name.trim()) return;
+    const sku = prompt('SKU / kod / артикул', '');
+    const brand = prompt(settings.language === 'pl' ? 'Marka / producent' : 'Бренд / производитель', '');
+    const location = prompt(settings.language === 'pl' ? 'Półka / miejsce' : 'Полка / место хранения', '');
+    const qtyStr = prompt(settings.language === 'pl' ? 'Stan początkowy' : 'Начальный остаток', '0');
+    const minStr = prompt(settings.language === 'pl' ? 'Min. stan (opcjonalnie)' : 'Мин. остаток (необязательно)', '');
+    const purchaseStr = prompt(settings.language === 'pl' ? 'Cena zakupu (PLN)' : 'Закупочная цена (PLN)', '');
+    const saleStr = prompt(settings.language === 'pl' ? 'Cena sprzedaży (PLN)' : 'Розничная цена (PLN)', '');
+
+    const qty = parseFloat(qtyStr || '0');
+    const minQty = minStr ? parseFloat(minStr) : null;
+    const purchasePrice = purchaseStr ? parseFloat(purchaseStr) : null;
+    const salePrice = saleStr ? parseFloat(saleStr) : null;
+
+    const part = {
+      id: nextId(),
+      sku: (sku || '').trim(),
+      name_pl: settings.language === 'pl' ? name.trim() : '',
+      name_ru: settings.language === 'pl' ? '' : name.trim(),
+      brand: (brand || '').trim(),
+      location: (location || '').trim(),
+      qty: isNaN(qty) ? 0 : qty,
+      minQty: !isNaN(minQty) && minQty >= 0 ? minQty : null,
+      purchasePrice: !isNaN(purchasePrice) && purchasePrice >= 0 ? purchasePrice : null,
+      salePrice: !isNaN(salePrice) && salePrice >= 0 ? salePrice : null
+    };
+    parts.push(part);
+    persistAll();
+    renderList();
+  });
+
+  container.appendChild(header);
   container.appendChild(listEl);
   renderList();
   return container;

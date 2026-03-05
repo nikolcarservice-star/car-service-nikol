@@ -98,6 +98,20 @@ export const DEFAULT_SERVICES = [
   { id: '20', name_pl: 'Regeneracja rozrusznika / alternatora', name_ru: 'Ремонт стартера / генератора', laborHours: 1.5, basePrice: 260, minPrice: 220, competitorAvgPrice: 310 }
 ];
 
+// Базовый каталог типовых запчастей (для склада)
+export const DEFAULT_PARTS = [
+  { id: 'p1', sku: 'OIL-5W30-4L', name_pl: 'Olej silnikowy 5W30 4L', name_ru: 'Моторное масло 5W30 4L', qty: 8, minQty: 4, location: 'Półka A1', purchasePrice: 90, salePrice: 130, brand: 'Uniwersalny' },
+  { id: 'p2', sku: 'FLT-OL-001', name_pl: 'Filtr oleju (uniwersalny)', name_ru: 'Масляный фильтр (универсальный)', qty: 20, minQty: 10, location: 'Półka A2', purchasePrice: 15, salePrice: 35, brand: 'Uniwersalny' },
+  { id: 'p3', sku: 'FLT-PW-001', name_pl: 'Filtr powietrza (uniwersalny)', name_ru: 'Воздушный фильтр (универсальный)', qty: 15, minQty: 5, location: 'Półka A3', purchasePrice: 20, salePrice: 45, brand: 'Uniwersalny' },
+  { id: 'p4', sku: 'BRK-PADS-FR', name_pl: 'Klocki hamulcowe przód (komplet)', name_ru: 'Тормозные колодки передние (комплект)', qty: 10, minQty: 4, location: 'Półka B1', purchasePrice: 80, salePrice: 150, brand: 'Uniwersalny' },
+  { id: 'p5', sku: 'BRK-PADS-RR', name_pl: 'Klocki hamulcowe tył (komplet)', name_ru: 'Тормозные колодки задние (комплект)', qty: 10, minQty: 4, location: 'Półka B2', purchasePrice: 75, salePrice: 140, brand: 'Uniwersalny' },
+  { id: 'p6', sku: 'SPARK-PLUG-4', name_pl: 'Świece zapłonowe (4 szt.)', name_ru: 'Свечи зажигания (4 шт.)', qty: 12, minQty: 4, location: 'Półка C1', purchasePrice: 40, salePrice: 90, brand: 'Uniwersalny' },
+  { id: 'p7', sku: 'BRK-FLUID-1L', name_pl: 'Płyn hamulcowy DOT4 1L', name_ru: 'Тормозная жидкость DOT4 1L', qty: 6, minQty: 3, location: 'Półка C2', purchasePrice: 25, salePrice: 55, brand: 'Uniwersalny' },
+  { id: 'p8', sku: 'CLIMA-GAS', name_pl: 'Czynnik klimatyzacji (kg)', name_ru: 'Фреон для кондиционера (кг)', qty: 5, minQty: 2, location: 'Butla D1', purchasePrice: 70, salePrice: 130, brand: 'Uniwersalny' },
+  { id: 'p9', sku: 'BAT-60AH', name_pl: 'Akumulator 60Ah', name_ru: 'Аккумулятор 60Ah', qty: 4, minQty: 2, location: 'Regał E1', purchasePrice: 220, salePrice: 360, brand: 'Uniwersalny' },
+  { id: 'p10', sku: 'WIPER-SET', name_pl: 'Pióra wycieraczek (komplet)', name_ru: 'Щётки стеклоочистителя (комплект)', qty: 14, minQty: 6, location: 'Regał F1', purchasePrice: 25, salePrice: 60, brand: 'Uniwersalny' }
+];
+
 // Словарь профессиональных названий: ручной ввод → корректные термины PL/RU (для вывода в PDF/WhatsApp и после мониторинга)
 export const PROFESSIONAL_TERMS = [
   { keys: ['замена двс', 'замена двигателя', 'wymiana silnika', 'silnik'], name_pl: 'Wymiana silnika', name_ru: 'Замена двигателя' },

@@ -2234,9 +2234,18 @@ function renderStockScreen() {
       const actions = createEl('div', 'flex items-center gap-2');
       const inBtn = createEl('button', 'text-xs px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white', [t('stock_in')]);
       const outBtn = createEl('button', 'text-xs px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100', [t('stock_out')]);
+      const delBtn = createEl('button', 'text-xs px-2 py-1.5 rounded-lg bg-red-900/70 hover:bg-red-800 text-red-200', ['× ', t('remove')]);
       actions.appendChild(inBtn);
       actions.appendChild(outBtn);
+      actions.appendChild(delBtn);
       right.appendChild(actions);
+
+      delBtn.addEventListener('click', () => {
+        if (!confirm(settings.language === 'pl' ? 'Usunąć tę pozycję z magazynu?' : 'Удалить эту запчасть из склада?')) return;
+        parts = parts.filter((x) => x.id !== p.id);
+        persistAll();
+        renderList();
+      });
 
       inBtn.addEventListener('click', () => {
         const qtyStr = prompt('+' + t('stock_qty'), '1');

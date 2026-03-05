@@ -230,6 +230,8 @@ const I18N = {
     discount_vs_market: 'Скидка к рынку, %',
     discount_vs_market_hint: 'Например -10: цена на 10% ниже среднего по Познани',
     min_price: 'Мин. порог (PLN)',
+    norm_hours: 'Нормо‑часы',
+    labor_rate: 'Ставка часа',
     market_price: 'Рыночная цена (Познань)',
     year_multiplier: 'Коэфф. за год',
     year_threshold: 'Год порог (старше = сложнее)',
@@ -378,6 +380,8 @@ const I18N = {
     discount_vs_market: 'Zniżka vs rynek, %',
     discount_vs_market_hint: 'Np. -10: cena 10% poniżej średniej (Poznań)',
     min_price: 'Min. próg (PLN)',
+    norm_hours: 'Normogodziny',
+    labor_rate: 'Stawka roboczogodziny',
     market_price: 'Cena rynkowa (Poznań)',
     year_multiplier: 'Współcz. za rok',
     year_threshold: 'Rok progu (starsze = trudniejsze)',
@@ -511,7 +515,9 @@ function getOrderTotal(o) {
 function calculateServicePrice(service, brandName, year) {
   const brandMult = getBrandMultiplier(brandName);
   const yearMult = getYearMultiplier(year);
-  let price = (service.basePrice || 0) * brandMult * yearMult;
+  const baseFromHours = (service.laborHours || 0) * (settings.laborRate || 0);
+  const base = baseFromHours > 0 ? baseFromHours : (service.basePrice || 0);
+  let price = base * brandMult * yearMult;
   const minP = service.minPrice != null ? service.minPrice : 0;
   if (minP > 0 && price < minP) price = minP;
   return { price, brandMult, yearMult };
@@ -2316,7 +2322,7 @@ function renderAdminScreen() {
           settings.language === 'pl' ? svc.name_pl : svc.name_ru
         ])
       );
-      const grid = createEl('div', 'grid grid-cols-3 gap-2 mt-1');
+      const grid = createEl('div', 'grid grid-cols-4 gap-2 mt-1');
 
       const baseWrap = createEl('div', 'space-y-0.5');
       baseWrap.appendChild(createEl('div', 'text-[10px] text-slate-400', [t('base_price')]));
@@ -2356,9 +2362,24 @@ function renderAdminScreen() {
       });
       cmpWrap.appendChild(cmpInput);
 
+      const hoursWrap = createEl('div', 'space-y-0.5');
+      hoursWrap.appendChild(createEl('div', 'text-[10px] text-slate-400', [t('norm_hours')]));
+      const hoursInput = createEl('input', 'w-full px-2 py-1 rounded-lg bg-slate-900 border border-slate-700 text-[11px] text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary-500');
+      hoursInput.type = 'number';
+      hoursInput.min = '0';
+      hoursInput.step = '0.1';
+      hoursInput.value = svc.laborHours ?? '';
+      hoursInput.addEventListener('change', () => {
+        const v = parseFloat(hoursInput.value);
+        svc.laborHours = !isNaN(v) && v >= 0 ? v : null;
+        persistAll();
+      });
+      hoursWrap.appendChild(hoursInput);
+
       grid.appendChild(baseWrap);
       grid.appendChild(minWrap);
       grid.appendChild(cmpWrap);
+      grid.appendChild(hoursWrap);
       row.appendChild(grid);
       serviceList.appendChild(row);
     });
@@ -2487,6 +2508,21 @@ function renderAdminScreen() {
   yearRow.appendChild(threshWrap);
   yearRow.appendChild(multWrap);
   settingsCard.appendChild(yearRow);
+
+  const rateWrap = createEl('div', 'space-y-1 pt-3 border-t border-slate-800 mt-3');
+  rateWrap.appendChild(createEl('label', 'block text-[11px] text-slate-400', [t('labor_rate') + ' (PLN/h)']));
+  const rateInput = createEl('input', 'w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  rateInput.type = 'number';
+  rateInput.min = '0';
+  rateInput.step = '10';
+  rateInput.value = settings.laborRate ?? 120;
+  rateInput.addEventListener('change', () => {
+    const v = parseFloat(rateInput.value);
+    settings.laborRate = !isNaN(v) && v >= 0 ? v : 0;
+    persistAll();
+  });
+  rateWrap.appendChild(rateInput);
+  settingsCard.appendChild(rateWrap);
 
   // Мониторинг цен: раз в неделю обновлять из URL или загрузить JSON
   const monitorCard = createEl('div', 'bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3');

@@ -13,7 +13,9 @@ const STORAGE_KEYS = {
   users: 'nikol_users',
   passwords: 'nikol_passwords',
   parts: 'nikol_parts',
-  stockMovements: 'nikol_stock_movements'
+  stockMovements: 'nikol_stock_movements',
+  lastSeenOrders: 'nikol_last_seen_orders',
+  lastSeenBookings: 'nikol_last_seen_bookings'
 };
 
 function loadJson(key, fallback) {
@@ -69,6 +71,30 @@ function persistAll() {
 
 function nextId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function getLastSeen(key) {
+  try {
+    const v = localStorage.getItem(key);
+    return v || null;
+  } catch {
+    return null;
+  }
+}
+function setLastSeen(key, isoDate) {
+  try {
+    localStorage.setItem(key, isoDate);
+  } catch {}
+}
+function getNewOrdersCount() {
+  const last = getLastSeen(STORAGE_KEYS.lastSeenOrders);
+  if (!last) return orders.length;
+  return orders.filter((o) => (o.createdAt || '') > last).length;
+}
+function getNewBookingsCount() {
+  const last = getLastSeen(STORAGE_KEYS.lastSeenBookings);
+  if (!last) return bookingRequests.length;
+  return bookingRequests.filter((b) => (b.createdAt || '') > last).length;
 }
 
 function upsertClientFromOrder(order) {
@@ -225,6 +251,12 @@ const I18N = {
     language: 'Язык интерфейса',
     order_created: 'Заказ сохранён.',
     order_saved: 'Заказ сохранён. Админ сможет сформировать PDF.',
+    conduct_btn: 'Провести',
+    preview_btn: 'Предпросмотр',
+    cancel_btn: 'Отмена',
+    back_btn: 'Назад',
+    add_to_order: 'Добавить в заказ',
+    doc_title_order: 'Заказ-наряд',
     open_pdf: 'Открыть PDF',
     send_whatsapp: 'Отправить в WhatsApp',
     pwa_hint: 'Добавьте эту страницу на главный экран для быстрого доступа.',
@@ -286,7 +318,9 @@ const I18N = {
     remove: 'Удалить',
     tab_clients: 'Клиенты',
     tab_vehicles: 'Авто',
+    tab_clients_vehicles: 'Клиенты и авто',
     tab_booking: 'Заявки',
+    new_badge: 'новых',
     tab_reminders: 'Напоминания',
     tab_analytics: 'Аналитика',
     tab_stock: 'Склад',
@@ -390,6 +424,12 @@ const I18N = {
     language: 'Język interfejsu',
     order_created: 'Zlecenie zapisane.',
     order_saved: 'Zlecenie zapisane. Admin utworzy PDF.',
+    conduct_btn: 'Przeprowadź',
+    preview_btn: 'Podgląd',
+    cancel_btn: 'Anuluj',
+    back_btn: 'Wstecz',
+    add_to_order: 'Dodaj do zlecenia',
+    doc_title_order: 'Zlecenie serwisowe',
     open_pdf: 'Otwórz PDF',
     send_whatsapp: 'Wyślij na WhatsApp',
     pwa_hint: 'Dodaj tę stronę do ekranu głównego.',
@@ -451,7 +491,9 @@ const I18N = {
     remove: 'Usuń',
     tab_clients: 'Klienci',
     tab_vehicles: 'Pojazdy',
+    tab_clients_vehicles: 'Klienci i pojazdy',
     tab_booking: 'Zgłoszenia',
+    new_badge: 'nowych',
     tab_reminders: 'Przypomnienia',
     tab_analytics: 'Analityka',
     tab_stock: 'Magazyn',
@@ -586,6 +628,51 @@ function createEl(tag, className = '', children = []) {
     else if (child) el.appendChild(child);
   }
   return el;
+}
+
+/** Модальная форма поверх сайта (стиль 1С, наш дизайн). fields: [{ id, label, type?, placeholder?, value? }]. onSave(values) вызывается с объектом { id: value }. */
+function showModalForm(title, fields, onSave) {
+  const overlay = createEl('div', 'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm');
+  const card = createEl('div', 'w-full max-w-md bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden');
+  const header = createEl('div', 'px-4 py-3 border-b border-slate-700 bg-slate-800/80');
+  header.appendChild(createEl('div', 'text-sm font-semibold text-slate-100', [title]));
+  card.appendChild(header);
+  const form = createEl('form', 'p-4 space-y-3');
+  const inputs = {};
+  fields.forEach((f) => {
+    const wrap = createEl('div', 'space-y-1');
+    wrap.appendChild(createEl('label', 'block text-xs font-medium text-slate-400', [f.label]));
+    const input = createEl('input', 'w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
+    input.name = f.id;
+    input.type = f.type || 'text';
+    input.placeholder = f.placeholder || '';
+    if (f.value != null) input.value = f.value;
+    inputs[f.id] = input;
+    wrap.appendChild(input);
+    form.appendChild(wrap);
+  });
+  card.appendChild(form);
+  const footer = createEl('div', 'flex justify-end gap-2 px-4 py-3 border-t border-slate-700 bg-slate-800/50');
+  const cancelBtn = createEl('button', 'px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700', [t('cancel_btn')]);
+  cancelBtn.type = 'button';
+  const saveBtn = createEl('button', 'px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white', [settings.language === 'pl' ? 'Zapisz' : 'Сохранить']);
+  saveBtn.type = 'submit';
+  cancelBtn.addEventListener('click', () => overlay.remove());
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const values = {};
+    fields.forEach((f) => { values[f.id] = (inputs[f.id].value || '').trim(); });
+    onSave(values);
+    overlay.remove();
+  });
+  footer.appendChild(cancelBtn);
+  footer.appendChild(saveBtn);
+  card.appendChild(footer);
+  overlay.appendChild(card);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  card.addEventListener('click', (e) => e.stopPropagation());
+  appRoot.appendChild(overlay);
+  if (fields.length) inputs[fields[0].id].focus();
 }
 
 // Рендеры
@@ -796,26 +883,40 @@ function renderAppShell(activeTab = 'order') {
   const isOwner = isAdmin && currentUser.username === 'admin';
 
   if (isAdmin) {
+    const newOrdersCount = getNewOrdersCount();
+    const newBookingsCount = getNewBookingsCount();
+
     const adminOrdersTab = createEl('button', tabClass('admin_orders'), [t('orders')]);
-    const clientsTab = createEl('button', tabClass('clients'), [t('tab_clients')]);
-    const vehiclesTab = createEl('button', tabClass('vehicles'), [t('tab_vehicles')]);
+    if (newOrdersCount > 0) {
+      const badge = createEl('span', 'ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold bg-primary-500 text-white', [String(newOrdersCount)]);
+      adminOrdersTab.appendChild(badge);
+    }
     const bookingTab = createEl('button', tabClass('booking'), [t('tab_booking')]);
+    if (newBookingsCount > 0) {
+      const badge = createEl('span', 'ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold bg-primary-500 text-white', [String(newBookingsCount)]);
+      bookingTab.appendChild(badge);
+    }
+    const clientsVehiclesTab = createEl('button', tabClass('clients_vehicles'), [t('tab_clients_vehicles')]);
     const remindersTab = createEl('button', tabClass('reminders'), [t('tab_reminders')]);
     const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
     const stockTab = createEl('button', tabClass('stock'), [t('tab_stock')]);
 
-    adminOrdersTab.addEventListener('click', () => renderAppShell('admin_orders'));
-    clientsTab.addEventListener('click', () => renderAppShell('clients'));
-    vehiclesTab.addEventListener('click', () => renderAppShell('vehicles'));
-    bookingTab.addEventListener('click', () => renderAppShell('booking'));
+    adminOrdersTab.addEventListener('click', () => {
+      setLastSeen(STORAGE_KEYS.lastSeenOrders, new Date().toISOString());
+      renderAppShell('admin_orders');
+    });
+    bookingTab.addEventListener('click', () => {
+      setLastSeen(STORAGE_KEYS.lastSeenBookings, new Date().toISOString());
+      renderAppShell('booking');
+    });
+    clientsVehiclesTab.addEventListener('click', () => renderAppShell('clients_vehicles'));
     remindersTab.addEventListener('click', () => renderAppShell('reminders'));
     analyticsTab.addEventListener('click', () => renderAppShell('analytics'));
     stockTab.addEventListener('click', () => renderAppShell('stock'));
 
     tabs.appendChild(adminOrdersTab);
-    tabs.appendChild(clientsTab);
-    tabs.appendChild(vehiclesTab);
     tabs.appendChild(bookingTab);
+    tabs.appendChild(clientsVehiclesTab);
     tabs.appendChild(remindersTab);
     tabs.appendChild(analyticsTab);
     tabs.appendChild(stockTab);
@@ -836,10 +937,8 @@ function renderAppShell(activeTab = 'order') {
     content.appendChild(renderOrderScreen());
   } else if (activeTab === 'admin_orders') {
     content.appendChild(renderAdminOrdersScreen());
-  } else if (activeTab === 'clients') {
-    content.appendChild(renderClientsScreen());
-  } else if (activeTab === 'vehicles') {
-    content.appendChild(renderVehiclesScreen());
+  } else if (activeTab === 'clients_vehicles') {
+    content.appendChild(renderClientsAndVehiclesScreen());
   } else if (activeTab === 'booking') {
     content.appendChild(renderBookingScreen());
   } else if (activeTab === 'reminders') {
@@ -860,17 +959,22 @@ function renderAppShell(activeTab = 'order') {
 
 function renderOrderScreen() {
   const isMaster = currentUser && currentUser.role === 'master';
-  const container = createEl(
-    'div',
-    'space-y-4'
-  );
+  const container = createEl('div', 'max-w-4xl mx-auto');
+
+  // Заголовок документа (стиль 1С)
+  const docHeader = createEl('div', 'border border-slate-700 bg-slate-800/80 rounded-t-lg px-4 py-2');
+  docHeader.appendChild(createEl('div', 'text-sm font-semibold text-slate-100', [t('doc_title_order')]));
+  container.appendChild(docHeader);
+
+  const docBody = createEl('div', 'space-y-0 border border-t-0 border-slate-700 rounded-b-lg overflow-hidden');
+  const formInner = createEl('div', 'p-4 space-y-4');
 
   // Авто
   const carCard = createEl(
     'div',
-    'bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3'
+    'p-3 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3'
   );
-  carCard.appendChild(createEl('h2', 'text-sm font-semibold text-slate-100 mb-1', [t('brand') + ' / ' + t('model')]));
+  carCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('brand') + ' / ' + t('model')]));
 
   const brandSelect = createEl(
     'select',
@@ -1011,14 +1115,14 @@ function renderOrderScreen() {
   carCard.appendChild(customCarWrap);
   carCard.appendChild(manualCarWrap);
 
-  // Услуги: для мастера — только ввод текстом; для админа — каталог + своя работа с ценой
+  // Услуги: для мастера — только ввод текстом; для админа — выпадающий список + таблица строк
   const servicesCard = createEl(
     'div',
-    'bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3'
+    'p-3 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3'
   );
-  servicesCard.appendChild(createEl('h2', 'text-sm font-semibold text-slate-100', [t('services_label')]));
+  servicesCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('services_label')]));
 
-  const selectedServiceIds = new Set();
+  const orderLines = [];
   const selectedCustomServices = [];
   const masterWorks = [];
 
@@ -1053,29 +1157,58 @@ function renderOrderScreen() {
     customCard.appendChild(addWorkBtn);
     customCard.appendChild(masterWorksList);
   } else {
+    const serviceSelectWrap = createEl('div', 'flex flex-wrap items-center gap-2 mb-2');
+    const serviceSelect = createEl('select', 'flex-1 min-w-[200px] px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary-500');
+    const servicePlaceholder = document.createElement('option');
+    servicePlaceholder.value = '';
+    servicePlaceholder.textContent = t('choose') + ' ' + t('services_label').toLowerCase();
+    serviceSelect.appendChild(servicePlaceholder);
     services.forEach((svc) => {
-      const row = createEl(
-        'label',
-        'flex items-center justify-between gap-2 rounded-xl bg-slate-950 border border-slate-800 px-3 py-2.5'
-      );
-      const left = createEl('div', 'flex items-center gap-2');
-      const checkbox = createEl('input', 'h-4 w-4 rounded border-slate-700');
-      checkbox.type = 'checkbox';
-      checkbox.addEventListener('change', () => {
-        if (checkbox.checked) selectedServiceIds.add(svc.id);
-        else selectedServiceIds.delete(svc.id);
-        updateSummary();
-      });
-      const name = createEl('div', 'text-xs text-slate-100', [settings.language === 'pl' ? svc.name_pl : svc.name_ru]);
-      const right = createEl('div', 'text-right');
-      const basePriceEl = createEl('div', 'text-[11px] text-slate-400', [formatPrice(svc.basePrice)]);
-      left.appendChild(checkbox);
-      left.appendChild(name);
-      right.appendChild(basePriceEl);
-      row.appendChild(left);
-      row.appendChild(right);
-      servicesList.appendChild(row);
+      const opt = document.createElement('option');
+      opt.value = svc.id;
+      opt.textContent = (settings.language === 'pl' ? svc.name_pl : svc.name_ru) + ' — ' + formatPrice(svc.basePrice);
+      serviceSelect.appendChild(opt);
     });
+    const addServiceBtn = createEl('button', 'px-3 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-xs text-white', [t('add_to_order')]);
+    addServiceBtn.type = 'button';
+    addServiceBtn.addEventListener('click', () => {
+      const id = serviceSelect.value;
+      if (!id) return;
+      const svc = services.find((s) => s.id === id);
+      if (!svc) return;
+      const car = getEffectiveCar();
+      const { price } = calculateServicePrice(svc, car.brand, car.year);
+      const lineId = 'line_' + Date.now();
+      orderLines.push({ id: lineId, type: 'catalog', svcId: svc.id, name_pl: svc.name_pl, name_ru: svc.name_ru, price });
+      renderOrderLinesTable();
+      updateSummary();
+      serviceSelect.value = '';
+    });
+    serviceSelectWrap.appendChild(serviceSelect);
+    serviceSelectWrap.appendChild(addServiceBtn);
+    servicesCard.appendChild(serviceSelectWrap);
+
+    const orderLinesTableWrap = createEl('div', 'border border-slate-700 rounded-lg overflow-hidden');
+    const orderLinesTable = createEl('div', 'divide-y divide-slate-700');
+    function renderOrderLinesTable() {
+      orderLinesTable.innerHTML = '';
+      orderLines.forEach((line) => {
+        const row = createEl('div', 'flex items-center justify-between gap-2 px-3 py-2 bg-slate-950/80 hover:bg-slate-900/80');
+        const name = line.type === 'catalog' ? (settings.language === 'pl' ? line.name_pl : line.name_ru) : (line.name || '');
+        row.appendChild(createEl('div', 'text-xs text-slate-100 flex-1 min-w-0 truncate', [name]));
+        row.appendChild(createEl('div', 'text-xs text-slate-300 shrink-0', [formatPrice(line.price)]));
+        const delBtn = createEl('button', 'shrink-0 text-red-400 hover:text-red-300 text-sm px-1', ['×']);
+        delBtn.type = 'button';
+        delBtn.addEventListener('click', () => {
+          const idx = orderLines.findIndex((l) => l.id === line.id);
+          if (idx !== -1) { orderLines.splice(idx, 1); renderOrderLinesTable(); updateSummary(); }
+        });
+        row.appendChild(delBtn);
+        orderLinesTable.appendChild(row);
+      });
+    }
+    orderLinesTableWrap.appendChild(orderLinesTable);
+    servicesCard.appendChild(orderLinesTableWrap);
     servicesCard.appendChild(servicesList);
     customCard.appendChild(createEl('h3', 'text-xs font-medium text-slate-200', [t('add_custom_service')]));
     const customName = createEl('input', 'w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500');
@@ -1124,7 +1257,7 @@ function renderOrderScreen() {
   // Комментарий и фото
   const commentCard = createEl(
     'div',
-    'bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3'
+    'p-3 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3'
   );
   const commentLabel = createEl('label', 'block text-xs text-slate-300', [t('comment')]);
   const commentInput = createEl(
@@ -1197,10 +1330,10 @@ function renderOrderScreen() {
     }
   })();
 
-  // Итог
+  // Итог и кнопки (стиль 1С)
   const summaryCard = createEl(
     'div',
-    'bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3 sticky bottom-0'
+    'p-4 border-t border-slate-700 bg-slate-800/50 rounded-b-lg space-y-3'
   );
 
   const summaryList = createEl('div', 'space-y-1 max-h-40 overflow-y-auto text-[11px]');
@@ -1212,14 +1345,13 @@ function renderOrderScreen() {
 
   const saveInfo = createEl('div', 'text-[11px] text-primary-300 min-h-[1rem]');
 
-  const actionsRow = createEl('div', 'mt-3');
-  const createBtn = createEl(
-    'button',
-    'w-full py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white',
-    [t('save_order')]
-  );
-
-  actionsRow.appendChild(createBtn);
+  const actionsRow = createEl('div', 'mt-3 flex flex-wrap gap-2');
+  const conductBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white', [t('conduct_btn')]);
+  const previewBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-slate-600 hover:bg-slate-500 text-sm font-medium text-slate-100', [t('preview_btn')]);
+  const cancelBtn = createEl('button', 'px-4 py-2.5 rounded-lg border border-slate-600 hover:bg-slate-800 text-sm font-medium text-slate-300', [t('cancel_btn')]);
+  actionsRow.appendChild(conductBtn);
+  actionsRow.appendChild(previewBtn);
+  actionsRow.appendChild(cancelBtn);
 
   if (!isMaster) {
     summaryCard.appendChild(summaryList);
@@ -1231,89 +1363,38 @@ function renderOrderScreen() {
   function updateSummary() {
     if (isMaster) return;
     summaryList.innerHTML = '';
-    const car = getEffectiveCar();
-    const brandName = car.brand || null;
-    const year = car.year || '';
     let total = 0;
-
-    services
-      .filter((svc) => selectedServiceIds.has(svc.id))
-      .forEach((svc) => {
-        const { price, brandMult, yearMult } = calculateServicePrice(svc, brandName, year);
-        total += price;
-        const cmp = classifyPriceVsCompetitors(svc, price);
-        const suggestedMarket = getSuggestedMarketPrice(svc);
-        const row = createEl(
-          'div',
-          'flex items-center justify-between gap-2'
-        );
-        const left = createEl('div', 'flex-1');
-        left.appendChild(
-          createEl(
-            'div',
-            'text-slate-100',
-            [settings.language === 'pl' ? svc.name_pl : svc.name_ru]
-          )
-        );
-        const multText = yearMult > 1
-          ? `×${brandMult.toFixed(2)} ×${yearMult}`
-          : `×${brandMult.toFixed(2)}`;
-        left.appendChild(
-          createEl(
-            'div',
-            'text-[10px] text-slate-400',
-            [`${t('recommended_price')}: ${formatPrice(price)} (${multText})`]
-          )
-        );
-        const right = createEl('div', 'text-right');
-        right.appendChild(createEl('div', 'text-xs text-slate-100', [formatPrice(price)]));
-        if (cmp) {
-          let text, color;
-          if (cmp === 'above') { text = t('above_competitors'); color = 'text-amber-400'; }
-          else if (cmp === 'below') { text = t('below_competitors'); color = 'text-sky-400'; }
-          else { text = t('near_competitors'); color = 'text-emerald-400'; }
-          right.appendChild(createEl('div', `text-[10px] ${color}`, [text]));
-        }
-        if (suggestedMarket != null && Math.abs(suggestedMarket - price) > 1) {
-          right.appendChild(
-            createEl('div', 'text-[10px] text-slate-500', [`≈ ${formatPrice(suggestedMarket)} vs rynek`])
-          );
-        }
-        row.appendChild(left);
-        row.appendChild(right);
-        summaryList.appendChild(row);
-      });
-
-    // кастомные услуги
+    orderLines.forEach((line) => {
+      total += line.price;
+      const name = line.type === 'catalog' ? (settings.language === 'pl' ? line.name_pl : line.name_ru) : (line.name || '');
+      const row = createEl('div', 'flex items-center justify-between gap-2');
+      row.appendChild(createEl('div', 'text-slate-100 text-xs', [name]));
+      row.appendChild(createEl('div', 'text-slate-100 text-xs', [formatPrice(line.price)]));
+      summaryList.appendChild(row);
+    });
     selectedCustomServices.forEach((svc) => {
       total += svc.price;
       const row = createEl('div', 'flex items-center justify-between gap-2');
-      row.appendChild(
-        createEl('div', 'text-slate-100 text-xs', [svc.name])
-      );
-      row.appendChild(
-        createEl('div', 'text-slate-100 text-xs', [formatPrice(svc.price)])
-      );
+      row.appendChild(createEl('div', 'text-slate-100 text-xs', [svc.name]));
+      row.appendChild(createEl('div', 'text-slate-100 text-xs', [formatPrice(svc.price)]));
       summaryList.appendChild(row);
     });
-
     totalValue.textContent = formatPrice(total);
   }
 
-  createBtn.addEventListener('click', async () => {
+  async function buildOrderFromForm() {
     const car = getEffectiveCar();
     const { brand: brandName, model: modelName, year } = car;
     if (!brandName || !modelName || !year) {
       alert(settings.language === 'pl' ? 'Podaj markę, model i rok.' : 'Укажите марку, модель и год авто.');
-      return;
+      return null;
     }
-
     let serviceItems = [];
     let total = 0;
     if (isMaster) {
       if (masterWorks.length === 0) {
         alert(settings.language === 'pl' ? 'Dodaj co najmniej jedną pracę.' : 'Добавьте хотя бы одну работу.');
-        return;
+        return null;
       }
       serviceItems = masterWorks.map((text) => {
         const catalog = suggestCatalogService(text);
@@ -1323,29 +1404,27 @@ function renderOrderScreen() {
         return { name_pl, name_ru, quantity: 1, price: 0 };
       });
     } else {
-      if (selectedServiceIds.size === 0 && selectedCustomServices.length === 0) {
+      if (orderLines.length === 0 && selectedCustomServices.length === 0) {
         alert(settings.language === 'pl' ? 'Wybierz co najmniej jedną usługę.' : 'Выберите хотя бы одну услугу.');
-        return;
+        return null;
       }
-      const selectedStandardServices = services.filter((s) => selectedServiceIds.has(s.id));
-      selectedStandardServices.forEach((svc) => {
-        const { price } = calculateServicePrice(svc, brandName, year);
-        total += price;
-        serviceItems.push({ name_pl: svc.name_pl, name_ru: svc.name_ru, quantity: 1, price });
+      orderLines.forEach((line) => {
+        total += line.price;
+        const name_pl = line.type === 'catalog' ? line.name_pl : (line.name || '');
+        const name_ru = line.type === 'catalog' ? line.name_ru : (line.name || '');
+        serviceItems.push({ name_pl, name_ru, quantity: 1, price: line.price });
       });
       selectedCustomServices.forEach((svc) => {
         total += svc.price;
         serviceItems.push({ name_pl: svc.name, name_ru: svc.name, quantity: 1, price: svc.price });
       });
     }
-
     let photoDataUrl = null;
     if (photoInput.files && photoInput.files[0]) {
       photoDataUrl = await fileToDataUrl(photoInput.files[0]);
     }
-
     const now = new Date().toISOString();
-    const order = {
+    return {
       id: Date.now().toString(),
       createdAt: now,
       status: 'pending',
@@ -1367,33 +1446,90 @@ function renderOrderScreen() {
       timeOut: null,
       master: currentUser?.username || null
     };
+  }
 
-    // Сохраняем локально (для оффлайна) и отправляем в общую базу (Supabase через /api/crm-orders)
+  function saveOrder(order) {
     orders.push(order);
     upsertClientFromOrder(order);
     upsertVehicleFromOrder(order);
     persistAll();
-
     try {
-      await fetch('/api/crm-orders', {
+      fetch('https://car-service-nikol.vercel.app/api/crm-orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order)
-      });
-    } catch {
-      // если сервер недоступен — оставляем только локально
-    }
+      }).catch(() => {});
+    } catch {}
+  }
 
+  conductBtn.addEventListener('click', async () => {
+    const order = await buildOrderFromForm();
+    if (!order) return;
+    saveOrder(order);
     saveInfo.textContent = t('order_saved');
     setTimeout(() => { saveInfo.textContent = ''; }, 3000);
+    try {
+      const lang = settings.language === 'pl' ? 'pl' : 'ru';
+      const { pdfBlobUrl } = await generateOrderPdf(order, lang);
+      if (pdfBlobUrl) window.open(pdfBlobUrl, '_blank');
+    } catch (e) {
+      saveInfo.textContent = (e && e.message) || 'PDF error';
+    }
+  });
+
+  let previewOverlay = null;
+  previewBtn.addEventListener('click', async () => {
+    const order = await buildOrderFromForm();
+    if (!order) return;
+    if (previewOverlay && previewOverlay.parentNode) previewOverlay.remove();
+    previewOverlay = createEl('div', 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70');
+    const panel = createEl('div', 'bg-slate-900 border border-slate-700 rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 space-y-4');
+    panel.appendChild(createEl('div', 'text-sm font-semibold text-slate-100', [t('doc_title_order')]));
+    panel.appendChild(createEl('div', 'text-xs text-slate-400', [order.brand + ' ' + order.model + ', ' + order.year]));
+    panel.appendChild(createEl('div', 'text-xs text-slate-400', [(order.clientName || '') + ' · ' + (order.clientPhone || '')]));
+    const list = createEl('div', 'space-y-1 text-xs');
+    (order.services || []).forEach((s) => {
+      const name = settings.language === 'pl' ? (s.name_pl || s.name_ru) : (s.name_ru || s.name_pl);
+      const row = createEl('div', 'flex justify-between');
+      row.appendChild(createEl('span', 'text-slate-200', [name]));
+      row.appendChild(createEl('span', 'text-slate-300', [formatPrice(s.price)]));
+      list.appendChild(row);
+    });
+    panel.appendChild(list);
+    panel.appendChild(createEl('div', 'text-sm font-semibold text-primary-400', [t('total') + ': ' + formatPrice(order.total)]));
+    const btnRow = createEl('div', 'flex gap-2 pt-2');
+    const backBtn = createEl('button', 'px-4 py-2 rounded-lg border border-slate-600 text-slate-200 hover:bg-slate-800', [t('back_btn')]);
+    const conductFromPreviewBtn = createEl('button', 'px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white', [t('conduct_btn')]);
+    backBtn.addEventListener('click', () => { if (previewOverlay.parentNode) previewOverlay.remove(); });
+    conductFromPreviewBtn.addEventListener('click', async () => {
+      saveOrder(order);
+      try {
+        const lang = settings.language === 'pl' ? 'pl' : 'ru';
+        const { pdfBlobUrl } = await generateOrderPdf(order, lang);
+        if (pdfBlobUrl) window.open(pdfBlobUrl, '_blank');
+      } catch {}
+      if (previewOverlay.parentNode) previewOverlay.remove();
+    });
+    btnRow.appendChild(backBtn);
+    btnRow.appendChild(conductFromPreviewBtn);
+    panel.appendChild(btnRow);
+    previewOverlay.appendChild(panel);
+    previewOverlay.addEventListener('click', (e) => { if (e.target === previewOverlay) previewOverlay.remove(); });
+    appRoot.appendChild(previewOverlay);
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    renderAppShell('order');
   });
 
   if (!isMaster) updateSummary();
 
-  container.appendChild(carCard);
-  container.appendChild(servicesCard);
-  container.appendChild(commentCard);
-  container.appendChild(summaryCard);
+  formInner.appendChild(carCard);
+  formInner.appendChild(servicesCard);
+  formInner.appendChild(commentCard);
+  formInner.appendChild(summaryCard);
+  docBody.appendChild(formInner);
+  container.appendChild(docBody);
 
   return container;
 }
@@ -1871,45 +2007,82 @@ function renderAdminOrdersScreen() {
   return container;
 }
 
-function renderClientsScreen() {
-  const container = createEl('div', 'space-y-4');
-  const topBar = createEl('div', 'flex gap-2');
-  const searchInput = createEl('input', 'flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm placeholder-slate-500');
-  searchInput.placeholder = t('search_placeholder');
-  searchInput.type = 'text';
-  const addClientBtn = createEl('button', 'px-3 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm text-white whitespace-nowrap', [t('add_client')]);
-  addClientBtn.addEventListener('click', () => {
-    const name = prompt(settings.language === 'pl' ? 'Imię i nazwisko' : 'Имя клиента', '');
-    if (name == null) return;
-    const phone = prompt(settings.language === 'pl' ? 'Telefon' : 'Телефон', '');
-    if (!name.trim() && !(phone || '').trim()) return;
-    clients.push({ id: nextId(), name: (name || '').trim() || '—', phone: (phone || '').trim(), createdAt: new Date().toISOString() });
-    persistAll();
-    renderList();
-  });
-  topBar.appendChild(searchInput);
-  topBar.appendChild(addClientBtn);
-  container.appendChild(topBar);
+function renderClientsAndVehiclesScreen() {
+  const container = createEl('div', 'space-y-6');
+  const searchAll = createEl('input', 'w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm placeholder-slate-500');
+  searchAll.placeholder = t('search_placeholder');
+  container.appendChild(searchAll);
 
-  let filtered = [];
-  function renderList() {
+  const clientsSection = createEl('div', 'space-y-2');
+  clientsSection.appendChild(createEl('div', 'text-sm font-semibold text-slate-200', [t('tab_clients')]));
+  const clientTop = createEl('div', 'flex justify-end');
+  const addClientBtn = createEl('button', 'px-3 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm text-white', [t('add_client')]);
+  addClientBtn.addEventListener('click', () => {
+    showModalForm(t('add_client'), [
+      { id: 'name', label: t('client_name'), placeholder: settings.language === 'pl' ? 'Imię i nazwisko' : 'Имя клиента' },
+      { id: 'phone', label: t('client_phone'), placeholder: settings.language === 'pl' ? 'Telefon' : 'Телефон' }
+    ], (values) => {
+      if (!values.name && !values.phone) return;
+      clients.push({ id: nextId(), name: values.name || '—', phone: values.phone || '', createdAt: new Date().toISOString() });
+      persistAll();
+      renderClientsList();
+    });
+  });
+  clientTop.appendChild(addClientBtn);
+  clientsSection.appendChild(clientTop);
+  const clientsListEl = createEl('div', 'space-y-2');
+  clientsSection.appendChild(clientsListEl);
+  container.appendChild(clientsSection);
+
+  const vehiclesSection = createEl('div', 'space-y-2');
+  vehiclesSection.appendChild(createEl('div', 'text-sm font-semibold text-slate-200', [t('tab_vehicles')]));
+  const vehicleTop = createEl('div', 'flex justify-end');
+  const addVehicleBtn = createEl('button', 'px-3 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm text-white', [t('add_vehicle')]);
+  addVehicleBtn.addEventListener('click', () => {
+    showModalForm(t('add_vehicle'), [
+      { id: 'brand', label: t('brand'), placeholder: settings.language === 'pl' ? 'Marka' : 'Марка' },
+      { id: 'model', label: t('model'), placeholder: settings.language === 'pl' ? 'Model' : 'Модель' },
+      { id: 'year', label: t('year'), placeholder: String(new Date().getFullYear()) },
+      { id: 'vin', label: t('vin'), placeholder: 'VIN' },
+      { id: 'plate', label: t('plate'), placeholder: settings.language === 'pl' ? 'Nr rejestr.' : 'Гос. номер' }
+    ], (values) => {
+      vehicles.push({
+        id: nextId(),
+        brand: values.brand || '',
+        model: values.model || '',
+        year: values.year || '',
+        vin: values.vin || '',
+        plate: values.plate || '',
+        createdAt: new Date().toISOString()
+      });
+      persistAll();
+      renderVehiclesList();
+    });
+  });
+  vehicleTop.appendChild(addVehicleBtn);
+  vehiclesSection.appendChild(vehicleTop);
+  const vehiclesListEl = createEl('div', 'space-y-2');
+  vehiclesSection.appendChild(vehiclesListEl);
+  container.appendChild(vehiclesSection);
+
+  const q = () => (searchAll.value || '').toLowerCase().trim();
+  function renderClientsList() {
     const list = getClientsList();
-    const q = (searchInput.value || '').toLowerCase().trim();
-    filtered = q ? list.filter((c) => (c.name || '').toLowerCase().includes(q) || (c.phone || '').replace(/\D/g, '').includes(q.replace(/\D/g, ''))) : list;
-    listEl.innerHTML = '';
+    const query = q();
+    const filtered = query ? list.filter((c) => (c.name || '').toLowerCase().includes(query) || (c.phone || '').replace(/\D/g, '').includes(query.replace(/\D/g, ''))) : list;
+    clientsListEl.innerHTML = '';
     if (filtered.length === 0) {
-      listEl.appendChild(createEl('div', 'text-sm text-slate-400 py-8 text-center', [t('no_clients')]));
+      clientsListEl.appendChild(createEl('div', 'text-sm text-slate-400 py-4 text-center', [t('no_clients')]));
       return;
     }
     filtered.forEach((c) => {
       const row = createEl('div', 'bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center gap-2 cursor-pointer hover:bg-slate-800');
-      const left = createEl('div', '', [
+      row.appendChild(createEl('div', '', [
         createEl('div', 'text-sm font-medium text-white', [c.name || '—']),
         createEl('div', 'text-xs text-slate-400', [c.phone || '—'])
-      ]);
-      row.appendChild(left);
-      const ordersCount = orders.filter((o) => (o.clientPhone || '').trim() === (c.phone || '').trim() || (o.clientName || '').trim() === (c.name || '').trim()).length;
+      ]));
       const right = createEl('div', 'flex items-center gap-2');
+      const ordersCount = orders.filter((o) => (o.clientPhone || '').trim() === (c.phone || '').trim() || (o.clientName || '').trim() === (c.name || '').trim()).length;
       right.appendChild(createEl('div', 'text-xs text-slate-400', [ordersCount + ' ' + t('client_orders').toLowerCase()]));
       const delBtn = createEl('button', 'text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:bg-red-700 hover:text-white', ['×']);
       delBtn.type = 'button';
@@ -1918,23 +2091,50 @@ function renderClientsScreen() {
         if (!window.confirm(settings.language === 'pl' ? 'Usunąć klienta?' : 'Удалить клиента?')) return;
         clients = clients.filter((x) => x.id !== c.id);
         persistAll();
-        renderList();
+        renderClientsList();
       });
       right.appendChild(delBtn);
       row.appendChild(right);
-      row.addEventListener('click', () => {
-        adminSelectedOrderId = null;
-        window.__adminSelectedClient = c;
-        renderAppShell('order');
-      });
-      listEl.appendChild(row);
+      row.addEventListener('click', () => { adminSelectedOrderId = null; window.__adminSelectedClient = c; renderAppShell('order'); });
+      clientsListEl.appendChild(row);
     });
   }
-  searchInput.addEventListener('input', renderList);
-
-  const listEl = createEl('div', 'space-y-2');
-  container.appendChild(listEl);
-  renderList();
+  function renderVehiclesList() {
+    const list = getVehiclesList();
+    const query = q();
+    const filtered = query ? list.filter((v) => (v.brand + ' ' + v.model + ' ' + v.year).toLowerCase().includes(query) || (v.vin || '').toLowerCase().includes(query) || (v.plate || '').toLowerCase().includes(query)) : list;
+    vehiclesListEl.innerHTML = '';
+    if (filtered.length === 0) {
+      vehiclesListEl.appendChild(createEl('div', 'text-sm text-slate-400 py-4 text-center', [t('no_vehicles')]));
+      return;
+    }
+    filtered.forEach((v) => {
+      const row = createEl('div', 'bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center gap-2 cursor-pointer hover:bg-slate-800');
+      row.appendChild(createEl('div', '', [
+        createEl('div', 'text-sm font-medium text-white', [`${v.brand} ${v.model}, ${v.year}`]),
+        createEl('div', 'text-xs text-slate-400', [(v.vin || v.plate || '—')])
+      ]));
+      const right = createEl('div', 'flex items-center gap-2');
+      const ordersCount = orders.filter((o) => (o.vin && o.vin === v.vin) || (o.plate && o.plate === v.plate) || (o.brand === v.brand && o.model === v.model && String(o.year) === String(v.year))).length;
+      right.appendChild(createEl('div', 'text-xs text-slate-400', [ordersCount + ' ' + t('client_orders').toLowerCase()]));
+      const delBtn = createEl('button', 'text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:bg-red-700 hover:text-white', ['×']);
+      delBtn.type = 'button';
+      delBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (!window.confirm(settings.language === 'pl' ? 'Usunąć pojazd?' : 'Удалить авто?')) return;
+        vehicles = vehicles.filter((x) => x.id !== v.id);
+        persistAll();
+        renderVehiclesList();
+      });
+      right.appendChild(delBtn);
+      row.appendChild(right);
+      row.addEventListener('click', () => { adminSelectedOrderId = null; window.__adminSelectedVehicle = v; renderAppShell('order'); });
+      vehiclesListEl.appendChild(row);
+    });
+  }
+  searchAll.addEventListener('input', () => { renderClientsList(); renderVehiclesList(); });
+  renderClientsList();
+  renderVehiclesList();
   return container;
 }
 
@@ -2077,38 +2277,31 @@ function renderBookingScreen() {
   }
 
   addBtn.addEventListener('click', () => {
-    const name = prompt(settings.language === 'pl' ? 'Imię i nazwisko' : 'Имя клиента', '');
-    if (name == null) return;
-    const phone = prompt(settings.language === 'pl' ? 'Telefon' : 'Телефон', '');
-    const car = prompt(settings.language === 'pl' ? 'Pojazd (marka, model, rok)' : 'Авто (марка, модель, год)', '');
-    const service = prompt(settings.language === 'pl' ? 'Usługa' : 'Услuga', '');
-    const message = prompt(settings.language === 'pl' ? 'Wiadomość' : 'Сообщение', '');
-    const entry = {
-      id: nextId(),
-      name: (name || '').trim(),
-      phone: (phone || '').trim(),
-      car: (car || '').trim(),
-      service: (service || '').trim(),
-      message: (message || '').trim(),
-      createdAt: new Date().toISOString()
-    };
-    bookingRequests.push(entry);
-    persistAll();
-    renderList();
-    // Параллельно отправляем в API, чтобы заявка попала в Supabase
-    fetch('https://car-service-nikol.vercel.app/api/booking', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: entry.name,
-        phone: entry.phone,
-        car: entry.car,
-        service: entry.service,
-        message: entry.message,
-        date: '',
-        lang: settings.language
-      })
-    }).catch(() => {});
+    showModalForm(t('add_booking'), [
+      { id: 'name', label: t('client_name'), placeholder: settings.language === 'pl' ? 'Imię i nazwisko' : 'Имя клиента' },
+      { id: 'phone', label: t('client_phone'), placeholder: settings.language === 'pl' ? 'Telefon' : 'Телефон' },
+      { id: 'car', label: t('booking_car'), placeholder: settings.language === 'pl' ? 'Marka, model, rok' : 'Марка, модель, год' },
+      { id: 'service', label: t('booking_service'), placeholder: settings.language === 'pl' ? 'Usługa' : 'Услуга' },
+      { id: 'message', label: t('comment'), placeholder: settings.language === 'pl' ? 'Wiadomość' : 'Сообщение' }
+    ], (values) => {
+      const entry = {
+        id: nextId(),
+        name: values.name || '',
+        phone: values.phone || '',
+        car: values.car || '',
+        service: values.service || '',
+        message: values.message || '',
+        createdAt: new Date().toISOString()
+      };
+      bookingRequests.push(entry);
+      persistAll();
+      renderList();
+      fetch('https://car-service-nikol.vercel.app/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: entry.name, phone: entry.phone, car: entry.car, service: entry.service, message: entry.message, date: '', lang: settings.language })
+      }).catch(() => {});
+    });
   });
 
   container.appendChild(listEl);
@@ -2154,18 +2347,20 @@ function renderRemindersScreen() {
   }
 
   addBtn.addEventListener('click', () => {
-    const note = prompt(settings.language === 'pl' ? 'Treść przypomnienia' : 'Текст напоминания', '');
-    if (note == null) return;
-    const dueStr = prompt(settings.language === 'pl' ? 'Data (RRRR-MM-DD)' : 'Дата (ГГГГ-ММ-ДД)', new Date().toISOString().slice(0, 10));
-    reminders.push({
-      id: nextId(),
-      note: (note || '').trim(),
-      dueDate: dueStr || new Date().toISOString().slice(0, 10),
-      completed: false,
-      createdAt: new Date().toISOString()
+    showModalForm(t('add_reminder'), [
+      { id: 'note', label: settings.language === 'pl' ? 'Treść przypomnienia' : 'Текст напоминания', placeholder: '' },
+      { id: 'dueDate', label: t('reminder_due'), placeholder: 'YYYY-MM-DD', value: new Date().toISOString().slice(0, 10) }
+    ], (values) => {
+      reminders.push({
+        id: nextId(),
+        note: values.note || '',
+        dueDate: values.dueDate || new Date().toISOString().slice(0, 10),
+        completed: false,
+        createdAt: new Date().toISOString()
+      });
+      persistAll();
+      renderList();
     });
-    persistAll();
-    renderList();
   });
 
   container.appendChild(listEl);

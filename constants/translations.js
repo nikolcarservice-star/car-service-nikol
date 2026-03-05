@@ -128,7 +128,7 @@ export const translations = {
     aboutBlock: {
       title: 'O nas — Pasja i Profesjonalizm w Jastrowo',
       paragraph1:
-        'Car Service Nikol powstał z myślą o kierowcach, którzy cenią swój czas i szukają niezawodnego mechanika w okolicy Szamotuł i Jastrowa. Wiemy, że awaria auta nie wybiera godziny, dlatego jako jedni z nielicznych jesteśmy do Twojej dyspozycji również w soboty i niedziele.',
+        'Car Service Nikol powstał z myślą o kierowcach, którzy cenią swój czas i szukają niezawodnego mechanika w okolicy Szamotuł i Jastrowo. Wiemy, że awaria auta nie wybiera godziny, dlatego jako jedni z nielicznych jesteśmy do Twojej dyspozycji również w soboty i niedziele.',
       paragraph2:
         'Specjalizujemy się w kompleksowej mechanice: od diagnostyki komputerowej, przez serwis zawieszenia, aż po kodowanie kluczy. Nasz priorytet to uczciwe podejście — zawsze tłumaczymy zakres prac i dbamy o to, by Twój samochód wrócił na drogę w idealnym stanie.',
     },
@@ -178,6 +178,13 @@ export const translations = {
       seoKeywordsLine:
         'Serwis samochodowy Jastrowo · Weekendowy serwis · Mechanik Szamotuły · Diagnostyka · Naprawa hamulców · Wymiana oleju i filtrów',
       rights: '© ' + new Date().getFullYear() + ' Car Service Nikol. Wszystkie prawa zastrzeżone.',
+    },
+    prompt: {
+      title: 'Potrzebujesz pomocy z autem?',
+      text: 'Umów wizytę lub zadzwoń – pomożemy w Jastrowo i okolicach. Pracujemy też w weekendy.',
+      ctaCall: 'Zadzwoń',
+      ctaBook: 'Umów wizytę',
+      close: 'Zamknij',
     },
   },
   ru: {
@@ -350,6 +357,13 @@ export const translations = {
       seoKeywordsLine:
         'Mechanik Jastrowo · Serwis samochodowy Szamotuły · Naprawa aut Jastrowo · Warsztat samochodowy czynny w niedzielę',
       rights: '© ' + new Date().getFullYear() + ' Car Service Nikol. Все права защищены.',
+    },
+    prompt: {
+      title: 'Нужна помощь с авто?',
+      text: 'Запишитесь на приём или позвоните – поможем в Jastrowo и окрестностях. Работаем и в выходные.',
+      ctaCall: 'Позвонить',
+      ctaBook: 'Записаться',
+      close: 'Закрыть',
     },
   },
 };

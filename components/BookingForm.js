@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { Calendar, CheckCircle2, Loader2, MessageSquare, Phone, Wrench } from 'lucide-react';
@@ -9,6 +9,7 @@ import { LANGUAGES, PHONE_DISPLAY, PHONE_RAW, translations } from '../constants/
 
 export default function BookingForm({ lang }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const dateInputRef = useRef(null);
   const t = translations[lang].booking;
 
   const {
@@ -19,7 +20,7 @@ export default function BookingForm({ lang }) {
   } = useForm({
     defaultValues: {
       name: '',
-      phone: '+48',
+      phone: '',
       car: '',
       service: '',
       date: '',
@@ -29,11 +30,12 @@ export default function BookingForm({ lang }) {
 
   const onSubmit = async (values) => {
     setStatus('loading');
+    const phoneFull = values.phone.replace(/\D/g, '').length > 0 ? '+48' + values.phone.replace(/\D/g, '') : '';
     try {
       const payload = {
         source: 'car-service-nikol-booking',
         name: values.name,
-        phone: values.phone,
+        phone: phoneFull || values.phone,
         car: values.car,
         service: values.service,
         date: values.date,
@@ -51,7 +53,7 @@ export default function BookingForm({ lang }) {
       setStatus('success');
       reset({
         name: '',
-        phone: '+48',
+        phone: '',
         car: '',
         service: '',
         date: '',
@@ -63,7 +65,8 @@ export default function BookingForm({ lang }) {
     }
   };
 
-  const phonePattern = /^\+48\s?\d{3}\s?\d{3}\s?\d{3}$/;
+  const phonePattern = /^\d{3}\s?\d{3}\s?\d{3}$/;
+  const dateRegister = register('date', { required: t.validation.dateRequired });
 
   return (
     <section
@@ -107,11 +110,15 @@ export default function BookingForm({ lang }) {
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-gray-200">{t.phoneLabel}</label>
-                <div className="flex items-center gap-2">
-                  <Phone className="hidden h-4 w-4 text-orange-400 sm:block" />
+                <div className="flex overflow-hidden rounded-lg border border-slate-700 bg-slate-950 shadow-sm ring-orange-500/0 transition focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/40">
+                  <span className="flex items-center gap-2 border-r border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-medium text-orange-400">
+                    <Phone className="h-4 w-4 shrink-0" />
+                    +48
+                  </span>
                   <input
                     type="tel"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-gray-100 outline-none ring-orange-500/0 transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/40"
+                    placeholder="123 456 789"
+                    className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-gray-100 placeholder-gray-500 outline-none"
                     {...register('phone', {
                       required: t.validation.phoneRequired,
                       pattern: { value: phonePattern, message: t.validation.phoneInvalid },
@@ -164,13 +171,28 @@ export default function BookingForm({ lang }) {
             <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-gray-200">{t.dateLabel}</label>
-                <div className="flex items-center gap-2">
-                  <Calendar className="hidden h-4 w-4 text-orange-400 sm:block" />
+                <div className="relative flex overflow-hidden rounded-lg border border-slate-700 bg-slate-950 shadow-sm ring-orange-500/0 transition focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/40">
+                  <span className="flex items-center border-r border-slate-700 bg-slate-800/80 px-3 py-2 text-orange-400">
+                    <Calendar className="h-4 w-4 shrink-0" />
+                  </span>
                   <input
                     type="date"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-gray-100 outline-none ring-orange-500/0 transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/40"
-                    {...register('date', { required: t.validation.dateRequired })}
+                    className="min-w-0 flex-1 bg-transparent py-2 pl-3 pr-10 text-sm text-gray-100 outline-none [color-scheme:dark]"
+                    {...dateRegister}
+                    ref={(el) => {
+                      dateRegister.ref(el);
+                      dateInputRef.current = el;
+                    }}
                   />
+                  <button
+                    type="button"
+                    onClick={() => dateInputRef.current?.showPicker?.()}
+                    className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-md p-1.5 text-orange-400 transition hover:bg-slate-800 hover:text-orange-300"
+                    title={lang === LANGUAGES.RU ? 'Открыть календарь' : 'Otwórz kalendarz'}
+                    aria-label={lang === LANGUAGES.RU ? 'Открыть календарь' : 'Otwórz kalendarz'}
+                  >
+                    <Calendar className="h-5 w-5" />
+                  </button>
                 </div>
                 {errors.date && (
                   <p className="text-[11px] text-red-400">{errors.date.message}</p>

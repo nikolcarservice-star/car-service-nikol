@@ -1,3 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M14.7 6.3a1 1 0 0 1 1.4 0l6 6 2.1-2.1a2 2 0 0 1 2.8 0l2.8 2.8a2 2 0 0 1 0 2.8l-2.1 2.1 6 6a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-1.4 0l-6-6-2.1 2.1a2 2 0 0 1-2.8 0l-2.8-2.8a2 2 0 0 1 0-2.8l2.1-2.1-6-6a1 1 0 0 1 0-1.4l4-4z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Hexagon badge -->
+  <path
+    d="M16 3 L27 9.5 L27 22.5 L16 29 L5 22.5 L5 9.5 Z"
+    stroke="#f97316"
+    stroke-width="1.8"
+    fill="#0f172a"
+  />
+  <!-- Crossed pistons: two ovals -->
+  <ellipse cx="16" cy="16" rx="10" ry="3" transform="rotate(-45 16 16)" stroke="#f97316" stroke-width="1.8" fill="none" />
+  <ellipse cx="16" cy="16" rx="10" ry="3" transform="rotate(45 16 16)" stroke="#f97316" stroke-width="1.8" fill="none" />
+  <!-- Center -->
+  <circle cx="16" cy="16" r="2" fill="#f97316" />
 </svg>

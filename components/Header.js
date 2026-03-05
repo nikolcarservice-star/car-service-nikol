@@ -27,9 +27,13 @@ export default function Header({ lang, t }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <div className="flex items-center gap-3">
           <Link href={buildPath(currentLang)} className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-tr from-orange-500 to-orange-400 text-slate-950 shadow-glow">
-              <span className="text-lg font-extrabold tracking-tight">N</span>
-            </div>
+            <img
+              src="/logo.svg"
+              alt=""
+              width={44}
+              height={48}
+              className="h-11 w-11 object-contain"
+            />
             <div className="flex flex-col">
               <span className="text-sm font-semibold uppercase tracking-[0.15em] text-orange-400">
                 Car Service

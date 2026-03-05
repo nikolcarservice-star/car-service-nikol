@@ -36,7 +36,7 @@ export default function LocationSection({ lang }) {
             className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl"
           >
             <a
-              href="https://www.google.com/maps/search/Wernisa%C5%BCowa+21+64-500+Jastrowo"
+              href="https://www.google.com/maps/place/Car+Service+Nikol+%7C+Serwis+samochodowy/@52.5905544,16.5387224,132m/data=!3m1!1e3!4m6!3m5!1s0x47041785835568fb:0xfad9f08b31a08d7!8m2!3d52.5908375!4d16.5384497!16s%2Fg%2F11wv2f39s2?hl=pl&entry=ttu"
               target="_blank"
               rel="noreferrer noopener"
               className="mb-2 inline-flex items-center gap-2 rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-gray-200 hover:bg-slate-700"
@@ -44,8 +44,8 @@ export default function LocationSection({ lang }) {
               Otwórz w Mapach
             </a>
             <iframe
-              title="Mapa dojazdu Car Service Nikol – Wernisażowa 21, Jastrowo"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2419.658250238475!2d16.5413491!3d52.5714312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470438d011197777%3A0x6b82504818617777!2sWernisa%C5%BCowa%2021%2C%2064-500%20Jastrowo!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl"
+              title="Car Service Nikol | Serwis samochodowy – mapa dojazdu"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2320.415!2d16.5384497!3d52.5908375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47041785835568fb%3A0xfad9f08b31a08d7!2sCar%20Service%20Nikol!5e0!3m2!1spl!2spl"
               width="100%"
               height="450"
               style={{ border: 0, borderRadius: '15px', filter: 'invert(90%) hue-rotate(180deg)' }}

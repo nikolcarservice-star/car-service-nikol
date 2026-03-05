@@ -4,7 +4,7 @@
 export const blogPosts = [
   {
     slug: 'dlaczego-car-service-nikol-najlepszy-wybor-jastrowo-szamotuly',
-    titlePl: 'Dlaczego Car Service Nikol to Najlepszy Wybór dla Kierowców z Jastrowa i Szamotuł?',
+    titlePl: 'Dlaczego Car Service Nikol to Najlepszy Wybór dla Kierowców z Jastrowo i Szamotuł?',
     titleRu: 'Почему Car Service Nikol — лучший выбор для водителей из Jastrowo и Шамотул?',
     excerptPl: 'Zaufany serwis samochodowy w Jastrowo i Szamotuły. Weekendowy serwis, uczciwe ceny, szybka diagnostyka. Car Service Nikol.',
     excerptRu: 'Надёжный автосервис в Jastrowo и Шамотулах. Выходные, честные цены, быстрая диагностика. Car Service Nikol.',

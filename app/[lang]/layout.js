@@ -1,6 +1,7 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import FloatingWhatsApp from '../../components/FloatingWhatsApp';
+import DelayedPrompt from '../../components/DelayedPrompt';
 import { getTranslations, normalizeLang } from '../../constants/translations';
 
 export default function LangLayout({ children, params }) {
@@ -13,6 +14,7 @@ export default function LangLayout({ children, params }) {
       <main>{children}</main>
       <Footer lang={lang} />
       <FloatingWhatsApp />
+      <DelayedPrompt lang={lang} />
     </div>
   );
 }

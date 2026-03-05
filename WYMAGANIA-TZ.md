@@ -61,7 +61,7 @@ Strona ma **bezpłatnie przyciągać klientów z wyszukiwarki** (SEO) i **szybko
 Potwierdzenie:
 - **Ulica, numer:** Wernisazowa 21  
 - **Miejscowość:** Jastrowo (Szamotuły)  
-- **Kod pocztowy:** ? (np. 64-500 Szamotuły czy inny dla Jastrowa — napisz dokładnie)
+- **Kod pocztowy:** ? (np. 64-500 Szamotuły czy inny dla Jastrowo — napisz dokładnie)
 
 Jak tylko potwierdzisz, wszędzie ustawię jednolity adres.
 

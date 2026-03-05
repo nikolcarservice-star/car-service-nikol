@@ -20,7 +20,7 @@ Wersje językowe: **PL** (główna, w katalogu głównym), **EN** (katalog `/en/
 - Schema.org `AutoRepair` (LocalBusiness) na stronie głównej PL
 - `hreflang` i `canonical` dla PL/EN/RU
 - `sitemap.xml` i `robots.txt`
-- Słowa kluczowe: Jastrowo, okolice Jastrowa, Piła, warsztat samochodowy, mechanik
+- Słowa kluczowe: Jastrowo, okolice Jastrowo, Piła, warsztat samochodowy, mechanik
 
 ## Przed wdrożeniem
 

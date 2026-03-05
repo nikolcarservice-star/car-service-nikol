@@ -3249,7 +3249,7 @@ function buildOrderSummaryText(order, lang) {
   lines.push('');
   lines.push((isPl ? 'Razem: ' : 'Итого: ') + total + ' PLN');
   lines.push('');
-  lines.push('ul. Wernisażowa 21, 64-500 Jastrowie (Szamotuły). Tel. +48 794 935 734');
+  lines.push('ul. Wernisażowa 21, 64-500 Jastrowo (Szamotuły). Tel. +48 794 935 734');
   return lines.join('\n');
 }
 
@@ -3284,7 +3284,7 @@ function buildOrderPdfHtml(order, lang) {
   return `
     <div class="pdf-page" style="font-family: 'Noto Sans', Arial, sans-serif; width: 210mm; padding: 15mm; box-sizing: border-box; background: #fff; color: #000;">
       <div style="font-size: 14pt; font-weight: bold; margin-bottom: 4px;">Car Service Nikol</div>
-      <div style="font-size: 10pt; margin-bottom: 2px;">ul. Wernisażowa 21, 64-500 Jastrowie (Szamotuły)</div>
+      <div style="font-size: 10pt; margin-bottom: 2px;">ul. Wernisażowa 21, 64-500 Jastrowo (Szamotuły)</div>
       <div style="font-size: 10pt; margin-bottom: 12px;">Tel. +48 794 935 734</div>
       <div style="font-size: 12pt; font-weight: bold; margin-bottom: 6px;">${escapeHtml(title)}</div>
       <div style="font-size: 10pt; margin-bottom: 2px;">${escapeHtml(dateLabel)}: ${escapeHtml(dateStr)}</div>

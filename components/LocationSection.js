@@ -7,9 +7,9 @@ import { translations } from '../constants/translations';
 export default function LocationSection({ lang }) {
   const t = translations[lang].location;
 
-  // Embed only by coordinates (no place name = no label on map)
+  // Embed: Wernisażowa 21, Jastrowo (place)
   const mapEmbedUrl =
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2320.415!2d16.5384497!3d52.5908375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spl!2spl';
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2419.658250238475!2d16.5413491!3d52.5714312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470438d011197777%3A0x6b82504818617777!2sWernisa%C5%BCowa%2021%2C%2064-500%20Jastrowo!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl';
 
   return (
     <section

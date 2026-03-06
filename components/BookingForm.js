@@ -222,9 +222,6 @@ export default function BookingForm({ lang }) {
                     {t.dateLabel}
                   </label>
                   <div className="relative flex overflow-hidden rounded-xl border border-slate-600/80 bg-slate-800/50 transition focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30">
-                    <span className="flex items-center border-r border-slate-600/80 bg-slate-800/80 px-3 py-3 text-orange-400">
-                      <Calendar className="h-4 w-4 shrink-0" />
-                    </span>
                     <input
                       type="date"
                       className="min-w-0 flex-1 bg-transparent py-3 pl-4 pr-11 text-sm text-gray-100 outline-none [color-scheme:dark]"

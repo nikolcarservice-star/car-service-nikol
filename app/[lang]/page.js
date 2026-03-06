@@ -10,9 +10,9 @@ export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
   if (lang === 'ru') {
     return {
-      title: 'Car Service Nikol – автосервис Jastrowo, Шамотулы',
+      title: 'Car Service Nikol – автосервис Jastrowo',
       description:
-        'Car Service Nikol – автосервис в Jastrowo и Шамотулах. Ремонт ходовой, тормозов, замена масла, диагностика, кондиционер. Работаем по воскресеньям.',
+        'Car Service Nikol – автосервис Jastrowo и Шамотулы. Ходовая, тормоза, масло, диагностика. Работаем по воскресеньям.',
       keywords:
         'Механик Jastrowo, Автосервис Шамотулы, Ремонт авто Jastrowo, Car Service Nikol',
       alternates: { canonical: `/${lang}` },

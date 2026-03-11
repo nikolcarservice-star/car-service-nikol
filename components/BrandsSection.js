@@ -2,9 +2,12 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
 import brandLogos from '../data/brandLogos';
 
-const DUPLICATED = [...brandLogos, ...brandLogos];
+const ITEM_WIDTH_PERCENT = 10; // 10 items, track 100% → each 10%; scroll by 1 item = -10%
+const SCROLL_SPEED = 0.05; // % per frame, ~3% per sec → один круг ~30 сек
+const FPS = 60;
 
 function BrandCard({ brand }) {
   const imgSrc = `/images/brands/${brand.id}.png`;
@@ -28,6 +31,32 @@ function BrandCard({ brand }) {
 
 export default function BrandsSection({ t }) {
   const brands = t.brands;
+  const [order, setOrder] = useState(() => brandLogos.map((_, i) => i));
+  const [offset, setOffset] = useState(0);
+  const rafRef = useRef(null);
+  const lastRef = useRef(0);
+
+  useEffect(() => {
+    const animate = (now) => {
+      lastRef.current = lastRef.current || now;
+      const elapsed = (now - lastRef.current) / 1000;
+      lastRef.current = now;
+      setOffset((prev) => {
+        let next = prev - SCROLL_SPEED * 60 * elapsed;
+        if (next <= -ITEM_WIDTH_PERCENT) {
+          setOrder((o) => [...o.slice(1), o[0]]);
+          return 0;
+        }
+        return next;
+      });
+      rafRef.current = requestAnimationFrame(animate);
+    };
+    rafRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   if (!brands?.title) return null;
 
   return (
@@ -60,32 +89,32 @@ export default function BrandsSection({ t }) {
           className="mt-8 w-full overflow-hidden"
           aria-label="Марки авто"
         >
-          <div className="brands-marquee flex gap-3 sm:gap-4">
-            {DUPLICATED.map((brand, i) => (
-              <div key={`${brand.id}-${i}`} className="brands-marquee-card">
-                <BrandCard brand={brand} />
-              </div>
-            ))}
+          <div
+            className="brands-track flex gap-3 sm:gap-4"
+            style={{
+              width: '200%',
+              transform: `translateX(${offset}%)`,
+            }}
+          >
+            {order.map((index) => {
+              const brand = brandLogos[index];
+              return (
+                <div key={brand.id} className="brands-marquee-card">
+                  <BrandCard brand={brand} />
+                </div>
+              );
+            })}
           </div>
         </motion.div>
       </div>
 
       <style jsx>{`
-        .brands-marquee {
-          width: 200%;
-          animation: brands-scroll 30s linear infinite;
+        .brands-track {
+          will-change: transform;
         }
         .brands-marquee-card {
-          flex: 0 0 calc(10% - 0.6rem);
+          flex: 0 0 10%;
           min-width: 0;
-        }
-        @keyframes brands-scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
         }
       `}</style>
     </section>

@@ -327,6 +327,13 @@ const I18N = {
     tab_planner: 'Планировщик',
     tab_analytics: 'Аналитика',
     tab_stock: 'Склад',
+    tab_parts_catalog: 'Каталог запчастей',
+    parts_catalog_title: 'Поиск запчастей по VIN',
+    parts_catalog_vin_placeholder: 'Введите VIN (17 символов)',
+    parts_catalog_search: 'Найти',
+    parts_catalog_vehicle: 'Данные авто',
+    parts_catalog_open_catalog: 'Открыть в каталоге',
+    parts_catalog_links_hint: 'Оригинальные каталоги по марке / VIN',
     stock_title: 'Склад запчастей',
     stock_search: 'Поиск по названию, коду, полке…',
     stock_add_part: 'Добавить запчасть',
@@ -513,6 +520,13 @@ const I18N = {
     tab_planner: 'Planer wizyt',
     tab_analytics: 'Analityka',
     tab_stock: 'Magazyn',
+    tab_parts_catalog: 'Katalog części',
+    parts_catalog_title: 'Wyszukiwanie części po VIN',
+    parts_catalog_vin_placeholder: 'Wpisz VIN (17 znaków)',
+    parts_catalog_search: 'Szukaj',
+    parts_catalog_vehicle: 'Dane pojazdu',
+    parts_catalog_open_catalog: 'Otwórz w katalogu',
+    parts_catalog_links_hint: 'Katalogi oryginalne po marce / VIN',
     stock_title: 'Magazyn części',
     stock_search: 'Szukaj po nazwie, kodzie, półce…',
     stock_add_part: 'Dodaj część',
@@ -929,6 +943,7 @@ function renderAppShell(activeTab = 'order') {
     const plannerTab = createEl('button', tabClass('planner'), [t('tab_planner')]);
     const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
     const stockTab = createEl('button', tabClass('stock'), [t('tab_stock')]);
+    const partsCatalogTab = createEl('button', tabClass('parts_catalog'), [t('tab_parts_catalog')]);
 
     adminOrdersTab.addEventListener('click', () => {
       setLastSeen(STORAGE_KEYS.lastSeenOrders, new Date().toISOString());
@@ -943,6 +958,7 @@ function renderAppShell(activeTab = 'order') {
     plannerTab.addEventListener('click', () => renderAppShell('planner'));
     analyticsTab.addEventListener('click', () => renderAppShell('analytics'));
     stockTab.addEventListener('click', () => renderAppShell('stock'));
+    partsCatalogTab.addEventListener('click', () => renderAppShell('parts_catalog'));
 
     tabs.appendChild(adminOrdersTab);
     tabs.appendChild(bookingTab);
@@ -951,6 +967,7 @@ function renderAppShell(activeTab = 'order') {
     tabs.appendChild(plannerTab);
     tabs.appendChild(analyticsTab);
     tabs.appendChild(stockTab);
+    tabs.appendChild(partsCatalogTab);
 
     if (isOwner) {
       const adminSettingsTab = createEl('button', tabClass('admin'), [t('settings')]);
@@ -980,6 +997,8 @@ function renderAppShell(activeTab = 'order') {
     content.appendChild(renderAnalyticsScreen());
   } else if (activeTab === 'stock') {
     content.appendChild(renderStockScreen());
+  } else if (activeTab === 'parts_catalog') {
+    content.appendChild(renderPartsCatalogScreen());
   } else {
     content.appendChild(renderAdminScreen());
   }
@@ -2604,6 +2623,96 @@ function renderVisitPlannerScreen() {
     });
   }
 
+  return container;
+}
+
+function renderPartsCatalogScreen() {
+  const container = createEl('div', 'space-y-4');
+  const apiBase = 'https://car-service-nikol.vercel.app';
+
+  container.appendChild(createEl('h2', 'text-base font-semibold text-slate-100', [t('parts_catalog_title')]));
+
+  const searchRow = createEl('div', 'flex gap-2 flex-wrap');
+  const vinInput = createEl('input', 'flex-1 min-w-[200px] px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  vinInput.placeholder = t('parts_catalog_vin_placeholder');
+  vinInput.maxLength = 17;
+  vinInput.autocomplete = 'off';
+  const searchBtn = createEl('button', 'px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white', [t('parts_catalog_search')]);
+  searchRow.appendChild(vinInput);
+  searchRow.appendChild(searchBtn);
+  container.appendChild(searchRow);
+
+  const vehicleCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-2 hidden');
+  const vehicleTitle = createEl('div', 'text-xs font-medium text-slate-400 uppercase', [t('parts_catalog_vehicle')]);
+  const vehicleBody = createEl('div', 'text-sm text-slate-200 space-y-1');
+  vehicleCard.appendChild(vehicleTitle);
+  vehicleCard.appendChild(vehicleBody);
+  container.appendChild(vehicleCard);
+
+  const linksCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3');
+  linksCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('parts_catalog_links_hint')]));
+  const catalogLinks = [
+    { name: '7zap', url: 'https://www.7zap.com/' },
+    { name: 'PartSouq (VIN)', url: 'https://www.partsouq.com/' },
+    { name: 'Partslink24', url: 'https://www.partslink24.com/' },
+    { name: 'TecDoc', url: 'https://www.tecdoc.net/' }
+  ];
+  const linksRow = createEl('div', 'flex flex-wrap gap-2');
+  catalogLinks.forEach(({ name, url }) => {
+    const a = createEl('a', 'inline-flex items-center px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm', [name]);
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    linksRow.appendChild(a);
+  });
+  linksCard.appendChild(linksRow);
+  container.appendChild(linksCard);
+
+  const statusEl = createEl('div', 'text-sm text-slate-500 min-h-[1.5rem]');
+
+  searchBtn.addEventListener('click', async () => {
+    const vin = (vinInput.value || '').trim().toUpperCase().replace(/\s/g, '');
+    if (vin.length !== 17) {
+      statusEl.textContent = settings.language === 'pl' ? 'VIN musi mieć 17 znaków.' : 'VIN должен содержать 17 символов.';
+      vehicleCard.classList.add('hidden');
+      return;
+    }
+    statusEl.textContent = settings.language === 'pl' ? 'Szukam…' : 'Поиск…';
+    vehicleCard.classList.add('hidden');
+    try {
+      const res = await fetch(`${apiBase}/api/vin-decode?vin=${encodeURIComponent(vin)}`);
+      const data = await res.json();
+      if (!data.ok) {
+        statusEl.textContent = data.error || (settings.language === 'pl' ? 'Nie znaleziono.' : 'Не найдено.');
+        return;
+      }
+      statusEl.textContent = '';
+      vehicleBody.innerHTML = '';
+      const parts = [
+        [t('brand'), data.brand],
+        [settings.language === 'pl' ? 'Model' : 'Модель', data.model],
+        [settings.language === 'pl' ? 'Rok' : 'Год', data.year],
+        [settings.language === 'pl' ? 'Paliwo' : 'Топливо', data.fuelType],
+        [settings.language === 'pl' ? 'Nadwozie' : 'Кузов', data.bodyType],
+        [settings.language === 'pl' ? 'Wersja' : 'Версия', data.version]
+      ];
+      parts.forEach(([label, value]) => {
+        if (value == null || value === '') return;
+        const row = createEl('div', 'flex justify-between gap-2');
+        row.appendChild(createEl('span', 'text-slate-400', [label + ':']));
+        row.appendChild(createEl('span', 'text-slate-100', [String(value)]));
+        vehicleBody.appendChild(row);
+      });
+      vehicleCard.classList.remove('hidden');
+
+      const partsouqLink = linksRow.querySelector('a[href*="partsouq"]');
+      if (partsouqLink) partsouqLink.href = `https://www.partsouq.com/en/search/vin/${vin}`;
+    } catch (e) {
+      statusEl.textContent = (e && e.message) || (settings.language === 'pl' ? 'Błąd połączenia.' : 'Ошибка соединения.');
+    }
+  });
+
+  container.appendChild(statusEl);
   return container;
 }
 

@@ -33,12 +33,12 @@ export default function Hero({ t }) {
         <div className="absolute inset-0 bg-black/70" />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 pb-12 pt-10 md:flex-row md:items-center md:pb-20 md:pt-16">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 pb-12 pt-10 md:flex-row md:items-center md:pb-20 md:pt-16 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="flex-1 space-y-6"
+          className="flex-1 space-y-6 px-0 sm:px-0"
         >
           {/* USP — główna przewaga: otwarte w niedzielę */}
           <div className="inline-flex items-center gap-3 rounded-2xl border-2 border-emerald-400/60 bg-emerald-500/20 px-5 py-3 shadow-lg shadow-emerald-500/20">
@@ -58,18 +58,18 @@ export default function Hero({ t }) {
             {hero.subtitle}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <button
               type="button"
               onClick={handleBookClick}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/40 ring-2 ring-orange-400/40 transition hover:scale-[1.03] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/50 active:scale-100"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/40 ring-2 ring-orange-400/40 transition hover:scale-[1.03] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/50 active:scale-100"
             >
               <CalendarDays className="h-4 w-4" />
               <span>{hero.ctaPrimary}</span>
             </button>
             <Link
               href={`/${lang}/contact`}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/50 bg-transparent px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/50 bg-transparent px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               <PhoneCall className="h-4 w-4" />
               <span>{hero.ctaSecondary}</span>
@@ -77,9 +77,9 @@ export default function Hero({ t }) {
           </div>
 
           {hero.trustSignals?.length > 0 && (
-            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-200 sm:text-sm" aria-label="Trust signals">
+            <ul className="flex flex-col gap-2 text-xs text-gray-200 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2 sm:text-sm" aria-label="Trust signals">
               {hero.trustSignals.map((label, i) => (
-                <li key={i} className="inline-flex items-center gap-2">
+                <li key={i} className="flex items-center gap-2">
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400" aria-hidden>
                     <Check className="h-3 w-3 stroke-[2.5]" />
                   </span>

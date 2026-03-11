@@ -1,12 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CalendarDays, ChevronDown, Languages, Phone, Wrench } from 'lucide-react';
+import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
 import { getServiceNavItems } from '../data/services';
 
 export default function Header({ lang, t }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const nav = t.navigation;
   const pathname = usePathname() || '/';
 
@@ -108,7 +110,8 @@ export default function Header({ lang, t }) {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Desktop: language + phone + book */}
+        <div className="hidden md:flex items-center gap-2 sm:gap-3">
           <div
             aria-label={nav.languageToggleLabel}
             className="flex items-center gap-1 rounded-full border border-slate-700/80 bg-slate-900/80 px-2 py-1.5 text-xs font-medium text-gray-200 shadow-inner"
@@ -154,7 +157,144 @@ export default function Header({ lang, t }) {
             <span className="hidden sm:inline">{nav.bookCta ?? 'Umów wizytę'}</span>
           </Link>
         </div>
+
+        {/* Mobile: only menu button */}
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          className="md:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700/80 bg-slate-900/80 text-gray-200 transition hover:bg-white/5 hover:text-orange-400"
+          aria-label="Otwórz menu"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
       </div>
+
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          aria-hidden="true"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Zamknij menu"
+          />
+          <div className="absolute right-0 top-0 h-full w-full max-w-sm border-l border-slate-800 bg-slate-950 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
+              <span className="text-sm font-semibold text-gray-300">Menu</span>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition hover:bg-white/5 hover:text-white"
+                aria-label="Zamknij menu"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-0 p-4">
+              <Link
+                href={buildPath(currentLang)}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.home}
+              </Link>
+              <Link
+                href={buildPath(currentLang, 'services')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.servicesAll ?? 'Wszystkie usługi'}
+              </Link>
+              {servicesNav.map((item) => (
+                <Link
+                  key={item.slug}
+                  href={buildPath(currentLang, `services/${item.slug}`)}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg px-3 py-2 pl-6 text-gray-400 hover:bg-white/5 hover:text-orange-400"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link
+                href={buildPath(currentLang, 'about')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.about ?? 'O nas'}
+              </Link>
+              <Link
+                href={buildPath(currentLang, 'contact')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.contact ?? 'Kontakt'}
+              </Link>
+              <Link
+                href={buildPath(currentLang, 'cennik')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.cennik ?? 'Cennik'}
+              </Link>
+              <Link
+                href={buildPath(currentLang, 'blog')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.blog ?? 'Blog'}
+              </Link>
+              <div className="my-3 h-px bg-slate-700" />
+              <div
+                aria-label={nav.languageToggleLabel}
+                className="flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900/80 px-3 py-2.5"
+              >
+                <Languages className="h-4 w-4 shrink-0 text-orange-400/90" />
+                <Link
+                  href={buildPath(LANGUAGES.PL, restPath)}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`rounded-full px-3 py-1 text-sm font-medium ${
+                    currentLang === LANGUAGES.PL
+                      ? 'bg-orange-500 text-slate-950'
+                      : 'text-gray-400 hover:text-orange-400'
+                  }`}
+                >
+                  PL
+                </Link>
+                <Link
+                  href={buildPath(LANGUAGES.RU, restPath)}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`rounded-full px-3 py-1 text-sm font-medium ${
+                    currentLang === LANGUAGES.RU
+                      ? 'bg-orange-500 text-slate-950'
+                      : 'text-gray-400 hover:text-orange-400'
+                  }`}
+                >
+                  RU
+                </Link>
+              </div>
+              <a
+                href={`tel:${PHONE_RAW}`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white"
+              >
+                <Phone className="h-4 w-4" />
+                {PHONE_DISPLAY}
+              </a>
+              <Link
+                href={bookHref}
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white"
+              >
+                <CalendarDays className="h-4 w-4" />
+                {nav.bookCta ?? 'Umów wizytę'}
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

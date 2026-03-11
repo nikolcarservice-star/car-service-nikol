@@ -64,7 +64,7 @@ export default function Header({ lang, t }) {
               <span>{nav.services}</span>
               <ChevronDown className="h-3.5 w-3.5 transition group-hover:rotate-180" />
             </button>
-            <div className="invisible absolute left-0 top-full mt-0.5 min-w-[220px] rounded-xl border border-slate-700/80 bg-slate-900/98 p-2 opacity-0 shadow-xl shadow-black/30 backdrop-blur transition duration-200 group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute left-0 top-full mt-0.5 min-w-[220px] rounded-xl border border-slate-700 bg-slate-900 p-2 opacity-0 shadow-xl shadow-black/50 transition duration-200 group-hover:visible group-hover:opacity-100">
               <Link
                 href={buildPath(currentLang, 'services')}
                 className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-gray-200 transition-colors hover:bg-orange-500/15 hover:text-orange-300"

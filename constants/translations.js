@@ -131,6 +131,10 @@ export const translations = {
         },
       ],
     },
+    servicesPage: {
+      sundayBadge: 'Dostępne terminy w najbliższą niedzielę!',
+      serviceDetails: 'Zobacz szczegóły usługi',
+    },
     aboutBlock: {
       title: 'O nas — Pasja i Profesjonalizm w Jastrowo',
       paragraph1:
@@ -316,6 +320,10 @@ export const translations = {
             'Восстановление и программирование ключей.',
         },
       ],
+    },
+    servicesPage: {
+      sundayBadge: 'Есть записи на ближайшее воскресенье!',
+      serviceDetails: 'Подробнее об услуге',
     },
     aboutBlock: {
       title: 'О нас — Страсть и профессионализм в Ястрово',

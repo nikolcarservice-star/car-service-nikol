@@ -1,8 +1,17 @@
 import Link from 'next/link';
-import { Wrench } from 'lucide-react';
+import Image from 'next/image';
+import { Wrench, CalendarDays, ArrowRight } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { getAllServices } from '../../../data/services';
 import { getTranslations, normalizeLang } from '../../../constants/translations';
+
+const imageMap = {
+  suspension: '/images/services/suspension.jpg',
+  oil: '/images/services/oil.jpg',
+  brakes: '/images/services/brakes.jpg',
+  timing: '/images/services/timing.jpg',
+  diagnostics: '/images/services/diagnostics.jpg',
+};
 
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
@@ -27,15 +36,39 @@ export default function ServicesIndexPage({ params }) {
   const lang = normalizeLang(params.lang);
   const t = getTranslations(lang);
   const services = getAllServices(lang);
-
   const basePath = `/${lang}`;
+  const bookingAnchor = `#${t.bookingId || 'booking'}`;
+  const isRu = lang === 'ru';
+  const servicesPage = t.servicesPage || {};
+  const sundayBadge = servicesPage.sundayBadge || (isRu ? 'Есть записи на ближайшее воскресенье!' : 'Dostępne terminy w najbliższą niedzielę!');
+  const serviceDetailsLabel = servicesPage.serviceDetails || (isRu ? 'Подробнее об услуге' : 'Zobacz szczegóły usługi');
 
   return (
-    <section className="border-b border-slate-800 bg-slate-950">
+    <section className="relative min-h-screen border-b border-slate-800 bg-slate-950">
+      {/* Плавающий бейдж — доступно в воскресенье */}
+      <div
+        className="fixed right-4 top-24 z-30 max-w-[280px] rounded-xl border-2 border-emerald-500/70 bg-emerald-500/20 px-4 py-3 shadow-lg shadow-emerald-500/20 backdrop-blur-sm sm:right-6 sm:top-28"
+        role="status"
+        aria-live="polite"
+      >
+        <p className="flex items-center gap-2 text-sm font-bold text-emerald-100 sm:text-base">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/40">
+            <CalendarDays className="h-4 w-4 text-emerald-200" />
+          </span>
+          {sundayBadge}
+        </p>
+        <Link
+          href={`${basePath}${bookingAnchor}`}
+          className="mt-2 inline-block text-xs font-semibold text-emerald-300 underline decoration-emerald-400/60 underline-offset-2 hover:text-emerald-200"
+        >
+          {t.navigation?.bookCta || (isRu ? 'Записаться' : 'Umów wizytę')} →
+        </Link>
+      </div>
+
       <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
         <Breadcrumbs
           items={[
-            { label: lang === 'ru' ? 'Главная' : 'Strona główna', href: basePath },
+            { label: isRu ? 'Главная' : 'Strona główna', href: basePath },
             { label: t.navigation.services },
           ]}
         />
@@ -43,37 +76,70 @@ export default function ServicesIndexPage({ params }) {
         <div className="mb-6 flex items-center gap-2">
           <Wrench className="h-6 w-6 text-orange-400" />
           <h1 className="text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">
-            {lang === 'ru'
-              ? 'Услуги автосервиса Car Service Nikol'
-              : 'Usługi serwisu Car Service Nikol'}
+            {isRu ? 'Услуги автосервиса Car Service Nikol' : 'Usługi serwisu Car Service Nikol'}
           </h1>
         </div>
-        <p className="mb-6 max-w-2xl text-sm text-gray-300 sm:text-base">
-          {lang === 'ru'
+        <p className="mb-8 max-w-2xl text-sm text-gray-300 sm:text-base">
+          {isRu
             ? 'Ниже вы найдёте подробное описание основных услуг нашего автосервиса в Jastrowo. Выберите раздел, чтобы узнать цену и этапы работ.'
             : 'Poniżej znajdziesz szczegółowe opisy głównych usług naszego serwisu w Jastrowo. Wybierz interesującą Cię usługę, aby poznać ceny i etapy pracy.'}
         </p>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <Link
-              key={service.slug}
-              href={`${basePath}/services/${service.slug}`}
-              className="group rounded-2xl border border-slate-800 bg-slate-900/70 p-4 text-xs text-gray-300 shadow-lg transition hover:-translate-y-1 hover:border-orange-500/70 hover:shadow-glow sm:text-sm"
-            >
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-100 sm:text-base">
-                <Wrench className="h-4 w-4 text-orange-400" />
-                <span>{service.name}</span>
-              </h2>
-              <p className="mt-2 text-xs text-gray-300 sm:text-sm">{service.intro}</p>
-              <span className="mt-3 inline-flex text-xs font-semibold text-orange-300 group-hover:text-orange-200">
-                {lang === 'ru' ? 'Подробнее o usłudze' : 'Zobacz szczegóły usługi'}
-              </span>
-            </Link>
-          ))}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => {
+            const imageUrl = imageMap[service.key];
+            return (
+              <article
+                key={service.slug}
+                className="group relative flex min-h-[320px] flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-slate-900 shadow-xl transition hover:border-orange-500/50 hover:shadow-orange-500/10"
+              >
+                {/* Фон и градиент */}
+                {imageUrl && (
+                  <div className="absolute inset-0">
+                    <Image
+                      src={imageUrl}
+                      alt=""
+                      fill
+                      className="object-cover transition duration-300 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    <div
+                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30"
+                      aria-hidden
+                    />
+                  </div>
+                )}
+
+                <div className="relative z-10 flex flex-1 flex-col p-5 pt-8">
+                  <h2 className="text-lg font-bold text-white sm:text-xl">
+                    {service.name}
+                  </h2>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-gray-200">
+                    {service.intro}
+                  </p>
+
+                  <div className="mt-auto flex flex-wrap gap-3 pt-4">
+                    <Link
+                      href={`${basePath}/services/${service.slug}`}
+                      className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/40"
+                    >
+                      <span>{serviceDetailsLabel}</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link
+                      href={`${basePath}${bookingAnchor}`}
+                      className="inline-flex items-center gap-2 rounded-lg border-2 border-white/60 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-orange-400/80 hover:bg-orange-500/20 hover:text-orange-100"
+                    >
+                      <CalendarDays className="h-4 w-4" />
+                      {t.navigation?.bookCta || (isRu ? 'Записаться' : 'Umów wizytę')}
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
-

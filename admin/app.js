@@ -2652,10 +2652,9 @@ function renderPartsCatalogScreen() {
   const linksCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3');
   linksCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('parts_catalog_links_hint')]));
   const catalogLinks = [
-    { name: '7zap', url: 'https://www.7zap.com/' },
-    { name: 'PartSouq (VIN)', url: 'https://www.partsouq.com/' },
-    { name: 'Partslink24', url: 'https://www.partslink24.com/' },
-    { name: 'TecDoc', url: 'https://www.tecdoc.net/' }
+    { name: '2407.pl', url: 'https://2407.pl/' },
+    { name: 'Autoostrov', url: 'https://autoostrov.by/auto/?srsltid=AfmBOopWaC6vACu6OovSOvfkIcetIu9J5W2cJVrgIYDP_QIHMWuJCKQF' },
+    { name: 'ML-Auto (оригинальные каталоги)', url: 'https://www.ml-auto.by/original/' }
   ];
   const linksRow = createEl('div', 'flex flex-wrap gap-2');
   catalogLinks.forEach(({ name, url }) => {
@@ -2688,25 +2687,33 @@ function renderPartsCatalogScreen() {
       }
       statusEl.textContent = '';
       vehicleBody.innerHTML = '';
-      const parts = [
-        [t('brand'), data.brand],
-        [settings.language === 'pl' ? 'Model' : 'Модель', data.model],
-        [settings.language === 'pl' ? 'Rok' : 'Год', data.year],
-        [settings.language === 'pl' ? 'Paliwo' : 'Топливо', data.fuelType],
-        [settings.language === 'pl' ? 'Nadwozie' : 'Кузов', data.bodyType],
-        [settings.language === 'pl' ? 'Wersja' : 'Версия', data.version]
-      ];
-      parts.forEach(([label, value]) => {
-        if (value == null || value === '') return;
-        const row = createEl('div', 'flex justify-between gap-2');
-        row.appendChild(createEl('span', 'text-slate-400', [label + ':']));
-        row.appendChild(createEl('span', 'text-slate-100', [String(value)]));
-        vehicleBody.appendChild(row);
-      });
+      if (data.vin) {
+        const vinRow = createEl('div', 'flex justify-between gap-2 border-b border-slate-700 pb-2 mb-2');
+        vinRow.appendChild(createEl('span', 'text-slate-400', ['VIN:']));
+        vinRow.appendChild(createEl('span', 'text-slate-100 font-mono text-xs', [data.vin]));
+        vehicleBody.appendChild(vinRow);
+      }
+      if (data.notFound) {
+        vehicleBody.appendChild(createEl('div', 'text-slate-500 text-sm', [settings.language === 'pl' ? 'Brak danych w katalogach dla tego VIN.' : 'По этому VIN в каталогах данных не найдено.']));
+      } else {
+        const parts = [
+          [t('brand'), data.brand],
+          [settings.language === 'pl' ? 'Model' : 'Модель', data.model],
+          [settings.language === 'pl' ? 'Rok' : 'Год', data.year],
+          [settings.language === 'pl' ? 'Paliwo' : 'Топливо', data.fuelType],
+          [settings.language === 'pl' ? 'Nadwozie' : 'Кузов', data.bodyType],
+          [settings.language === 'pl' ? 'Wersja' : 'Версия', data.version],
+          [settings.language === 'pl' ? 'Kraj rejestracji' : 'Страна регистрации', data.registrationCountry]
+        ];
+        parts.forEach(([label, value]) => {
+          if (value == null || value === '') return;
+          const row = createEl('div', 'flex justify-between gap-2');
+          row.appendChild(createEl('span', 'text-slate-400', [label + ':']));
+          row.appendChild(createEl('span', 'text-slate-100', [String(value)]));
+          vehicleBody.appendChild(row);
+        });
+      }
       vehicleCard.classList.remove('hidden');
-
-      const partsouqLink = linksRow.querySelector('a[href*="partsouq"]');
-      if (partsouqLink) partsouqLink.href = `https://www.partsouq.com/en/search/vin/${vin}`;
     } catch (e) {
       statusEl.textContent = (e && e.message) || (settings.language === 'pl' ? 'Błąd połączenia.' : 'Ошибка соединения.');
     }

@@ -10,12 +10,12 @@ function BrandCard({ brand }) {
   const imgSrc = `/images/brands/${brand.id}.png`;
   return (
     <div className="group flex h-[120px] flex-col items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/90 px-2 py-4 shadow-lg transition-all duration-200 hover:border-orange-500/60 hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] sm:h-[130px] sm:py-5">
-      <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center transition-opacity group-hover:opacity-95 sm:h-14 sm:w-14">
+      <div className="relative h-14 w-14 flex-shrink-0 transition-opacity group-hover:opacity-95 sm:h-16 sm:w-16">
         <Image
           src={imgSrc}
           alt={brand.name}
-          width={56}
-          height={56}
+          fill
+          sizes="64px"
           className="object-contain"
         />
       </div>

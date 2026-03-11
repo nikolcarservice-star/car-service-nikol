@@ -4,20 +4,13 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import brandLogos from '../data/brandLogos';
 
-const cardClass =
-  'group flex shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/90 px-3 py-5 shadow-lg transition-all duration-200 hover:border-orange-500/60 hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] sm:py-6';
+const DUPLICATED = [...brandLogos, ...brandLogos];
 
-function BrandCard({ brand, index }) {
+function BrandCard({ brand }) {
   const imgSrc = `/images/brands/${brand.id}.png`;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3, delay: index * 0.03 }}
-      className={`w-[100px] sm:w-[110px] ${cardClass}`}
-    >
-      <div className="relative flex h-14 w-14 items-center justify-center transition-opacity group-hover:opacity-95 sm:h-16 sm:w-16">
+    <div className="group flex h-[120px] flex-col items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/90 px-2 py-4 shadow-lg transition-all duration-200 hover:border-orange-500/60 hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] sm:h-[130px] sm:py-5">
+      <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center transition-opacity group-hover:opacity-95 sm:h-14 sm:w-14">
         <Image
           src={imgSrc}
           alt={brand.name}
@@ -26,10 +19,10 @@ function BrandCard({ brand, index }) {
           className="object-contain"
         />
       </div>
-      <span className="mt-3 text-center text-xs font-medium text-white sm:text-sm">
+      <span className="mt-2 line-clamp-1 text-center text-xs font-medium text-white sm:text-sm">
         {brand.name}
       </span>
-    </motion.div>
+    </div>
   );
 }
 
@@ -64,13 +57,37 @@ export default function BrandsSection({ t }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mt-8 flex flex-nowrap justify-center gap-3 overflow-x-auto pb-2 sm:gap-4"
+          className="mt-8 w-full overflow-hidden"
+          aria-label="Марки авто"
         >
-          {brandLogos.map((brand, i) => (
-            <BrandCard key={brand.id} brand={brand} index={i} />
-          ))}
+          <div className="brands-marquee flex gap-3 sm:gap-4">
+            {DUPLICATED.map((brand, i) => (
+              <div key={`${brand.id}-${i}`} className="brands-marquee-card">
+                <BrandCard brand={brand} />
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
+
+      <style jsx>{`
+        .brands-marquee {
+          width: 200%;
+          animation: brands-scroll 30s linear infinite;
+        }
+        .brands-marquee-card {
+          flex: 0 0 calc(10% - 0.6rem);
+          min-width: 0;
+        }
+        @keyframes brands-scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
     </section>
   );
 }

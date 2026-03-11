@@ -36,27 +36,39 @@ export default function LocationSection({ lang }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="max-w-2xl overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl"
+          className="max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-slate-950/80 shadow-2xl gradient-border"
         >
-          <a
-            href="https://www.google.com/maps/place/Wernisa%C5%BCowa+21,+64-500+Jastrowo/@52.5908375,16.5384497,17z"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="mb-2 inline-flex items-center gap-2 rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-gray-200 hover:bg-slate-700"
-          >
-            {lang === 'ru' ? 'Открыть в Картах' : 'Otwórz w Mapach'}
-          </a>
-          <iframe
-            title={lang === 'ru' ? 'Карта – адрес сервиса' : 'Mapa dojazdu – adres serwisu'}
-            src={mapEmbedUrl}
-            width="100%"
-            height="450"
-            style={{ border: 0, borderRadius: '15px', filter: 'invert(90%) hue-rotate(180deg)' }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="border-0"
-          />
+          <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 bg-slate-900/80 px-4 py-3 text-xs text-gray-200 sm:text-sm">
+            <div className="flex flex-col">
+              <span className="font-semibold">
+                {lang === 'ru' ? 'Car Service Nikol – адрес сервиса' : 'Car Service Nikol – adres serwisu'}
+              </span>
+              <span className="text-[11px] text-gray-400">
+                Wernisażowa 21, 64-500 Jastrowo
+              </span>
+            </div>
+            <a
+              href="https://www.google.com/maps/place/Wernisa%C5%BCowa+21,+64-500+Jastrowo/@52.5908375,16.5384497,17z"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-3 py-1.5 text-[11px] font-semibold text-slate-950 shadow-glow hover:bg-orange-400"
+            >
+              {lang === 'ru' ? 'Открыть в Картах' : 'Otwórz w Mapach'}
+            </a>
+          </div>
+          <div className="bg-slate-900">
+            <iframe
+              title={lang === 'ru' ? 'Карта – адрес сервиса' : 'Mapa dojazdu – adres serwisu'}
+              src={mapEmbedUrl}
+              width="100%"
+              height="360"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-[360px] w-full"
+            />
+          </div>
         </motion.div>
       </div>
     </section>

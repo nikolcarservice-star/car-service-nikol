@@ -334,6 +334,7 @@ const I18N = {
     parts_catalog_vehicle: 'Данные авто',
     parts_catalog_open_catalog: 'Открыть в каталоге',
     parts_catalog_links_hint: 'Оригинальные каталоги по марке / VIN',
+    parts_catalog_where_order: 'Где заказываю запчасти',
     stock_title: 'Склад запчастей',
     stock_search: 'Поиск по названию, коду, полке…',
     stock_add_part: 'Добавить запчасть',
@@ -348,6 +349,11 @@ const I18N = {
     stock_in: 'Приход',
     stock_out: 'Расход',
     stock_history: 'История движений',
+    stock_import_from_order: 'Выгрузить из заказа',
+    stock_import_placeholder: 'Вставьте список из заказа магазина — каждая строка одна позиция. Например:\nФильтр масляный 2 шт\nОлеј 5W30, 4\nŚwieca zapłonowa 8',
+    stock_import_hint: 'Скопируйте список из письма или страницы заказа (Wapex, Inter Cars, 2407) и вставьте сюда. В конце строки укажите количество: 2 шт, 3 szt или , 4',
+    stock_import_preview: 'Будет добавлено на склад',
+    stock_import_do: 'Добавить на склад',
     add_client: 'Добавить клиента',
     add_vehicle: 'Добавить авто',
     add_booking: 'Добавить заявку',
@@ -527,6 +533,7 @@ const I18N = {
     parts_catalog_vehicle: 'Dane pojazdu',
     parts_catalog_open_catalog: 'Otwórz w katalogu',
     parts_catalog_links_hint: 'Katalogi oryginalne po marce / VIN',
+    parts_catalog_where_order: 'Gdzie zamawiam części',
     stock_title: 'Magazyn części',
     stock_search: 'Szukaj po nazwie, kodzie, półce…',
     stock_add_part: 'Dodaj część',
@@ -541,6 +548,11 @@ const I18N = {
     stock_in: 'Przychód',
     stock_out: 'Rozchód',
     stock_history: 'Historia ruchów',
+    stock_import_from_order: 'Import z zamówienia',
+    stock_import_placeholder: 'Wklej listę z zamówienia — jedna pozycja w linii. Np.:\nFiltr oleju 2 szt\nOlej 5W30, 4\nŚwieca zapłonowa 8',
+    stock_import_hint: 'Skopiuj listę z e-maila lub strony zamówienia (Wapex, Inter Cars, 2407) i wklej tutaj. Na końcu linii podaj ilość: 2 szt, 3 szt lub , 4',
+    stock_import_preview: 'Zostanie dodane na magazyn',
+    stock_import_do: 'Dodaj na magazyn',
     add_client: 'Dodaj klienta',
     add_vehicle: 'Dodaj pojazd',
     add_booking: 'Dodaj zgłoszenie',
@@ -2667,6 +2679,24 @@ function renderPartsCatalogScreen() {
   linksCard.appendChild(linksRow);
   container.appendChild(linksCard);
 
+  const whereOrderCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3');
+  whereOrderCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('parts_catalog_where_order')]));
+  const shopLinks = [
+    { name: 'Wapex', url: 'https://wapex.pl/' },
+    { name: 'Inter Cars', url: 'https://intercars.pl/produkty' },
+    { name: '2407.pl', url: 'https://2407.pl/' }
+  ];
+  const shopLinksRow = createEl('div', 'flex flex-wrap gap-2');
+  shopLinks.forEach(({ name, url }) => {
+    const a = createEl('a', 'inline-flex items-center px-3 py-2 rounded-lg bg-primary-600/20 hover:bg-primary-600/40 text-primary-300 text-sm border border-primary-600/50', [name]);
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    shopLinksRow.appendChild(a);
+  });
+  whereOrderCard.appendChild(shopLinksRow);
+  container.appendChild(whereOrderCard);
+
   const statusEl = createEl('div', 'text-sm text-slate-500 min-h-[1.5rem]');
 
   searchBtn.addEventListener('click', async () => {
@@ -2733,8 +2763,10 @@ function renderStockScreen() {
   const searchInput = createEl('input', 'w-full sm:w-64 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
   searchInput.placeholder = t('stock_search');
   const addBtn = createEl('button', 'px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm text-white', ['+ ', t('stock_add_part')]);
+  const importOrderBtn = createEl('button', 'px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-sm text-slate-200', [t('stock_import_from_order')]);
   controls.appendChild(searchInput);
   controls.appendChild(addBtn);
+  controls.appendChild(importOrderBtn);
   header.appendChild(controls);
 
   const listEl = createEl('div', 'space-y-2');
@@ -2871,6 +2903,107 @@ function renderStockScreen() {
     parts.push(part);
     persistAll();
     renderList();
+  });
+
+  importOrderBtn.addEventListener('click', () => {
+    const overlay = createEl('div', 'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm');
+    const card = createEl('div', 'w-full max-w-lg bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden');
+    const header = createEl('div', 'px-4 py-3 border-b border-slate-700 bg-slate-800/80');
+    header.appendChild(createEl('div', 'text-sm font-semibold text-slate-100', [t('stock_import_from_order')]));
+    card.appendChild(header);
+    const body = createEl('div', 'p-4 space-y-3');
+    body.appendChild(createEl('p', 'text-xs text-slate-400', [t('stock_import_hint')]));
+    const textarea = createEl('textarea', 'w-full h-32 px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-y');
+    textarea.placeholder = t('stock_import_placeholder');
+    body.appendChild(textarea);
+    const previewTitle = createEl('div', 'text-xs font-medium text-slate-400', [t('stock_import_preview')]);
+    const previewList = createEl('div', 'max-h-40 overflow-y-auto space-y-1 text-xs');
+    body.appendChild(previewTitle);
+    body.appendChild(previewList);
+
+    function parseLines() {
+      const text = (textarea.value || '').trim();
+      const lines = text.split(/\n/).map((s) => s.trim()).filter(Boolean);
+      const rows = [];
+      const qtyRegex = /[,\s](\d+(?:[.,]\d+)?)\s*(szt\.?|шт\.?|pcs\.?|odb\.?)?\s*$/i;
+      for (const line of lines) {
+        const m = line.match(qtyRegex);
+        let name, qty;
+        if (m) {
+          name = line.slice(0, m.index).replace(/^[,\s]+|[,\s]+$/g, '').trim();
+          qty = parseFloat(m[1].replace(',', '.')) || 1;
+        } else {
+          name = line;
+          qty = 1;
+        }
+        if (name) rows.push({ name, qty });
+      }
+      return rows;
+    }
+
+    function renderPreview() {
+      const rows = parseLines();
+      previewList.innerHTML = '';
+      if (rows.length === 0) {
+        previewList.appendChild(createEl('div', 'text-slate-500 py-2', [settings.language === 'pl' ? 'Wpisz lub wklej listę.' : 'Введите или вставьте список.']));
+        return;
+      }
+      rows.forEach((r) => {
+        const row = createEl('div', 'flex justify-between gap-2 py-1 border-b border-slate-800');
+        row.appendChild(createEl('span', 'text-slate-200 truncate', [r.name]));
+        row.appendChild(createEl('span', 'text-slate-400 shrink-0', [String(r.qty)]));
+        previewList.appendChild(row);
+      });
+    }
+
+    textarea.addEventListener('input', renderPreview);
+
+    const footer = createEl('div', 'flex justify-end gap-2 px-4 py-3 border-t border-slate-700 bg-slate-800/50');
+    const cancelBtn = createEl('button', 'px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700', [t('cancel_btn')]);
+    const addToStockBtn = createEl('button', 'px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white', [t('stock_import_do')]);
+    cancelBtn.addEventListener('click', () => overlay.remove());
+    addToStockBtn.addEventListener('click', () => {
+      const rows = parseLines();
+      if (rows.length === 0) {
+        if (settings.language === 'pl') alert('Dodaj co najmniej jedną pozycję.'); else alert('Добавьте хотя бы одну позицию.');
+        return;
+      }
+      const nameStr = (n) => (settings.language === 'pl' ? n : n);
+      rows.forEach((r) => {
+        const part = {
+          id: nextId(),
+          sku: '',
+          name_pl: r.name,
+          name_ru: r.name,
+          brand: '',
+          location: '',
+          qty: r.qty,
+          minQty: null,
+          purchasePrice: null,
+          salePrice: null
+        };
+        parts.push(part);
+        stockMovements.push({
+          id: nextId(),
+          partId: part.id,
+          type: 'in',
+          qty: part.qty,
+          createdAt: new Date().toISOString()
+        });
+      });
+      persistAll();
+      renderList();
+      overlay.remove();
+    });
+    footer.appendChild(cancelBtn);
+    footer.appendChild(addToStockBtn);
+    card.appendChild(body);
+    card.appendChild(footer);
+    overlay.appendChild(card);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    card.addEventListener('click', (e) => e.stopPropagation());
+    appRoot.appendChild(overlay);
+    renderPreview();
   });
 
   container.appendChild(header);

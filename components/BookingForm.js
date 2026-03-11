@@ -18,7 +18,7 @@ function trackFormEvent(action, label = '') {
   }
 }
 
-export default function BookingForm({ lang }) {
+export default function BookingForm({ lang, embed }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const dateInputRef = useRef(null);
   const t = translations[lang].booking;
@@ -91,44 +91,8 @@ export default function BookingForm({ lang }) {
   const inputBase =
     'w-full rounded-xl border border-slate-600/80 bg-slate-800/50 px-4 py-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30';
 
-  return (
-    <section
-      id={translations[lang].bookingId}
-      className="relative overflow-hidden border-b border-slate-800 bg-slate-950"
-    >
-      {/* Subtle background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-950 to-slate-950" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(249,115,22,0.06),transparent)]" />
-
-      <div className="relative mx-auto max-w-6xl px-4 py-12 sm:py-16">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 max-w-2xl"
-        >
-          <span className="inline-block rounded-full border border-orange-500/40 bg-orange-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-orange-400">
-            {lang === LANGUAGES.RU ? 'Запись' : 'Zapisz się'}
-          </span>
-          <h2 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-            {t.title}
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-gray-400 sm:text-base">
-            {t.subtitle}
-          </p>
-          {t.trustLine && (
-            <p className="mt-2 flex items-center gap-2 text-xs font-medium text-orange-400/90 sm:text-sm">
-              <Clock className="h-3.5 w-3.5" />
-              {t.trustLine}
-            </p>
-          )}
-        </motion.div>
-
-        <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr]">
-          {/* Form card */}
-          <motion.form
+  const formContent = (
+    <motion.form
             onSubmit={handleSubmit(onSubmit)}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -350,8 +314,51 @@ export default function BookingForm({ lang }) {
               )}
             </div>
           </motion.form>
+  );
 
-          {/* Sidebar trust card */}
+  if (embed) {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-lg font-bold text-gray-50 sm:text-xl">{t.title}</h2>
+        <p className="text-sm text-gray-400">{t.subtitle}</p>
+        {formContent}
+      </div>
+    );
+  }
+
+  return (
+    <section
+      id={translations[lang].bookingId}
+      className="relative overflow-hidden border-b border-slate-800 bg-slate-950"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-950 to-slate-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(249,115,22,0.06),transparent)]" />
+      <div className="relative mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 max-w-2xl"
+        >
+          <span className="inline-block rounded-full border border-orange-500/40 bg-orange-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-orange-400">
+            {lang === LANGUAGES.RU ? 'Запись' : 'Zapisz się'}
+          </span>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            {t.title}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-gray-400 sm:text-base">
+            {t.subtitle}
+          </p>
+          {t.trustLine && (
+            <p className="mt-2 flex items-center gap-2 text-xs font-medium text-orange-400/90 sm:text-sm">
+              <Clock className="h-3.5 w-3.5" />
+              {t.trustLine}
+            </p>
+          )}
+        </motion.div>
+        <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr]">
+          {formContent}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -37,8 +37,10 @@ export default function ContactPage({ params }) {
 
   return (
     <>
-      <section className="border-b border-slate-800 bg-slate-950">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+      <section className="relative overflow-hidden border-b border-slate-800 bg-slate-950">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-950 to-slate-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(249,115,22,0.08),transparent_70%)]" />
+        <div className="relative mx-auto max-w-6xl px-4 py-8 sm:py-12">
           <Breadcrumbs
             items={[
               { label: lang === 'ru' ? 'Главная' : 'Strona główna', href: basePath },
@@ -46,91 +48,124 @@ export default function ContactPage({ params }) {
             ]}
           />
 
-          <div className="mb-8 flex items-center gap-2">
-            <MapPin className="h-6 w-6 text-orange-400" />
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">
+          <div className="mb-10">
+            <span className="inline-block rounded-full border border-orange-500/40 bg-orange-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400">
+              {lang === 'ru' ? 'Контакт' : 'Kontakt'}
+            </span>
+            <h1 className="mt-4 flex items-center gap-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/20 text-orange-400 ring-1 ring-orange-500/30">
+                <MapPin className="h-6 w-6" />
+              </span>
               {lang === 'ru'
                 ? 'Контакт и как нас найти'
                 : 'Kontakt i jak do nas trafić'}
             </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
+              {lang === 'ru'
+                ? 'Звоните, пишите в мессенджеры или оставляйте заявку через форму — ответим и подскажем удобное время визита.'
+                : 'Zadzwoń, napisz na komunikator lub skorzystaj z formularza – doradzimy i zaproponujemy dogodny termin wizyty.'}
+            </p>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             {/* Left column: contact info + schedule + CTAs */}
             <div className="space-y-6">
-              <p className="text-sm leading-relaxed text-gray-300 sm:text-base">
-                {lang === 'ru'
-                  ? 'Звоните, пишите в мессенджеры или оставляйте заявку через форму — ответим и подскажем удобное время визита.'
-                  : 'Zadzwoń, napisz na komunikator lub skorzystaj z formularza – doradzimy i zaproponujemy dogodny termin wizyty.'}
-              </p>
-
-              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 sm:p-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-400">
-                  {t.location.addressLabel}
-                </p>
-                <p className="mt-1 text-gray-100">{t.location.addressValue}</p>
-                <p className="mt-1 text-[11px] text-gray-400">{t.location.mapNote}</p>
+              {/* Address card */}
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-900/90 to-slate-900/60 p-6 shadow-xl shadow-black/20 ring-1 ring-slate-700/50 transition hover:border-slate-600/80 hover:ring-orange-500/20">
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/40 to-transparent" />
+                <div className="flex gap-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-orange-400 ring-1 ring-slate-700">
+                    <MapPin className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-500">
+                      {t.location.addressLabel}
+                    </p>
+                    <p className="mt-2 text-lg font-medium text-white">{t.location.addressValue}</p>
+                    <p className="mt-1.5 text-sm text-gray-400">{t.location.mapNote}</p>
+                  </div>
+                </div>
               </div>
 
               {/* Schedule with Sunday highlight */}
-              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/80 p-5 sm:p-6">
-                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-400">
-                  <CalendarDays className="h-4 w-4 text-orange-400" />
-                  {t.footer.scheduleTitle}
-                </p>
-                <ul className="mt-3 space-y-2 text-sm text-gray-200">
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-900/90 to-slate-900/60 p-6 shadow-xl shadow-black/20 ring-1 ring-slate-700/50 transition hover:border-slate-600/80">
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/40 to-transparent" />
+                <div className="flex items-center gap-2">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-orange-400 ring-1 ring-slate-700">
+                    <CalendarDays className="h-5 w-5" />
+                  </span>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-500">
+                    {t.footer.scheduleTitle}
+                  </p>
+                </div>
+                <ul className="mt-4 space-y-3 text-sm text-gray-200">
                   {t.footer.saturday && (
-                    <li>{t.footer.saturday}</li>
+                    <li className="rounded-lg bg-slate-800/50 px-3 py-2 font-medium">
+                      {t.footer.saturday}
+                    </li>
                   )}
                   {t.footer.sunday && (
-                    <li className="flex flex-wrap items-center gap-2 rounded-xl border-2 border-emerald-500/50 bg-emerald-500/10 px-3 py-2 font-semibold text-emerald-200">
+                    <li className="rounded-xl border-2 border-emerald-500/60 bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 px-4 py-3 font-semibold text-emerald-100 shadow-lg shadow-emerald-500/10">
                       {t.footer.sunday}
                     </li>
                   )}
                 </ul>
-                <p className="mt-3 text-sm font-medium text-emerald-400">
+                <p className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2 text-sm font-semibold text-emerald-300">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
                   {t.location.scheduleSundayHighlight}
                 </p>
               </div>
 
               {/* Trust phrase */}
-              <p className="rounded-xl border border-orange-500/30 bg-orange-500/10 px-4 py-3 text-sm font-medium text-orange-200">
-                {t.location.trustPhrase}
-              </p>
+              <div className="rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-500/15 to-amber-500/10 px-5 py-4 shadow-lg shadow-orange-500/5">
+                <p className="flex items-center gap-3 text-sm font-semibold text-orange-200 sm:text-base">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-orange-500/20 text-orange-400">
+                    <MapPin className="h-5 w-5" />
+                  </span>
+                  {t.location.trustPhrase}
+                </p>
+              </div>
 
               {/* Large CTA buttons */}
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <a
                   href={`tel:${PHONE_RAW}`}
-                  className="inline-flex min-h-[48px] min-w-[48px] items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-4 text-base font-bold text-white shadow-lg shadow-orange-500/30 transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/40"
+                  className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-6 py-4 text-base font-bold text-white shadow-xl shadow-orange-500/25 ring-2 ring-orange-400/20 transition hover:scale-[1.02] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/35 hover:ring-orange-400/40"
                   title={lang === 'ru' ? 'Позвонить' : 'Zadzwoń'}
                 >
-                  <Phone className="h-6 w-6 shrink-0" />
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20">
+                    <Phone className="h-5 w-5" />
+                  </span>
                   <span>{PHONE_DISPLAY}</span>
                 </a>
                 <a
                   href={`https://wa.me/${PHONE_RAW}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-[48px] min-w-[48px] items-center justify-center gap-3 rounded-xl bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-lg transition hover:bg-[#20bd5a]"
+                  className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-xl shadow-[#25D366]/25 transition hover:scale-[1.02] hover:bg-[#20bd5a] hover:shadow-[#25D366]/35"
                 >
-                  <Send className="h-6 w-6 shrink-0" />
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20">
+                    <Send className="h-5 w-5" />
+                  </span>
                   <span>{t.location.whatsapp}</span>
                 </a>
                 <a
                   href="https://t.me/+48794935734"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-[48px] min-w-[48px] items-center justify-center gap-3 rounded-xl border-2 border-slate-600 bg-slate-800 px-6 py-4 text-base font-bold text-gray-100 transition hover:border-orange-500 hover:bg-slate-700 hover:text-orange-300"
+                  className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl border-2 border-slate-600 bg-slate-800/80 px-6 py-4 text-base font-bold text-gray-100 shadow-lg transition hover:scale-[1.02] hover:border-orange-500/60 hover:bg-slate-700/80 hover:text-orange-300 hover:shadow-orange-500/10"
                 >
-                  <Send className="h-6 w-6 shrink-0 text-sky-400" />
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/20">
+                    <Send className="h-5 w-5 text-sky-400" />
+                  </span>
                   <span>{t.location.telegram}</span>
                 </a>
               </div>
             </div>
 
             {/* Right column: booking form */}
-            <div className="rounded-2xl border border-slate-700/80 bg-slate-900/50 p-5 sm:p-6">
+            <div className="relative overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-slate-900/80 to-slate-900/50 p-6 shadow-2xl shadow-black/30 ring-1 ring-orange-500/10 sm:p-8">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500/80 via-orange-400 to-amber-500/80" />
               <BookingForm lang={lang} embed />
             </div>
           </div>
@@ -138,8 +173,17 @@ export default function ContactPage({ params }) {
       </section>
 
       {/* Full-width Google Maps */}
-      <section className="border-b border-slate-800 bg-slate-950" aria-label={lang === 'ru' ? 'Карта' : 'Mapa'}>
-        <div className="w-full">
+      <section
+        className="border-b border-slate-800 bg-slate-950"
+        aria-label={lang === 'ru' ? 'Карта' : 'Mapa'}
+      >
+        <div className="mx-auto max-w-6xl px-4 pt-8 sm:pt-10">
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-200 sm:text-xl">
+            <MapPin className="h-5 w-5 text-orange-400" />
+            {lang === 'ru' ? 'Как нас найти' : 'Jak do nas trafić'}
+          </h2>
+        </div>
+        <div className="mt-4 w-full overflow-hidden">
           <iframe
             title={lang === 'ru' ? 'Карта – адрес сервиса' : 'Mapa – adres serwisu'}
             src={MAP_EMBED_URL}
@@ -149,7 +193,7 @@ export default function ContactPage({ params }) {
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="h-[320px] w-full sm:h-[400px]"
+            className="h-[320px] w-full sm:h-[420px]"
           />
         </div>
       </section>

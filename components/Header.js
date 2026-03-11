@@ -46,7 +46,7 @@ export default function Header({ lang, t }) {
           <Link href={buildPath(currentLang)} className="hover:text-orange-400">
             {nav.home}
           </Link>
-          <div className="group relative pt-2">
+          <div className="group relative">
             <button
               type="button"
               className="inline-flex items-center gap-1 text-gray-300 hover:text-orange-400"

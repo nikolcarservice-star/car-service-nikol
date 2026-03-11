@@ -25,6 +25,22 @@ body {
   z-index: -1;
 }
 
+/* Ukrycie domyślnej ikony kalendarza w polu daty,
+   żeby nie dublować naszej pomarańczowej ikonki */
+.date-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+.date-input::-ms-clear,
+.date-input::-ms-reveal {
+  display: none;
+}
+.date-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
 /* Ukrycie brandingu widżetu Elfsight („Free Google Reviews Widget”) */
 [data-elfsight-app-lazy] + *,
 [class*="elfsight-app"] a[href*="elfsight"] {

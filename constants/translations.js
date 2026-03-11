@@ -135,6 +135,18 @@ export const translations = {
       sundayBadge: 'Dostępne terminy w najbliższą niedzielę!',
       serviceDetails: 'Zobacz szczegóły usługi',
     },
+    aboutPage: {
+      heroTitle: 'Car Service Nikol — Twój zaufany serwis w Jastrowo',
+      heroSubtitle: 'Doświadczenie, uczciwość i terminowość. Pracujemy także w niedziele.',
+      values: [
+        { title: 'Uczciwość', description: 'Przed naprawą omawiamy wyniki diagnostyki i warianty. Klient wybiera części – oryginały lub sprawdzone zamienniki. Bez ukrytych kosztów.' },
+        { title: 'Terminy', description: 'Szanujemy Twój czas. Wiele usług – wymiana oleju, hamulce, diagnostyka – wykonujemy tego samego dnia.' },
+        { title: 'Diagnostyka', description: 'Nowoczesny sprzęt i doświadczenie. Szybka diagnoza to podstawa trafnego i ekonomicznego naprawy.' },
+      ],
+      sundayParagraph: 'Rozumiemy, że w tygodniu potrzebujesz auta do pracy – dlatego jako nieliczni w regionie Jastrowo i Szamotuły pracujemy dla Ciebie także w niedzielę.',
+      ctaTitle: 'Chcesz sprawdzić swój samochód? Umów się na wizytę!',
+      ctaButton: 'Umów wizytę',
+    },
     aboutBlock: {
       title: 'O nas — Pasja i Profesjonalizm w Jastrowo',
       paragraph1:
@@ -324,6 +336,18 @@ export const translations = {
     servicesPage: {
       sundayBadge: 'Есть записи на ближайшее воскресенье!',
       serviceDetails: 'Подробнее об услуге',
+    },
+    aboutPage: {
+      heroTitle: 'Car Service Nikol — ваш надёжный сервис в Jastrowo',
+      heroSubtitle: 'Опыт, честность и соблюдение сроков. Работаем и по воскресеньям.',
+      values: [
+        { title: 'Честность', description: 'Перед ремонтом обсуждаем результаты диагностики и варианты. Клиент выбирает запчасти – оригинал или проверенные аналоги. Без скрытых доплат.' },
+        { title: 'Сроки', description: 'Уважаем ваше время. Многие услуги – замена масла, тормоза, диагностика – делаем в тот же день.' },
+        { title: 'Диагностика', description: 'Современное оборудование и опыт. Быстрая и точная диагностика – основа правильного и выгодного ремонта.' },
+      ],
+      sundayParagraph: 'Мы понимаем, что в будни машина нужна для работы – поэтому мы одни из немногих в районе Jastrowo и Шамотул работаем для вас и в воскресенье.',
+      ctaTitle: 'Хотите проверить автомобиль? Запишитесь на визит!',
+      ctaButton: 'Записаться',
     },
     aboutBlock: {
       title: 'О нас — Страсть и профессионализм в Ястрово',

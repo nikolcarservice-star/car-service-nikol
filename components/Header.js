@@ -299,6 +299,7 @@ export default function Header({ lang, t }) {
             </nav>
           </div>
         </div>
+      </div>
       )}
     </header>
   );

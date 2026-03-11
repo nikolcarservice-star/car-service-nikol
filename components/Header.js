@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, Phone, Languages, Wrench } from 'lucide-react';
-import { PHONE_DISPLAY, LANGUAGES } from '../constants/translations';
+import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
 import { getServiceNavItems } from '../data/services';
 
 export default function Header({ lang, t }) {
@@ -46,7 +46,7 @@ export default function Header({ lang, t }) {
           <Link href={buildPath(currentLang)} className="hover:text-orange-400">
             {nav.home}
           </Link>
-          <div className="group relative">
+          <div className="group relative pt-2">
             <button
               type="button"
               className="inline-flex items-center gap-1 text-gray-300 hover:text-orange-400"
@@ -54,7 +54,7 @@ export default function Header({ lang, t }) {
               <span>{nav.services}</span>
               <ChevronDown className="h-3.5 w-3.5" />
             </button>
-            <div className="invisible absolute left-0 top-full mt-2 min-w-[220px] rounded-xl border border-slate-800 bg-slate-950/95 p-2 text-xs opacity-0 shadow-xl backdrop-blur transition group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute left-0 top-full min-w-[220px] rounded-xl border border-slate-800 bg-slate-950/95 p-2 text-xs opacity-0 shadow-xl backdrop-blur transition group-hover:visible group-hover:opacity-100">
               <Link
                 href={buildPath(currentLang, 'services')}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-200 hover:bg-slate-900 hover:text-orange-300"
@@ -117,14 +117,14 @@ export default function Header({ lang, t }) {
             </Link>
           </div>
 
-          <Link
-            href={buildPath(currentLang, 'contact')}
+          <a
+            href={`tel:${PHONE_RAW}`}
             className="hidden items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow-glow hover:bg-orange-400 md:inline-flex"
             title={nav.phoneCta}
           >
             <Phone className="h-4 w-4" />
             <span>{PHONE_DISPLAY}</span>
-          </Link>
+          </a>
         </div>
       </div>
     </header>

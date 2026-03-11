@@ -62,7 +62,7 @@ export default function Hero({ t }) {
             <button
               type="button"
               onClick={handleBookClick}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-7 py-3 text-sm font-bold text-slate-950 shadow-glow transition transform hover:scale-[1.03] hover:bg-orange-400 active:scale-100"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/40 ring-2 ring-orange-400/40 transition hover:scale-[1.03] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/50 active:scale-100"
             >
               <CalendarDays className="h-4 w-4" />
               <span>{hero.ctaPrimary}</span>

@@ -138,7 +138,7 @@ export default function Header({ lang, t }) {
 
           <a
             href={`tel:${PHONE_RAW}`}
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-3 py-2 text-xs font-bold text-white shadow-lg shadow-orange-500/25 transition hover:from-orange-400 hover:to-orange-500 hover:shadow-orange-500/30 sm:px-4 sm:text-sm"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-3 py-2 text-xs font-bold text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/40 hover:ring-orange-400/50 sm:px-4 sm:text-sm"
             title={nav.phoneCta}
           >
             <Phone className="h-4 w-4 shrink-0" />
@@ -147,7 +147,7 @@ export default function Header({ lang, t }) {
 
           <Link
             href={bookHref}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-orange-500/80 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-400 transition hover:bg-orange-500/20 hover:text-orange-300 hover:border-orange-400/90 sm:px-4 sm:text-sm"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-3 py-2 text-xs font-bold text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/40 hover:ring-orange-400/50 sm:px-4 sm:text-sm"
             title={nav.bookCta ?? 'Umów wizytę'}
           >
             <CalendarDays className="h-4 w-4 shrink-0" />

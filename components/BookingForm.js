@@ -27,6 +27,8 @@ export default function BookingForm({ lang }) {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -81,6 +83,10 @@ export default function BookingForm({ lang }) {
 
   const phonePattern = /^\d{3}\s?\d{3}\s?\d{3}$/;
   const dateRegister = register('date', { required: t.validation.dateRequired });
+  const serviceRegister = register('service', { required: t.validation.serviceRequired });
+  const servicesList = translations[lang].services.list;
+  const selectedService = watch('service');
+  const [serviceOpen, setServiceOpen] = useState(false);
 
   const inputBase =
     'w-full rounded-xl border border-slate-600/80 bg-slate-800/50 px-4 py-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30';
@@ -191,24 +197,52 @@ export default function BookingForm({ lang }) {
                   <label className="text-xs font-semibold uppercase tracking-wider text-gray-300">
                     {t.serviceLabel}
                   </label>
-                  <div className="flex overflow-hidden rounded-xl border border-slate-600/80 bg-slate-800/60 shadow-inner transition focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30">
-                    <span className="flex items-center border-r border-slate-600/80 bg-slate-800/80 px-3 py-3 text-orange-400">
-                      <Wrench className="h-4 w-4 shrink-0" />
-                    </span>
-                    <select
-                      className="min-w-0 flex-1 border-0 bg-transparent px-4 py-3 text-sm text-gray-100 outline-none [color-scheme:dark]"
-                      defaultValue=""
-                      {...register('service', { required: t.validation.serviceRequired })}
+
+                  {/* Custom styled dropdown (bez natywnego selecta) */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setServiceOpen((open) => !open)}
+                      className="flex w-full items-center justify-between gap-3 overflow-hidden rounded-xl border border-slate-600/80 bg-slate-800/60 px-4 py-3 text-left text-sm text-gray-100 shadow-inner transition hover:border-orange-500 focus:outline-none focus-visible:border-orange-500 focus-visible:ring-2 focus-visible:ring-orange-500/30"
                     >
-                      <option value="" disabled>
-                        {t.servicePlaceholder}
-                      </option>
-                      {translations[lang].services.list.map((service) => (
-                        <option key={service.key} value={service.name}>
-                          {service.name}
-                        </option>
-                      ))}
-                    </select>
+                      <span className="flex items-center gap-3">
+                        <span className="flex items-center justify-center rounded-lg bg-slate-800/80 px-2 py-1 text-orange-400">
+                          <Wrench className="h-4 w-4 shrink-0" />
+                        </span>
+                        <span className={selectedService ? '' : 'text-gray-500'}>
+                          {selectedService || t.servicePlaceholder}
+                        </span>
+                      </span>
+                      <span className="text-xs text-gray-400">▼</span>
+                    </button>
+                    {serviceOpen && (
+                      <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-xl border border-slate-700 bg-slate-900/95 text-sm text-gray-100 shadow-xl">
+                        <button
+                          type="button"
+                          className="block w-full px-4 py-2 text-left text-gray-400 hover:bg-slate-800"
+                          onClick={() => {
+                            setValue('service', '', { shouldValidate: true });
+                            setServiceOpen(false);
+                          }}
+                        >
+                          {t.servicePlaceholder}
+                        </button>
+                        <div className="h-px bg-slate-800" />
+                        {servicesList.map((service) => (
+                          <button
+                            key={service.key}
+                            type="button"
+                            className="block w-full px-4 py-2 text-left hover:bg-slate-800"
+                            onClick={() => {
+                              setValue('service', service.name, { shouldValidate: true });
+                              setServiceOpen(false);
+                            }}
+                          >
+                            {service.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   {errors.service && (
                     <p className="text-xs text-red-400">{errors.service.message}</p>

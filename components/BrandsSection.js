@@ -1,18 +1,35 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import brandLogos from '../data/brandLogos';
 
-function BrandIcon({ path }) {
+const cardClass =
+  'group flex shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/90 px-3 py-5 shadow-lg transition-all duration-200 hover:border-orange-500/60 hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] sm:py-6';
+
+function BrandCard({ brand, index }) {
+  const imgSrc = `/images/brands/${brand.id}.png`;
   return (
-    <svg
-      className="h-9 w-9 shrink-0 sm:h-10 sm:w-10"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3, delay: index * 0.03 }}
+      className={`w-[100px] sm:w-[110px] ${cardClass}`}
     >
-      <path d={path} />
-    </svg>
+      <div className="relative flex h-14 w-14 items-center justify-center transition-opacity group-hover:opacity-95 sm:h-16 sm:w-16">
+        <Image
+          src={imgSrc}
+          alt={brand.name}
+          width={56}
+          height={56}
+          className="object-contain"
+        />
+      </div>
+      <span className="mt-3 text-center text-xs font-medium text-white sm:text-sm">
+        {brand.name}
+      </span>
+    </motion.div>
   );
 }
 
@@ -47,24 +64,10 @@ export default function BrandsSection({ t }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mt-8 flex flex-wrap justify-center gap-4"
+          className="mt-8 flex flex-nowrap justify-center gap-3 overflow-x-auto pb-2 sm:gap-4"
         >
           {brandLogos.map((brand, i) => (
-            <motion.div
-              key={brand.id}
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: i * 0.03 }}
-              className="group flex min-w-[100px] max-w-[120px] flex-1 flex-col items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/90 px-4 py-5 shadow-lg transition-all duration-200 hover:border-orange-500/60 hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] sm:min-w-[110px] sm:py-6"
-            >
-              <div className="flex h-14 w-14 items-center justify-center text-gray-400 transition-colors duration-200 group-hover:text-white sm:h-16 sm:w-16">
-                <BrandIcon path={brand.path} />
-              </div>
-              <span className="mt-3 text-center text-xs font-medium text-white sm:text-sm">
-                {brand.name}
-              </span>
-            </motion.div>
+            <BrandCard key={brand.id} brand={brand} index={i} />
           ))}
         </motion.div>
       </div>

@@ -27,18 +27,17 @@ export default function Header({ lang, t }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <div className="flex items-center gap-3">
           <Link href={buildPath(currentLang)} className="flex items-center gap-3">
-            <img
-              src="/logo.svg"
-              alt=""
-              width={44}
-              height={48}
-              className="h-11 w-11 object-contain"
-            />
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold uppercase tracking-[0.15em] text-orange-400">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-400 shadow-glow">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-950 text-orange-200">
+                <Wrench className="h-5 w-5" />
+              </div>
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-400">
                 Car Service
               </span>
-              <span className="text-base font-semibold text-gray-100">Nikol</span>
+              <span className="text-lg font-semibold text-gray-100">Nikol</span>
+              <span className="text-[10px] text-gray-500">Jastrowo · Szamotuły</span>
             </div>
           </Link>
         </div>

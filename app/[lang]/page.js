@@ -11,9 +11,9 @@ export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
   if (lang === 'ru') {
     return {
-      title: 'Car Service Nikol – автосервис Jastrowo',
+      title: 'Car Service Nikol – автосервис в Jastrowo',
       description:
-        'Car Service Nikol – автосервис Jastrowo и Шамотулы. Ходовая, тормоза, масло, диагностика. Работаем по воскресеньям.',
+        'Car Service Nikol – профессиональный автосервис Jastrowo и Шамотулы. Механик, диагностика, ремонт подвески и тормозов, замена масла. Работаем в субботу и воскресенье.',
       keywords:
         'Механик Jastrowo, Автосервис Шамотулы, Ремонт авто Jastrowo, Car Service Nikol',
       alternates: { canonical: `/${lang}` },
@@ -21,9 +21,9 @@ export function generateMetadata({ params }) {
   }
 
   return {
-    title: 'Car Service Nikol – serwis Jastrowo, Szamotuły',
+    title: 'Car Service Nikol – Profesjonalny serwis samochodowy w Jastrowo',
     description:
-      'Car Service Nikol – serwis Jastrowo, mechanik Szamotuły. Weekendowy serwis, diagnostyka, hamulce, wymiana oleju. Otwarte w niedzielę.',
+      'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele.',
     keywords:
       'serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, mechanik Szamotuły, diagnostyka samochodowa Jastrowo, naprawa hamulców Szamotuły, wymiana oleju i filtrów Jastrowo, Car Service Nikol',
     alternates: { canonical: `/${lang}` },

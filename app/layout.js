@@ -10,7 +10,7 @@ const jsonLd = {
   '@type': 'AutoRepair',
   name: 'Car Service Nikol',
   description:
-    'Car Service Nikol – Mechanik Jastrowo, serwis samochodowy Szamotuły. Naprawa aut Jastrowo, warsztat czynny w niedzielę. Zawieszenie, hamulce, olej.',
+    'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele.',
   url: siteUrl,
   telephone: '+48 794 935 734',
   address: {
@@ -40,7 +40,7 @@ const jsonLdOrganization = {
   url: siteUrl,
   logo: `${siteUrl}/icon.svg`,
   description:
-    'Serwis samochodowy w Jastrowo, Szamotuły. Naprawa zawieszenia, hamulce, wymiana oleju, diagnostyka. Warsztat czynny w niedzielę.',
+    'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców. Otwarte w soboty i niedziele.',
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'ul. Wernisażowa 21',
@@ -51,9 +51,9 @@ const jsonLdOrganization = {
   telephone: '+48 794 935 734',
 };
 
-const title = 'Car Service Nikol – serwis Jastrowo, Szamotuły';
+const title = 'Car Service Nikol – Profesjonalny serwis samochodowy w Jastrowo';
 const description =
-  'Car Service Nikol – serwis Jastrowo, mechanik Szamotuły. Weekendowy serwis, diagnostyka, hamulce, wymiana oleju. Otwarte w niedzielę.';
+  'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele.';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),

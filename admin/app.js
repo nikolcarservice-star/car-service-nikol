@@ -2664,6 +2664,7 @@ function renderPartsCatalogScreen() {
   const linksCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3');
   linksCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('parts_catalog_links_hint')]));
   const catalogLinks = [
+    { name: '7zap', url: 'https://www.7zap.com/' },
     { name: '2407.pl', url: 'https://2407.pl/' },
     { name: 'Autoostrov', url: 'https://autoostrov.by/auto/?srsltid=AfmBOopWaC6vACu6OovSOvfkIcetIu9J5W2cJVrgIYDP_QIHMWuJCKQF' },
     { name: 'ML-Auto (оригинальные каталоги)', url: 'https://www.ml-auto.by/original/' }

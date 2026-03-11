@@ -35,8 +35,9 @@ const imageMap = {
   keys: '/images/services/high-angle-hand-holding-car-key.jpg',
 };
 
-export default function Services({ t }) {
+export default function Services({ t, lang = 'pl' }) {
   const services = t.services;
+  const showRussianInTitles = lang === 'ru';
 
   return (
     <section id={t.servicesId} className="border-b border-slate-800 bg-slate-950">
@@ -114,8 +115,10 @@ export default function Services({ t }) {
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-semibold text-gray-50 sm:text-base">
-                        <span className="font-bold">{service.name}</span>{' '}
-                        <span className="font-normal text-gray-400">({service.nameRu})</span>
+                        <span className="font-bold">{service.name}</span>
+                        {showRussianInTitles && (
+                          <span className="font-normal text-gray-400"> ({service.nameRu})</span>
+                        )}
                       </h3>
                     </div>
                   </div>

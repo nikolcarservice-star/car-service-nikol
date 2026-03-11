@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, Phone, Languages, Wrench } from 'lucide-react';
+import { CalendarDays, ChevronDown, Languages, Phone, Wrench } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
 import { getServiceNavItems } from '../data/services';
 
@@ -89,7 +89,15 @@ export default function Header({ lang, t }) {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href={buildPath(currentLang) + '#' + (t.bookingId || 'booking')}
+            className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-3 py-2 text-xs font-bold text-slate-950 shadow-glow hover:bg-orange-400 sm:px-4 sm:text-sm"
+            title={nav.bookCta ?? 'Umów wizytę'}
+          >
+            <CalendarDays className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline">{nav.bookCta ?? 'Umów wizytę'}</span>
+          </Link>
           <div
             aria-label={nav.languageToggleLabel}
             className="flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-2 py-1 text-xs font-medium text-gray-200 shadow-sm"

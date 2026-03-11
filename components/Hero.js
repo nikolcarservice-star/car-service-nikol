@@ -40,9 +40,14 @@ export default function Hero({ t }) {
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="flex-1 space-y-6"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/50 bg-orange-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-orange-200">
-            <Clock className="h-4 w-4" />
-            <span>{hero.sundayBadge}</span>
+          {/* USP — główna przewaga: otwarte w niedzielę */}
+          <div className="inline-flex items-center gap-3 rounded-2xl border-2 border-emerald-400/60 bg-emerald-500/20 px-5 py-3 shadow-lg shadow-emerald-500/20">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/30">
+              <Clock className="h-6 w-6 text-emerald-300" />
+            </span>
+            <span className="text-base font-bold uppercase tracking-wide text-emerald-100 sm:text-lg">
+              {hero.sundayBadge}
+            </span>
           </div>
 
           <h1 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">

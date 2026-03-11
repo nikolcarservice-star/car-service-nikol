@@ -25,6 +25,7 @@ export const translations = {
       cennik: 'Cennik',
       blog: 'Blog',
       phoneCta: 'Zadzwoń',
+      bookCta: 'Umów wizytę',
       languageToggleLabel: 'Wybierz język',
     },
     hero: {
@@ -42,6 +43,11 @@ export const translations = {
         'Szybka diagnostyka',
         'Konkurencyjne ceny',
       ],
+    },
+    brands: {
+      title: 'Serwisujemy marki',
+      subtitle: 'Doświadczenie w obsłudze popularnych marek.',
+      names: ['BMW', 'Volkswagen', 'Audi', 'Opel', 'Mercedes', 'Ford', 'Skoda', 'Toyota', 'Renault', 'Peugeot'],
     },
     features: {
       title: 'Dlaczego warto wybrać nasz serwis',
@@ -205,6 +211,7 @@ export const translations = {
       cennik: 'Прайс-лист',
       blog: 'Блог',
       phoneCta: 'Позвонить',
+      bookCta: 'Записаться',
       languageToggleLabel: 'Выбор языка',
     },
     hero: {
@@ -222,6 +229,11 @@ export const translations = {
         'Быстрая диагностика',
         'Конкурентные цены',
       ],
+    },
+    brands: {
+      title: 'Обслуживаем марки',
+      subtitle: 'Опыт работы с популярными марками автомобилей.',
+      names: ['BMW', 'Volkswagen', 'Audi', 'Opel', 'Mercedes', 'Ford', 'Skoda', 'Toyota', 'Renault', 'Peugeot'],
     },
     features: {
       title: 'Преимущества нашего сервиса',

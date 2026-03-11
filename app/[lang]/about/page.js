@@ -12,22 +12,27 @@ const valueIcons = {
   diagnostics: Activity,
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
+  const canonical = `/${lang}/about`;
+  const languages = { pl: `${SITE_URL}/pl/about`, ru: `${SITE_URL}/ru/about` };
+
   if (lang === 'ru') {
     return {
-      title: 'О компании Car Service Nikol – автосервис Jastrowo',
+      title: 'О компании Car Service Nikol – автосервис Jastrowo, Шамотулы',
       description:
-        'Узнайте больше о Car Service Nikol в Jastrowo: опыт, ценности сервиса, работа в воскресенье. Запишитесь на визит.',
-      alternates: { canonical: `/${lang}/about` },
+        'Узнайте больше о Car Service Nikol в Jastrowo: опыт, ценности сервиса, работа в воскресенье. Честность, сроки, диагностика. Запишитесь на визит.',
+      alternates: { canonical, languages },
     };
   }
 
   return {
-    title: 'O nas - Car Service Nikol Jastrowo, Szamotuły',
+    title: 'O nas – Car Service Nikol Jastrowo, Szamotuły | Wartości, niedziele',
     description:
-      'Poznaj Car Service Nikol w Jastrowo: doświadczenie, wartości serwisu, praca w niedzielę. Umów wizytę w serwisie.',
-    alternates: { canonical: `/${lang}/about` },
+      'Poznaj Car Service Nikol w Jastrowo: doświadczenie, wartości serwisu, praca w niedzielę. Uczciwość, terminy, diagnostyka. Umów wizytę w serwisie.',
+    alternates: { canonical, languages },
   };
 }
 

@@ -3,21 +3,26 @@ import Link from 'next/link';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { getTranslations, normalizeLang } from '../../../constants/translations';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
+  const canonical = `/${lang}/privacy`;
+  const languages = { pl: `${SITE_URL}/pl/privacy`, ru: `${SITE_URL}/ru/privacy` };
+
   if (lang === 'ru') {
     return {
       title: 'Политика конфиденциальности (RODO) – Car Service Nikol',
       description:
         'Политика конфиденциальности и обработки персональных данных Car Service Nikol. RODO, контакт.',
-      alternates: { canonical: `/${lang}/privacy` },
+      alternates: { canonical, languages },
     };
   }
   return {
     title: 'Polityka Prywatności (RODO) – Car Service Nikol',
     description:
       'Polityka prywatności i przetwarzania danych osobowych Car Service Nikol. RODO, kontakt.',
-    alternates: { canonical: `/${lang}/privacy` },
+    alternates: { canonical, languages },
   };
 }
 

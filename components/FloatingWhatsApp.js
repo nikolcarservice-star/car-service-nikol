@@ -1,8 +1,10 @@
 'use client';
 
-import { PHONE_RAW } from '../constants/translations';
+import { PHONE_RAW, getTranslations } from '../constants/translations';
 
-export default function FloatingWhatsApp() {
+export default function FloatingWhatsApp({ lang = 'pl' }) {
+  const t = getTranslations(lang);
+  const label = t?.location?.whatsapp ?? 'Napisz na WhatsApp';
   const href = `https://wa.me/${PHONE_RAW}`;
 
   return (
@@ -10,8 +12,8 @@ export default function FloatingWhatsApp() {
       href={href}
       target="_blank"
       rel="noreferrer noopener"
-      aria-label="Napisz na WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 focus:ring-offset-slate-950 md:bottom-8 md:right-8 md:h-16 md:w-16 animate-cta-glow-whatsapp"
+      aria-label={label}
+      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 focus:ring-offset-slate-950 md:bottom-8 md:right-8 md:h-16 md:w-16 animate-cta-glow-whatsapp"
     >
       <svg
         className="h-7 w-7 md:h-8 md:w-8"

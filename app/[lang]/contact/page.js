@@ -11,22 +11,27 @@ import {
 const MAP_EMBED_URL =
   'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2419.658250238475!2d16.5413491!3d52.5714312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470438d011197777%3A0x6b82504818617777!2sWernisa%C5%BCowa%2021%2C%2064-500%20Jastrowo!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
+  const canonical = `/${lang}/contact`;
+  const languages = { pl: `${SITE_URL}/pl/contact`, ru: `${SITE_URL}/ru/contact` };
+
   if (lang === 'ru') {
     return {
-      title: 'Контакты Car Service Nikol – Jastrowo, Шамотулы',
+      title: 'Контакты Car Service Nikol – Jastrowo, Шамотулы | Адрес, телефон, запись',
       description:
-        'Контакт с Car Service Nikol: адрес, телефон, WhatsApp, Telegram и форма записи. Сервис в Jastrowo и окрестностях Шамотул.',
-      alternates: { canonical: `/${lang}/contact` },
+        'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21 Jastrowo, телефон, WhatsApp, Telegram и форма записи. Сервис в Jastrowo и окрестностях Шамотул. Работаем в воскресенье.',
+      alternates: { canonical, languages },
     };
   }
 
   return {
-    title: 'Kontakt - Car Service Nikol Jastrowo, Szamotuły',
+    title: 'Kontakt – Car Service Nikol Jastrowo, Szamotuły | Adres, telefon, umów wizytę',
     description:
-      'Skontaktuj się z Car Service Nikol w Jastrowo. Adres ul. Wernisażowa 21, telefon, WhatsApp, Telegram oraz formularz umówienia wizyty.',
-    alternates: { canonical: `/${lang}/contact` },
+      'Skontaktuj się z Car Service Nikol w Jastrowo. Adres ul. Wernisażowa 21, telefon, WhatsApp, Telegram oraz formularz umówienia wizyty. Otwarte w niedziele.',
+    alternates: { canonical, languages },
   };
 }
 

@@ -162,38 +162,39 @@ export default function Header({ lang, t }) {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(true)}
-          className="md:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700/80 bg-slate-900/80 text-gray-200 transition hover:bg-white/5 hover:text-orange-400"
-          aria-label="Otwórz menu"
+          className="md:hidden flex h-11 w-11 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 text-gray-100 transition hover:bg-slate-700 hover:text-orange-400"
+          aria-label={nav.openMenu ?? 'Otwórz menu'}
+          aria-expanded={mobileMenuOpen}
         >
           <Menu className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile menu overlay — solid background so menu is visible on all devices */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-50 md:hidden"
-          aria-hidden="true"
+          aria-modal="true"
+          role="dialog"
+          aria-label={nav.menuLabel ?? 'Menu nawigacji'}
         >
           <button
             type="button"
-            className="absolute inset-0 bg-black/70"
+            className="absolute inset-0 z-0 bg-black/75 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
-            aria-label="Zamknij menu"
+            aria-label={nav.closeMenu ?? 'Zamknij menu'}
           />
           <div
-            className="absolute right-0 top-0 h-full w-full max-w-sm border-l border-slate-800 shadow-2xl"
-            style={{ backgroundColor: '#0f172a' }}
+            className="absolute right-0 top-0 z-10 h-full w-full max-w-[min(100vw,22rem)] overflow-y-auto border-l-2 border-slate-700 bg-slate-900 shadow-2xl"
           >
-            <div className="absolute inset-0 bg-[#0f172a]" aria-hidden />
-            <div className="relative flex flex-col h-full">
+            <div className="flex min-h-full flex-col">
             <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 flex-shrink-0">
               <span className="text-sm font-semibold text-gray-300">Menu</span>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition hover:bg-white/5 hover:text-white"
-                aria-label="Zamknij menu"
+                aria-label={nav.closeMenu ?? 'Zamknij menu'}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -297,9 +298,9 @@ export default function Header({ lang, t }) {
                 {nav.bookCta ?? 'Umów wizytę'}
               </Link>
             </nav>
+            </div>
           </div>
         </div>
-      </div>
       )}
     </header>
   );

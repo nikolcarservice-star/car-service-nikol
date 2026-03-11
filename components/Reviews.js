@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote, Star } from 'lucide-react';
 import googleReviews from '../data/googleReviews';
+import { getTranslations } from '../constants/translations';
 
-export default function Reviews() {
+export default function Reviews({ lang = 'pl' }) {
+  const t = getTranslations(lang)?.reviews || {};
   const reviews = googleReviews;
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -44,17 +46,16 @@ export default function Reviews() {
         <div className="flex flex-col items-center gap-2 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-300">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-            Opinie Google
+            {t.title ?? 'Opinia Google'}
           </span>
           <p className="text-sm text-gray-500">
-            Co mówią o nas klienci
+            {t.subtitle ?? 'Co mówią o nas klienci'}
           </p>
         </div>
 
         {!total && (
           <p className="mt-8 text-center text-sm text-gray-400">
-            Dodaj kilka opinii do pliku <span className="font-mono text-gray-300">data/googleReviews.js</span>, aby
-            wyświetlić je tutaj.
+            {t.noReviewsHint ?? 'Dodaj kilka opinii do pliku data/googleReviews.js, aby wyświetlić je tutaj.'}
           </p>
         )}
 
@@ -65,7 +66,7 @@ export default function Reviews() {
               <button
                 type="button"
                 onClick={handlePrev}
-                aria-label="Poprzednia opinia"
+                aria-label={t.prevReview ?? 'Poprzednia opinia'}
                 className="hidden sm:flex absolute left-0 top-1/2 z-10 h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-900/90 text-gray-300 shadow-xl backdrop-blur transition hover:border-amber-400/50 hover:bg-amber-500/10 hover:text-amber-300"
               >
                 <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden="true">
@@ -155,7 +156,7 @@ export default function Reviews() {
               <button
                 type="button"
                 onClick={handleNext}
-                aria-label="Następna opinia"
+                aria-label={t.nextReview ?? 'Następna opinia'}
                 className="hidden sm:flex absolute right-0 top-1/2 z-10 h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-900/90 text-gray-300 shadow-xl backdrop-blur transition hover:border-amber-400/50 hover:bg-amber-500/10 hover:text-amber-300"
               >
                 <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden="true">
@@ -170,7 +171,7 @@ export default function Reviews() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  aria-label="Poprzednia opinia"
+                  aria-label={t.prevReview ?? 'Poprzednia opinia'}
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-slate-800/90 text-gray-300 shadow-lg transition hover:border-amber-400/50 hover:text-amber-300"
                 >
                   <svg viewBox="0 0 20 20" className="h-5 w-5"><path d="M12.5 5L8 9.5 12.5 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -178,7 +179,7 @@ export default function Reviews() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  aria-label="Następna opinia"
+                  aria-label={t.nextReview ?? 'Następna opinia'}
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-slate-800/90 text-gray-300 shadow-lg transition hover:border-amber-400/50 hover:text-amber-300"
                 >
                   <svg viewBox="0 0 20 20" className="h-5 w-5"><path d="M7.5 5L12 9.5 7.5 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -199,7 +200,7 @@ export default function Reviews() {
                         ? 'h-2 w-8 bg-amber-400'
                         : 'h-2 w-2 bg-slate-600 hover:bg-slate-500'
                     }`}
-                    aria-label={`Opinia ${index + 1}`}
+                    aria-label={`${t.reviewN ?? 'Opinia'} ${index + 1}`}
                   />
                 ))}
               </div>
@@ -213,7 +214,7 @@ export default function Reviews() {
               className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-amber-400/50 bg-gradient-to-r from-amber-500/20 to-amber-600/10 px-6 py-3.5 text-sm font-semibold text-amber-200 shadow-lg shadow-amber-500/10 transition hover:border-amber-400 hover:from-amber-500/30 hover:to-amber-600/20 hover:text-amber-100"
             >
               <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-              Zobacz wszystkie opinie w Google
+              {t.viewAllReviews ?? 'Zobacz wszystkie opinie w Google'}
             </a>
           </div>
         )}

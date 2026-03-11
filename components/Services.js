@@ -1,20 +1,24 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Activity,
+  CalendarDays,
+  ArrowRight,
   Disc,
   Gauge,
   Key,
   MapPin,
-  Oil,
+  Fuel,
   Wrench,
   Circle,
 } from 'lucide-react';
+import { servicesData } from '../data/services';
 
 const iconMap = {
   suspension: Wrench,
-  oil: Oil,
+  oil: Fuel,
   brakes: Disc,
   diagnostics: Activity,
   timing: Gauge,
@@ -37,6 +41,7 @@ const imageMap = {
 
 export default function Services({ t, lang = 'pl' }) {
   const services = t.services;
+  const servicesPage = t.servicesPage || {};
   const showRussianInTitles = lang === 'ru';
 
   return (
@@ -125,6 +130,24 @@ export default function Services({ t, lang = 'pl' }) {
                   <p className="mt-3 text-xs leading-relaxed text-gray-300 sm:text-sm">
                     {service.description}
                   </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {servicesData[service.key] && (
+                      <Link
+                        href={`/${lang}/services/${servicesData[service.key].slug}`}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-3 py-2 text-xs font-semibold text-white shadow-md transition hover:from-orange-400 hover:to-amber-400 sm:px-4 sm:py-2.5 sm:text-sm"
+                      >
+                        <span>{servicesPage?.serviceDetails ?? 'Zobacz szczegóły'}</span>
+                        <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      </Link>
+                    )}
+                    <Link
+                      href={`/${lang}#${t.bookingId || 'booking'}`}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-white/5 px-3 py-2 text-xs font-semibold text-gray-100 backdrop-blur-sm transition hover:border-orange-400/60 hover:bg-orange-500/20 sm:px-4 sm:py-2.5 sm:text-sm"
+                    >
+                      <CalendarDays className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <span>{t.navigation?.bookCta ?? 'Umów wizytę'}</span>
+                    </Link>
+                  </div>
                 </div>
               </motion.article>
             );

@@ -55,6 +55,13 @@ const title = 'Car Service Nikol – Profesjonalny serwis samochodowy w Jastrowo
 const description =
   'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele.';
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#0f172a',
+};
+
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title,

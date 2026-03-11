@@ -1,13 +1,16 @@
 'use client';
 
-import { PHONE_RAW } from '../constants/translations';
+import { PHONE_RAW, getTranslations } from '../constants/translations';
 
-export default function FloatingCall() {
+export default function FloatingCall({ lang = 'pl' }) {
+  const t = getTranslations(lang);
+  const label = t?.navigation?.phoneCta ?? 'Zadzwoń';
+
   return (
     <a
       href={`tel:${PHONE_RAW}`}
-      aria-label="Zadzwoń"
-      className="fixed bottom-24 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-950 md:bottom-28 md:right-8 md:h-16 md:w-16 animate-cta-glow"
+      aria-label={label}
+      className="fixed bottom-24 right-6 z-40 flex h-14 w-14 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-950 md:bottom-28 md:right-8 md:h-16 md:w-16 animate-cta-glow"
     >
       <svg
         className="h-7 w-7 md:h-8 md:w-8"

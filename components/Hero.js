@@ -27,8 +27,9 @@ export default function Hero({ t }) {
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?q=80&w=2000&auto=format&fit=crop"
-          alt="Profesjonalny warsztat samochodowy"
+          alt={hero.heroImageAlt || 'Profesjonalny warsztat samochodowy Car Service Nikol Jastrowo'}
           className="h-full w-full object-cover"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-black/70" />
       </div>

@@ -14,22 +14,27 @@ const imageMap = {
   diagnostics: '/images/services/diagnostics.jpg',
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
+  const canonical = `/${lang}/services`;
+  const languages = { pl: `${SITE_URL}/pl/services`, ru: `${SITE_URL}/ru/services` };
+
   if (lang === 'ru') {
     return {
-      title: 'Услуги автосервиса в Jastrowo - Car Service Nikol',
+      title: 'Услуги автосервиса в Jastrowo – Car Service Nikol | Ремонт, диагностика',
       description:
-        'Полный список услуг Car Service Nikol в Jastrowo: ремонт ходовой, тормозов, замена масла, компьютерная диагностика и замена ГРМ.',
-      alternates: { canonical: `/${lang}/services` },
+        'Полный список услуг Car Service Nikol в Jastrowo: ремонт ходовой, тормозов, замена масла, компьютерная диагностика и замена ГРМ. Запись на воскресенье.',
+      alternates: { canonical, languages },
     };
   }
 
   return {
-    title: 'Usługi serwisu samochodowego w Jastrowo - Car Service Nikol',
+    title: 'Usługi serwisu samochodowego w Jastrowo – Car Service Nikol | Naprawa, diagnostyka',
     description:
-      'Pełna oferta Car Service Nikol w Jastrowo: naprawa zawieszenia, serwis hamulców, wymiana oleju, diagnostyka komputerowa i wymiana rozrządu.',
-    alternates: { canonical: `/${lang}/services` },
+      'Pełna oferta Car Service Nikol w Jastrowo: naprawa zawieszenia, serwis hamulców, wymiana oleju, diagnostyka komputerowa i wymiana rozrządu. Terminy w niedzielę.',
+    alternates: { canonical, languages },
   };
 }
 

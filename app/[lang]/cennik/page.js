@@ -1,23 +1,29 @@
-import { FileText } from 'lucide-react';
+import Link from 'next/link';
+import { FileText, Phone, CalendarDays } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import { getTranslations, normalizeLang } from '../../../constants/translations';
+import { getTranslations, normalizeLang, PHONE_RAW, PHONE_DISPLAY } from '../../../constants/translations';
 import { priceListPl, priceListRu } from '../../../data/prices';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
 
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
+  const canonical = `/${lang}/cennik`;
+  const languages = { pl: `${SITE_URL}/pl/cennik`, ru: `${SITE_URL}/ru/cennik` };
+
   if (lang === 'ru') {
     return {
-      title: 'Прайс-лист – Car Service Nikol Jastrowo',
+      title: 'Прайс-лист – Car Service Nikol Jastrowo | Цены на услуги',
       description:
-        'Цены на услуги автосервиса в Jastrowo и близлежащих местностях. Масло, тормоза, диагностика, шиномонтаж, ключи.',
-      alternates: { canonical: `/${lang}/cennik` },
+        'Цены на услуги автосервиса в Jastrowo и близлежащих местностях. Масло, тормоза, диагностика, шиномонтаж, ключи. Ориентировочные цены.',
+      alternates: { canonical, languages },
     };
   }
   return {
-    title: 'Cennik usług – Car Service Nikol Jastrowo',
+    title: 'Cennik usług – Car Service Nikol Jastrowo | Ceny orientacyjne',
     description:
-      'Cennik usług serwisu samochodowego w Jastrowo i okolicznych miejscowościach. Olej, hamulce, diagnostyka, opony, klucze.',
-    alternates: { canonical: `/${lang}/cennik` },
+      'Cennik usług serwisu samochodowego w Jastrowo i okolicznych miejscowościach. Olej, hamulce, diagnostyka, opony, klucze. Ceny orientacyjne.',
+    alternates: { canonical, languages },
   };
 }
 
@@ -91,6 +97,36 @@ export default function CennikPage({ params }) {
             ? 'Цены netto. Окончательная стоимость зависит от марки и модели автомобиля.'
             : 'Ceny netto. Ostateczny koszt zależy od marki i modelu pojazdu.'}
         </p>
+
+        {/* CTA — Umów wizytę / Zadzwoń */}
+        <div className="mt-12 rounded-2xl border border-orange-500/30 bg-gradient-to-b from-orange-500/10 to-transparent p-6 text-center sm:p-8">
+          <h2 className="text-lg font-bold text-gray-50 sm:text-xl">
+            {lang === 'ru'
+              ? 'Готовы записаться? Позвоните или оставьте заявку'
+              : 'Gotowy na wizytę? Zadzwoń lub wypełnij formularz'}
+          </h2>
+          <p className="mt-2 text-sm text-gray-400">
+            {lang === 'ru'
+              ? 'Подберём удобную дату и рассчитаем точную стоимость.'
+              : 'Dopasujemy dogodny termin i podamy dokładną wycenę.'}
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
+            <a
+              href={`tel:${PHONE_RAW}`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:from-orange-400 hover:to-amber-400"
+            >
+              <Phone className="h-5 w-5" />
+              {PHONE_DISPLAY}
+            </a>
+            <Link
+              href={`/${lang}#booking`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-orange-500/60 bg-slate-800/80 px-5 py-3.5 text-sm font-bold text-white transition hover:border-orange-400 hover:bg-orange-500/20"
+            >
+              <CalendarDays className="h-5 w-5" />
+              {lang === 'ru' ? 'Записаться онлайн' : 'Umów wizytę online'}
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

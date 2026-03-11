@@ -27,6 +27,9 @@ export const translations = {
       phoneCta: 'Zadzwoń',
       bookCta: 'Umów wizytę',
       languageToggleLabel: 'Wybierz język',
+      openMenu: 'Otwórz menu',
+      closeMenu: 'Zamknij menu',
+      menuLabel: 'Menu nawigacji',
     },
     hero: {
       title: 'Naprawimy Twój samochód, gdy inni odpoczywają',
@@ -43,6 +46,7 @@ export const translations = {
         'Szybka diagnostyka',
         'Konkurencyjne ceny',
       ],
+      heroImageAlt: 'Warsztat samochodowy Car Service Nikol w Jastrowo – mechanik przy pojeździe.',
     },
     brands: {
       title: 'Serwisujemy marki',
@@ -212,6 +216,15 @@ export const translations = {
       ctaBook: 'Umów wizytę',
       close: 'Zamknij',
     },
+    reviews: {
+      title: 'Opinia Google',
+      subtitle: 'Co mówią o nas klienci',
+      viewAllReviews: 'Zobacz wszystkie opinie w Google',
+      prevReview: 'Poprzednia opinia',
+      nextReview: 'Następna opinia',
+      reviewN: 'Opinia',
+      noReviewsHint: 'Dodaj opinie w pliku data/googleReviews.js, aby wyświetlić je tutaj.',
+    },
   },
   ru: {
     langLabel: 'RU',
@@ -231,6 +244,9 @@ export const translations = {
       phoneCta: 'Позвонить',
       bookCta: 'Записаться',
       languageToggleLabel: 'Выбор языка',
+      openMenu: 'Открыть меню',
+      closeMenu: 'Закрыть меню',
+      menuLabel: 'Меню навигации',
     },
     hero: {
       title: 'Починим ваш авто, пока другие отдыхают',
@@ -247,6 +263,7 @@ export const translations = {
         'Быстрая диагностика',
         'Конкурентные цены',
       ],
+      heroImageAlt: 'Автосервис Car Service Nikol в Jastrowo – механик и автомобиль.',
     },
     brands: {
       title: 'Обслуживаем марки',
@@ -407,7 +424,7 @@ export const translations = {
       privacy: 'Политика конфиденциальности (RODO)',
       invoices: 'Выставляем счета-фактуры VAT',
       seoKeywordsLine:
-        'Mechanik Jastrowo · Serwis samochodowy Szamotuły · Naprawa aut Jastrowo · Warsztat samochodowy czynny w niedzielę',
+        'Автосервис Ястрово · Механик Шамотулы · Ремонт авто Jastrowo · Сервис по воскресеньям',
       rights: '© ' + new Date().getFullYear() + ' Car Service Nikol. Все права защищены.',
     },
     prompt: {
@@ -416,6 +433,15 @@ export const translations = {
       ctaCall: 'Позвонить',
       ctaBook: 'Записаться',
       close: 'Закрыть',
+    },
+    reviews: {
+      title: 'Отзывы Google',
+      subtitle: 'Что говорят о нас клиенты',
+      viewAllReviews: 'Смотреть все отзывы в Google',
+      prevReview: 'Предыдущий отзыв',
+      nextReview: 'Следующий отзыв',
+      reviewN: 'Отзыв',
+      noReviewsHint: 'Добавьте отзывы в файл data/googleReviews.js для отображения здесь.',
     },
   },
 };

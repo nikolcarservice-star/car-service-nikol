@@ -4,16 +4,20 @@ import Breadcrumbs from '../../../components/Breadcrumbs';
 import { blogPosts, getBlogPost } from '../../../data/blog';
 import { getTranslations, normalizeLang } from '../../../constants/translations';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
-  const t = getTranslations(lang);
   const isRu = lang === 'ru';
+  const canonical = `/${lang}/blog`;
+  const languages = { pl: `${SITE_URL}/pl/blog`, ru: `${SITE_URL}/ru/blog` };
+
   return {
     title: isRu ? 'Блог – Car Service Nikol Jastrowo, Шамотулы' : 'Blog – Car Service Nikol Jastrowo, Szamotuły',
     description: isRu
       ? 'Полезные статьи об автосервисе в Jastrowo и Шамотулах: диагностика, подвеска, тормоза, замена масла, выходной сервис. Car Service Nikol.'
       : 'Poradniki dla kierowców z Jastrowo i Szamotuł: diagnostyka, zawieszenie, hamulce, wymiana oleju, serwis w niedziele. Car Service Nikol.',
-    alternates: { canonical: `/${lang}/blog` },
+    alternates: { canonical, languages },
   };
 }
 

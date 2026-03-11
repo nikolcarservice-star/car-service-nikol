@@ -177,12 +177,17 @@ export default function Header({ lang, t }) {
         >
           <button
             type="button"
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70"
             onClick={() => setMobileMenuOpen(false)}
             aria-label="Zamknij menu"
           />
-          <div className="absolute right-0 top-0 h-full w-full max-w-sm border-l border-slate-800 bg-[#0f172a] shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
+          <div
+            className="absolute right-0 top-0 h-full w-full max-w-sm border-l border-slate-800 shadow-2xl"
+            style={{ backgroundColor: '#0f172a' }}
+          >
+            <div className="absolute inset-0 bg-[#0f172a]" aria-hidden />
+            <div className="relative flex flex-col h-full">
+            <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 flex-shrink-0">
               <span className="text-sm font-semibold text-gray-300">Menu</span>
               <button
                 type="button"

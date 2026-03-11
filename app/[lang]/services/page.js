@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Wrench, CalendarDays, ArrowRight } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
+import AvailableTermsSlideOut from '../../../components/AvailableTermsSlideOut';
 import { getAllServices } from '../../../data/services';
 import { getTranslations, normalizeLang } from '../../../constants/translations';
 
@@ -45,25 +46,12 @@ export default function ServicesIndexPage({ params }) {
 
   return (
     <section className="relative min-h-screen border-b border-slate-800 bg-slate-950">
-      {/* Плавающий бейдж — доступно в воскресенье */}
-      <div
-        className="fixed right-4 top-24 z-30 max-w-[280px] rounded-xl border-2 border-emerald-500/70 bg-emerald-500/20 px-4 py-3 shadow-lg shadow-emerald-500/20 backdrop-blur-sm sm:right-6 sm:top-28"
-        role="status"
-        aria-live="polite"
-      >
-        <p className="flex items-center gap-2 text-sm font-bold text-emerald-100 sm:text-base">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/40">
-            <CalendarDays className="h-4 w-4 text-emerald-200" />
-          </span>
-          {sundayBadge}
-        </p>
-        <Link
-          href={`${basePath}${bookingAnchor}`}
-          className="mt-2 inline-block text-xs font-semibold text-emerald-300 underline decoration-emerald-400/60 underline-offset-2 hover:text-emerald-200"
-        >
-          {t.navigation?.bookCta || (isRu ? 'Записаться' : 'Umów wizytę')} →
-        </Link>
-      </div>
+      {/* Доступные термины — wysuwany panel z boku (domyślnie ukryty, otwiera się przyciskiem) */}
+      <AvailableTermsSlideOut
+        sundayBadge={sundayBadge}
+        bookCtaLabel={t.navigation?.bookCta || (isRu ? 'Записаться' : 'Umów wizytę')}
+        bookingHref={`${basePath}${bookingAnchor}`}
+      />
 
       <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
         <Breadcrumbs

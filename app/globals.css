@@ -47,3 +47,30 @@ body {
   display: none !important;
 }
 
+/* Delikatna animacja przyciągająca uwagę dla pływających CTA (telefon, WhatsApp) */
+@keyframes cta-glow {
+  0%, 100% {
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+  50% {
+    box-shadow: 0 10px 40px -5px rgb(249 115 22 / 0.35), 0 0 0 3px rgb(249 115 22 / 0.2);
+  }
+}
+
+@keyframes cta-glow-whatsapp {
+  0%, 100% {
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+  50% {
+    box-shadow: 0 10px 40px -5px rgb(37 211 102 / 0.4), 0 0 0 3px rgb(37 211 102 / 0.25);
+  }
+}
+
+.animate-cta-glow {
+  animation: cta-glow 2s ease-in-out infinite;
+}
+
+.animate-cta-glow-whatsapp {
+  animation: cta-glow-whatsapp 2s ease-in-out infinite;
+}
+

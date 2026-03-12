@@ -280,9 +280,10 @@ const I18N = {
     orders: 'Заказы',
     settings: 'Настройки',
     order_status: 'Статус',
-    status_pending: 'Ожидает',
+    status_pending: 'Принят',
     status_in_progress: 'В работе',
     status_completed: 'Выполнен',
+    status_issued: 'Выдан',
     status_cancelled: 'Отменён',
     generate_pdf: 'Сформировать PDF',
     no_orders: 'Нет заказов',
@@ -482,9 +483,10 @@ const I18N = {
     orders: 'Zlecenia',
     settings: 'Ustawienia',
     order_status: 'Status',
-    status_pending: 'Oczekuje',
+    status_pending: 'Przyjęty',
     status_in_progress: 'W realizacji',
     status_completed: 'Wykonane',
+    status_issued: 'Wydany',
     status_cancelled: 'Anulowane',
     generate_pdf: 'Generuj PDF',
     no_orders: 'Brak zleceń',
@@ -1422,11 +1424,13 @@ function renderOrderScreen() {
       photoDataUrl = await fileToDataUrl(photoInput.files[0]);
     }
     const now = new Date().toISOString();
+    const username = currentUser?.username || 'master';
     return {
       id: Date.now().toString(),
       createdAt: now,
       status: 'pending',
-      createdBy: currentUser?.username || 'master',
+      statusHistory: [{ status: 'pending', changedAt: now, changedBy: username }],
+      createdBy: username,
       brand: brandName,
       model: modelName,
       year,
@@ -1621,7 +1625,7 @@ function renderAdminOrdersScreen() {
     statusRow.appendChild(createEl('span', 'text-xs text-slate-400', [t('order_status') + ': ']));
     const statusSelect = createEl('select', 'px-2 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-100');
     const currentStatus = order.status || 'pending';
-    ['pending', 'in_progress', 'completed', 'cancelled'].forEach((st) => {
+    ['pending', 'in_progress', 'completed', 'issued', 'cancelled'].forEach((st) => {
       const opt = document.createElement('option');
       opt.value = st;
       opt.textContent = t('status_' + st);
@@ -1629,11 +1633,35 @@ function renderAdminOrdersScreen() {
       statusSelect.appendChild(opt);
     });
     statusSelect.addEventListener('change', () => {
-      order.status = statusSelect.value;
+      const newStatus = statusSelect.value;
+      if (newStatus === order.status) return;
+      order.status = newStatus;
+      if (!Array.isArray(order.statusHistory)) order.statusHistory = [];
+      order.statusHistory.push({
+        status: newStatus,
+        changedAt: new Date().toISOString(),
+        changedBy: currentUser?.username || 'master'
+      });
       persistAll();
     });
     statusRow.appendChild(statusSelect);
     detail.appendChild(statusRow);
+
+    const isPl = settings.language === 'pl';
+    const historyEntries = Array.isArray(order.statusHistory) && order.statusHistory.length > 0
+      ? order.statusHistory.slice()
+      : (order.status && order.createdAt ? [{ status: order.status, changedAt: order.createdAt, changedBy: order.createdBy || '—' }] : []);
+    if (historyEntries.length > 0) {
+      const historyBlock = createEl('div', 'mt-2 p-2 rounded-lg bg-slate-900/50 border border-slate-800');
+      historyBlock.appendChild(createEl('div', 'text-[11px] font-medium text-slate-400 mb-1', [isPl ? 'Historia statusów' : 'История статусов']));
+      historyEntries.reverse().forEach((h) => {
+        const line = createEl('div', 'text-xs text-slate-300 flex flex-wrap gap-x-2');
+        line.appendChild(createEl('span', 'font-medium', [t('status_' + (h.status || 'pending'))]));
+        line.appendChild(document.createTextNode((h.changedAt ? new Date(h.changedAt).toLocaleString(isPl ? 'pl-PL' : 'ru-RU') : '') + (h.changedBy ? ' · ' + h.changedBy : '')));
+        historyBlock.appendChild(line);
+      });
+      detail.appendChild(historyBlock);
+    }
 
     const payRow = createEl('div', 'grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2');
     const paymentSelect = createEl('select', 'px-2 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-100');
@@ -2003,15 +2031,9 @@ function renderAdminOrdersScreen() {
         const left = createEl('div', '');
         left.appendChild(createEl('div', 'text-sm font-medium text-white', [`${o.brand} ${o.model}, ${o.year}`]));
         left.appendChild(createEl('div', 'text-[11px] text-slate-400', [(o.clientName || o.clientPhone || '—') + ' · ' + new Date(o.createdAt).toLocaleString()]));
-        const statusBadge = createEl(
-          'span',
-          `text-[10px] px-2 py-0.5 rounded-full ${
-            (o.status || 'pending') === 'completed' ? 'bg-emerald-900 text-emerald-300' :
-            (o.status || 'pending') === 'in_progress' ? 'bg-amber-900 text-amber-300' :
-            (o.status || 'pending') === 'cancelled' ? 'bg-slate-700 text-slate-400' : 'bg-slate-700 text-slate-300'
-          }`,
-          [t('status_' + (o.status || 'pending'))]
-        );
+        const st = o.status || 'pending';
+        const badgeClass = st === 'completed' ? 'bg-emerald-900 text-emerald-300' : st === 'issued' ? 'bg-sky-900 text-sky-300' : st === 'in_progress' ? 'bg-amber-900 text-amber-300' : st === 'cancelled' ? 'bg-slate-700 text-slate-400' : 'bg-slate-700 text-slate-300';
+        const statusBadge = createEl('span', 'text-[10px] px-2 py-0.5 rounded-full ' + badgeClass, [t('status_' + st)]);
         const right = createEl('div', 'text-right');
         right.appendChild(createEl('div', 'text-sm font-semibold text-primary-400', [formatPrice(getOrderTotal(o))]));
         right.appendChild(statusBadge);
@@ -3775,12 +3797,16 @@ function buildOrderSummaryText(order, lang) {
 
 function buildOrderPdfHtml(order, lang) {
   const isPl = lang === 'pl';
-  const dateStr = new Date(order.createdAt).toLocaleString(isPl ? 'pl-PL' : 'ru-RU');
-  const col1 = isPl ? 'Usługa' : 'Услуга';
+  const dateStr = new Date(order.createdAt).toLocaleDateString(isPl ? 'pl-PL' : 'ru-RU');
+  const colLp = 'Lp.';
+  const col1 = isPl ? 'Nazwa usługi / pozycja' : 'Наименование работ / позиция';
   const col2 = isPl ? 'Ilość' : 'Кол-во';
-  const col3 = 'Cena (PLN)';
+  const col3 = isPl ? 'Cena jedn. (PLN)' : 'Цена ед. (PLN)';
+  const col4 = isPl ? 'Wartość (PLN)' : 'Сумма (PLN)';
   let rows = '';
+  let rowNum = 0;
   (order.services || []).forEach((item) => {
+    rowNum += 1;
     let name = isPl ? (item.name_pl || item.name || '') : (item.name_ru || item.name || '');
     if ((!item.name_pl || !item.name_ru) && item.name) {
       const pro = getProfessionalName(item.name);
@@ -3788,41 +3814,72 @@ function buildOrderPdfHtml(order, lang) {
     }
     const price = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0;
     const qty = item.quantity != null ? item.quantity : 1;
-    rows += `<tr><td style="border: 1px solid #333; padding: 8px 10px;">${escapeHtml(name)}</td><td style="border: 1px solid #333; padding: 8px 10px; text-align: center;">${escapeHtml(String(qty))}</td><td style="border: 1px solid #333; padding: 8px 10px; text-align: right;">${price.toFixed(0)}</td></tr>`;
+    const value = price * qty;
+    rows += `<tr>
+      <td style="border: 1px solid #333; padding: 6px 8px; text-align: center;">${rowNum}</td>
+      <td style="border: 1px solid #333; padding: 6px 8px;">${escapeHtml(name)}</td>
+      <td style="border: 1px solid #333; padding: 6px 8px; text-align: center;">${escapeHtml(String(qty))}</td>
+      <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">${price.toFixed(2)}</td>
+      <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">${value.toFixed(2)}</td>
+    </tr>`;
   });
   const totalNum = typeof order.total === 'number' ? order.total : parseFloat(order.total) || 0;
   const legalText = isPl
     ? 'Wyrażam zgodę na wykonanie powyższych prac serwisowych w warsztacie Car Service Nikol. Oświadczam, że zostałem poinformowany o orientacyjnej cenie usługi i mogę zostać poinformowany o zmianach kosztów przed wykonaniem dodatkowych prac.'
     : 'Даю согласие на выполнение указанных работ в сервисе Car Service Nikol. Подтверждаю, что ознакомлен с ориентировочной стоимостью и могу быть уведомлён об изменении стоимости до выполнения дополнительных работ.';
   const title = isPl ? 'Zlecenie serwisowe' : 'Заказ-наряд';
-  const vehicleLabel = isPl ? 'Pojazd' : 'Авто';
-  const dateLabel = isPl ? 'Data' : 'Дата';
-  const totalLabel = isPl ? 'Razem brutto' : 'Итого';
-  const tableStyle = 'width: 100%; border-collapse: collapse; font-size: 10pt; margin-bottom: 10px; table-layout: fixed; font-family: \'Noto Sans\', Arial, sans-serif;';
-  const thStyle = 'border: 1px solid #333; padding: 8px 10px; text-align: left; font-weight: bold; background: #f5f5f5;';
-  const tdStyle = 'border: 1px solid #333; padding: 8px 10px;';
+  const docNrLabel = isPl ? 'Nr zlecenia' : '№ заказа';
+  const vehicleLabel = isPl ? 'Pojazd' : 'Автомобиль';
+  const clientLabel = isPl ? 'Klient' : 'Клиент';
+  const totalLabel = isPl ? 'Razem brutto' : 'Итого к оплате';
+  const signLabel = isPl ? 'Podpis klienta' : 'Подпись клиента';
+  const thStyle = 'border: 1px solid #333; padding: 6px 8px; text-align: left; font-weight: bold; background: #e8e8e8; font-size: 9pt;';
+  const tableStyle = 'width: 100%; border-collapse: collapse; font-size: 9pt; margin: 0; table-layout: fixed; font-family: \'Noto Sans\', Arial, sans-serif;';
+  const logoHtml = '<div style="display: inline-block; width: 52px; height: 52px; border: 2px solid #1a1a1a; border-radius: 10px; text-align: center; line-height: 50px; font-weight: 700; font-size: 22px; color: #1a1a1a;">N</div>';
   return `
-    <div class="pdf-page" style="font-family: 'Noto Sans', Arial, sans-serif; width: 210mm; padding: 15mm; box-sizing: border-box; background: #fff; color: #000;">
-      <div style="font-size: 14pt; font-weight: bold; margin-bottom: 4px;">Car Service Nikol</div>
-      <div style="font-size: 10pt; margin-bottom: 2px;">ul. Wernisażowa 21, 64-500 Jastrowo (Szamotuły)</div>
-      <div style="font-size: 10pt; margin-bottom: 12px;">Tel. +48 794 935 734</div>
-      <div style="font-size: 12pt; font-weight: bold; margin-bottom: 6px;">${escapeHtml(title)}</div>
-      <div style="font-size: 10pt; margin-bottom: 2px;">${escapeHtml(dateLabel)}: ${escapeHtml(dateStr)}</div>
-      <div style="font-size: 10pt; margin-bottom: 10px;">${escapeHtml(vehicleLabel)}: ${escapeHtml(order.brand || '')} ${escapeHtml(order.model || '')}, ${escapeHtml(String(order.year || ''))}</div>
+    <div class="pdf-page" style="font-family: \'Noto Sans\', Arial, sans-serif; width: 210mm; min-height: 297mm; padding: 14mm; box-sizing: border-box; background: #fff; color: #000;">
+      <header style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #333;">
+        <div style="flex-shrink: 0;">${logoHtml}</div>
+        <div style="text-align: right;">
+          <div style="font-size: 16pt; font-weight: 700; margin-bottom: 2px;">Car Service Nikol</div>
+          <div style="font-size: 9pt;">ul. Wernisażowa 21, 64-500 Jastrowo (Szamotuły)</div>
+          <div style="font-size: 9pt;">Tel. +48 794 935 734</div>
+        </div>
+      </header>
+      <h1 style="font-size: 14pt; font-weight: 700; margin: 0 0 12px 0; text-align: center;">${escapeHtml(title)}</h1>
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 9pt; margin-bottom: 12px;">
+        <span><strong>${escapeHtml(docNrLabel)}:</strong> ${escapeHtml(String(order.id || ''))}</span>
+        <span><strong>${isPl ? 'Data' : 'Дата'}:</strong> ${escapeHtml(dateStr)}</span>
+      </div>
+      <div style="font-size: 9pt; margin-bottom: 14px; padding: 8px; background: #f8f8f8; border: 1px solid #ddd;">
+        <div style="margin-bottom: 4px;"><strong>${escapeHtml(clientLabel)}:</strong> ${escapeHtml(order.clientName || '—')} ${order.clientPhone ? ' · ' + escapeHtml(order.clientPhone) : ''}</div>
+        <div style="margin-bottom: 4px;"><strong>${escapeHtml(vehicleLabel)}:</strong> ${escapeHtml(order.brand || '')} ${escapeHtml(order.model || '')} ${order.year ? ', ' + escapeHtml(String(order.year)) : ''}</div>
+        <div>${order.vin ? '<strong>VIN:</strong> ' + escapeHtml(order.vin) : ''} ${order.plate ? (order.vin ? ' · ' : '') + '<strong>' + (isPl ? 'Nr rej.' : 'Гос. номер') + ':</strong> ' + escapeHtml(order.plate) : ''}</div>
+      </div>
       <table style="${tableStyle}" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
-            <th style="${thStyle} width: 55%;">${escapeHtml(col1)}</th>
-            <th style="${thStyle} width: 15%; text-align: center;">${escapeHtml(col2)}</th>
-            <th style="${thStyle} width: 30%; text-align: right;">${escapeHtml(col3)}</th>
+            <th style="${thStyle} width: 6%;">${colLp}</th>
+            <th style="${thStyle} width: 44%;">${escapeHtml(col1)}</th>
+            <th style="${thStyle} width: 12%; text-align: center;">${escapeHtml(col2)}</th>
+            <th style="${thStyle} width: 18%; text-align: right;">${escapeHtml(col3)}</th>
+            <th style="${thStyle} width: 20%; text-align: right;">${escapeHtml(col4)}</th>
           </tr>
         </thead>
         <tbody>
           ${rows}
+          <tr>
+            <td colspan="4" style="border: 1px solid #333; padding: 8px 10px; text-align: right; font-weight: bold;">${escapeHtml(totalLabel)}:</td>
+            <td style="border: 1px solid #333; padding: 8px 10px; text-align: right; font-weight: bold;">${totalNum.toFixed(2)} PLN</td>
+          </tr>
         </tbody>
       </table>
-      <div style="font-size: 10pt; font-weight: bold; margin-top: 8px;">${escapeHtml(totalLabel)}: ${totalNum.toFixed(0)} PLN</div>
-      <div style="font-size: 8pt; margin-top: 12px; line-height: 1.4;">${escapeHtml(legalText)}</div>
+      <div style="font-size: 12pt; font-weight: 700; margin-top: 10px;">${escapeHtml(totalLabel)}: ${totalNum.toFixed(2)} PLN</div>
+      <div style="font-size: 8pt; margin-top: 16px; line-height: 1.45;">${escapeHtml(legalText)}</div>
+      <div style="margin-top: 20px;">
+        <div style="font-size: 8pt; color: #555;">${escapeHtml(signLabel)}</div>
+        <div style="border-bottom: 1px solid #333; width: 180px; margin-top: 4px;"></div>
+      </div>
     </div>`;
 }
 

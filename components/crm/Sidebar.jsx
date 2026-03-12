@@ -14,15 +14,16 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+import { CRM_BASE_PATH } from '@/lib/crm-base-path';
 
 const navItems = [
-  { href: '/crm', labelKey: 'dashboard', icon: LayoutDashboard },
-  { href: '/crm/order/new', labelKey: 'new_order', icon: FilePlus },
-  { href: '/crm/orders', labelKey: 'orders', icon: ClipboardList },
-  { href: '/crm/clients', labelKey: 'clients', icon: Users },
-  { href: '/crm/stock', labelKey: 'stock', icon: Package },
-  { href: '/crm/analytics', labelKey: 'analytics', icon: BarChart3 },
-  { href: '/crm/settings', labelKey: 'settings', icon: Settings },
+  { path: '', labelKey: 'dashboard', icon: LayoutDashboard },
+  { path: '/order/new', labelKey: 'new_order', icon: FilePlus },
+  { path: '/orders', labelKey: 'orders', icon: ClipboardList },
+  { path: '/clients', labelKey: 'clients', icon: Users },
+  { path: '/stock', labelKey: 'stock', icon: Package },
+  { path: '/analytics', labelKey: 'analytics', icon: BarChart3 },
+  { path: '/settings', labelKey: 'settings', icon: Settings },
 ];
 
 const labels = {
@@ -93,14 +94,16 @@ export function Sidebar({ collapsed, onToggle, language = 'ru' }) {
 
       <nav className="flex-1 py-2 overflow-y-auto">
         {navItems.map((item) => {
+          const href = CRM_BASE_PATH + item.path;
+          const crmPath = '/crm' + item.path;
           const isActive =
-            pathname === item.href ||
-            (item.href !== '/crm' && pathname.startsWith(item.href));
+            pathname === crmPath ||
+            (item.path !== '' && pathname.startsWith(crmPath));
           const Icon = item.icon;
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={href}
+              href={href}
               className={`
                 flex items-center gap-3 px-3 py-2.5 mx-2 rounded-crm
                 transition-colors duration-150

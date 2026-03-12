@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/crm/Card';
 import { Button } from '@/components/crm/Button';
+import { CRM_BASE_PATH } from '@/lib/crm-base-path';
 
 const STORAGE_ORDERS = 'nikol_orders';
 
@@ -32,7 +33,7 @@ export default function OrderDetailPage() {
   if (order === null) {
     return (
       <div className="max-w-2xl mx-auto space-y-4">
-        <Link href="/crm/orders" className="inline-flex items-center gap-1 text-sm text-crm-textMuted hover:text-crm-text">
+        <Link href={`${CRM_BASE_PATH}/orders`} className="inline-flex items-center gap-1 text-sm text-crm-textMuted hover:text-crm-text">
           <ArrowLeft className="w-4 h-4" /> К списку заказов
         </Link>
         <p className="text-crm-textMuted">Заказ не найден.</p>
@@ -51,7 +52,7 @@ export default function OrderDetailPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-4">
       <div className="flex items-center justify-between">
-        <Link href="/crm/orders" className="inline-flex items-center gap-1 text-sm text-crm-textMuted hover:text-crm-text">
+        <Link href={`${CRM_BASE_PATH}/orders`} className="inline-flex items-center gap-1 text-sm text-crm-textMuted hover:text-crm-text">
           <ArrowLeft className="w-4 h-4" /> К списку заказов
         </Link>
       </div>

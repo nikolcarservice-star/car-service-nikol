@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation';
 
 /**
- * Редирект на обновлённую CRM 1.1 (в этом же приложении).
- * После деплоя на Vercel /admin и /crm ведут на новый интерфейс.
+ * CRM доступна только по https://car-service-nikol-crm.vercel.app/
+ * С основного сайта — редирект туда (редректы /admin и /crm заданы в middleware).
  */
 export default function AdminRedirectPage() {
-  redirect('/crm');
+  redirect('https://car-service-nikol-crm.vercel.app/');
 }
 

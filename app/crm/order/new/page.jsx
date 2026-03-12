@@ -9,6 +9,7 @@ import { Button } from '@/components/crm/Button';
 import { Input } from '@/components/crm/Input';
 import { Select } from '@/components/crm/Select';
 import { BRANDS, YEARS, DEFAULT_SERVICES, CUSTOM_BRAND_ID } from '@/lib/crm-data';
+import { CRM_BASE_PATH } from '@/lib/crm-base-path';
 
 const STORAGE_ORDERS = 'nikol_orders';
 
@@ -172,7 +173,7 @@ export default function NewOrderPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-center gap-2 text-sm text-crm-textMuted">
-        <Link href="/crm" className="hover:text-crm-text transition-colors">
+        <Link href={CRM_BASE_PATH} className="hover:text-crm-text transition-colors">
           Рабочий стол
         </Link>
         <span>/</span>
@@ -388,7 +389,7 @@ export default function NewOrderPage() {
         {saved && (
           <span className="text-sm text-green-400">Заказ сохранён.</span>
         )}
-        <Link href="/crm/orders">
+        <Link href={`${CRM_BASE_PATH}/orders`}>
           <Button variant="ghost">К списку заказов</Button>
         </Link>
       </div>

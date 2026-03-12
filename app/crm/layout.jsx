@@ -6,6 +6,7 @@ import { CrmProvider, useCrm } from './CrmContext';
 import { Sidebar } from '@/components/crm/Sidebar';
 import { Header } from '@/components/crm/Header';
 import { LoginForm } from './LoginForm';
+import { CRM_BASE_PATH } from '@/lib/crm-base-path';
 
 function CrmLayoutInner({ children }) {
   const { user, language, setLanguage, logout } = useCrm();
@@ -14,7 +15,7 @@ function CrmLayoutInner({ children }) {
 
   const handleSearch = (query) => {
     if (!query) return;
-    router.push(`/crm/orders?q=${encodeURIComponent(query)}`);
+    router.push(`${CRM_BASE_PATH}/orders?q=${encodeURIComponent(query)}`);
   };
 
   if (!user) {

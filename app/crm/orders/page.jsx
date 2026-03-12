@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react';
 import { Card } from '@/components/crm/Card';
 import { Button } from '@/components/crm/Button';
 import { Skeleton, SkeletonRow } from '@/components/crm/Skeleton';
+import { CRM_BASE_PATH } from '@/lib/crm-base-path';
 
 const STORAGE_ORDERS = 'nikol_orders';
 
@@ -50,7 +51,7 @@ export default function OrdersPage() {
     <div className="max-w-4xl mx-auto space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-crm-text">Заказы</h1>
-        <Link href="/crm/order/new">
+        <Link href={`${CRM_BASE_PATH}/order/new`}>
           <Button variant="primary">Новый заказ</Button>
         </Link>
       </div>
@@ -95,7 +96,7 @@ export default function OrdersPage() {
                     </td>
                     <td className="py-3 px-4">
                       <Link
-                        href={`/crm/orders/${order.id}`}
+                        href={`${CRM_BASE_PATH}/orders/${order.id}`}
                         className="inline-flex text-crm-textMuted hover:text-crm-accent transition-colors"
                       >
                         <ChevronRight className="w-4 h-4" />

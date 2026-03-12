@@ -4,6 +4,7 @@ import { LayoutDashboard, FilePlus, ClipboardList } from 'lucide-react';
 import Link from 'next/link';
 import { Card } from '@/components/crm/Card';
 import { Button } from '@/components/crm/Button';
+import { CRM_BASE_PATH } from '@/lib/crm-base-path';
 
 export default function CrmDashboardPage() {
   return (
@@ -18,7 +19,7 @@ export default function CrmDashboardPage() {
           <p className="text-xs text-crm-textMuted">
             Создать заказ-наряд для клиента
           </p>
-          <Link href="/crm/order/new">
+          <Link href={`${CRM_BASE_PATH}/order/new`}>
             <Button variant="primary" size="sm">Создать</Button>
           </Link>
         </Card>
@@ -30,7 +31,7 @@ export default function CrmDashboardPage() {
           <p className="text-xs text-crm-textMuted">
             Список всех заказов
           </p>
-          <Link href="/crm/orders">
+          <Link href={`${CRM_BASE_PATH}/orders`}>
             <Button variant="secondary" size="sm">Открыть</Button>
           </Link>
         </Card>
@@ -42,7 +43,7 @@ export default function CrmDashboardPage() {
           <p className="text-xs text-crm-textMuted">
             Выручка и отчёты
           </p>
-          <Link href="/crm/analytics">
+          <Link href={`${CRM_BASE_PATH}/analytics`}>
             <Button variant="secondary" size="sm">Открыть</Button>
           </Link>
         </Card>

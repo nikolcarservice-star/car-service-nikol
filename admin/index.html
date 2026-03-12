@@ -4,39 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Service Nikol — CRM</title>
-  <meta name="theme-color" content="#020617">
+  <meta name="theme-color" content="#1A1D21">
   <link rel="manifest" href="manifest.json">
-  <!-- Шрифт для PDF: польский (ł, ń, ą…) и кириллица (русский) без искажений -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS via CDN (стили как на основном сайте: orange, slate) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            primary: {
-              400: '#fb923c',
-              500: '#f97316',
-              600: '#ea580c',
-              700: '#c2410c'
+            primary: { 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c' },
+            crm: {
+              bg: '#1A1D21',
+              surface: '#24292E',
+              surfaceHover: '#2d333b',
+              accent: '#F97316',
+              text: '#E2E8F0',
+              textMuted: '#94A3B8',
+              border: 'rgba(255,255,255,0.08)',
+              glass: 'rgba(36,41,46,0.85)'
             }
+          },
+          borderRadius: { crm: '10px', 'crm-lg': '14px' },
+          boxShadow: {
+            'crm-card': '0 4px 24px -4px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)',
+            'crm-btn': '0 2px 8px -2px rgba(249,115,22,0.35)'
           }
         }
       },
       darkMode: 'class'
     };
   </script>
-  <!-- jsPDF + html2canvas for PDF (таблица, польский/русский) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-/FqZ2VNfzGEGZm4G6dkprdFMn/hTyBC0bYKT1eZq9VHtV6nRvWmvMRGsiE9zraFMvx6bMpiKFFitvolG/Gp9Hw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
 </head>
-<body class="h-full bg-slate-950 text-slate-100 antialiased">
-  <div id="app" class="min-h-full flex items-stretch justify-center bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900">
-    <!-- App will be rendered by app.js -->
+<body class="h-full bg-crm-bg text-crm-text antialiased">
+  <div id="app" class="h-full min-h-screen flex">
+    <!-- Rendered by app.js -->
   </div>
-
-  <script type="module" src="./app.js?v=4"></script>
+  <script type="module" src="./app.js?v=5"></script>
 </body>
 </html>
-

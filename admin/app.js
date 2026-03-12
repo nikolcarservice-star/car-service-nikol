@@ -192,6 +192,7 @@ const USERS = [
 let currentUser = null;
 let adminSelectedOrderId = null;
 let selectedBookingId = null;
+let sidebarCollapsed = false;
 
 // Восстанавливаем пользователя из localStorage, чтобы не выбрасывало при перезагрузке
 try {
@@ -741,60 +742,32 @@ function showModalForm(title, fields, onSave, onInit) {
 // Рендеры
 function renderLogin() {
   appRoot.innerHTML = '';
+  appRoot.className = 'h-full min-h-screen flex items-center justify-center p-4 bg-crm-bg';
 
-  const container = createEl(
-    'div',
-    'flex-1 flex flex-col items-center justify-center px-4 py-8'
-  );
-
-  const card = createEl(
-    'div',
-    'w-full max-w-sm bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl p-6'
-  );
-
-  const title = createEl(
-    'h1',
-    'text-2xl font-semibold mb-1 text-center text-white',
-    [t('login_title')]
-  );
-  const subtitle = createEl(
-    'p',
-    'text-sm text-slate-400 mb-6 text-center',
-    [t('login_subtitle')]
-  );
-
+  const container = createEl('div', 'w-full max-w-sm');
+  const card = createEl('div', 'w-full bg-crm-glass border border-white/10 rounded-crm-lg shadow-crm-card p-6');
+  const title = createEl('h1', 'text-xl font-semibold mb-1 text-center text-crm-text', [t('login_title')]);
+  const subtitle = createEl('p', 'text-sm text-crm-textMuted mb-6 text-center', [t('login_subtitle')]);
   const form = createEl('form', 'space-y-4');
 
   const userGroup = createEl('div', 'space-y-1');
-  userGroup.appendChild(createEl('label', 'block text-sm text-slate-300', [t('username')]));
-  const userInput = createEl('input', 'w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500');
+  userGroup.appendChild(createEl('label', 'block text-xs font-medium text-crm-textMuted', [t('username')]));
+  const userInput = createEl('input', 'w-full px-3 py-2.5 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text placeholder-crm-textMuted/70 focus:outline-none focus:ring-2 focus:ring-crm-accent');
   userInput.type = 'text';
   userInput.autocomplete = 'username';
   userGroup.appendChild(userInput);
 
   const passGroup = createEl('div', 'space-y-1');
-  passGroup.appendChild(createEl('label', 'block text-sm text-slate-300', [t('password')]));
-  const passInput = createEl('input', 'w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500');
+  passGroup.appendChild(createEl('label', 'block text-xs font-medium text-crm-textMuted', [t('password')]));
+  const passInput = createEl('input', 'w-full px-3 py-2.5 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   passInput.type = 'password';
   passInput.autocomplete = 'current-password';
   passGroup.appendChild(passInput);
 
   const errorBox = createEl('div', 'text-xs text-red-400 h-4');
-
-  const loginBtn = createEl(
-    'button',
-    'w-full py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white transition flex items-center justify-center gap-2',
-    [t('login_btn')]
-  );
+  const loginBtn = createEl('button', 'w-full py-2.5 rounded-crm bg-crm-accent hover:bg-primary-600 text-sm font-medium text-white shadow-crm-btn transition-colors', [t('login_btn')]);
   loginBtn.type = 'submit';
-
-  const credsHint = createEl(
-    'p',
-    'mt-4 text-[11px] text-slate-500 text-center',
-    [
-      `admin / admin123 (${t('role_admin')}), master / master123 (${t('role_master')})`
-    ]
-  );
+  const credsHint = createEl('p', 'mt-4 text-xs text-crm-textMuted text-center', [`admin / admin123 (${t('role_admin')}), master / master123 (${t('role_master')})`]);
 
   form.appendChild(userGroup);
   form.appendChild(passGroup);
@@ -841,13 +814,7 @@ function renderLogin() {
   card.appendChild(subtitle);
   card.appendChild(form);
   card.appendChild(credsHint);
-
-  const hint = createEl(
-    'p',
-    'mt-6 text-xs text-slate-500 text-center max-w-xs',
-    [t('pwa_hint')]
-  );
-
+  const hint = createEl('p', 'mt-6 text-xs text-crm-textMuted text-center max-w-xs', [t('pwa_hint')]);
   container.appendChild(card);
   container.appendChild(hint);
   appRoot.appendChild(container);
@@ -860,40 +827,82 @@ function renderAppShell(activeTab = 'order') {
   }
 
   appRoot.innerHTML = '';
+  appRoot.className = 'h-full w-full flex bg-crm-bg';
 
-  const wrapper = createEl(
-    'div',
-    'flex-1 flex flex-col w-full max-w-6xl mx-auto'
-  );
+  const isAdmin = currentUser.role === 'admin';
+  const isOwner = isAdmin && currentUser.username === 'admin';
+  const newOrdersCount = getNewOrdersCount();
+  const newBookingsCount = getNewBookingsCount();
 
-  const header = createEl(
-    'header',
-    'px-4 pt-4 pb-3 flex items-center justify-between bg-slate-950/80 backdrop-blur border-b border-slate-800'
-  );
-  const left = createEl('div', 'flex items-center gap-3');
-  const logoIcon = createEl('div', 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-tr from-primary-500 to-primary-400 text-slate-950 shadow-md');
-  logoIcon.appendChild(createEl('span', 'text-lg font-extrabold tracking-tight', ['N']));
-  const logoText = createEl('div', 'flex flex-col');
-  logoText.appendChild(createEl('span', 'text-[11px] font-semibold uppercase tracking-[0.12em] text-primary-400', ['Car Service']));
-  logoText.appendChild(createEl('span', 'text-sm font-semibold text-white', ['Nikol CRM']));
-  const logo = createEl('div', 'flex items-center gap-2');
-  logo.appendChild(logoIcon);
-  logo.appendChild(logoText);
-  const roleBadge = createEl(
-    'span',
-    'ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-slate-800 text-[11px] text-slate-300',
-    [currentUser.role === 'admin' ? t('role_admin') : t('role_master')]
-  );
-  left.appendChild(logo);
-  left.appendChild(roleBadge);
+  // ——— Сайдбар (складывающийся) ———
+  const sidebarWidth = sidebarCollapsed ? 'w-[72px]' : 'w-60';
+  const sidebar = createEl('aside', `flex flex-col shrink-0 h-full bg-crm-surface border-r border-white/10 overflow-hidden transition-[width] duration-200 ${sidebarWidth}`);
 
-  const right = createEl('div', 'flex items-center gap-2');
+  const sidebarHead = createEl('div', 'flex items-center justify-between p-3 border-b border-white/10 min-h-[56px]');
+  if (!sidebarCollapsed) {
+    const logoWrap = createEl('div', 'flex items-center gap-2 min-w-0');
+    const logoIcon = createEl('div', 'flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-crm-accent text-white font-bold text-lg shadow-crm-btn');
+    logoIcon.textContent = 'N';
+    const logoText = createEl('span', 'text-sm font-semibold text-crm-text truncate', ['Nikol CRM']);
+    logoWrap.appendChild(logoIcon);
+    logoWrap.appendChild(logoText);
+    sidebarHead.appendChild(logoWrap);
+  }
+  const toggleBtn = createEl('button', 'p-1.5 rounded-crm text-crm-textMuted hover:text-crm-text hover:bg-white/5 transition-colors shrink-0');
+  toggleBtn.innerHTML = sidebarCollapsed ? '&#8250;' : '&#8249;';
+  toggleBtn.setAttribute('aria-label', sidebarCollapsed ? 'Развернуть меню' : 'Свернуть меню');
+  toggleBtn.addEventListener('click', () => { sidebarCollapsed = !sidebarCollapsed; renderAppShell(activeTab); });
+  sidebarHead.appendChild(toggleBtn);
+  sidebar.appendChild(sidebarHead);
 
-  // language switch
-  const langSelect = createEl(
-    'select',
-    'text-xs bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-slate-200 focus:outline-none focus:ring-1 focus:ring-primary-500'
-  );
+  const navClass = (tab) => `flex items-center gap-3 px-3 py-2.5 mx-2 rounded-crm text-sm font-medium transition-colors w-full text-left ${activeTab === tab ? 'bg-crm-accent/15 text-crm-accent' : 'text-crm-textMuted hover:bg-white/5 hover:text-crm-text'}`;
+
+  const navItems = [
+    { tab: 'order', label: t('new_order') },
+    ...(isAdmin ? [
+      { tab: 'admin_orders', label: t('orders'), badge: newOrdersCount },
+      { tab: 'booking', label: t('tab_booking'), badge: newBookingsCount },
+      { tab: 'clients_vehicles', label: t('tab_clients_vehicles') },
+      { tab: 'reminders', label: t('tab_reminders') },
+      { tab: 'planner', label: t('tab_planner') },
+      { tab: 'analytics', label: t('tab_analytics') },
+      { tab: 'stock', label: t('tab_stock') },
+      { tab: 'parts_catalog', label: t('tab_parts_catalog') },
+      ...(isOwner ? [{ tab: 'admin', label: t('settings') }] : [])
+    ] : [])
+  ];
+
+  navItems.forEach(({ tab, label, badge }) => {
+    const btn = createEl('button', navClass(tab));
+    if (!sidebarCollapsed) {
+      btn.appendChild(document.createTextNode(label));
+      if (badge > 0) {
+        const b = createEl('span', 'ml-auto inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold bg-crm-accent text-white', [String(badge)]);
+        btn.appendChild(b);
+      }
+    }
+    const go = () => {
+      if (tab === 'admin_orders') setLastSeen(STORAGE_KEYS.lastSeenOrders, new Date().toISOString());
+      if (tab === 'booking') setLastSeen(STORAGE_KEYS.lastSeenBookings, new Date().toISOString());
+      renderAppShell(tab);
+    };
+    btn.addEventListener('click', go);
+    sidebar.appendChild(btn);
+  });
+
+  appRoot.appendChild(sidebar);
+
+  // ——— Основная область: хедер + контент ———
+  const main = createEl('div', 'flex-1 flex flex-col min-w-0');
+  const header = createEl('header', 'h-14 shrink-0 flex items-center justify-between gap-4 px-4 bg-crm-surface/80 border-b border-white/10');
+  const searchWrap = createEl('div', 'flex-1 max-w-xl');
+  const searchInput = createEl('input', 'w-full pl-9 pr-3 py-2 rounded-crm bg-crm-bg/80 border border-white/10 text-sm text-crm-text placeholder-crm-textMuted/70 focus:outline-none focus:ring-2 focus:ring-crm-accent focus:border-transparent');
+  searchInput.placeholder = t('search_placeholder');
+  searchInput.type = 'search';
+  searchWrap.appendChild(searchInput);
+  const headerRight = createEl('div', 'flex items-center gap-2');
+  const userSpan = createEl('span', 'text-sm text-crm-text', [currentUser.username || '—']);
+  const langSelect = createEl('select', 'text-xs bg-crm-bg/80 border border-white/10 rounded-crm px-2.5 py-1.5 text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   [['ru', 'RU'], ['pl', 'PL']].forEach(([code, label]) => {
     const opt = document.createElement('option');
     opt.value = code;
@@ -901,107 +910,17 @@ function renderAppShell(activeTab = 'order') {
     if (settings.language === code) opt.selected = true;
     langSelect.appendChild(opt);
   });
-  langSelect.addEventListener('change', () => {
-    settings.language = langSelect.value;
-    persistAll();
-    renderAppShell(activeTab);
-  });
+  langSelect.addEventListener('change', () => { settings.language = langSelect.value; persistAll(); renderAppShell(activeTab); });
+  const logoutBtn = createEl('button', 'text-xs px-2.5 py-1.5 rounded-crm text-crm-textMuted hover:bg-white/5 hover:text-crm-text transition-colors', [t('logout')]);
+  logoutBtn.addEventListener('click', () => { currentUser = null; try { localStorage.removeItem('nikol_current_user'); } catch {} renderLogin(); });
+  headerRight.appendChild(userSpan);
+  headerRight.appendChild(langSelect);
+  headerRight.appendChild(logoutBtn);
+  header.appendChild(searchWrap);
+  header.appendChild(headerRight);
+  main.appendChild(header);
 
-  const logoutBtn = createEl(
-    'button',
-    'text-xs px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200',
-    [t('logout')]
-  );
-  logoutBtn.addEventListener('click', () => {
-    currentUser = null;
-    try {
-      localStorage.removeItem('nikol_current_user');
-    } catch {
-      // ignore
-    }
-    renderLogin();
-  });
-
-  right.appendChild(langSelect);
-  right.appendChild(logoutBtn);
-
-  header.appendChild(left);
-  header.appendChild(right);
-
-  const tabs = createEl(
-    'div',
-    'px-3 pt-2 pb-1 flex items-center gap-1.5 overflow-x-auto bg-slate-950/80 border-b border-slate-900 flex-wrap'
-  );
-
-  const tabClass = (tab) =>
-    `text-xs font-medium rounded-full px-3 py-2 whitespace-nowrap ${
-      activeTab === tab ? 'bg-primary-600 text-white' : 'bg-slate-900 text-slate-300'
-    }`;
-
-  const orderTab = createEl('button', tabClass('order'), [t('new_order')]);
-  orderTab.addEventListener('click', () => renderAppShell('order'));
-  tabs.appendChild(orderTab);
-
-  const isAdmin = currentUser.role === 'admin';
-  const isOwner = isAdmin && currentUser.username === 'admin';
-
-  if (isAdmin) {
-    const newOrdersCount = getNewOrdersCount();
-    const newBookingsCount = getNewBookingsCount();
-
-    const adminOrdersTab = createEl('button', tabClass('admin_orders'), [t('orders')]);
-    if (newOrdersCount > 0) {
-      const badge = createEl('span', 'ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold bg-primary-500 text-white', [String(newOrdersCount)]);
-      adminOrdersTab.appendChild(badge);
-    }
-    const bookingTab = createEl('button', tabClass('booking'), [t('tab_booking')]);
-    if (newBookingsCount > 0) {
-      const badge = createEl('span', 'ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold bg-primary-500 text-white', [String(newBookingsCount)]);
-      bookingTab.appendChild(badge);
-    }
-    const clientsVehiclesTab = createEl('button', tabClass('clients_vehicles'), [t('tab_clients_vehicles')]);
-    const remindersTab = createEl('button', tabClass('reminders'), [t('tab_reminders')]);
-    const plannerTab = createEl('button', tabClass('planner'), [t('tab_planner')]);
-    const analyticsTab = createEl('button', tabClass('analytics'), [t('tab_analytics')]);
-    const stockTab = createEl('button', tabClass('stock'), [t('tab_stock')]);
-    const partsCatalogTab = createEl('button', tabClass('parts_catalog'), [t('tab_parts_catalog')]);
-
-    adminOrdersTab.addEventListener('click', () => {
-      setLastSeen(STORAGE_KEYS.lastSeenOrders, new Date().toISOString());
-      renderAppShell('admin_orders');
-    });
-    bookingTab.addEventListener('click', () => {
-      setLastSeen(STORAGE_KEYS.lastSeenBookings, new Date().toISOString());
-      renderAppShell('booking');
-    });
-    clientsVehiclesTab.addEventListener('click', () => renderAppShell('clients_vehicles'));
-    remindersTab.addEventListener('click', () => renderAppShell('reminders'));
-    plannerTab.addEventListener('click', () => renderAppShell('planner'));
-    analyticsTab.addEventListener('click', () => renderAppShell('analytics'));
-    stockTab.addEventListener('click', () => renderAppShell('stock'));
-    partsCatalogTab.addEventListener('click', () => renderAppShell('parts_catalog'));
-
-    tabs.appendChild(adminOrdersTab);
-    tabs.appendChild(bookingTab);
-    tabs.appendChild(clientsVehiclesTab);
-    tabs.appendChild(remindersTab);
-    tabs.appendChild(plannerTab);
-    tabs.appendChild(analyticsTab);
-    tabs.appendChild(stockTab);
-    tabs.appendChild(partsCatalogTab);
-
-    if (isOwner) {
-      const adminSettingsTab = createEl('button', tabClass('admin'), [t('settings')]);
-      adminSettingsTab.addEventListener('click', () => renderAppShell('admin'));
-      tabs.appendChild(adminSettingsTab);
-    }
-  }
-
-  const content = createEl(
-    'main',
-    'flex-1 overflow-y-auto px-3 pb-6 pt-3'
-  );
-
+  const content = createEl('main', 'flex-1 overflow-y-auto p-4');
   if (activeTab === 'order') {
     content.appendChild(renderOrderScreen());
   } else if (activeTab === 'admin_orders') {
@@ -1023,31 +942,23 @@ function renderAppShell(activeTab = 'order') {
   } else {
     content.appendChild(renderAdminScreen());
   }
-
-  wrapper.appendChild(header);
-  wrapper.appendChild(tabs);
-  wrapper.appendChild(content);
-  appRoot.appendChild(wrapper);
+  main.appendChild(content);
+  appRoot.appendChild(main);
 }
 
 function renderOrderScreen() {
   const isMaster = currentUser && currentUser.role === 'master';
-  const container = createEl('div', 'max-w-4xl mx-auto');
+  const container = createEl('div', 'max-w-3xl mx-auto space-y-6');
 
-  // Заголовок документа (стиль 1С)
-  const docHeader = createEl('div', 'border border-slate-700 bg-slate-800/80 rounded-t-lg px-4 py-2');
-  docHeader.appendChild(createEl('div', 'text-sm font-semibold text-slate-100', [t('doc_title_order')]));
-  container.appendChild(docHeader);
+  const docTitle = createEl('h1', 'text-xl font-semibold text-crm-text', [t('doc_title_order')]);
+  container.appendChild(docTitle);
 
-  const docBody = createEl('div', 'space-y-0 border border-t-0 border-slate-700 rounded-b-lg overflow-hidden');
-  const formInner = createEl('div', 'p-4 space-y-4');
-
-  // Авто
-  const carCard = createEl(
-    'div',
-    'p-3 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3'
-  );
-  carCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('brand') + ' / ' + t('model')]));
+  // Блок авто (карточный вид)
+  const carCard = createEl('div', 'p-4 rounded-crm-lg bg-crm-glass border border-white/10 shadow-crm-card space-y-3');
+  const carCardHeader = createEl('div', 'border-b border-white/10 pb-3 mb-3');
+  carCardHeader.appendChild(createEl('h3', 'text-sm font-semibold text-crm-text', ['Автомобиль']));
+  carCard.appendChild(carCardHeader);
+  carCard.appendChild(createEl('div', 'text-xs font-medium text-crm-textMuted', [t('brand') + ' / ' + t('model')]));
 
   const brandSelect = createEl(
     'select',
@@ -1115,21 +1026,32 @@ function renderOrderScreen() {
   customCarWrap.appendChild(customModelInput);
   customCarWrap.appendChild(customYearInput);
 
-  // Всегда видимые поля для ручного ввода марки, модели, года (приоритет, если заполнены)
-  const manualCarWrap = createEl('div', 'mt-3 pt-3 border-t border-slate-800 space-y-2');
-  manualCarWrap.appendChild(createEl('div', 'text-[11px] text-slate-500', [t('brand') + ' / ' + t('model') + ' / ' + t('year') + ' — ' + (settings.language === 'pl' ? 'wpisz ręcznie' : 'ввод вручную')]));
-  const manualBrandInput = createEl('input', 'w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  // Ручной ввод: схлопнут по умолчанию, раскрывается по клику «Ввести вручную»
+  let manualOpen = false;
+  const manualCarWrap = createEl('div', 'mt-3 pt-3 border-t border-white/10');
+  const manualToggle = createEl('button', 'flex items-center gap-2 text-sm text-crm-accent hover:underline mb-2');
+  manualToggle.type = 'button';
+  manualToggle.innerHTML = '&#9654; ' + (settings.language === 'pl' ? 'Wpisz ręcznie' : 'Ввести вручную');
+  const manualFields = createEl('div', 'space-y-2 hidden');
+  const manualBrandInput = createEl('input', 'w-full px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text placeholder-crm-textMuted focus:outline-none focus:ring-2 focus:ring-crm-accent');
   manualBrandInput.placeholder = t('manual_brand');
-  const manualModelInput = createEl('input', 'w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  const manualModelInput = createEl('input', 'w-full px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text placeholder-crm-textMuted focus:outline-none focus:ring-2 focus:ring-crm-accent');
   manualModelInput.placeholder = t('manual_model');
-  const manualYearInput = createEl('input', 'w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  const manualYearInput = createEl('input', 'w-full px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text placeholder-crm-textMuted focus:outline-none focus:ring-2 focus:ring-crm-accent');
   manualYearInput.placeholder = t('manual_year');
   manualYearInput.type = 'number';
   manualYearInput.min = '1990';
   manualYearInput.max = '2030';
-  manualCarWrap.appendChild(manualBrandInput);
-  manualCarWrap.appendChild(manualModelInput);
-  manualCarWrap.appendChild(manualYearInput);
+  manualFields.appendChild(manualBrandInput);
+  manualFields.appendChild(manualModelInput);
+  manualFields.appendChild(manualYearInput);
+  manualToggle.addEventListener('click', () => {
+    manualOpen = !manualOpen;
+    manualFields.classList.toggle('hidden', !manualOpen);
+    manualToggle.innerHTML = (manualOpen ? '&#9660; ' : '&#9654; ') + (settings.language === 'pl' ? 'Wpisz ręcznie' : 'Ввести вручную');
+  });
+  manualCarWrap.appendChild(manualToggle);
+  manualCarWrap.appendChild(manualFields);
 
   function toggleCustomCar(show) {
     customCarWrap.classList.toggle('hidden', !show);
@@ -1189,11 +1111,10 @@ function renderOrderScreen() {
   carCard.appendChild(manualCarWrap);
 
   // Услуги: для мастера — только ввод текстом; для админа — выпадающий список + таблица строк
-  const servicesCard = createEl(
-    'div',
-    'p-3 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3'
-  );
-  servicesCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('services_label')]));
+  const servicesCard = createEl('div', 'p-4 rounded-crm-lg bg-crm-glass border border-white/10 shadow-crm-card space-y-3');
+  const servicesHeader = createEl('div', 'border-b border-white/10 pb-3 mb-3');
+  servicesHeader.appendChild(createEl('h3', 'text-sm font-semibold text-crm-text', [t('services_label')]));
+  servicesCard.appendChild(servicesHeader);
 
   const orderLines = [];
   const selectedCustomServices = [];
@@ -1327,33 +1248,27 @@ function renderOrderScreen() {
 
   servicesCard.appendChild(customCard);
 
-  // Комментарий и фото
-  const commentCard = createEl(
-    'div',
-    'p-3 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3'
-  );
-  const commentLabel = createEl('label', 'block text-xs text-slate-300', [t('comment')]);
-  const commentInput = createEl(
-    'textarea',
-    'w-full mt-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500'
-  );
+  // Комментарий и фото (карточный блок)
+  const commentCard = createEl('div', 'p-4 rounded-crm-lg bg-crm-glass border border-white/10 shadow-crm-card space-y-3');
+  const commentCardHeader = createEl('div', 'border-b border-white/10 pb-3 mb-3');
+  commentCardHeader.appendChild(createEl('h3', 'text-sm font-semibold text-crm-text', ['Клиент и данные']));
+  commentCard.appendChild(commentCardHeader);
+  const commentLabel = createEl('label', 'block text-xs font-medium text-crm-textMuted', [t('comment')]);
+  const commentInput = createEl('textarea', 'w-full mt-1 px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   commentInput.rows = 2;
 
-  const clientNameInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  const clientNameInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   clientNameInput.placeholder = t('client_name');
-  const clientPhoneInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  const clientPhoneInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   clientPhoneInput.placeholder = t('client_phone');
   clientPhoneInput.type = 'tel';
-  const vinInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  const vinInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   vinInput.placeholder = t('vin');
-  const plateInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500');
+  const plateInput = createEl('input', 'w-full mt-2 px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
   plateInput.placeholder = t('plate');
 
-  const photoLabel = createEl('div', 'text-xs text-slate-300 mt-2', [t('photo_before')]);
-  const photoInput = createEl(
-    'input',
-    'mt-1 block w-full text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-medium file:bg-slate-800 file:text-slate-100 hover:file:bg-slate-700'
-  );
+  const photoLabel = createEl('div', 'text-xs text-crm-textMuted mt-2', [t('photo_before')]);
+  const photoInput = createEl('input', 'mt-1 block w-full text-xs text-crm-textMuted file:mr-2 file:py-1.5 file:px-3 file:rounded-crm file:border-0 file:bg-crm-surface file:text-crm-text');
   photoInput.type = 'file';
   photoInput.accept = 'image/*';
   photoInput.capture = 'environment';
@@ -1403,26 +1318,23 @@ function renderOrderScreen() {
     }
   })();
 
-  // Итог и кнопки (стиль 1С)
-  const summaryCard = createEl(
-    'div',
-    'p-4 border-t border-slate-700 bg-slate-800/50 rounded-b-lg space-y-3'
-  );
+  // Итог и кнопки (CRM 1.1: крупный итог, тени кнопок)
+  const summaryCard = createEl('div', 'p-4 rounded-crm-lg bg-crm-glass border border-white/10 shadow-crm-card space-y-3');
 
-  const summaryList = createEl('div', 'space-y-1 max-h-40 overflow-y-auto text-[11px]');
-  const totalRow = createEl('div', 'flex items-center justify-between mt-1');
-  const totalLabel = createEl('span', 'text-xs text-slate-300', [t('total')]);
-  const totalValue = createEl('span', 'text-base font-semibold text-primary-400', ['0 PLN']);
+  const summaryList = createEl('div', 'space-y-1 max-h-40 overflow-y-auto text-xs text-crm-text');
+  const totalRow = createEl('div', 'flex items-center justify-between mt-4 pt-4 border-t border-white/10');
+  const totalLabel = createEl('span', 'text-sm font-medium text-crm-textMuted', [t('total')]);
+  const totalValue = createEl('span', 'text-2xl font-bold text-crm-accent', ['0 PLN']);
   totalRow.appendChild(totalLabel);
   totalRow.appendChild(totalValue);
 
-  const saveInfo = createEl('div', 'text-[11px] text-primary-300 min-h-[1rem]');
+  const saveInfo = createEl('div', 'text-xs text-crm-accent min-h-[1rem]');
 
   const actionsRow = createEl('div', 'mt-3 flex flex-wrap gap-2');
-  const conductBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white', [t('conduct_btn')]);
-  const previewBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-slate-600 hover:bg-slate-500 text-sm font-medium text-slate-100', [t('preview_btn')]);
-  const cancelBtn = createEl('button', 'px-4 py-2.5 rounded-lg border border-slate-600 hover:bg-slate-800 text-sm font-medium text-slate-300', [t('cancel_btn')]);
-  const saveOnlyBtn = createEl('button', 'px-4 py-2.5 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm font-medium text-white', [t('save_order')]);
+  const conductBtn = createEl('button', 'px-4 py-2.5 rounded-crm bg-crm-accent hover:bg-primary-600 text-sm font-medium text-white shadow-crm-btn transition-colors', [t('conduct_btn')]);
+  const previewBtn = createEl('button', 'px-4 py-2.5 rounded-crm bg-crm-surface hover:bg-crm-surfaceHover border border-white/10 text-sm font-medium text-crm-text', [t('preview_btn')]);
+  const cancelBtn = createEl('button', 'px-4 py-2.5 rounded-crm border border-white/10 hover:bg-white/5 text-sm font-medium text-crm-textMuted', [t('cancel_btn')]);
+  const saveOnlyBtn = createEl('button', 'px-4 py-2.5 rounded-crm bg-crm-accent hover:bg-primary-600 text-sm font-medium text-white shadow-crm-btn', [t('save_order')]);
   if (isMaster) {
     actionsRow.appendChild(saveOnlyBtn);
   } else {
@@ -1610,12 +1522,9 @@ function renderOrderScreen() {
 
   if (!isMaster) updateSummary();
 
-  formInner.appendChild(carCard);
-  formInner.appendChild(servicesCard);
-  formInner.appendChild(commentCard);
-  formInner.appendChild(summaryCard);
-  docBody.appendChild(formInner);
-  container.appendChild(docBody);
+  container.appendChild(servicesCard);
+  container.appendChild(commentCard);
+  container.appendChild(summaryCard);
 
   return container;
 }

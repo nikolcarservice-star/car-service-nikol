@@ -895,11 +895,19 @@ function renderAppShell(activeTab = 'order') {
   // ——— Основная область: хедер + контент ———
   const main = createEl('div', 'flex-1 flex flex-col min-w-0');
   const header = createEl('header', 'h-14 shrink-0 flex items-center justify-between gap-4 px-4 bg-crm-surface/80 border-b border-white/10');
-  const searchWrap = createEl('div', 'flex-1 max-w-xl');
+  const searchWrap = createEl('form', 'flex-1 max-w-xl');
+  searchWrap.setAttribute('role', 'search');
   const searchInput = createEl('input', 'w-full pl-9 pr-3 py-2 rounded-crm bg-crm-bg/80 border border-white/10 text-sm text-crm-text placeholder-crm-textMuted/70 focus:outline-none focus:ring-2 focus:ring-crm-accent focus:border-transparent');
   searchInput.placeholder = t('search_placeholder');
   searchInput.type = 'search';
+  searchInput.name = 'q';
   searchWrap.appendChild(searchInput);
+  searchWrap.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = (searchInput.value || '').trim();
+    window.__crmGlobalSearch = q;
+    renderAppShell('admin_orders');
+  });
   const headerRight = createEl('div', 'flex items-center gap-2');
   const userSpan = createEl('span', 'text-sm text-crm-text', [currentUser.username || '—']);
   const langSelect = createEl('select', 'text-xs bg-crm-bg/80 border border-white/10 rounded-crm px-2.5 py-1.5 text-crm-text focus:outline-none focus:ring-2 focus:ring-crm-accent');
@@ -1913,7 +1921,7 @@ function renderAdminOrdersScreen() {
 
   (async () => {
     try {
-      const res = await fetch('/api/crm-orders');
+      const res = await fetch('https://car-service-nikol.vercel.app/api/crm-orders');
       const data = await res.json();
       if (data && data.ok && Array.isArray(data.orders)) {
         orders = data.orders.map((o) => ({
@@ -1962,12 +1970,28 @@ function renderAdminOrdersScreen() {
     ]));
     container.appendChild(dashboard);
 
+    const orderSearchInput = createEl('input', 'w-full mb-3 px-3 py-2 rounded-crm bg-crm-surface border border-white/10 text-sm text-crm-text placeholder-crm-textMuted focus:outline-none focus:ring-2 focus:ring-crm-accent');
+    orderSearchInput.placeholder = t('search_placeholder') + ' (VIN, гос. номер, клиент…)';
+    if (window.__crmGlobalSearch) {
+      orderSearchInput.value = window.__crmGlobalSearch;
+      window.__crmGlobalSearch = null;
+    }
+    container.appendChild(orderSearchInput);
+
     const list = createEl('div', 'space-y-2');
     const sorted = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    if (sorted.length === 0) {
-      list.appendChild(createEl('div', 'text-sm text-slate-400 py-8 text-center', [t('no_orders')]));
-    } else {
-      sorted.forEach((o) => {
+    function applyOrderList() {
+      const q = (orderSearchInput.value || '').trim().toLowerCase();
+      const filtered = q ? sorted.filter((o) => {
+        const hay = [o.vin, o.plate, o.clientName, o.clientPhone, o.brand, o.model, (o.clientPhone || '').replace(/\D/g, '')].map((s) => (s || '').toLowerCase());
+        return hay.some((h) => h.includes(q)) || (o.clientPhone || '').replace(/\D/g, '').includes(q.replace(/\D/g, ''));
+      }) : sorted;
+      list.innerHTML = '';
+      if (filtered.length === 0) {
+        list.appendChild(createEl('div', 'text-sm text-slate-400 py-8 text-center', [t('no_orders')]));
+        return;
+      }
+      filtered.forEach((o) => {
         const row = createEl(
           'div',
           'bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center cursor-pointer hover:bg-slate-800'
@@ -1978,7 +2002,7 @@ function renderAdminOrdersScreen() {
         });
         const left = createEl('div', '');
         left.appendChild(createEl('div', 'text-sm font-medium text-white', [`${o.brand} ${o.model}, ${o.year}`]));
-        left.appendChild(createEl('div', 'text-[11px] text-slate-400', [new Date(o.createdAt).toLocaleString()]));
+        left.appendChild(createEl('div', 'text-[11px] text-slate-400', [(o.clientName || o.clientPhone || '—') + ' · ' + new Date(o.createdAt).toLocaleString()]));
         const statusBadge = createEl(
           'span',
           `text-[10px] px-2 py-0.5 rounded-full ${
@@ -1996,6 +2020,8 @@ function renderAdminOrdersScreen() {
         list.appendChild(row);
       });
     }
+    applyOrderList();
+    orderSearchInput.addEventListener('input', applyOrderList);
     container.appendChild(list);
   })();
 
@@ -2342,8 +2368,21 @@ function renderBookingScreen() {
     return container;
   }
 
-  const addBtn = createEl('button', 'w-full py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-sm text-white', [t('add_booking')]);
-  container.appendChild(addBtn);
+  const topBar = createEl('div', 'flex flex-wrap gap-2 mb-3');
+  const refreshBtn = createEl('button', 'px-4 py-2 rounded-crm bg-crm-surface hover:bg-crm-surfaceHover border border-white/10 text-sm text-crm-text', [settings.language === 'pl' ? 'Odśwież listę' : 'Обновить список']);
+  refreshBtn.type = 'button';
+  refreshBtn.addEventListener('click', async () => {
+    refreshBtn.disabled = true;
+    refreshBtn.textContent = '…';
+    await loadFromApi();
+    refreshBtn.disabled = false;
+    refreshBtn.textContent = settings.language === 'pl' ? 'Odśwież listę' : 'Обновить список';
+    renderList();
+  });
+  topBar.appendChild(refreshBtn);
+  const addBtn = createEl('button', 'px-4 py-2 rounded-crm bg-crm-accent hover:bg-primary-600 text-sm text-white', [t('add_booking')]);
+  topBar.appendChild(addBtn);
+  container.appendChild(topBar);
   const listEl = createEl('div', 'space-y-2');
 
   function renderList() {
@@ -2420,7 +2459,7 @@ function renderBookingScreen() {
   });
 
   container.appendChild(listEl);
-  loadFromApi().then(renderList).catch(renderList);
+  loadFromApi().then(renderList).catch(() => renderList());
   return container;
 }
 
@@ -2880,11 +2919,12 @@ function renderStockScreen() {
     const purchasePrice = purchaseStr ? parseFloat(purchaseStr) : null;
     const salePrice = saleStr ? parseFloat(saleStr) : null;
 
+    const nameTrim = (name || '').trim();
     const part = {
       id: nextId(),
       sku: (sku || '').trim(),
-      name_pl: settings.language === 'pl' ? name.trim() : '',
-      name_ru: settings.language === 'pl' ? '' : name.trim(),
+      name_pl: nameTrim,
+      name_ru: nameTrim,
       brand: (brand || '').trim(),
       location: (location || '').trim(),
       qty: isNaN(qty) ? 0 : qty,

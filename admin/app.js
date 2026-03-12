@@ -335,6 +335,8 @@ const I18N = {
     parts_catalog_open_catalog: 'Открыть в каталоге',
     parts_catalog_links_hint: 'Оригинальные каталоги по марке / VIN',
     parts_catalog_where_order: 'Где заказываю запчасти',
+    parts_catalog_oil_selector: 'Подбор масла',
+    parts_catalog_oil_motul: 'Motul — подбор масла',
     stock_title: 'Склад запчастей',
     stock_search: 'Поиск по названию, коду, полке…',
     stock_add_part: 'Добавить запчасть',
@@ -534,6 +536,8 @@ const I18N = {
     parts_catalog_open_catalog: 'Otwórz w katalogu',
     parts_catalog_links_hint: 'Katalogi oryginalne po marce / VIN',
     parts_catalog_where_order: 'Gdzie zamawiam części',
+    parts_catalog_oil_selector: 'Dobierz olej',
+    parts_catalog_oil_motul: 'Motul — dobierz olej',
     stock_title: 'Magazyn części',
     stock_search: 'Szukaj po nazwie, kodzie, półce…',
     stock_add_part: 'Dodaj część',
@@ -2679,6 +2683,15 @@ function renderPartsCatalogScreen() {
   });
   linksCard.appendChild(linksRow);
   container.appendChild(linksCard);
+
+  const oilCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3');
+  oilCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('parts_catalog_oil_selector')]));
+  const motulLink = createEl('a', 'inline-flex items-center px-3 py-2 rounded-lg bg-amber-900/30 hover:bg-amber-800/40 text-amber-200 text-sm border border-amber-600/50', [t('parts_catalog_oil_motul')]);
+  motulLink.href = 'https://www.motul.com/pl-PL/lubricants';
+  motulLink.target = '_blank';
+  motulLink.rel = 'noopener noreferrer';
+  oilCard.appendChild(motulLink);
+  container.appendChild(oilCard);
 
   const whereOrderCard = createEl('div', 'rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3');
   whereOrderCard.appendChild(createEl('div', 'text-xs font-medium text-slate-400', [t('parts_catalog_where_order')]));

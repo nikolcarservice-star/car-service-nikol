@@ -337,6 +337,7 @@ const I18N = {
     parts_catalog_where_order: 'Где заказываю запчасти',
     parts_catalog_oil_selector: 'Подбор масла',
     parts_catalog_oil_motul: 'Motul — подбор масла',
+    add_client_vehicle_vin: 'Клиент+авто по VIN',
     stock_title: 'Склад запчастей',
     stock_search: 'Поиск по названию, коду, полке…',
     stock_add_part: 'Добавить запчасть',
@@ -538,6 +539,7 @@ const I18N = {
     parts_catalog_where_order: 'Gdzie zamawiam części',
     parts_catalog_oil_selector: 'Dobierz olej',
     parts_catalog_oil_motul: 'Motul — dobierz olej',
+    add_client_vehicle_vin: 'Klient + pojazd (VIN)',
     stock_title: 'Magazyn części',
     stock_search: 'Szukaj po nazwie, kodzie, półce…',
     stock_add_part: 'Dodaj część',
@@ -688,8 +690,8 @@ function createEl(tag, className = '', children = []) {
   return el;
 }
 
-/** Модальная форма поверх сайта (стиль 1С, наш дизайн). fields: [{ id, label, type?, placeholder?, value? }]. onSave(values) вызывается с объектом { id: value }. */
-function showModalForm(title, fields, onSave) {
+/** Модальная форма поверх сайта (стиль 1С, наш дизайн). fields: [{ id, label, type?, placeholder?, value? }]. onSave(values) вызывается с объектом { id: value }. onInit?(inputs) даёт доступ к input-элементам. */
+function showModalForm(title, fields, onSave, onInit) {
   const overlay = createEl('div', 'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm');
   const card = createEl('div', 'w-full max-w-md bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden');
   const header = createEl('div', 'px-4 py-3 border-b border-slate-700 bg-slate-800/80');
@@ -710,6 +712,9 @@ function showModalForm(title, fields, onSave) {
     form.appendChild(wrap);
   });
   card.appendChild(form);
+  if (typeof onInit === 'function') {
+    onInit(inputs);
+  }
   const footer = createEl('div', 'flex justify-end gap-2 px-4 py-3 border-t border-slate-700 bg-slate-800/50');
   const cancelBtn = createEl('button', 'px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700', [t('cancel_btn')]);
   cancelBtn.type = 'button';
@@ -2096,7 +2101,7 @@ function renderClientsAndVehiclesScreen() {
 
   const clientsSection = createEl('div', 'space-y-2');
   clientsSection.appendChild(createEl('div', 'text-sm font-semibold text-slate-200', [t('tab_clients')]));
-  const clientTop = createEl('div', 'flex justify-end');
+  const clientTop = createEl('div', 'flex justify-end gap-2 flex-wrap');
   const addClientBtn = createEl('button', 'px-3 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-sm text-white', [t('add_client')]);
   addClientBtn.addEventListener('click', () => {
     showModalForm(t('add_client'), [
@@ -2110,6 +2115,59 @@ function renderClientsAndVehiclesScreen() {
     });
   });
   clientTop.appendChild(addClientBtn);
+
+  const addClientVehicleBtn = createEl('button', 'px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm text-slate-100', [t('add_client_vehicle_vin')]);
+  addClientVehicleBtn.addEventListener('click', () => {
+    showModalForm(
+      t('add_client_vehicle_vin'),
+      [
+        { id: 'vin', label: t('vin'), placeholder: 'VIN' },
+        { id: 'name', label: t('client_name'), placeholder: settings.language === 'pl' ? 'Imię i nazwisko' : 'Имя клиента' },
+        { id: 'phone', label: t('client_phone'), placeholder: settings.language === 'pl' ? 'Telefon' : 'Телефон' },
+        { id: 'brand', label: t('brand'), placeholder: settings.language === 'pl' ? 'Marka' : 'Марка' },
+        { id: 'model', label: t('model'), placeholder: settings.language === 'pl' ? 'Model' : 'Модель' },
+        { id: 'year', label: t('year'), placeholder: String(new Date().getFullYear()) },
+        { id: 'plate', label: t('plate'), placeholder: settings.language === 'pl' ? 'Nr rejestr.' : 'Гос. номер' }
+      ],
+      (values) => {
+        if (!values.name && !values.phone && !values.vin) return;
+        const nowIso = new Date().toISOString();
+        const client = { id: nextId(), name: values.name || '—', phone: values.phone || '', createdAt: nowIso };
+        clients.push(client);
+        vehicles.push({
+          id: nextId(),
+          brand: values.brand || '',
+          model: values.model || '',
+          year: values.year || '',
+          vin: values.vin || '',
+          plate: values.plate || '',
+          createdAt: nowIso
+        });
+        persistAll();
+        renderClientsList();
+        renderVehiclesList();
+      },
+      (inputs) => {
+        const vinInput = inputs.vin;
+        if (!vinInput) return;
+        vinInput.addEventListener('blur', async () => {
+          const raw = (vinInput.value || '').trim().toUpperCase().replace(/\s/g, '');
+          if (raw.length !== 17) return;
+          try {
+            const res = await fetch('https://car-service-nikol.vercel.app/api/vin-decode?vin=' + encodeURIComponent(raw));
+            const data = await res.json();
+            if (!data || !data.ok || data.notFound) return;
+            if (!inputs.brand.value && data.brand) inputs.brand.value = data.brand;
+            if (!inputs.model.value && data.model) inputs.model.value = data.model;
+            if (!inputs.year.value && data.year) inputs.year.value = String(data.year);
+          } catch {
+            // ignore network errors
+          }
+        });
+      }
+    );
+  });
+  clientTop.appendChild(addClientVehicleBtn);
   clientsSection.appendChild(clientTop);
   const clientsListEl = createEl('div', 'space-y-2');
   clientsSection.appendChild(clientsListEl);
@@ -2756,6 +2814,17 @@ function renderPartsCatalogScreen() {
           row.appendChild(createEl('span', 'text-slate-100', [String(value)]));
           vehicleBody.appendChild(row);
         });
+
+        const brandLower = String(data.brand || '').toLowerCase();
+        if (brandLower.startsWith('volkswagen') || brandLower === 'vw') {
+          const ilRow = createEl('div', 'pt-2');
+          const ilLink = createEl('a', 'inline-flex items-center px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-100 border border-slate-600', ['IlCats (VW)']);
+          ilLink.href = 'https://www.ilcats.ru/';
+          ilLink.target = '_blank';
+          ilLink.rel = 'noopener noreferrer';
+          ilRow.appendChild(ilLink);
+          vehicleBody.appendChild(ilRow);
+        }
       }
       vehicleCard.classList.remove('hidden');
     } catch (e) {

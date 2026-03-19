@@ -1,7 +1,7 @@
 /**
  * Vercel Serverless: заявки с формы записи.
  * POST: получает заявку, сохраняет в Supabase (booking_requests).
- * GET: возвращает список заявок для CRM.
+ * GET: возвращает список заявок.
  * PATCH: подтверждение заявки (body: { id, confirmed: true }). Нужна колонка: ALTER TABLE booking_requests ADD COLUMN IF NOT EXISTS confirmed boolean DEFAULT false;
  * DELETE: удаление заявки по id.
  */
@@ -171,7 +171,7 @@ export default async function handler(req, res) {
     lang: payload.lang
   });
 
-  const webhookUrl = process.env.CRM_WEBHOOK_URL || process.env.BOOKING_WEBHOOK_URL;
+  const webhookUrl = process.env.BOOKING_WEBHOOK_URL;
   if (webhookUrl) {
     try {
       await fetch(webhookUrl, {

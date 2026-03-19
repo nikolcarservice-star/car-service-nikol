@@ -1,20 +1,19 @@
 /**
- * Proxy API /api/prices для CRM (мониторинг cen Poznań i okolice).
- * Логика взята из admin/price-monitor/api/prices.js.
+ * Proxy API /api/prices — мониторинг цен (Poznań i okolice).
  */
 
 const POZNAN_URL = 'https://kb.pl/cenniki/miejskie/warsztat-samochodowy/poznan/';
 const SZAMOTULY_URL = 'https://kb.pl/cenniki/miejskie/warsztat-samochodowy/szamotuly/';
 
 const KEYWORDS = [
-  { keys: ['oleju i filtr', 'oleju i filtrów'], crmId: 'oil' },
-  { keys: ['tarcz i klocków', 'klocków hamulcowych'], crmId: '3' },
-  { keys: ['płynu hamulcowego'], crmId: 'brake_fluid' },
-  { keys: ['amortyzatorów'], crmId: 'shock' },
-  { keys: ['sprzęgła'], crmId: 'clutch' }
+  { keys: ['oleju i filtr', 'oleju i filtrów'], serviceId: 'oil' },
+  { keys: ['tarcz i klocków', 'klocków hamulcowych'], serviceId: '3' },
+  { keys: ['płynu hamulcowego'], serviceId: 'brake_fluid' },
+  { keys: ['amortyzatorów'], serviceId: 'shock' },
+  { keys: ['sprzęgła'], serviceId: 'clutch' }
 ];
 
-const CRM_SERVICES = [
+const PRICE_SERVICES = [
   { id: '1', basePrice: 100, competitorAvgPrice: 95 },
   { id: '2', basePrice: 250, competitorAvgPrice: 280 },
   { id: '3', basePrice: 100, competitorAvgPrice: 120 },
@@ -71,17 +70,17 @@ function parseTable(html) {
 }
 
 function extractPrices(rows) {
-  const byCrmId = {};
+  const byServiceId = {};
   for (const row of rows) {
-    for (const { keys, crmId } of KEYWORDS) {
+    for (const { keys, serviceId } of KEYWORDS) {
       const match = keys.some((k) => row.name.includes(k));
       if (match) {
-        if (!byCrmId[crmId] || row.brutto < byCrmId[crmId]) byCrmId[crmId] = row.brutto;
+        if (!byServiceId[serviceId] || row.brutto < byServiceId[serviceId]) byServiceId[serviceId] = row.brutto;
         break;
       }
     }
   }
-  return byCrmId;
+  return byServiceId;
 }
 
 export default async function handler(req, res) {
@@ -99,7 +98,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const out = CRM_SERVICES.map((s) => ({ ...s }));
+  const out = PRICE_SERVICES.map((s) => ({ ...s }));
 
   try {
     const [rPoznan, rSzamotuly] = await Promise.all([

@@ -16,15 +16,6 @@ export default function Footer({ lang }) {
             >
               {t.privacy}
             </Link>
-            <a
-              href="https://car-service-nikol-crm.vercel.app"
-              target="_blank"
-              rel="noreferrer"
-              className="ml-3 inline-flex text-[11px] text-slate-500 hover:text-slate-400"
-              title="CRM (dla personelu)"
-            >
-              CRM
-            </a>
             {t.seoKeywordsLine && (
               <p className="mt-3 max-w-xl text-[10px] text-gray-500 sm:text-[11px]">
                 {t.seoKeywordsLine}

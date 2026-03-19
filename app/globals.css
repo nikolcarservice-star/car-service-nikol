@@ -73,33 +73,3 @@ body {
 .animate-cta-glow-whatsapp {
   animation: cta-glow-whatsapp 2s ease-in-out infinite;
 }
-
-/* ========== CRM 1.1 Deep Dark Theme ========== */
-.crm-root {
-  --crm-bg: #1a1d21;
-  --crm-surface: #24292e;
-  --crm-surface-hover: #2d333b;
-  --crm-accent: #f97316;
-  --crm-accent-hover: #ea580c;
-  --crm-text: #e2e8f0;
-  --crm-text-muted: #94a3b8;
-  --crm-border: rgba(255, 255, 255, 0.08);
-  --crm-glass: rgba(36, 41, 46, 0.85);
-}
-
-/* Плавные переходы для интерактивных элементов CRM */
-.crm-root [data-crm-interactive] {
-  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-}
-
-/* Скелетон-анимация */
-@keyframes crm-skeleton {
-  0% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-  100% { opacity: 0.4; }
-}
-
-.crm-skeleton {
-  animation: crm-skeleton 1.5s ease-in-out infinite;
-}
-

@@ -4,6 +4,7 @@ import { CalendarDays, Phone, Stethoscope } from 'lucide-react';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import { getServiceBySlug, getLowestFromPricePln, SERVICE_KEYS, servicesData } from '../../../../data/services';
 import { getTranslations, normalizeLang } from '../../../../constants/translations';
+import { getSitemapLangs } from '../../../../constants/localeConfig';
 
 function displayPriceInPln(value) {
   if (value == null || value === '') return '';
@@ -12,7 +13,7 @@ function displayPriceInPln(value) {
 
 export function generateStaticParams() {
   const params = [];
-  const langs = ['pl', 'ru'];
+  const langs = getSitemapLangs();
 
   langs.forEach((lang) => {
     SERVICE_KEYS.forEach((key) => {

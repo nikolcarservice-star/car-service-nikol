@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
+import { RUSSIAN_LOCALE_ENABLED } from '../constants/localeConfig';
 import { getServiceNavItems } from '../data/services';
 
 function HeaderContent({ lang, t, querySuffix = '' }) {
@@ -30,39 +31,39 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
   const bookHref = `${buildPath(currentLang)}${querySuffix}#${t.bookingId || 'booking'}`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 shadow-lg shadow-black/20 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:py-3.5">
-        <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 shadow-md shadow-black/20 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
           <Link
             href={buildPath(currentLang)}
-            className="group flex items-center gap-3 rounded-xl transition-opacity hover:opacity-90"
+            className="group flex min-w-0 items-center gap-2 rounded-lg transition-opacity hover:opacity-90 sm:gap-2.5"
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500 shadow-lg shadow-orange-500/25 ring-1 ring-white/10 transition group-hover:shadow-orange-500/30">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950/80 text-orange-200">
-                <Wrench className="h-5 w-5" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500 shadow-md shadow-orange-500/20 ring-1 ring-white/10 transition group-hover:shadow-orange-500/30 sm:h-10 sm:w-10">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-950/80 text-orange-200 sm:h-8 sm:w-8">
+                <Wrench className="h-4 w-4 sm:h-[17px] sm:w-[17px]" />
               </div>
             </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-500">
+            <div className="min-w-0 flex flex-col leading-none">
+              <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-gray-500 sm:text-[9px]">
                 Car Service
               </span>
-              <span className="text-lg font-bold tracking-tight text-white">Nikol</span>
-              <span className="text-[10px] text-gray-500">Jastrowo · Szamotuły</span>
+              <span className="text-[15px] font-bold tracking-tight text-white sm:text-base">Nikol</span>
+              <span className="truncate text-[8px] text-gray-500 sm:text-[9px]">Jastrowo · Szamotuły</span>
             </div>
           </Link>
         </div>
 
-        <nav className="hidden items-center gap-1 text-sm md:flex">
+        <nav className="hidden items-center gap-0.5 text-xs md:flex lg:text-[13px]">
           <Link
             href={buildPath(currentLang)}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.home}
           </Link>
           <div className="group relative">
             <button
               type="button"
-              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+              className="inline-flex items-center gap-0.5 rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
             >
               <span>{nav.services}</span>
               <ChevronDown className="h-3.5 w-3.5 transition group-hover:rotate-180" />
@@ -89,87 +90,89 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
           </div>
           <Link
             href={buildPath(currentLang, 'about')}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.about ?? 'O nas'}
           </Link>
           <Link
             href={buildPath(currentLang, 'gallery')}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.gallery ?? 'Galeria'}
           </Link>
           <Link
             href={buildPath(currentLang, 'faq')}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.faq ?? 'FAQ'}
           </Link>
           <Link
             href={buildPath(currentLang, 'contact')}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.contact ?? 'Kontakt'}
           </Link>
           <Link
             href={buildPath(currentLang, 'cennik')}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.cennik ?? 'Cennik'}
           </Link>
           <Link
             href={buildPath(currentLang, 'blog')}
-            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
           >
             {nav.blog ?? 'Blog'}
           </Link>
         </nav>
 
-        {/* Desktop: language + phone + book */}
-        <div className="hidden md:flex items-center gap-2 sm:gap-3">
-          <div
-            aria-label={nav.languageToggleLabel}
-            className="flex items-center gap-1 rounded-full border border-slate-700/80 bg-slate-900/80 px-2 py-1.5 text-xs font-medium text-gray-200 shadow-inner"
-          >
-            <Languages className="h-3.5 w-3.5 shrink-0 text-orange-400/90" />
-            <Link
-              href={langHref(LANGUAGES.PL)}
-              className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition ${
-                currentLang === LANGUAGES.PL
-                  ? 'bg-orange-500 text-slate-950 shadow-sm'
-                  : 'text-gray-400 hover:text-orange-400'
-              }`}
+        {/* Desktop: language (optional) + phone + book */}
+        <div className="hidden items-center gap-1.5 md:flex sm:gap-2">
+          {RUSSIAN_LOCALE_ENABLED && (
+            <div
+              aria-label={nav.languageToggleLabel}
+              className="flex items-center gap-1 rounded-full border border-slate-700/80 bg-slate-900/80 px-1.5 py-1 text-xs font-medium text-gray-200 shadow-inner"
             >
-              PL
-            </Link>
-            <Link
-              href={langHref(LANGUAGES.RU)}
-              className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition ${
-                currentLang === LANGUAGES.RU
-                  ? 'bg-orange-500 text-slate-950 shadow-sm'
-                  : 'text-gray-400 hover:text-orange-400'
-              }`}
-            >
-              RU
-            </Link>
-          </div>
+              <Languages className="h-3 w-3 shrink-0 text-orange-400/90" />
+              <Link
+                href={langHref(LANGUAGES.PL)}
+                className={`rounded-full px-2 py-0.5 text-[11px] font-medium transition ${
+                  currentLang === LANGUAGES.PL
+                    ? 'bg-orange-500 text-slate-950 shadow-sm'
+                    : 'text-gray-400 hover:text-orange-400'
+                }`}
+              >
+                PL
+              </Link>
+              <Link
+                href={langHref(LANGUAGES.RU)}
+                className={`rounded-full px-2 py-0.5 text-[11px] font-medium transition ${
+                  currentLang === LANGUAGES.RU
+                    ? 'bg-orange-500 text-slate-950 shadow-sm'
+                    : 'text-gray-400 hover:text-orange-400'
+                }`}
+              >
+                RU
+              </Link>
+            </div>
+          )}
 
           <a
             href={`tel:${PHONE_RAW}`}
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-3 py-2 text-xs font-bold text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/40 hover:ring-orange-400/50 sm:px-4 sm:text-sm"
+            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 sm:gap-2 sm:px-3 sm:text-xs"
             title={nav.phoneCta}
           >
-            <Phone className="h-4 w-4 shrink-0" />
-            <span className="hidden sm:inline">{PHONE_DISPLAY}</span>
+            <Phone className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+            <span className="hidden lg:inline">{PHONE_DISPLAY}</span>
           </a>
 
           <Link
             href={bookHref}
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-3 py-2 text-xs font-bold text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/40 hover:ring-orange-400/50 sm:px-4 sm:text-sm"
+            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 sm:gap-2 sm:px-3 sm:text-xs"
             title={nav.bookCta ?? 'Umów wizytę'}
           >
-            <CalendarDays className="h-4 w-4 shrink-0" />
-            <span className="hidden sm:inline">{nav.bookCta ?? 'Umów wizytę'}</span>
+            <CalendarDays className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+            <span className="hidden lg:inline">{nav.bookCta ?? 'Umów wizytę'}</span>
           </Link>
         </div>
 
@@ -177,7 +180,7 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(true)}
-          className="md:hidden flex h-11 w-11 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 text-gray-100 transition hover:bg-slate-700 hover:text-orange-400"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-gray-100 transition hover:bg-slate-700 hover:text-orange-400 md:hidden"
           aria-label={nav.openMenu ?? 'Otwórz menu'}
           aria-expanded={mobileMenuOpen}
         >
@@ -281,35 +284,39 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
               >
                 {nav.blog ?? 'Blog'}
               </Link>
-              <div className="my-3 h-px bg-slate-700" />
-              <div
-                aria-label={nav.languageToggleLabel}
-                className="flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900/80 px-3 py-2.5"
-              >
-                <Languages className="h-4 w-4 shrink-0 text-orange-400/90" />
-                <Link
-                  href={langHref(LANGUAGES.PL)}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`rounded-full px-3 py-1 text-sm font-medium ${
-                    currentLang === LANGUAGES.PL
-                      ? 'bg-orange-500 text-slate-950'
-                      : 'text-gray-400 hover:text-orange-400'
-                  }`}
-                >
-                  PL
-                </Link>
-                <Link
-                  href={langHref(LANGUAGES.RU)}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`rounded-full px-3 py-1 text-sm font-medium ${
-                    currentLang === LANGUAGES.RU
-                      ? 'bg-orange-500 text-slate-950'
-                      : 'text-gray-400 hover:text-orange-400'
-                  }`}
-                >
-                  RU
-                </Link>
-              </div>
+              {RUSSIAN_LOCALE_ENABLED && (
+                <>
+                  <div className="my-3 h-px bg-slate-700" />
+                  <div
+                    aria-label={nav.languageToggleLabel}
+                    className="flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900/80 px-3 py-2.5"
+                  >
+                    <Languages className="h-4 w-4 shrink-0 text-orange-400/90" />
+                    <Link
+                      href={langHref(LANGUAGES.PL)}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`rounded-full px-3 py-1 text-sm font-medium ${
+                        currentLang === LANGUAGES.PL
+                          ? 'bg-orange-500 text-slate-950'
+                          : 'text-gray-400 hover:text-orange-400'
+                      }`}
+                    >
+                      PL
+                    </Link>
+                    <Link
+                      href={langHref(LANGUAGES.RU)}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`rounded-full px-3 py-1 text-sm font-medium ${
+                        currentLang === LANGUAGES.RU
+                          ? 'bg-orange-500 text-slate-950'
+                          : 'text-gray-400 hover:text-orange-400'
+                      }`}
+                    >
+                      RU
+                    </Link>
+                  </div>
+                </>
+              )}
               <a
                 href={`tel:${PHONE_RAW}`}
                 onClick={() => setMobileMenuOpen(false)}

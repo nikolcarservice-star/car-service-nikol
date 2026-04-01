@@ -1,3 +1,5 @@
+import { RUSSIAN_LOCALE_ENABLED } from './localeConfig';
+
 export const LANGUAGES = {
   PL: 'pl',
   RU: 'ru',
@@ -521,6 +523,7 @@ export const translations = {
 export function normalizeLang(lang) {
   if (!lang) return LANGUAGES.PL;
   const lower = String(lang).toLowerCase();
+  if (!RUSSIAN_LOCALE_ENABLED && lower === LANGUAGES.RU) return LANGUAGES.PL;
   return SUPPORTED_LANGS.includes(lower) ? lower : LANGUAGES.PL;
 }
 

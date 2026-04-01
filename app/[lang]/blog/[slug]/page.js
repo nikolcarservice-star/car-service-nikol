@@ -4,10 +4,11 @@ import { FileText, ArrowLeft } from 'lucide-react';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import { blogPosts, getBlogPost, getAllBlogSlugs } from '../../../../data/blog';
 import { normalizeLang } from '../../../../constants/translations';
+import { getSitemapLangs } from '../../../../constants/localeConfig';
 
 export function generateStaticParams() {
   const params = [];
-  ['pl', 'ru'].forEach((lang) => {
+  getSitemapLangs().forEach((lang) => {
     getAllBlogSlugs().forEach((slug) => {
       params.push({ lang, slug });
     });

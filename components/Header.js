@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
 import { getServiceNavItems } from '../data/services';
 
-export default function Header({ lang, t }) {
+function HeaderContent({ lang, t, querySuffix = '' }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const nav = t.navigation;
   const pathname = usePathname() || '/';
@@ -20,11 +20,14 @@ export default function Header({ lang, t }) {
   const buildPath = (targetLang, subPath = '') =>
     `/${targetLang}${subPath ? `/${subPath}` : ''}`;
 
+  /** Zachowuje ?query przy przełączaniu PL ↔ RU (np. ?service=). */
+  const langHref = (targetLang) => `${buildPath(targetLang, restPath)}${querySuffix}`;
+
   const servicesNav = getServiceNavItems(lang);
 
   const currentLang = lang || currentLangSegment;
 
-  const bookHref = buildPath(currentLang) + '#' + (t.bookingId || 'booking');
+  const bookHref = `${buildPath(currentLang)}${querySuffix}#${t.bookingId || 'booking'}`;
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 shadow-lg shadow-black/20 backdrop-blur-md">
@@ -118,7 +121,7 @@ export default function Header({ lang, t }) {
           >
             <Languages className="h-3.5 w-3.5 shrink-0 text-orange-400/90" />
             <Link
-              href={buildPath(LANGUAGES.PL, restPath)}
+              href={langHref(LANGUAGES.PL)}
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition ${
                 currentLang === LANGUAGES.PL
                   ? 'bg-orange-500 text-slate-950 shadow-sm'
@@ -128,7 +131,7 @@ export default function Header({ lang, t }) {
               PL
             </Link>
             <Link
-              href={buildPath(LANGUAGES.RU, restPath)}
+              href={langHref(LANGUAGES.RU)}
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition ${
                 currentLang === LANGUAGES.RU
                   ? 'bg-orange-500 text-slate-950 shadow-sm'
@@ -259,7 +262,7 @@ export default function Header({ lang, t }) {
               >
                 <Languages className="h-4 w-4 shrink-0 text-orange-400/90" />
                 <Link
-                  href={buildPath(LANGUAGES.PL, restPath)}
+                  href={langHref(LANGUAGES.PL)}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`rounded-full px-3 py-1 text-sm font-medium ${
                     currentLang === LANGUAGES.PL
@@ -270,7 +273,7 @@ export default function Header({ lang, t }) {
                   PL
                 </Link>
                 <Link
-                  href={buildPath(LANGUAGES.RU, restPath)}
+                  href={langHref(LANGUAGES.RU)}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`rounded-full px-3 py-1 text-sm font-medium ${
                     currentLang === LANGUAGES.RU
@@ -306,3 +309,16 @@ export default function Header({ lang, t }) {
   );
 }
 
+function HeaderWithQuery(props) {
+  const searchParams = useSearchParams();
+  const q = searchParams.toString();
+  return <HeaderContent {...props} querySuffix={q ? `?${q}` : ''} />;
+}
+
+export default function Header(props) {
+  return (
+    <Suspense fallback={<HeaderContent {...props} querySuffix="" />}>
+      <HeaderWithQuery {...props} />
+    </Suspense>
+  );
+}

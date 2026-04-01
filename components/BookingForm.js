@@ -1,14 +1,41 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Calendar, CheckCircle2, Clock, Loader2, MessageSquare, Phone, Shield, Wrench } from 'lucide-react';
+import {
+  Calendar,
+  CheckCircle2,
+  Clock,
+  ImagePlus,
+  Loader2,
+  MessageSquare,
+  Phone,
+  Shield,
+  Wrench,
+  X,
+} from 'lucide-react';
 import { LANGUAGES, PHONE_DISPLAY, PHONE_RAW, translations } from '../constants/translations';
 
 const GA_FORM_CATEGORY = 'booking_form';
+
+const MAX_PHOTO_FILES = 3;
+const MAX_PHOTO_BYTES = 1_500_000;
+
+function localISODate(d = new Date()) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function preferredTimeLabel(val, t) {
+  if (val === 'morning') return t.timeMorning;
+  if (val === 'afternoon') return t.timeAfternoon;
+  return t.timeAny;
+}
 
 function trackFormEvent(action, label = '') {
   if (typeof window !== 'undefined' && window.gtag) {
@@ -26,9 +53,29 @@ function getBookingServiceLabel(serviceItem, lang) {
 
 export default function BookingForm({ lang, embed }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [photoFiles, setPhotoFiles] = useState([]);
+  const [photoError, setPhotoError] = useState('');
   const dateInputRef = useRef(null);
+  const photosInputRef = useRef(null);
   const searchParams = useSearchParams();
   const t = translations[lang].booking;
+  const todayIso = useMemo(() => localISODate(), []);
+  const quickDates = useMemo(() => {
+    const out = [];
+    const loc = lang === LANGUAGES.RU ? 'ru-RU' : 'pl-PL';
+    const fmt = new Intl.DateTimeFormat(loc, { weekday: 'short', day: 'numeric', month: 'short' });
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setHours(12, 0, 0, 0);
+      d.setDate(d.getDate() + i);
+      const iso = localISODate(d);
+      let label = fmt.format(d);
+      if (i === 0) label = lang === LANGUAGES.RU ? 'Сегодня' : 'Dziś';
+      else if (i === 1) label = lang === LANGUAGES.RU ? 'Завтра' : 'Jutro';
+      out.push({ iso, label });
+    }
+    return out;
+  }, [lang]);
 
   const {
     register,
@@ -44,15 +91,44 @@ export default function BookingForm({ lang, embed }) {
       car: '',
       service: '',
       date: '',
+      preferredTime: 'any',
       message: '',
     },
   });
 
+  const readFileAsAttachment = (file) =>
+    new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => {
+        const res = r.result;
+        const data = typeof res === 'string' ? res.replace(/^data:[^;]+;base64,/, '') : '';
+        resolve({ name: file.name.slice(0, 120), type: file.type || 'image/jpeg', data });
+      };
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+
   const onSubmit = async (values) => {
+    setPhotoError('');
     setStatus('loading');
     trackFormEvent('form_submit');
     const phoneFull = values.phone.replace(/\D/g, '').length > 0 ? '+48' + values.phone.replace(/\D/g, '') : '';
     try {
+      const attachments = [];
+      for (const f of photoFiles) {
+        if (!f.type.startsWith('image/')) {
+          setPhotoError(t.photoWrongType);
+          setStatus('idle');
+          return;
+        }
+        if (f.size > MAX_PHOTO_BYTES) {
+          setPhotoError(t.photoTooBig);
+          setStatus('idle');
+          return;
+        }
+        attachments.push(await readFileAsAttachment(f));
+      }
+
       const payload = {
         source: 'car-service-nikol-booking',
         name: values.name,
@@ -61,24 +137,31 @@ export default function BookingForm({ lang, embed }) {
         service: values.service,
         date: values.date,
         message: values.message,
+        preferredTime: preferredTimeLabel(values.preferredTime, t),
+        attachments,
         lang: lang === LANGUAGES.RU ? 'ru' : 'pl',
         createdAt: new Date().toISOString(),
       };
 
-      await fetch('/api/booking', {
+      const res = await fetch('/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
+      if (!res.ok) throw new Error('booking failed');
+
       setStatus('success');
       trackFormEvent('form_success');
+      setPhotoFiles([]);
+      if (photosInputRef.current) photosInputRef.current.value = '';
       reset({
         name: '',
         phone: '',
         car: '',
         service: '',
         date: '',
+        preferredTime: 'any',
         message: '',
       });
     } catch (e) {
@@ -86,6 +169,24 @@ export default function BookingForm({ lang, embed }) {
       setStatus('error');
       trackFormEvent('form_error');
     }
+  };
+
+  const addPhotos = (list) => {
+    setPhotoError('');
+    const next = [...photoFiles];
+    for (const f of list) {
+      if (next.length >= MAX_PHOTO_FILES) break;
+      if (!f.type.startsWith('image/')) {
+        setPhotoError(t.photoWrongType);
+        return;
+      }
+      if (f.size > MAX_PHOTO_BYTES) {
+        setPhotoError(t.photoTooBig);
+        return;
+      }
+      next.push(f);
+    }
+    setPhotoFiles(next);
   };
 
   const phonePattern = /^\d{3}\s?\d{3}\s?\d{3}$/;
@@ -233,14 +334,30 @@ export default function BookingForm({ lang, embed }) {
                 </div>
               </div>
 
-              <div className="mt-5 grid gap-5 sm:grid-cols-[1fr_1.2fr]">
+              <div className="mt-5 space-y-5">
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-gray-300">
                     {t.dateLabel}
                   </label>
+                  {t.dateQuickHint && (
+                    <p className="text-[11px] leading-relaxed text-gray-500 sm:text-xs">{t.dateQuickHint}</p>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {quickDates.map(({ iso, label }) => (
+                      <button
+                        key={iso}
+                        type="button"
+                        onClick={() => setValue('date', iso, { shouldValidate: true })}
+                        className="rounded-lg border border-slate-600/90 bg-slate-800/70 px-3 py-1.5 text-xs font-medium text-gray-200 transition hover:border-orange-500/50 hover:bg-orange-500/10 hover:text-orange-200"
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
                   <div className="relative flex overflow-hidden rounded-xl border border-slate-600/80 bg-slate-800/60 shadow-inner transition focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30">
                     <input
                       type="date"
+                      min={todayIso}
                       className="date-input min-w-0 flex-1 bg-transparent py-3 pl-4 pr-11 text-sm text-gray-100 outline-none [color-scheme:dark]"
                       {...dateRegister}
                       ref={(el) => {
@@ -261,7 +378,81 @@ export default function BookingForm({ lang, embed }) {
                   {errors.date && (
                     <p className="text-xs text-red-400">{errors.date.message}</p>
                   )}
+                  {t.calendarHelp && (
+                    <p className="text-[11px] leading-relaxed text-gray-500 sm:text-xs">{t.calendarHelp}</p>
+                  )}
                 </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-gray-300">
+                    {t.timePreferenceLabel}
+                  </label>
+                  <select
+                    className={inputBase}
+                    {...register('preferredTime')}
+                  >
+                    <option value="any">{t.timeAny}</option>
+                    <option value="morning">{t.timeMorning}</option>
+                    <option value="afternoon">{t.timeAfternoon}</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-gray-300">
+                    {t.photosLabel}
+                  </label>
+                  {t.photosHint && (
+                    <p className="text-[11px] leading-relaxed text-gray-500 sm:text-xs">{t.photosHint}</p>
+                  )}
+                  <input
+                    ref={photosInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    className="sr-only"
+                    tabIndex={-1}
+                    onChange={(e) => {
+                      addPhotos(Array.from(e.target.files || []));
+                      e.target.value = '';
+                    }}
+                  />
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => photosInputRef.current?.click()}
+                      disabled={photoFiles.length >= MAX_PHOTO_FILES}
+                      className="inline-flex items-center gap-2 rounded-xl border border-dashed border-orange-500/50 bg-slate-800/40 px-4 py-2.5 text-sm font-medium text-orange-200 transition hover:border-orange-400 hover:bg-orange-500/10 disabled:pointer-events-none disabled:opacity-50"
+                    >
+                      <ImagePlus className="h-4 w-4 shrink-0" aria-hidden />
+                      {lang === LANGUAGES.RU ? 'Добавить фото' : 'Dodaj zdjęcia'}
+                    </button>
+                    <span className="text-[11px] text-gray-500">
+                      {photoFiles.length}/{MAX_PHOTO_FILES}
+                    </span>
+                  </div>
+                  {photoFiles.length > 0 && (
+                    <ul className="flex flex-wrap gap-2 pt-1">
+                      {photoFiles.map((f, idx) => (
+                        <li
+                          key={`${f.name}-${idx}`}
+                          className="flex items-center gap-1 rounded-lg border border-slate-600 bg-slate-800/80 py-1 pl-2 pr-1 text-xs text-gray-200"
+                        >
+                          <span className="max-w-[140px] truncate">{f.name}</span>
+                          <button
+                            type="button"
+                            onClick={() => setPhotoFiles((prev) => prev.filter((_, i) => i !== idx))}
+                            className="rounded-md p-1 text-gray-400 hover:bg-slate-700 hover:text-white"
+                            aria-label={t.photoRemove}
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {photoError && <p className="text-xs text-red-400">{photoError}</p>}
+                </div>
+
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-gray-300">
                     {t.messageLabel}

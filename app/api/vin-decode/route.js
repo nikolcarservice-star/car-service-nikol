@@ -1,14 +1,18 @@
-/**
- * Декодирование VIN: db.vin (Европа) + fallback NHTSA (США/мир).
- * GET /api/vin-decode?vin=WBADT43452G123456
- */
+import { NextResponse } from 'next/server';
 
+/**
+ * GET /api/vin-decode?vin=... — db.vin + fallback NHTSA
+ */
 const DBVIN_URL = 'https://db.vin/api/v1/vin';
 const NHTSA_URL = 'https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+};
+
 async function decodeDbVin(vin) {
   const response = await fetch(`${DBVIN_URL}/${encodeURIComponent(vin)}`, {
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json' },
   });
   if (!response.ok) return null;
   const data = await response.json();
@@ -21,13 +25,13 @@ async function decodeDbVin(vin) {
     fuelType: data.fuelType || '',
     bodyType: data.bodyType || '',
     version: data.version || '',
-    registrationCountry: data.registrationCountry || ''
+    registrationCountry: data.registrationCountry || '',
   };
 }
 
 async function decodeNhtsa(vin) {
   const response = await fetch(`${NHTSA_URL}/${encodeURIComponent(vin)}?format=json`, {
-    headers: { Accept: 'application/json', 'User-Agent': 'CarServiceNikol/1.0' }
+    headers: { Accept: 'application/json', 'User-Agent': 'CarServiceNikol/1.0' },
   });
   if (!response.ok) return null;
   const json = await response.json();
@@ -35,27 +39,26 @@ async function decodeNhtsa(vin) {
   if (!r || (r.ErrorCode != null && String(r.ErrorCode) !== '0')) return null;
   const year = r.ModelYear ? parseInt(r.ModelYear, 10) : null;
   return {
-    vin: vin,
+    vin,
     brand: r.Make || '',
     model: r.Model || '',
     year: Number.isFinite(year) ? year : null,
     fuelType: r.FuelTypePrimary || r.FuelTypePrimary1 || '',
     bodyType: r.BodyClass || '',
     version: r.Series || r.Trim || '',
-    registrationCountry: r.PlantCountry || ''
+    registrationCountry: r.PlantCountry || '',
   };
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(405).json({ ok: false, error: 'Method not allowed' });
-  }
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const vin = (searchParams.get('vin') || '').trim().toUpperCase().replace(/\s/g, '');
 
-  const vin = (req.query?.vin || '').trim().toUpperCase().replace(/\s/g, '');
   if (!vin || vin.length !== 17) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(400).json({ ok: false, error: 'VIN must be 17 characters' });
+    return NextResponse.json(
+      { ok: false, error: 'VIN must be 17 characters' },
+      { status: 400, headers: corsHeaders }
+    );
   }
 
   try {
@@ -64,28 +67,30 @@ export default async function handler(req, res) {
       result = await decodeNhtsa(vin);
     }
     if (!result || (!result.brand && !result.model)) {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      return res.status(200).json({
-        ok: true,
-        vin,
-        brand: '',
-        model: '',
-        year: null,
-        fuelType: '',
-        bodyType: '',
-        version: '',
-        registrationCountry: '',
-        notFound: true
-      });
+      return NextResponse.json(
+        {
+          ok: true,
+          vin,
+          brand: '',
+          model: '',
+          year: null,
+          fuelType: '',
+          bodyType: '',
+          version: '',
+          registrationCountry: '',
+          notFound: true,
+        },
+        { headers: corsHeaders }
+      );
     }
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(200).json({
-      ok: true,
-      notFound: false,
-      ...result
-    });
+    return NextResponse.json(
+      { ok: true, notFound: false, ...result },
+      { headers: corsHeaders }
+    );
   } catch (e) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(500).json({ ok: false, error: e.message || 'Decode failed' });
+    return NextResponse.json(
+      { ok: false, error: e.message || 'Decode failed' },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }

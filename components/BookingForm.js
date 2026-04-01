@@ -60,18 +60,27 @@ export default function BookingForm({ lang, embed }) {
   const searchParams = useSearchParams();
   const t = translations[lang].booking;
   const todayIso = useMemo(() => localISODate(), []);
+  /** Tylko najbliższe terminy weekendowe (sob.–niedz.) — zgodnie z profilem serwisu. */
   const quickDates = useMemo(() => {
     const out = [];
     const loc = lang === LANGUAGES.RU ? 'ru-RU' : 'pl-PL';
     const fmt = new Intl.DateTimeFormat(loc, { weekday: 'short', day: 'numeric', month: 'short' });
-    for (let i = 0; i < 7; i++) {
-      const d = new Date();
-      d.setHours(12, 0, 0, 0);
-      d.setDate(d.getDate() + i);
+    const start = new Date();
+    start.setHours(12, 0, 0, 0);
+    const todayIso = localISODate(start);
+    const maxWeekendSlots = 8;
+    const maxDaysScan = 70;
+
+    for (let dayOffset = 0; dayOffset < maxDaysScan && out.length < maxWeekendSlots; dayOffset++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + dayOffset);
+      const wd = d.getDay();
+      if (wd !== 0 && wd !== 6) continue;
       const iso = localISODate(d);
       let label = fmt.format(d);
-      if (i === 0) label = lang === LANGUAGES.RU ? 'Сегодня' : 'Dziś';
-      else if (i === 1) label = lang === LANGUAGES.RU ? 'Завтра' : 'Jutro';
+      if (iso === todayIso) {
+        label = lang === LANGUAGES.RU ? 'Сегодня' : 'Dziś';
+      }
       out.push({ iso, label });
     }
     return out;
@@ -213,6 +222,7 @@ export default function BookingForm({ lang, embed }) {
 
   const formContent = (
     <motion.form
+            lang={lang === LANGUAGES.RU ? 'ru' : 'pl'}
             onSubmit={handleSubmit(onSubmit)}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

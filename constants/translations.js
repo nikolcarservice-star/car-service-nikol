@@ -183,9 +183,9 @@ export const translations = {
       carLabel: 'Marka i model samochodu',
       serviceLabel: 'Rodzaj usługi',
       dateLabel: 'Preferowana data',
-      dateQuickHint: 'Szybki wybór (możesz też wybrać datę w kalendarzu):',
+      dateQuickHint: 'Szybki wybór weekendów (sob.–niedz.); inny dzień ustawisz w kalendarzu:',
       calendarHelp:
-        'Kalendarz poniżej — proponowana data jest orientacyjna; dokładny termin potwierdzimy telefonicznie.',
+        'Kalendarz poniżej — możesz wybrać dowolny dzień; proponowana data jest orientacyjna, dokładny termin potwierdzimy telefonicznie.',
       timePreferenceLabel: 'Preferowany przedział godzin (orientacyjnie)',
       timeAny: 'Dowolna pora (w godzinach otwarcia)',
       timeMorning: 'Rano 8:00–12:00',
@@ -437,9 +437,9 @@ export const translations = {
       carLabel: 'Марка и модель автомобиля',
       serviceLabel: 'Тип услуги',
       dateLabel: 'Предпочтительная дата',
-      dateQuickHint: 'Быстрый выбор (или укажите дату в календаре):',
+      dateQuickHint: 'Быстрый выбор выходных (сб–вс); другой день — в календаре:',
       calendarHelp:
-        'Дата ориентировочная; точное время согласуем по телефону после заявки.',
+        'В календаре можно выбрать любой день; дата ориентировочная, точное время согласуем по телефону после заявки.',
       timePreferenceLabel: 'Предпочтительное время визита (ориентировочно)',
       timeAny: 'Любое время (в часы работы)',
       timeMorning: 'Утро 8:00–12:00',

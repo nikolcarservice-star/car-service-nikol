@@ -65,5 +65,12 @@ const googleReviews = [
   },
 ];
 
+export function getGoogleReviewsStats() {
+  const n = googleReviews.length;
+  if (n === 0) return { count: 0, average: 0 };
+  const sum = googleReviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+  return { count: n, average: Math.round((sum / n) * 10) / 10 };
+}
+
 export default googleReviews;
 

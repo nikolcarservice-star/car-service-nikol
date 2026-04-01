@@ -3,13 +3,47 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CalendarDays, Check, Clock, PhoneCall } from 'lucide-react';
+import { CalendarDays, Check, Clock, ExternalLink, PhoneCall, Star } from 'lucide-react';
 import { PHONE_DISPLAY } from '../constants/translations';
+import { GOOGLE_BUSINESS_REVIEWS_URL } from '../constants/googleBusiness';
+import { getGoogleReviewsStats } from '../data/googleReviews';
+
+function formatGoogleReviewsCount(n, lang) {
+  if (lang === 'ru') {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return `${n} отзыв в Google`;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${n} отзыва в Google`;
+    return `${n} отзывов в Google`;
+  }
+  if (n === 1) return `${n} opinia w Google`;
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${n} opinie w Google`;
+  return `${n} opinii w Google`;
+}
 
 export default function Hero({ t }) {
   const pathname = usePathname() || '/pl';
   const lang = (pathname.split('/').filter(Boolean)[0] === 'ru') ? 'ru' : 'pl';
   const hero = t.hero;
+  const reviewsT = t.reviews || {};
+  const googleStats = getGoogleReviewsStats();
+  const ratingLabel =
+    googleStats.count > 0
+      ? formatGoogleReviewsCount(googleStats.count, lang)
+      : lang === 'ru'
+        ? 'Отзывы Google'
+        : 'Opinie Google';
+  const ratingDisplay =
+    googleStats.count > 0
+      ? googleStats.average.toLocaleString(lang === 'ru' ? 'ru-RU' : 'pl-PL', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        })
+      : '—';
+  const filledStars =
+    googleStats.count > 0 ? Math.min(5, Math.max(0, Math.round(googleStats.average))) : 0;
 
   const handleBookClick = () => {
     if (typeof document === 'undefined') return;
@@ -41,14 +75,19 @@ export default function Hero({ t }) {
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="flex-1 space-y-6 px-0 sm:px-0"
         >
-          {/* USP — główna przewaga: otwarte w niedzielę */}
-          <div className="inline-flex items-center gap-3 rounded-2xl border-2 border-emerald-400/60 bg-emerald-500/20 px-5 py-3 shadow-lg shadow-emerald-500/20">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/30">
-              <Clock className="h-6 w-6 text-emerald-300" />
+          {/* USP — jedyny czynny serwis w niedzielę w okolicy */}
+          <div className="inline-flex max-w-xl items-start gap-3 rounded-2xl border-2 border-amber-400/55 bg-gradient-to-br from-amber-500/25 via-amber-600/15 to-orange-600/10 px-4 py-3 shadow-lg shadow-amber-900/30 sm:gap-3.5 sm:px-5 sm:py-3.5">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/35 ring-2 ring-amber-400/40">
+              <Clock className="h-6 w-6 text-amber-200" aria-hidden />
             </span>
-            <span className="text-base font-bold uppercase tracking-wide text-emerald-100 sm:text-lg">
-              {hero.sundayBadge}
-            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-amber-200/90 sm:text-xs">
+                {hero.sundayBadge}
+              </p>
+              <p className="mt-1 text-sm font-bold leading-snug text-white sm:text-base">
+                {hero.sundayUniqueBadge ?? hero.sundayBadge}
+              </p>
+            </div>
           </div>
 
           <h1 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -76,6 +115,47 @@ export default function Hero({ t }) {
               <span>{hero.ctaSecondary}</span>
             </Link>
           </div>
+
+          {/* Social proof — ocena Google (dane z lokalnej listy opinii) */}
+          {googleStats.count > 0 && (
+            <a
+              href={GOOGLE_BUSINESS_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/rating flex w-full max-w-xl flex-col gap-3 rounded-2xl border border-white/20 bg-black/35 px-4 py-3 shadow-xl backdrop-blur-md transition hover:border-amber-400/45 hover:bg-black/45 sm:flex-row sm:items-center sm:justify-between sm:py-3.5"
+              aria-label={`${hero.googleRatingLead ?? ''}. ${ratingLabel}, ${ratingDisplay}`}
+            >
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                <div className="flex items-center gap-0.5" aria-hidden>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem] ${
+                        i < filledStars
+                          ? 'fill-amber-400 text-amber-400 drop-shadow-sm'
+                          : 'fill-white/10 text-white/15'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-200/95">
+                    {hero.googleRatingLead}
+                  </p>
+                  <p className="text-lg font-bold tabular-nums text-white sm:text-xl">
+                    {ratingDisplay}
+                    <span className="ml-2 text-sm font-normal text-gray-300 sm:text-base">
+                      {ratingLabel}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-amber-200 transition group-hover/rating:text-amber-100 sm:shrink-0">
+                <span>{reviewsT.viewAllReviews ?? (lang === 'ru' ? 'Отзывы' : 'Zobacz opinie')}</span>
+                <ExternalLink className="h-4 w-4 opacity-80" aria-hidden />
+              </span>
+            </a>
+          )}
 
           {hero.trustSignals?.length > 0 && (
             <ul className="flex flex-col gap-2 text-xs text-gray-200 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2 sm:text-sm" aria-label="Trust signals">

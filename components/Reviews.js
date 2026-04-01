@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote, Star } from 'lucide-react';
 import googleReviews from '../data/googleReviews';
+import { GOOGLE_BUSINESS_REVIEWS_URL } from '../constants/googleBusiness';
 import { getTranslations } from '../constants/translations';
 
 export default function Reviews({ lang = 'pl' }) {
@@ -208,7 +209,7 @@ export default function Reviews({ lang = 'pl' }) {
 
             {/* CTA Google */}
             <a
-              href="https://www.google.com/maps/place/Car+Service+Nikol+%7C+Serwis+samochodowy/@52.5908447,16.5381048,148m/data=!3m1!1e3!4m6!3m5!1s0x47041785835568fb:0xfad9f08b31a08d7!8m2!3d52.5908375!4d16.5384497!16s%2Fg%2F11wv2f39s2?entry=ttu"
+              href={GOOGLE_BUSINESS_REVIEWS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-amber-400/50 bg-gradient-to-r from-amber-500/20 to-amber-600/10 px-6 py-3.5 text-sm font-semibold text-amber-200 shadow-lg shadow-amber-500/10 transition hover:border-amber-400 hover:from-amber-500/30 hover:to-amber-600/20 hover:text-amber-100"

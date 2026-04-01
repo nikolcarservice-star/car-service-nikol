@@ -38,6 +38,9 @@ export const translations = {
       ctaPrimary: 'Umów wizytę online',
       ctaSecondary: 'Zadzwoń teraz',
       sundayBadge: 'Otwarte w niedziele!',
+      sundayUniqueBadge:
+        'Jedyny czynny serwis w okolicy w niedziele',
+      googleRatingLead: 'Ocena klientów w Google',
       scheduleTitle: 'Weekendowe godziny otwarcia',
       saturday: 'SOBOTA: 08:00 – 18:00',
       sunday: 'NIEDZIELA: 10:00 – 16:00',
@@ -255,6 +258,9 @@ export const translations = {
       ctaPrimary: 'Записаться онлайн',
       ctaSecondary: 'Позвонить сейчас',
       sundayBadge: 'Работаем по воскресеньям!',
+      sundayUniqueBadge:
+        'Единственный работающий сервис в округе по воскресеньям',
+      googleRatingLead: 'Оценка клиентов в Google',
       scheduleTitle: 'График работы по выходным',
       saturday: 'СУББОТА: 08:00 – 18:00',
       sunday: 'ВОСКРЕСЕНЬЕ: 10:00 – 16:00',

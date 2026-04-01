@@ -94,6 +94,18 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
             {nav.about ?? 'O nas'}
           </Link>
           <Link
+            href={buildPath(currentLang, 'gallery')}
+            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+          >
+            {nav.gallery ?? 'Galeria'}
+          </Link>
+          <Link
+            href={buildPath(currentLang, 'faq')}
+            className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
+          >
+            {nav.faq ?? 'FAQ'}
+          </Link>
+          <Link
             href={buildPath(currentLang, 'contact')}
             className="rounded-lg px-3 py-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400"
           >
@@ -233,6 +245,20 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
                 className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
               >
                 {nav.about ?? 'O nas'}
+              </Link>
+              <Link
+                href={buildPath(currentLang, 'gallery')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.gallery ?? 'Galeria'}
+              </Link>
+              <Link
+                href={buildPath(currentLang, 'faq')}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+              >
+                {nav.faq ?? 'FAQ'}
               </Link>
               <Link
                 href={buildPath(currentLang, 'contact')}

@@ -24,6 +24,10 @@ export default function sitemap() {
     { path: '/ru/privacy', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/pl/blog', priority: 0.7, changeFrequency: 'weekly' },
     { path: '/ru/blog', priority: 0.7, changeFrequency: 'weekly' },
+    { path: '/pl/gallery', priority: 0.65, changeFrequency: 'weekly' },
+    { path: '/ru/gallery', priority: 0.65, changeFrequency: 'weekly' },
+    { path: '/pl/faq', priority: 0.75, changeFrequency: 'monthly' },
+    { path: '/ru/faq', priority: 0.75, changeFrequency: 'monthly' },
   ];
 
   const entries = routes.map(({ path, priority, changeFrequency }) => ({

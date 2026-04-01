@@ -24,6 +24,8 @@ export const translations = {
       contact: 'Kontakt',
       cennik: 'Cennik',
       blog: 'Blog',
+      gallery: 'Galeria',
+      faq: 'FAQ',
       phoneCta: 'Zadzwoń',
       bookCta: 'Umów wizytę',
       languageToggleLabel: 'Wybierz język',
@@ -241,6 +243,15 @@ export const translations = {
       ctaBook: 'Umów wizytę',
       close: 'Zamknij',
     },
+    galleryPage: {
+      intro:
+        'Zdjęcia z naszego warsztatu w Jastrowo — prace serwisowe, stanowiska i sprzęt. Galerię regularnie uzupełniamy o nowe realizacje (także dla klientów z Szamotuł i okolic).',
+      photoAltPrefix: 'Galeria Car Service Nikol –',
+    },
+    faqPage: {
+      intro:
+        'Odpowiedzi na typowe pytania — wiele z nich pada przy pierwszym kontakcie telefonicznym. Jeśli nie znalazłeś odpowiedzi, zadzwoń lub umów wizytę online.',
+    },
     reviews: {
       title: 'Opinia Google',
       subtitle: 'Co mówią o nas klienci',
@@ -266,6 +277,8 @@ export const translations = {
       contact: 'Контакт',
       cennik: 'Прайс-лист',
       blog: 'Блог',
+      gallery: 'Галерея',
+      faq: 'Вопросы и ответы',
       phoneCta: 'Позвонить',
       bookCta: 'Записаться',
       languageToggleLabel: 'Выбор языка',
@@ -483,6 +496,15 @@ export const translations = {
       ctaCall: 'Позвонить',
       ctaBook: 'Записаться',
       close: 'Закрыть',
+    },
+    galleryPage: {
+      intro:
+        'Фото из нашего сервиса в Jastrowo — работы, подъёмники и оборудование. Регулярно добавляем новые снимки (в том числе для клиентов из Шамотул и окрестностей).',
+      photoAltPrefix: 'Галерея Car Service Nikol –',
+    },
+    faqPage: {
+      intro:
+        'Ответы на типичные вопросы — многие звучат при первом звонке. Если не нашли ответ, позвоните или запишитесь онлайн.',
     },
     reviews: {
       title: 'Отзывы Google',

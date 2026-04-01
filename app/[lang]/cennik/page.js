@@ -11,19 +11,49 @@ export function generateMetadata({ params }) {
   const canonical = `/${lang}/cennik`;
   const languages = { pl: `${SITE_URL}/pl/cennik`, ru: `${SITE_URL}/ru/cennik` };
 
+  const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
+
   if (lang === 'ru') {
+    const title = 'Прайс-лист – Car Service Nikol Jastrowo | Цены на услуги';
+    const description =
+      'Цены на услуги автосервиса в Jastrowo и близлежащих местностях. Масло, тормоза, диагностика, шиномонтаж, ключи. Ориентировочные цены.';
     return {
-      title: 'Прайс-лист – Car Service Nikol Jastrowo | Цены на услуги',
-      description:
-        'Цены на услуги автосервиса в Jastrowo и близлежащих местностях. Масло, тормоза, диагностика, шиномонтаж, ключи. Ориентировочные цены.',
+      title,
+      description,
+      keywords: 'прайс автосервис Jastrowo, цены ремонт авто, замена масла, тормоза, диагностика, Car Service Nikol',
       alternates: { canonical, languages },
+      openGraph: {
+        type: 'website',
+        locale: 'ru_RU',
+        alternateLocale: 'pl_PL',
+        url: `${SITE_URL}${canonical}`,
+        siteName: 'Car Service Nikol',
+        title,
+        description,
+        images: [{ ...ogImage, alt: 'Прайс-лист Car Service Nikol – Jastrowo' }],
+      },
+      twitter: { card: 'summary_large_image', title, description },
     };
   }
+  const title = 'Cennik usług – Car Service Nikol Jastrowo | Ceny orientacyjne';
+  const description =
+    'Cennik usług serwisu samochodowego w Jastrowo i okolicznych miejscowościach. Olej, hamulce, diagnostyka, opony, klucze. Ceny orientacyjne.';
   return {
-    title: 'Cennik usług – Car Service Nikol Jastrowo | Ceny orientacyjne',
-    description:
-      'Cennik usług serwisu samochodowego w Jastrowo i okolicznych miejscowościach. Olej, hamulce, diagnostyka, opony, klucze. Ceny orientacyjne.',
+    title,
+    description,
+    keywords: 'cennik serwis Jastrowo, ceny naprawa auta, wymiana oleju, hamulce, diagnostyka, Car Service Nikol',
     alternates: { canonical, languages },
+    openGraph: {
+      type: 'website',
+      locale: 'pl_PL',
+      alternateLocale: 'ru_RU',
+      url: `${SITE_URL}${canonical}`,
+      siteName: 'Car Service Nikol',
+      title,
+      description,
+      images: [{ ...ogImage, alt: 'Cennik Car Service Nikol – Jastrowo' }],
+    },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 

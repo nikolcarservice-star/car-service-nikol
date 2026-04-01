@@ -79,6 +79,11 @@ export default function Services({ t, lang = 'pl' }) {
             const imageUrl = imageMap[service.key];
             const isMobileService = service.key === 'mobileService';
 
+            const detailHref =
+              servicesData[service.key]?.slug != null
+                ? `/${lang}/services/${servicesData[service.key].slug}`
+                : null;
+
             return (
               <motion.article
                 key={service.key}
@@ -86,7 +91,7 @@ export default function Services({ t, lang = 'pl' }) {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-xl transition hover:-translate-y-1 hover:border-orange-500/70 hover:shadow-glow"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-xl transition hover:-translate-y-1 hover:border-orange-500/70 hover:shadow-glow"
               >
                 {imageUrl && (
                   <div className="relative h-48 w-full overflow-hidden border-b border-white/10 bg-slate-900/60">
@@ -113,7 +118,7 @@ export default function Services({ t, lang = 'pl' }) {
                   </div>
                 )}
 
-                <div className="p-4">
+                <div className="flex flex-1 flex-col p-4">
                   <div className="flex items-start gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/20 text-orange-300">
                       <Icon className="h-5 w-5" />
@@ -127,24 +132,26 @@ export default function Services({ t, lang = 'pl' }) {
                       </h3>
                     </div>
                   </div>
-                  <p className="mt-3 text-xs leading-relaxed text-gray-300 sm:text-sm">
+                  <p className="mt-3 flex-1 text-xs leading-relaxed text-gray-300 sm:text-sm">
                     {service.description}
                   </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {servicesData[service.key] && (
+                  <div className="mt-auto flex flex-col gap-2 pt-4 sm:flex-row sm:flex-wrap">
+                    {detailHref ? (
                       <Link
-                        href={`/${lang}/services/${servicesData[service.key].slug}`}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-3 py-2 text-xs font-semibold text-white shadow-md transition hover:from-orange-400 hover:to-amber-400 sm:px-4 sm:py-2.5 sm:text-sm"
+                        href={detailHref}
+                        className="inline-flex min-h-[2.75rem] flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-3 py-2 text-xs font-semibold text-white shadow-md transition hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/25 sm:min-h-[2.875rem] sm:flex-1 sm:px-4 sm:text-sm lg:flex-none lg:justify-center"
                       >
-                        <span>{servicesPage?.serviceDetails ?? 'Zobacz szczegóły'}</span>
-                        <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        <span className="text-center leading-snug">
+                          {servicesPage?.serviceDetails ?? 'Zobacz szczegóły'}
+                        </span>
+                        <ArrowRight className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" aria-hidden />
                       </Link>
-                    )}
+                    ) : null}
                     <Link
                       href={`/${lang}#${t.bookingId || 'booking'}`}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-white/5 px-3 py-2 text-xs font-semibold text-gray-100 backdrop-blur-sm transition hover:border-orange-400/60 hover:bg-orange-500/20 sm:px-4 sm:py-2.5 sm:text-sm"
+                      className="inline-flex min-h-[2.75rem] flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/40 bg-white/5 px-3 py-2 text-xs font-semibold text-gray-100 backdrop-blur-sm transition hover:border-orange-400/60 hover:bg-orange-500/20 sm:min-h-[2.875rem] sm:flex-1 sm:px-4 sm:text-sm lg:flex-none lg:justify-center"
                     >
-                      <CalendarDays className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <CalendarDays className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" aria-hidden />
                       <span>{t.navigation?.bookCta ?? 'Umów wizytę'}</span>
                     </Link>
                   </div>

@@ -1,6 +1,15 @@
 import { LANGUAGES, normalizeLang } from '../constants/translations';
 
-export const SERVICE_KEYS = ['suspension', 'oil', 'brakes', 'diagnostics', 'timing'];
+export const SERVICE_KEYS = [
+  'suspension',
+  'oil',
+  'brakes',
+  'diagnostics',
+  'timing',
+  'tires',
+  'mobileService',
+  'keys',
+];
 
 export const servicesData = {
   suspension: {
@@ -221,6 +230,141 @@ export const servicesData = {
       prices: [
         { label: 'Замена ремня ГРМ (4-цилиндровый двигатель)', value: 'от 900 zł работа' },
         { label: 'Замена цепи ГРМ', value: 'индивидуальный расчёт' },
+      ],
+    },
+  },
+  tires: {
+    slug: 'serwis-opon-jastrowo',
+    pl: {
+      name: 'Serwis opon',
+      shortName: 'Opony',
+      h1: 'Wymiana opon i wyważanie Jastrowo - Car Service Nikol',
+      seoTitle: 'Serwis opon, wymiana i wyważanie kół w Jastrowo - Car Service Nikol',
+      seoDescription:
+        'Profesjonalna wymiana opon sezonowa, wyważanie kół i naprawa przebić w Jastrowo. Szybko, dokładnie, bez uszkodzenia felg.',
+      intro:
+        'Prawidłowo zamontowane i wyważone koła to komfort jazdy i bezpieczeństwo. W Car Service Nikol w Jastrowo wykonujemy wymianę opon letnich i zimowych, wyważanie na nowoczesnym sprzęcie oraz drobne naprawy – np. po kolizji z krawężnikiem.',
+      process: [
+        'Sprawdzamy stan opon (bieżnik, wiek, pęknięcia), felg aluminiowych i stalowych oraz rekomendujemy dalsze kroki.',
+        'Demontujemy koła, przenosimy czujniki TPMS ostrożnie (gdy występują), montujemy opony zgodnie z kierunkiem bieżnika lub stronami „inside/outside”.',
+        'Wykonujemy wyważanie statyczne i dynamiczne, dokręcamy koła dynamometrycznie według momentu podanego przez producenta pojazdu.',
+      ],
+      pricesIntro: 'Przykładowe ceny usług oponiarskich:',
+      prices: [
+        { label: 'Wymiana kompletu opon (4 koła, osobowe)', value: 'od 120 zł' },
+        { label: 'Wyważanie koła', value: 'od 25 zł / szt.' },
+        { label: 'Naprawa przebicia (łata, standard)', value: 'od 60 zł' },
+      ],
+    },
+    ru: {
+      name: 'Шиномонтаж',
+      shortName: 'Шины',
+      h1: 'Шиномонтаж и балансировка Jastrowo - Car Service Nikol',
+      seoTitle: 'Шиномонтаж и балансировка колёс в Jastrowo - Car Service Nikol',
+      seoDescription:
+        'Сезонная замена шин, балансировка и ремонт проколов в Jastrowo. Аккуратная работа с дисками и датчиками давления.',
+      intro:
+        'Качественный шиномонтаж продлевает срок службы шин и улучшает управляемость. Мы меняем летнюю и зимнюю резину, балансируем колёса и при необходимости устраняем проколы.',
+      process: [
+        'Осматриваем протоктор, возраст шин и диски, при необходимости рекомендуем замену или ремонт.',
+        'Снимаем колёса, аккуратно работаем с датчиками TPMS, монтируем шины с учётом направления рисунка и маркировки сторон.',
+        'Выполняем балансировку, затягиваем колёса динамометрическим ключом с нужным моментом.',
+      ],
+      pricesIntro: 'Примеры цен на шиномонтаж:',
+      prices: [
+        { label: 'Замена комплекта шин (4 колеса, легковые)', value: 'от 120 zł' },
+        { label: 'Балансировка колеса', value: 'от 25 zł / шт.' },
+        { label: 'Ремонт прокола (заплатка)', value: 'от 60 zł' },
+      ],
+    },
+  },
+  mobileService: {
+    slug: 'serwis-mobilny-jastrowo',
+    pl: {
+      name: 'Serwis mobilny',
+      shortName: 'Mobilny',
+      h1: 'Serwis mobilny i pomoc drogowa Jastrowo - Car Service Nikol',
+      seoTitle: 'Serwis mobilny, dojazd do klienta w Jastrowo i okolicy - Car Service Nikol',
+      seoDescription:
+        'Awaryjne odpalanie, wymiana koła zapasowego, drobne naprawy z dojazdem do klienta w rejonie Jastrowo. Zadzwoń i ustal zakres.',
+      intro:
+        'Gdy nie możesz podjechać do warsztatu lub potrzebujesz szybkiej pomocy w terenie – oferujemy usługi mobilne w uzgodnionym zasięgu od Jastrowo. Zakres ustalamy telefonicznie: od boostera akumulatora po wymianę koła po stłuczce.',
+      process: [
+        'Dzwonisz i opisujesz sytuację (miejsce, marka auta, objawy). Podajemy orientacyjny koszt i czas dojazdu.',
+        'Na miejscu wykonujemy bezpieczną diagnostykę „pierwszego kontaktu” i proponujemy najprostsze skuteczne rozwiązanie.',
+        'Jeśli naprawa wymaga podnośnika lub części – organizujemy odholowanie lub termin w warsztacie.',
+      ],
+      pricesIntro: 'Przykładowe stawki (zależnie od odległości i godziny):',
+      prices: [
+        { label: 'Dojazd w okolicy Jastrowo (w ciągu dnia)', value: 'od 80 zł' },
+        { label: 'Uruchomienie auta boosterem / kablami', value: 'od 80 zł' },
+        { label: 'Wymiana koła na zapas (w razie przygotowanego koła)', value: 'od 60 zł' },
+      ],
+    },
+    ru: {
+      name: 'Выездной сервис',
+      shortName: 'Выезд',
+      h1: 'Мобильный сервис и помощь на дороге Jastrowo - Car Service Nikol',
+      seoTitle: 'Выезд мастера к клиенту в Jastrowo и окрестностях - Car Service Nikol',
+      seoDescription:
+        'Аварийный запуск, замена колеса на запаску, мелкий ремонт с выездом в районе Jastrowo. Уточните детали по телефону.',
+      intro:
+        'Если вы не можете доехать до сервиса или нужна срочная помощь — по предварительной договорённости выезжаем к вам в согласованном радиусе от Jastrowo. Точные условия и цена зависят от задачи и расстояния.',
+      process: [
+        'Вы звоните и описываете ситуацию. Мы называем ориентировочную стоимость и время прибытия.',
+        'На месте выполняем безопасную первичную диагностику и выбираем оптимальный вариант решения.',
+        'При необходимости полноценного ремонта согласуем эвакуацию или визит в мастерскую.',
+      ],
+      pricesIntro: 'Примерные цены (зависят от расстояния и времени):',
+      prices: [
+        { label: 'Выезд в районе Jastrowo (днём)', value: 'от 80 zł' },
+        { label: 'Запуск автомобиля от внешнего источника', value: 'от 80 zł' },
+        { label: 'Замена колеса на запаску', value: 'от 60 zł' },
+      ],
+    },
+  },
+  keys: {
+    slug: 'programowanie-kluczy-jastrowo',
+    pl: {
+      name: 'Kluczyki samochodowe',
+      shortName: 'Klucze',
+      h1: 'Programowanie i dorabianie kluczy Jastrowo - Car Service Nikol',
+      seoTitle: 'Programowanie kluczyków samochodowych w Jastrowo - Car Service Nikol',
+      seoDescription:
+        'Dorabianie kluczy, programowanie pilotów i transponderów, adaptacja w sterowniku. Zapytaj o swoją markę i model w Car Service Nikol.',
+      intro:
+        'Zgubiony lub uszkodzony kluczyk to częsty problem. Wielu pojazdom możemy dorobić nowy klucz z immobilizerem i pilotem albo zsynchronizować istniejący zestaw. Zakres zależy od producenta, roku i dostępności kodów – zawsze uczciwie mówimy, co da się zrobić lokalnie.',
+      process: [
+        'Potrzebujemy danych pojazdu (VIN, rocznik, typ klucza) oraz dowodu rejestracyjnego – usługa wyłącznie dla właściciela auta.',
+        'Sprawdzamy, czy mamy odpowiednie oprogramowanie i blanki pod Twoją markę; w razie potrzeby zamawiamy części.',
+        'Programujemy transponder / pilot, uczymy klucz w sterowniku i testujemy start silnika oraz zdalne funkcje.',
+      ],
+      pricesIntro: 'Ceny są mocno zależne od marki – przykłady orientacyjne:',
+      prices: [
+        { label: 'Programowanie dodatkowego klucza (popularne modele)', value: 'od 350 zł' },
+        { label: 'Dorobienie klucza z immobilizerem (wycena po VIN)', value: 'indywidualnie' },
+        { label: 'Adaptacja / synchronizacja istniejącego klucza', value: 'od 200 zł' },
+      ],
+    },
+    ru: {
+      name: 'Автомобильные ключи',
+      shortName: 'Ключи',
+      h1: 'Программирование ключей Jastrowo - Car Service Nikol',
+      seoTitle: 'Программирование и изготовление ключей авто в Jastrowo - Car Service Nikol',
+      seoDescription:
+        'Дубликат ключа, прописывание чипа и брелока, привязка к блоку управления. Уточните марку и год в Car Service Nikol.',
+      intro:
+        'Потеря или поломка ключа не должна останавливать вас надолго. Для многих марок мы можем изготовить и прописать новый ключ или восстановить связь с иммобилайзером. Возможности зависят от автомобиля — заранее проконсультируем по телефону.',
+      process: [
+        'Нужны данные авто (VIN, год) и документы, подтверждающие право собственности.',
+        'Проверяем наличие софта и заготовок; при необходимости заказываем комплектующие.',
+        'Программируем чип и пульт, привязываем к блоку, проверяем запуск и работу дистанционных функций.',
+      ],
+      pricesIntro: 'Стоимость сильно зависит от марки — ориентиры:',
+      prices: [
+        { label: 'Программирование дополнительного ключа (распространённые модели)', value: 'от 350 zł' },
+        { label: 'Изготовление ключа с чипом (расчёт по VIN)', value: 'индивидуально' },
+        { label: 'Синхронизация существующего ключа', value: 'от 200 zł' },
       ],
     },
   },

@@ -275,7 +275,7 @@ export const translations = {
       items: [
         {
           key: 'fast',
-          title: 'Бырое обслуживание',
+          title: 'Быстрое обслуживание',
           description: 'Большинство работ выполняем в тот же или на следующий день.',
         },
         {

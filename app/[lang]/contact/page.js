@@ -18,20 +18,50 @@ export function generateMetadata({ params }) {
   const canonical = `/${lang}/contact`;
   const languages = { pl: `${SITE_URL}/pl/contact`, ru: `${SITE_URL}/ru/contact` };
 
+  const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
+
   if (lang === 'ru') {
+    const title = 'Контакты Car Service Nikol – Jastrowo, Шамотулы | Адрес, телефон, запись';
+    const description =
+      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21 Jastrowo, телефон, WhatsApp, Telegram и форма записи. Сервис в Jastrowo и окрестностях Шамотул. Работаем в воскресенье.';
     return {
-      title: 'Контакты Car Service Nikol – Jastrowo, Шамотулы | Адрес, телефон, запись',
-      description:
-        'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21 Jastrowo, телефон, WhatsApp, Telegram и форма записи. Сервис в Jastrowo и окрестностях Шамотул. Работаем в воскресенье.',
+      title,
+      description,
+      keywords: 'контакты Car Service Nikol, адрес Jastrowo, телефон автосервиса, запись в сервис, Шамотулы',
       alternates: { canonical, languages },
+      openGraph: {
+        type: 'website',
+        locale: 'ru_RU',
+        alternateLocale: 'pl_PL',
+        url: `${SITE_URL}${canonical}`,
+        siteName: 'Car Service Nikol',
+        title,
+        description,
+        images: [{ ...ogImage, alt: 'Car Service Nikol – контакты, Jastrowo' }],
+      },
+      twitter: { card: 'summary_large_image', title, description },
     };
   }
 
+  const title = 'Kontakt – Car Service Nikol Jastrowo, Szamotuły | Adres, telefon, umów wizytę';
+  const description =
+    'Skontaktuj się z Car Service Nikol w Jastrowo. Adres ul. Wernisażowa 21, telefon, WhatsApp, Telegram oraz formularz umówienia wizyty. Otwarte w niedziele.';
   return {
-    title: 'Kontakt – Car Service Nikol Jastrowo, Szamotuły | Adres, telefon, umów wizytę',
-    description:
-      'Skontaktuj się z Car Service Nikol w Jastrowo. Adres ul. Wernisażowa 21, telefon, WhatsApp, Telegram oraz formularz umówienia wizyty. Otwarte w niedziele.',
+    title,
+    description,
+    keywords: 'kontakt Car Service Nikol, adres Jastrowo, telefon serwis, umów wizytę, Szamotuły',
     alternates: { canonical, languages },
+    openGraph: {
+      type: 'website',
+      locale: 'pl_PL',
+      alternateLocale: 'ru_RU',
+      url: `${SITE_URL}${canonical}`,
+      siteName: 'Car Service Nikol',
+      title,
+      description,
+      images: [{ ...ogImage, alt: 'Car Service Nikol – kontakt, Jastrowo' }],
+    },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 

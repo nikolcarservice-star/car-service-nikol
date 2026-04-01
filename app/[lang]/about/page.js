@@ -19,20 +19,50 @@ export function generateMetadata({ params }) {
   const canonical = `/${lang}/about`;
   const languages = { pl: `${SITE_URL}/pl/about`, ru: `${SITE_URL}/ru/about` };
 
+  const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
+
   if (lang === 'ru') {
+    const title = 'О компании Car Service Nikol – автосервис Jastrowo, Шамотулы';
+    const description =
+      'Узнайте больше о Car Service Nikol в Jastrowo: опыт, ценности сервиса, работа в воскресенье. Честность, сроки, диагностика. Запишитесь на визит.';
     return {
-      title: 'О компании Car Service Nikol – автосервис Jastrowo, Шамотулы',
-      description:
-        'Узнайте больше о Car Service Nikol в Jastrowo: опыт, ценности сервиса, работа в воскресенье. Честность, сроки, диагностика. Запишитесь на визит.',
+      title,
+      description,
+      keywords: 'о компании Car Service Nikol, автосервис Jastrowo, сервис воскресенье, механик Шамотулы',
       alternates: { canonical, languages },
+      openGraph: {
+        type: 'website',
+        locale: 'ru_RU',
+        alternateLocale: 'pl_PL',
+        url: `${SITE_URL}${canonical}`,
+        siteName: 'Car Service Nikol',
+        title,
+        description,
+        images: [{ ...ogImage, alt: 'О компании Car Service Nikol – Jastrowo' }],
+      },
+      twitter: { card: 'summary_large_image', title, description },
     };
   }
 
+  const title = 'O nas – Car Service Nikol Jastrowo, Szamotuły | Wartości, niedziele';
+  const description =
+    'Poznaj Car Service Nikol w Jastrowo: doświadczenie, wartości serwisu, praca w niedzielę. Uczciwość, terminy, diagnostyka. Umów wizytę w serwisie.';
   return {
-    title: 'O nas – Car Service Nikol Jastrowo, Szamotuły | Wartości, niedziele',
-    description:
-      'Poznaj Car Service Nikol w Jastrowo: doświadczenie, wartości serwisu, praca w niedzielę. Uczciwość, terminy, diagnostyka. Umów wizytę w serwisie.',
+    title,
+    description,
+    keywords: 'o nas Car Service Nikol, serwis Jastrowo, warsztat niedziela, mechanik Szamotuły',
     alternates: { canonical, languages },
+    openGraph: {
+      type: 'website',
+      locale: 'pl_PL',
+      alternateLocale: 'ru_RU',
+      url: `${SITE_URL}${canonical}`,
+      siteName: 'Car Service Nikol',
+      title,
+      description,
+      images: [{ ...ogImage, alt: 'O nas Car Service Nikol – Jastrowo' }],
+    },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 

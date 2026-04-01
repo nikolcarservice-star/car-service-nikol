@@ -1,7 +1,54 @@
 /**
  * Artykuły blogowe – SEO, Jastrowo i Szamotuły
+ * Warto uzupełniać wpisy realnymi zdjęciami „przed/po” z warsztatu – budują zaufanie i sygnał E-E-A-T w Google.
  */
 export const blogPosts = [
+  {
+    slug: 'gdzie-naprawic-auto-w-niedziele-szamotuly',
+    titlePl: 'Gdzie naprawić auto w niedzielę w Szamotułach?',
+    titleRu: 'Где отремонтировать авто в воскресенье в Шамотулах?',
+    excerptPl:
+      'Niedzielny warsztat Szamotuły – gdzie pojechać, gdy większość serwisów ma wolne? Jastrowo (ok. 10 min), Car Service Nikol: naprawy i diagnostyka w niedzielę 10:00–16:00.',
+    excerptRu:
+      'Автосервис в воскресенье Шамотулы — куда поехать, если большинство мастерских закрыто? Jastrowo (~10 минут), Car Service Nikol: ремонт и диагностика по воскресеньям 10:00–16:00.',
+    bodyPl: [
+      'Wpisujesz w Google „gdzie naprawić auto w niedzielę w Szamotułach” i odkrywasz, że większość stacjonarnych warsztatów jest zamknięta – to normalne w Polsce. Przy życiu zawodowym i obowiązkach rodzinnych naprawa w weekend często jest jedyną realną opcją.',
+      'Z Szamotuł do Jastrowa masz krótki, wygodny dojazd (w praktyce ok. 10 minut samochodem). W Car Service Nikol przyjmujemy klientów w niedziele w godz. 10:00–16:00 oraz w soboty 08:00–18:00. Możesz umówić się na diagnostykę komputerową, wymianę oleju i filtrów, serwis hamulców i zawieszenia, wymianę opon czy pilniejsze sprawy – np. pomoc przy rozładowanym akumulatorze, jeśli wcześniej to ustalimy.',
+      'Warto przyjechać z krótkim opisem objawów i historią serwisową; przy naprawach chętnie tłumaczymy, co jest konieczne, a co może poczekać – bez narzucania zbędnych kosztów.',
+      'Z punktu widzenia SEO i zaufania klienta najcenniejsze są materiały pokazujące realną pracę warsztatu: zdjęcia stanu „przed” i „po” naprawie (np. zużyte klocki vs nowy zestaw, stary amortyzator vs montaż nowego) oraz krótki opis wykonanych czynności. Taki content świetnie uzupełnia artykuły i wizytówkę w Google – jeśli wykonamy u Ciebie naprawę i wyrazisz zgodę na publikację, chętnie pokażemy efekt bez danych osobowych, np. tylko z marką modelu auta.',
+      'Zanim wyruszysz – zadzwoń lub napisz (np. WhatsApp): potwierdzimy termin i powiemy, czy w niedzielę zdążymy przygotować typowe części pod Twój model.',
+    ],
+    bodyRu: [
+      'Запрос вроде «где отремонтировать машину в воскресенье в Шамотулах» часто упирается в то, что стационарные сервисы в выходной закрыты – это обычная картина. А поломка не ждёт понедельника.',
+      'Из Шамотул до Jastrowo удобно доехать примерно за 10 минут. В Car Service Nikol мы работаем по воскресеньям с 10:00 до 16:00 и по субботам с 08:00 до 18:00. Можно записаться на компьютерную диагностику, замену масла и фильтров, обслуживание тормозов и подвески, шиномонтаж или срочные вопросы – например помощь с аккумулятором, если заранее договоримся.',
+      'Приезжайте с кратким описанием симптомов и историей ТО; мы честно объясняем, что срочно, а что может подождать.',
+      'Для сайта и Google особенно ценен контент с доказательством экспертизы: фото «до и после» (изношенные колодки и новый комплект, старый амортизатор и установленный), плюс короткий перечень работ. Если после ремонта вы согласны на анонимную публикацию — с удовольствием покажем результат без личных данных.',
+      'Перед выездом позвоните или напишите: подтвердим время и скажем, успеем ли подготовить типовые запчасти под вашу модель.',
+    ],
+  },
+  {
+    slug: 'jak-przygotowac-auto-do-zimy-jastrowo',
+    titlePl: 'Jak przygotować auto do zimy w Jastrowie? Checklista mechanika',
+    titleRu: 'Как подготовить авто к зиме в Jastrowo? Чек-лист механика',
+    excerptPl:
+      'Zima Jastrowo – opony, akumulator, płyn chłodniczy, hamulce, oświetlenie. Praktyczna lista przed mrozem i śniegiem. Car Service Nikol pomoże przed sezonem.',
+    excerptRu:
+      'Зима Jastrowo – шины, аккумулятор, антифриз, тормоза, свет. Практический список перед морозами. Car Service Nikol поможет перед сезоном.',
+    bodyPl: [
+      'Mrozy, śnieg i sole na drodze w naszym regionie szybciej odsłaniają słabe punkty auta: akumulator, opony, układ chłodzenia czy wycieraczki. Dobre przygotowanie przed zimą to mniej stresu na rozgrzewającym się silniku przy −10°C i pewniejsze hamowanie na oblodzonej nawierzchni.',
+      'Opony – jeśli jeździsz na całorocznych, sprawdź głębokość bieżnika i wiek mieszanki; klasycznie zima to osobny komplet (przezbrojenie i wyważenie wykonamy w serwisie). Akumulator – słaby akumulator „trzymał się” latem, a zimą odmawia posłuszeństwa; warto zmierzyć stan pod obciążeniem. Płyn chłodzący – poprawna mieszanka antyzamrozowa i poziom chronią przed korozją i zamarzaniem w układzie.',
+      'Hamulce i płyn hamulcowy – wilgoć w płynie i zużyte klocki to większe ryzyko przy niskich temperaturach; krótki przegląd przed sezonem się zwraca. Oświetlenie – światła przednie i tylne oraz wycieraczki z dobrą gumą poprawiają widoczność przy krótkim dniu i błocie z dróg.',
+      'Olej silnikowy – trzymaj się zaleceń producenta co do dopuszczalnej lepkości przy niskich temperaturach; przy wymianie sprawdzamy też filtry. Na koniec warto przejrzeć stan zawieszenia po wybojach z jesieni – luźne elementy dają się we znaki na śliskiej nawierzchni.',
+      'W Car Service Nikol w Jastrowo zrobisz większość tych czynności w jednej wizycie lub zaplanujemy je etapami; soboty i niedziele ułatwiają dopasowanie terminu do pracy. Zarezerwuj slot z wyprzedzeniem – przed sezonem terminy szybciej się zapełniają.',
+    ],
+    bodyRu: [
+      'Морозы, снег и реагенты на дорогах быстрее «вскрывают» слабые места: аккумулятор, резина, охлаждение, дворники. Нормальная подготовка к зиме — меньше проблем на холодном старте и увереннее торможение на льду.',
+      'Шины – на «всесезонке» проверьте протектор и возраст; классическая схема — отдельный зимний комплект (переобувка и балансировка у нас в сервисе). Аккумулятор – летом ещё «тянул», зимой может отказать; лучше проверить под нагрузкой. Антифриз – правильная концентрация и уровень защищают от коррозии и замерзания.',
+      'Тормоза и жидкость – влага в жидкости и изношенные колодки опаснее на морозе; короткий осмотр перед сезоном окупается. Свет и дворники – видимость при коротком дне и грязи с трассы.',
+      'Масло – по допускам производителя на мороз; при замене смотрим и фильтры. Полезно осмотреть подвеску после ям осенью — люфты чувствительнее на скользкой дороге.',
+      'В Car Service Nikol в Jastrowo большую часть пунктов можно сделать за один визит или по плану; выходные дни помогают попасть без отпуска. Лучше записаться заранее — перед сезоном очереди длиннее.',
+    ],
+  },
   {
     slug: 'dlaczego-car-service-nikol-najlepszy-wybor-jastrowo-szamotuly',
     titlePl: 'Dlaczego Car Service Nikol to Najlepszy Wybór dla Kierowców z Jastrowo i Szamotuł?',

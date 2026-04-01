@@ -42,8 +42,8 @@ export default function BlogPage({ params }) {
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-gray-300 sm:text-base">
           {isRu
-            ? 'Полезные статьи о сервисе автомобилей в Jastrowo и Шамотулах: диагностика, ремонт, советы.'
-            : 'Poradniki dla kierowców z Jastrowo i Szamotuł – diagnostyka, naprawy, praktyczne wskazówki.'}
+            ? 'Экспертные материалы под локальные запросы: сервис в выходные, подготовка к зиме, безопасность на дороге — Jastrowo, Шамотулы и окрестности.'
+            : 'Eksperckie wpisy pod lokalne tematy: naprawa w niedzielę, przygotowanie auta do zimy, bezpieczeństwo — Jastrowo, Szamotuły i okolice.'}
         </p>
 
         <ul className="mt-8 space-y-4">

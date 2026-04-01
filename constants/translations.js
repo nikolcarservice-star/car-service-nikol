@@ -232,7 +232,7 @@ export const translations = {
       regonLabel: 'REGON',
       regonValue: '[placeholder]',
       privacy: 'Polityka Prywatności (RODO)',
-      invoices: 'Wystawiamy faktury VAT',
+      invoices: 'Dokumentacja sprzedaży na życzenie — szczegóły przy umówieniu wizyty',
       mapLinkLabel: 'Google Maps — profil i opinie (Jastrowo)',
       seoKeywordsLine:
         'Serwis samochodowy Jastrowo · Weekendowy serwis · Mechanik Szamotuły · Diagnostyka · Naprawa hamulców · Wymiana oleju i filtrów',
@@ -486,7 +486,7 @@ export const translations = {
       regonLabel: 'REGON',
       regonValue: '[placeholder]',
       privacy: 'Политика конфиденциальности (RODO)',
-      invoices: 'Выставляем счета-фактуры VAT',
+      invoices: 'Документы по продаже по запросу — детали при записи',
       mapLinkLabel: 'Google Maps — профиль и отзывы (Jastrowo)',
       seoKeywordsLine:
         'Автосервис Ястрово · Механик Шамотулы · Ремонт авто Jastrowo · Сервис по воскресеньям',

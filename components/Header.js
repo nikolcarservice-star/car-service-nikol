@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
-import { RUSSIAN_LOCALE_ENABLED } from '../constants/localeConfig';
+import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from '../constants/localeConfig';
 import { getServiceNavItems } from '../data/services';
 
 function HeaderContent({ lang, t, querySuffix = '' }) {
@@ -94,12 +94,14 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
           >
             {nav.about ?? 'O nas'}
           </Link>
-          <Link
-            href={buildPath(currentLang, 'gallery')}
-            className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
-          >
-            {nav.gallery ?? 'Galeria'}
-          </Link>
+          {GALLERY_ENABLED && (
+            <Link
+              href={buildPath(currentLang, 'gallery')}
+              className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
+            >
+              {nav.gallery ?? 'Galeria'}
+            </Link>
+          )}
           <Link
             href={buildPath(currentLang, 'faq')}
             className="rounded-md px-2 py-1.5 text-gray-300 transition-colors hover:bg-white/5 hover:text-orange-400 lg:px-2.5"
@@ -249,13 +251,15 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
               >
                 {nav.about ?? 'O nas'}
               </Link>
-              <Link
-                href={buildPath(currentLang, 'gallery')}
-                onClick={() => setMobileMenuOpen(false)}
-                className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
-              >
-                {nav.gallery ?? 'Galeria'}
-              </Link>
+              {GALLERY_ENABLED && (
+                <Link
+                  href={buildPath(currentLang, 'gallery')}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-orange-400"
+                >
+                  {nav.gallery ?? 'Galeria'}
+                </Link>
+              )}
               <Link
                 href={buildPath(currentLang, 'faq')}
                 onClick={() => setMobileMenuOpen(false)}

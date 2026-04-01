@@ -1,6 +1,6 @@
 import { SERVICE_KEYS, servicesData } from '../data/services';
 import { getAllBlogSlugs } from '../data/blog';
-import { getSitemapLangs } from '../constants/localeConfig';
+import { GALLERY_ENABLED, getSitemapLangs } from '../constants/localeConfig';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
 
@@ -20,7 +20,7 @@ export default function sitemap() {
       { path: `/${lang}/contact`, priority: 0.7, changeFrequency: 'monthly' },
       { path: `/${lang}/privacy`, priority: 0.5, changeFrequency: 'yearly' },
       { path: `/${lang}/blog`, priority: 0.7, changeFrequency: 'weekly' },
-      { path: `/${lang}/gallery`, priority: 0.65, changeFrequency: 'weekly' },
+      ...(GALLERY_ENABLED ? [{ path: `/${lang}/gallery`, priority: 0.65, changeFrequency: 'weekly' }] : []),
       { path: `/${lang}/faq`, priority: 0.75, changeFrequency: 'monthly' }
     );
   }

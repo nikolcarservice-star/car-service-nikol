@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { RUSSIAN_LOCALE_ENABLED } from './constants/localeConfig';
+import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from './constants/localeConfig';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
 
@@ -15,6 +15,13 @@ export function middleware(request) {
   if (!RUSSIAN_LOCALE_ENABLED && (pathname === '/ru' || pathname.startsWith('/ru/'))) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/ru/, '/pl') || '/pl';
+    return NextResponse.redirect(url, 307);
+  }
+
+  if (!GALLERY_ENABLED && /^\/(pl|ru)\/gallery(\/|$)/.test(pathname)) {
+    const url = request.nextUrl.clone();
+    const seg = pathname.split('/').filter(Boolean)[0] || 'pl';
+    url.pathname = `/${seg === 'ru' && RUSSIAN_LOCALE_ENABLED ? 'ru' : 'pl'}`;
     return NextResponse.redirect(url, 307);
   }
 

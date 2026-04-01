@@ -56,17 +56,6 @@ export const faqItems = [
     },
   },
   {
-    id: 'invoice',
-    question: {
-      pl: 'Czy wystawiacie faktury VAT?',
-      ru: 'Вы выставляете фактуры VAT?',
-    },
-    answer: {
-      pl: 'Tak — na życzenie wystawiamy fakturę VAT dla firm i klientów indywidualnych zgodnie z obowiązującymi przepisami.',
-      ru: 'Да — по запросу выставляем счёт-фактуру VAT для фирм и частных клиентов в соответствии с действующими правилами.',
-    },
-  },
-  {
     id: 'own-parts',
     question: {
       pl: 'Czy mogę dostarczyć własne części?',

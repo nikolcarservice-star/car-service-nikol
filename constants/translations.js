@@ -41,7 +41,7 @@ export const translations = {
       ctaSecondary: 'Zadzwoń teraz',
       sundayBadge: 'Otwarte w niedziele!',
       sundayUniqueBadge:
-        'Jedyny czynny serwis w okolicy w niedziele',
+        'Jedyny serwis w okolicy otwarty w niedziele',
       googleRatingLead: 'Ocena klientów w Google',
       scheduleTitle: 'Weekendowe godziny otwarcia',
       saturday: 'SOBOTA: 08:00 – 18:00',

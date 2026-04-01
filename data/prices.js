@@ -3,11 +3,32 @@
  * Ceny mogą się różnić w zależności od modelu auta i zakresu prac.
  */
 
+/** Krótki fragment z kwotami pod SERP / meta (widoczny też jako lead na stronie cennika). */
+export function getCennikSeoSnippet(lang) {
+  if (lang === 'ru') {
+    return 'Car Service Nikol, Jastrowo: масло + фильтр от 80 zł (работа), колодки ось от 150 zł, диагностика от 100 zł, шины 4 шт. от 100 zł, ГРМ от 700 zł. Клиенты из Шамотул — полный текст прайса ниже.';
+  }
+  return 'Car Service Nikol, Jastrowo: olej + filtr od 80 zł (robocizna), klocki oś od 150 zł, diagnostyka od 100 zł, opony 4 szt. od 100 zł, rozrząd od 700 zł. Kierowcy z Szamotuł — pełna tabela cen poniżej.';
+}
+
+/** Dłuższy akapit z cenami (tylko strona, niepodwójny względem meta). */
+export function getCennikIntroParagraph(lang) {
+  if (lang === 'ru') {
+    return 'Ниже — ориентировочный прайс по основным работам. Примеры: замена масла и фильтра от 80 zł (только работа) или комплекс с маслом от 220 zł с материалом; тормозные колодки ось от 150 zł; компьютерная диагностика от 100 zł; шиномонтаж 4 колеса от 100 zł; ремень ГРМ для 4-цил. от 700 zł (работа). Итог зависит от марки авто и запчастей — звоните, подскажем.';
+  }
+  return 'Poniżej orientacyjny cennik najczęstszych usług. Przykłady: wymiana oleju i filtru od 80 zł (sam koszt robocizny) lub komplet z olejem i materiałem od 220 zł; klocki hamulcowe na jedną oś od 150 zł; diagnostyka komputerowa od 100 zł; wymiana czterech opon od 100 zł; rozrząd 4-cyl. od 700 zł (robocizna). Końcowa kwota zależy od modelu auta i części — zadzwoń, wstępnie wycenimy.';
+}
+
 export const priceListPl = [
   {
     category: 'Oleje i filtry',
     items: [
       { name: 'Wymiana oleju + filtr oleju (silnik 4-cyl.)', price: 'od 80 zł', note: 'robocizna' },
+      {
+        name: 'Wymiana oleju + filtr oleju + olej i materiały (osobówka, typowy silnik)',
+        price: 'od 220 zł',
+        note: 'z materiałem',
+      },
       { name: 'Wymiana oleju + filtr (V6 / diesel)', price: 'od 100 zł', note: 'robocizna' },
       { name: 'Wymiana filtra powietrza', price: 'od 35 zł', note: 'robocizna' },
       { name: 'Wymiana filtra kabinowego', price: 'od 45 zł', note: 'robocizna' },
@@ -53,6 +74,7 @@ export const priceListPl = [
       { name: 'Wymiana opon (4 szt.)', price: 'od 100 zł', note: '' },
       { name: 'Wyważanie kół (4 szt.)', price: 'od 80 zł', note: '' },
       { name: 'Naprawa przebicia', price: 'od 40 zł', note: 'za oponę' },
+      { name: 'Geometria / ustawienie zbieżności', price: 'od 120 zł', note: '' },
     ],
   },
   {
@@ -121,6 +143,7 @@ export const priceListRu = [
       { name: 'Замена шин (4 шт.)', price: 'от 100 zł', note: '' },
       { name: 'Балансировка колёс (4 шт.)', price: 'от 80 zł', note: '' },
       { name: 'Ремонт прокола', price: 'от 40 zł', note: 'за шину' },
+      { name: 'Сход-развал / регулировка углов', price: 'от 120 zł', note: '' },
     ],
   },
   {

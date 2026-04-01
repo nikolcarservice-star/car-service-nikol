@@ -2,7 +2,12 @@ import Link from 'next/link';
 import { FileText, Phone, CalendarDays } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { getTranslations, normalizeLang, PHONE_RAW, PHONE_DISPLAY } from '../../../constants/translations';
-import { priceListPl, priceListRu } from '../../../data/prices';
+import {
+  priceListPl,
+  priceListRu,
+  getCennikSeoSnippet,
+  getCennikIntroParagraph,
+} from '../../../data/prices';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
 
@@ -15,8 +20,7 @@ export function generateMetadata({ params }) {
 
   if (lang === 'ru') {
     const title = 'Прайс-лист – Car Service Nikol Jastrowo, Шамотулы | Цены на услуги';
-    const description =
-      'Цены на услуги автосервиса в Jastrowo и для водителей из Шамотул. Масло, тормоза, диагностика, шиномонтаж, ключи. Ориентировочные цены.';
+    const description = `${getCennikSeoSnippet('ru')} Полная таблица: масла, тормоза, диагностика, ГРМ, шины, ключи.`;
     return {
       title,
       description,
@@ -36,8 +40,7 @@ export function generateMetadata({ params }) {
     };
   }
   const title = 'Cennik usług – Car Service Nikol Jastrowo, Szamotuły | Ceny orientacyjne';
-  const description =
-    'Cennik serwisu w Jastrowo — także dla kierowców z Szamotuł i okolic. Olej, hamulce, diagnostyka, opony, klucze. Ceny orientacyjne.';
+  const description = `${getCennikSeoSnippet('pl')} Pełna tabela: oleje, hamulce, diagnostyka, rozrząd, opony, klucze.`;
   return {
     title,
     description,
@@ -66,8 +69,9 @@ export default function CennikPage({ params }) {
   const title = lang === 'ru' ? 'Прайс-лист' : 'Cennik usług';
   const subtitle =
     lang === 'ru'
-      ? 'Ориентировочные цены на услуги в Jastrowo и ближайших населённых пунктах. Точную стоимость уточняйте по телефону.'
-      : 'Ceny orientacyjne na usługi w Jastrowo i pobliskich miejscowościach. Dokładną wycenę podamy telefonicznie.';
+      ? 'Текстовый прайс ниже — ориентировочные цены в злотых. Уточнение по телефону перед визитом.'
+      : 'Poniżej pełny cennik tekstowy — kwoty orientacyjne w złotych. Przed wizytą możesz dopytać telefonicznie.';
+  const introParagraph = getCennikIntroParagraph(lang);
 
   return (
     <section className="border-b border-slate-800 bg-slate-950">
@@ -90,6 +94,10 @@ export default function CennikPage({ params }) {
             <p className="mt-1 text-sm text-gray-400">{subtitle}</p>
           </div>
         </div>
+
+        <p className="mb-8 rounded-2xl border border-orange-500/25 bg-orange-500/5 px-4 py-4 text-sm leading-relaxed text-gray-200 sm:px-5 sm:text-base">
+          {introParagraph}
+        </p>
 
         <div className="space-y-6">
           {priceList.map((group) => (
@@ -122,10 +130,10 @@ export default function CennikPage({ params }) {
           ))}
         </div>
 
-        <p className="mt-8 text-center text-xs text-gray-500">
+        <p className="mt-8 text-center text-xs leading-relaxed text-gray-500 sm:text-sm">
           {lang === 'ru'
-            ? 'Цены netto. Окончательная стоимость зависит от марки и модели автомобиля.'
-            : 'Ceny netto. Ostateczny koszt zależy od marki i modelu pojazdu.'}
+            ? 'Цены ориентировочные. Позиции с пометкой «работа» — без стоимости запчастей, если не указано «с материалом». Итог — после осмотра автомобиля.'
+            : 'Kwoty orientacyjne. Przy dopisku „robocizna” nie wliczamy kosztu części, chyba że przy pozycji jest „z materiałem”. Końcowa wycena po oględzinach pojazdu.'}
         </p>
 
         {/* CTA — Umów wizytę / Zadzwoń */}

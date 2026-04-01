@@ -27,9 +27,9 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Услуги автосервиса в Jastrowo – Car Service Nikol | Ремонт, диагностика';
+    const title = 'Услуги автосервиса Jastrowo, Шамотулы – Car Service Nikol | Ремонт, диагностика';
     const description =
-      'Полный список услуг Car Service Nikol в Jastrowo: ремонт ходовой, тормозов, замена масла, компьютерная диагностика и замена ГРМ. Запись на воскресенье.';
+      'Услуги Car Service Nikol в Jastrowo для клиентов из Шамотул и окрестностей: ходовая, тормоза, масло, диагностика, ГРМ. Запись на воскресенье.';
     return {
       title,
       description,
@@ -49,9 +49,9 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Usługi serwisu samochodowego w Jastrowo – Car Service Nikol | Naprawa, diagnostyka';
+  const title = 'Usługi serwisu Jastrowo, Szamotuły – Car Service Nikol | Naprawa, diagnostyka';
   const description =
-    'Pełna oferta Car Service Nikol w Jastrowo: naprawa zawieszenia, serwis hamulców, wymiana oleju, diagnostyka komputerowa i wymiana rozrządu. Terminy w niedzielę.';
+    'Oferta Car Service Nikol: Jastrowo i kierowcy z Szamotuł — zawieszenie, hamulce, olej, diagnostyka, rozrząd. Terminy w niedzielę.';
   return {
     title,
     description,

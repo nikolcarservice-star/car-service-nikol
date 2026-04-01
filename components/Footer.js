@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { GOOGLE_BUSINESS_PROFILE_URL } from '../constants/googleBusiness';
 import { getTranslations } from '../constants/translations';
 
 export default function Footer({ lang }) {
@@ -16,6 +17,18 @@ export default function Footer({ lang }) {
             >
               {t.privacy}
             </Link>
+            {t.mapLinkLabel && (
+              <p className="mt-2">
+                <a
+                  href={GOOGLE_BUSINESS_PROFILE_URL}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-[11px] text-orange-300 hover:text-orange-200"
+                >
+                  {t.mapLinkLabel}
+                </a>
+              </p>
+            )}
             {t.seoKeywordsLine && (
               <p className="mt-3 max-w-xl text-[10px] text-gray-500 sm:text-[11px]">
                 {t.seoKeywordsLine}

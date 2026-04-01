@@ -18,9 +18,9 @@ export const servicesData = {
       name: 'Naprawa zawieszenia',
       shortName: 'Zawieszenie',
       h1: 'Naprawa zawieszenia Jastrowo - Car Service Nikol',
-      seoTitle: 'Naprawa zawieszenia w Jastrowo - Car Service Nikol',
+      seoTitle: 'Naprawa zawieszenia Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Profesjonalna naprawa zawieszenia w Jastrowo. Wymiana amortyzatorów, wahaczy, sworzni, tulei i sprężyn. Szybka diagnostyka, uczciwe ceny, gwarancja na wykonaną usługę.',
+        'Profesjonalna naprawa zawieszenia w Jastrowo i okolicach Szamotuł. Wymiana amortyzatorów, wahaczy, sworzni, tulei i sprężyn. Szybka diagnostyka, uczciwe ceny, gwarancja na wykonaną usługę.',
       intro:
         'Zawieszenie odpowiada za komfort jazdy, prowadzenie samochodu i bezpieczeństwo na drodze. W Car Service Nikol w Jastrowo diagnozujemy i naprawiamy zawieszenie w samochodach osobowych i dostawczych – od luźnych tulei po zużyte amortyzatory.',
       process: [
@@ -46,9 +46,9 @@ export const servicesData = {
       name: 'Ремонт ходовой',
       shortName: 'Ходовая',
       h1: 'Ремонт ходовой Jastrowo - Car Service Nikol',
-      seoTitle: 'Ремонт ходовой в Jastrowo - Car Service Nikol',
+      seoTitle: 'Ремонт ходовой Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Профессиональный ремонт ходовой части в Jastrowo. Замена амортизаторов, рычагов, шаровых опор, сайлентблоков и пружин. Быстрая диагностика и честные цены.',
+        'Профессиональный ремонт ходовой в Jastrowo и для клиентов из Шамотул. Замена амортизаторов, рычагов, шаровых опор, сайлентблоков и пружин. Быстрая диагностика и честные цены.',
       intro:
         'Ходовая часть напрямую влияет на устойчивость автомобиля и вашу безопасность. В Car Service Nikol мы проводим полную диагностику и ремонт подвески легковых и легких коммерческих автомобилей.',
       process: [
@@ -76,9 +76,9 @@ export const servicesData = {
       name: 'Wymiana oleju i filtrów',
       shortName: 'Oleje i filtry',
       h1: 'Wymiana oleju i filtrów Jastrowo - Car Service Nikol',
-      seoTitle: 'Wymiana oleju i filtrów w Jastrowo - Car Service Nikol',
+      seoTitle: 'Wymiana oleju i filtrów Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Szybka wymiana oleju i filtrów w Jastrowo. Dobór odpowiedniego oleju, kontrola stanu silnika, uczciwe ceny i ekologiczna utylizacja zużytego oleju.',
+        'Szybka wymiana oleju i filtrów w Jastrowo i okolicach Szamotuł. Dobór odpowiedniego oleju, kontrola stanu silnika, uczciwe ceny i ekologiczna utylizacja zużytego oleju.',
       intro:
         'Regularna wymiana oleju i filtrów to podstawa długiej i bezproblemowej pracy silnika. W naszym serwisie dobieramy olej zgodnie z zaleceniami producenta i stylu jazdy, a całą usługę wykonujemy zwykle w mniej niż godzinę.',
       process: [
@@ -103,9 +103,9 @@ export const servicesData = {
       name: 'Замена масла и фильтров',
       shortName: 'Масла и фильтры',
       h1: 'Замена масла и фильтров Jastrowo - Car Service Nikol',
-      seoTitle: 'Замена масла и фильтров в Jastrowo - Car Service Nikol',
+      seoTitle: 'Замена масла и фильтров Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Быстрая замена моторного масла и фильтров в Jastrowo. Подбор масла по допускам производителя, проверка состояния двигателя и утилизация отработанного масла.',
+        'Быстрая замена моторного масла и фильтров в Jastrowo и для клиентов из Шамотул. Подбор масла по допускам производителя, проверка состояния двигателя и утилизация отработки.',
       intro:
         'Своевременная замена масла и фильтров защищает двигатель от износа и перегрева. Мы подбираем масло по допускам производителя и вашему стилю езды, а работу выполняем быстро и аккуратно.',
       process: [
@@ -133,9 +133,9 @@ export const servicesData = {
       name: 'Serwis hamulców',
       shortName: 'Hamulce',
       h1: 'Serwis i naprawa hamulców Jastrowo - Car Service Nikol',
-      seoTitle: 'Wymiana klocków i tarcz hamulcowych Jastrowo - Car Service Nikol',
+      seoTitle: 'Wymiana klocków i tarcz hamulcowych Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Serwis hamulców w Jastrowo: wymiana klocków, tarcz, płynu hamulcowego i przewodów. Profesjonalna diagnoza i krótkie terminy.',
+        'Serwis hamulców w Jastrowo i Szamotułach: wymiana klocków, tarcz, płynu hamulcowego i przewodów. Profesjonalna diagnoza i krótkie terminy.',
       intro:
         'Sprawne hamulce to podstawa bezpieczeństwa. W naszym serwisie sprawdzamy skuteczność hamowania, stan klocków, tarcz, przewodów i płynu hamulcowego, a następnie proponujemy optymalne rozwiązanie.',
       process: [
@@ -161,9 +161,9 @@ export const servicesData = {
       name: 'Сервис тормозной системы',
       shortName: 'Тормоза',
       h1: 'Ремонт и обслуживание тормозов Jastrowo - Car Service Nikol',
-      seoTitle: 'Ремонт тормозов в Jastrowo - Car Service Nikol',
+      seoTitle: 'Ремонт тормозов Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Обслуживание тормозной системы в Jastrowo: замена колодок и дисков, тормозной жидкости и шлангов. Точная диагностика и гарантия на работы.',
+        'Обслуживание тормозов в Jastrowo и для водителей из Шамотул: колодки и диски, жидкость и шланги. Точная диагностика и гарантия на работы.',
       intro:
         'От исправности тормозов зависит ваша безопасность. Мы диагностируем состояние колодок, дисков, суппортов и тормозной жидкости, а затем выполняем необходимый ремонт.',
       process: [
@@ -192,9 +192,9 @@ export const servicesData = {
       name: 'Diagnostyka komputerowa',
       shortName: 'Diagnostyka',
       h1: 'Diagnostyka komputerowa Jastrowo - Car Service Nikol',
-      seoTitle: 'Diagnostyka komputerowa samochodu w Jastrowo - Car Service Nikol',
+      seoTitle: 'Diagnostyka komputerowa Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Zaawansowana diagnostyka komputerowa w Jastrowo. Odczyt błędów, analiza parametrów pracy silnika i elektroniki, jasna informacja o przyczynie usterki.',
+        'Zaawansowana diagnostyka komputerowa w Jastrowo i okolicach Szamotuł. Odczyt błędów, analiza parametrów pracy silnika i elektroniki, jasna informacja o przyczynie usterki.',
       intro:
         'Nowoczesne samochody pełne są elektroniki. Dzięki profesjonalnym testerom diagnostycznym odczytujemy błędy sterowników i parametry pracy silnika, aby szybko znaleźć przyczynę problemu.',
       process: [
@@ -219,9 +219,9 @@ export const servicesData = {
       name: 'Компьютерная диагностика',
       shortName: 'Диагностика',
       h1: 'Компьютерная диагностика Jastrowo - Car Service Nikol',
-      seoTitle: 'Компьютерная диагностика автомобиля в Jastrowo - Car Service Nikol',
+      seoTitle: 'Компьютерная диагностика Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Компьютерная диагностика автомобиля в Jastrowo: считывание ошибок, проверка параметров работы двигателя и электроники, рекомендации по ремонту.',
+        'Компьютерная диагностика в Jastrowo и для клиентов из Шамотул: ошибки OBD, параметры двигателя и электроники, рекомендации по ремонту.',
       intro:
         'Электроника современного автомобиля требует точной диагностики. Мы используем профессиональные сканеры, чтобы быстро определить источник неисправности.',
       process: [
@@ -248,9 +248,9 @@ export const servicesData = {
       name: 'Wymiana rozrządu',
       shortName: 'Rozrząd',
       h1: 'Wymiana rozrządu Jastrowo - Car Service Nikol',
-      seoTitle: 'Wymiana paska rozrządu w Jastrowo - Car Service Nikol',
+      seoTitle: 'Wymiana paska rozrządu Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Profesjonalna wymiana paska lub łańcucha rozrządu w Jastrowo. Kompletny serwis z pompą wody i napinaczami, zgodnie z zaleceniami producenta.',
+        'Profesjonalna wymiana paska lub łańcucha rozrządu w Jastrowo i okolicach Szamotuł. Kompletny serwis z pompą wody i napinaczami, zgodnie z zaleceniami producenta.',
       intro:
         'Uszkodzony rozrząd może doprowadzić do poważnej awarii silnika. W naszym serwisie wymieniamy kompletne zestawy rozrządu, dbając o prawidłowe ustawienie faz rozrządu i momenty dokręcania.',
       process: [
@@ -275,9 +275,9 @@ export const servicesData = {
       name: 'Замена ГРМ',
       shortName: 'ГРМ',
       h1: 'Замена ГРМ Jastrowo - Car Service Nikol',
-      seoTitle: 'Замена ремня или цепи ГРМ в Jastrowo - Car Service Nikol',
+      seoTitle: 'Замена ремня или цепи ГРМ Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Профессиональная замена ремня или цепи ГРМ в Jastrowo. Полный сервис с заменой роликов, натяжителей и помпы охлаждения.',
+        'Профессиональная замена ремня или цепи ГРМ в Jastrowo и для автомобилей из Шамотул. Полный сервис: ролики, натяжители, помпа охлаждения.',
       intro:
         'Своевременная замена ГРМ защищает двигатель от серьёзных поломок. Мы работаем по заводским регламентам и используем комплектующие проверенных брендов.',
       process: [
@@ -304,9 +304,9 @@ export const servicesData = {
       name: 'Serwis opon',
       shortName: 'Opony',
       h1: 'Wymiana opon i wyważanie Jastrowo - Car Service Nikol',
-      seoTitle: 'Serwis opon, wymiana i wyważanie kół w Jastrowo - Car Service Nikol',
+      seoTitle: 'Serwis opon Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Profesjonalna wymiana opon sezonowa, wyważanie kół i naprawa przebić w Jastrowo. Szybko, dokładnie, bez uszkodzenia felg.',
+        'Wymiana opon sezonowa, wyważanie i naprawa przebić w Jastrowo i dla klientów z Szamotuł. Szybko, dokładnie, bez uszkodzenia felg.',
       intro:
         'Prawidłowo zamontowane i wyważone koła to komfort jazdy i bezpieczeństwo. W Car Service Nikol w Jastrowo wykonujemy wymianę opon letnich i zimowych, wyważanie na nowoczesnym sprzęcie oraz drobne naprawy – np. po kolizji z krawężnikiem.',
       process: [
@@ -331,9 +331,9 @@ export const servicesData = {
       name: 'Шиномонтаж',
       shortName: 'Шины',
       h1: 'Шиномонтаж и балансировка Jastrowo - Car Service Nikol',
-      seoTitle: 'Шиномонтаж и балансировка колёс в Jastrowo - Car Service Nikol',
+      seoTitle: 'Шиномонтаж Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Сезонная замена шин, балансировка и ремонт проколов в Jastrowo. Аккуратная работа с дисками и датчиками давления.',
+        'Сезонная замена шин, балансировка и ремонт проколов в Jastrowo и для клиентов из Шамотул. Аккуратная работа с дисками и TPMS.',
       intro:
         'Качественный шиномонтаж продлевает срок службы шин и улучшает управляемость. Мы меняем летнюю и зимнюю резину, балансируем колёса и при необходимости устраняем проколы.',
       process: [
@@ -360,9 +360,9 @@ export const servicesData = {
       name: 'Serwis mobilny',
       shortName: 'Mobilny',
       h1: 'Serwis mobilny i pomoc drogowa Jastrowo - Car Service Nikol',
-      seoTitle: 'Serwis mobilny, dojazd do klienta w Jastrowo i okolicy - Car Service Nikol',
+      seoTitle: 'Serwis mobilny Jastrowo, Szamotuły i okolice – Car Service Nikol',
       seoDescription:
-        'Awaryjne odpalanie, wymiana koła zapasowego, drobne naprawy z dojazdem do klienta w rejonie Jastrowo. Zadzwoń i ustal zakres.',
+        'Awaryjne odpalanie, wymiana koła zapasowego, drobne naprawy z dojazdem w rejonie Jastrowo, Szamotuł i okolic. Zadzwoń i ustal zakres.',
       intro:
         'Gdy nie możesz podjechać do warsztatu lub potrzebujesz szybkiej pomocy w terenie – oferujemy usługi mobilne w uzgodnionym zasięgu od Jastrowo. Zakres ustalamy telefonicznie: od boostera akumulatora po wymianę koła po stłuczce.',
       process: [
@@ -387,9 +387,9 @@ export const servicesData = {
       name: 'Выездной сервис',
       shortName: 'Выезд',
       h1: 'Мобильный сервис и помощь на дороге Jastrowo - Car Service Nikol',
-      seoTitle: 'Выезд мастера к клиенту в Jastrowo и окрестностях - Car Service Nikol',
+      seoTitle: 'Выезд мастера Jastrowo, Шамотулы и окрестности – Car Service Nikol',
       seoDescription:
-        'Аварийный запуск, замена колеса на запаску, мелкий ремонт с выездом в районе Jastrowo. Уточните детали по телефону.',
+        'Аварийный запуск, запаска, мелкий ремонт с выездом: Jastrowo, Шамотулы и ближайшие населённые пункты. Уточните детали по телефону.',
       intro:
         'Если вы не можете доехать до сервиса или нужна срочная помощь — по предварительной договорённости выезжаем к вам в согласованном радиусе от Jastrowo. Точные условия и цена зависят от задачи и расстояния.',
       process: [
@@ -416,9 +416,9 @@ export const servicesData = {
       name: 'Kluczyki samochodowe',
       shortName: 'Klucze',
       h1: 'Programowanie i dorabianie kluczy Jastrowo - Car Service Nikol',
-      seoTitle: 'Programowanie kluczyków samochodowych w Jastrowo - Car Service Nikol',
+      seoTitle: 'Programowanie kluczyków Jastrowo, Szamotuły – Car Service Nikol',
       seoDescription:
-        'Dorabianie kluczy, programowanie pilotów i transponderów, adaptacja w sterowniku. Zapytaj o swoją markę i model w Car Service Nikol.',
+        'Dorabianie kluczy, programowanie pilotów i transponderów w Jastrowo i okolicach Szamotuł. Zapytaj o markę i model w Car Service Nikol.',
       intro:
         'Zgubiony lub uszkodzony kluczyk to częsty problem. Wielu pojazdom możemy dorobić nowy klucz z immobilizerem i pilotem albo zsynchronizować istniejący zestaw. Zakres zależy od producenta, roku i dostępności kodów – zawsze uczciwie mówimy, co da się zrobić lokalnie.',
       process: [
@@ -443,9 +443,9 @@ export const servicesData = {
       name: 'Автомобильные ключи',
       shortName: 'Ключи',
       h1: 'Программирование ключей Jastrowo - Car Service Nikol',
-      seoTitle: 'Программирование и изготовление ключей авто в Jastrowo - Car Service Nikol',
+      seoTitle: 'Программирование ключей Jastrowo, Шамотулы – Car Service Nikol',
       seoDescription:
-        'Дубликат ключа, прописывание чипа и брелока, привязка к блоку управления. Уточните марку и год в Car Service Nikol.',
+        'Дубликат ключа, чип, брелок, привязка к блоку — Jastrowo и клиенты из Шамотул. Уточните марку и год в Car Service Nikol.',
       intro:
         'Потеря или поломка ключа не должна останавливать вас надолго. Для многих марок мы можем изготовить и прописать новый ключ или восстановить связь с иммобилайзером. Возможности зависят от автомобиля — заранее проконсультируем по телефону.',
       process: [

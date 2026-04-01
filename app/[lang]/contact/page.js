@@ -2,15 +2,13 @@ import { Suspense } from 'react';
 import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import BookingForm from '../../../components/BookingForm';
+import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../../../constants/googleBusiness';
 import {
   getTranslations,
   normalizeLang,
   PHONE_DISPLAY,
   PHONE_RAW,
 } from '../../../constants/translations';
-
-const MAP_EMBED_URL =
-  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2419.658250238475!2d16.5413491!3d52.5714312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470438d011197777%3A0x6b82504818617777!2sWernisa%C5%BCowa%2021%2C%2064-500%20Jastrowo!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
 
@@ -24,7 +22,7 @@ export function generateMetadata({ params }) {
   if (lang === 'ru') {
     const title = 'Контакты Car Service Nikol – Jastrowo, Шамотулы | Адрес, телефон, запись';
     const description =
-      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21 Jastrowo, телефон, WhatsApp, Telegram и форма записи. Сервис в Jastrowo и окрестностях Шамотул. Работаем в воскресенье.';
+      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21, Jastrowo, телефон, WhatsApp, Telegram и форма записи. Обслуживаем клиентов из Jastrowo, Шамотул и окрестностей. Работаем в воскресенье.';
     return {
       title,
       description,
@@ -46,7 +44,7 @@ export function generateMetadata({ params }) {
 
   const title = 'Kontakt – Car Service Nikol Jastrowo, Szamotuły | Adres, telefon, umów wizytę';
   const description =
-    'Skontaktuj się z Car Service Nikol w Jastrowo. Adres ul. Wernisażowa 21, telefon, WhatsApp, Telegram oraz formularz umówienia wizyty. Otwarte w niedziele.';
+    'Skontaktuj się z Car Service Nikol: Jastrowo (ul. Wernisażowa 21), obsługa kierowców z Szamotuł i okolic. Telefon, WhatsApp, Telegram i formularz wizyty. Otwarte w niedziele.';
   return {
     title,
     description,
@@ -224,7 +222,7 @@ export default function ContactPage({ params }) {
         <div className="mt-4 w-full overflow-hidden">
           <iframe
             title={lang === 'ru' ? 'Карта – адрес сервиса' : 'Mapa – adres serwisu'}
-            src={MAP_EMBED_URL}
+            src={GOOGLE_MAPS_EMBED_URL}
             width="100%"
             height="400"
             style={{ border: 0 }}
@@ -233,6 +231,18 @@ export default function ContactPage({ params }) {
             referrerPolicy="no-referrer-when-downgrade"
             className="h-[320px] w-full sm:h-[420px]"
           />
+        </div>
+        <div className="mx-auto max-w-6xl px-4 pb-10 pt-4 text-sm">
+          <a
+            href={GOOGLE_BUSINESS_PROFILE_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="font-medium text-orange-400 hover:text-orange-300"
+          >
+            {lang === 'ru'
+              ? 'Открыть профиль Car Service Nikol в Google Maps (отзывы и маршрут)'
+              : 'Otwórz profil Car Service Nikol w Google Maps (opinie i nawigacja)'}
+          </a>
         </div>
       </section>
     </>

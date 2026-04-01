@@ -229,6 +229,7 @@ export const translations = {
       regonValue: '[placeholder]',
       privacy: 'Polityka Prywatności (RODO)',
       invoices: 'Wystawiamy faktury VAT',
+      mapLinkLabel: 'Google Maps — profil i opinie (Jastrowo)',
       seoKeywordsLine:
         'Serwis samochodowy Jastrowo · Weekendowy serwis · Mechanik Szamotuły · Diagnostyka · Naprawa hamulców · Wymiana oleju i filtrów',
       rights: '© ' + new Date().getFullYear() + ' Car Service Nikol. Wszystkie prawa zastrzeżone.',
@@ -471,6 +472,7 @@ export const translations = {
       regonValue: '[placeholder]',
       privacy: 'Политика конфиденциальности (RODO)',
       invoices: 'Выставляем счета-фактуры VAT',
+      mapLinkLabel: 'Google Maps — профиль и отзывы (Jastrowo)',
       seoKeywordsLine:
         'Автосервис Ястрово · Механик Шамотулы · Ремонт авто Jastrowo · Сервис по воскресеньям',
       rights: '© ' + new Date().getFullYear() + ' Car Service Nikol. Все права защищены.',

@@ -20,9 +20,13 @@ export function generateMetadata({ params }) {
   const post = getBlogPost(params.slug, lang);
   if (!post) return {};
   const siteName = 'Car Service Nikol';
+  const descriptionSuffix =
+    lang === 'ru'
+      ? 'Car Service Nikol — Jastrowo, Шамотулы.'
+      : 'Car Service Nikol — Jastrowo, Szamotuły.';
   return {
-    title: `${post.title} – ${siteName}`,
-    description: post.excerpt,
+    title: `${post.title} – ${siteName} | Jastrowo, ${lang === 'ru' ? 'Шамотулы' : 'Szamotuły'}`,
+    description: `${post.excerpt} ${descriptionSuffix}`,
     alternates: { canonical: `/${lang}/blog/${params.slug}` },
     openGraph: {
       title: post.title,

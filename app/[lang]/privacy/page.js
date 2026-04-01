@@ -12,16 +12,16 @@ export function generateMetadata({ params }) {
 
   if (lang === 'ru') {
     return {
-      title: 'Политика конфиденциальности (RODO) – Car Service Nikol',
+      title: 'Политика конфиденциальности (RODO) – Car Service Nikol, Jastrowo, Шамотулы',
       description:
-        'Политика конфиденциальности и обработки персональных данных Car Service Nikol. RODO, контакт.',
+        'Политика конфиденциальности Car Service Nikol (Jastrowo, клиенты из Шамотул и окрестностей): обработка данных при записи в сервис и на сайте, RODO, контакт.',
       alternates: { canonical, languages },
     };
   }
   return {
-    title: 'Polityka Prywatności (RODO) – Car Service Nikol',
+    title: 'Polityka prywatności (RODO) – Car Service Nikol Jastrowo, Szamotuły',
     description:
-      'Polityka prywatności i przetwarzania danych osobowych Car Service Nikol. RODO, kontakt.',
+      'Polityka prywatności Car Service Nikol (Jastrowo, klienci z Szamotuł): przetwarzanie danych przy umawianiu wizyt i na stronie, RODO, kontakt.',
     alternates: { canonical, languages },
   };
 }

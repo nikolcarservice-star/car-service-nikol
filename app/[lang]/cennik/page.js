@@ -14,9 +14,9 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Прайс-лист – Car Service Nikol Jastrowo | Цены на услуги';
+    const title = 'Прайс-лист – Car Service Nikol Jastrowo, Шамотулы | Цены на услуги';
     const description =
-      'Цены на услуги автосервиса в Jastrowo и близлежащих местностях. Масло, тормоза, диагностика, шиномонтаж, ключи. Ориентировочные цены.';
+      'Цены на услуги автосервиса в Jastrowo и для водителей из Шамотул. Масло, тормоза, диагностика, шиномонтаж, ключи. Ориентировочные цены.';
     return {
       title,
       description,
@@ -35,9 +35,9 @@ export function generateMetadata({ params }) {
       twitter: { card: 'summary_large_image', title, description },
     };
   }
-  const title = 'Cennik usług – Car Service Nikol Jastrowo | Ceny orientacyjne';
+  const title = 'Cennik usług – Car Service Nikol Jastrowo, Szamotuły | Ceny orientacyjne';
   const description =
-    'Cennik usług serwisu samochodowego w Jastrowo i okolicznych miejscowościach. Olej, hamulce, diagnostyka, opony, klucze. Ceny orientacyjne.';
+    'Cennik serwisu w Jastrowo — także dla kierowców z Szamotuł i okolic. Olej, hamulce, diagnostyka, opony, klucze. Ceny orientacyjne.';
   return {
     title,
     description,

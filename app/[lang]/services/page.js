@@ -153,7 +153,7 @@ export default function ServicesIndexPage({ params }) {
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                     <Link
-                      href={`${basePath}${bookingAnchor}`}
+                      href={`${basePath}?service=${encodeURIComponent(service.key)}${bookingAnchor}`}
                       className="inline-flex items-center gap-2 rounded-lg border-2 border-white/60 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-orange-400/80 hover:bg-orange-500/20 hover:text-orange-100"
                     >
                       <CalendarDays className="h-4 w-4" />

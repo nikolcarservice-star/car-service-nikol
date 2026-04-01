@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Calendar, CheckCircle2, Clock, Loader2, MessageSquare, Phone, Shield, Wrench } from 'lucide-react';
 import { LANGUAGES, PHONE_DISPLAY, PHONE_RAW, translations } from '../constants/translations';
@@ -18,9 +19,15 @@ function trackFormEvent(action, label = '') {
   }
 }
 
+function getBookingServiceLabel(serviceItem, lang) {
+  if (lang === LANGUAGES.RU && serviceItem.nameRu) return serviceItem.nameRu;
+  return serviceItem.name;
+}
+
 export default function BookingForm({ lang, embed }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const dateInputRef = useRef(null);
+  const searchParams = useSearchParams();
   const t = translations[lang].booking;
 
   const {
@@ -87,6 +94,18 @@ export default function BookingForm({ lang, embed }) {
   const servicesList = translations[lang].services.list;
   const selectedService = watch('service');
   const [serviceOpen, setServiceOpen] = useState(false);
+  useEffect(() => {
+    const key = searchParams.get('service');
+    if (!key || typeof document === 'undefined') return;
+    const item = servicesList.find((s) => s.key === key);
+    if (!item) return;
+    setValue('service', getBookingServiceLabel(item, lang), { shouldValidate: true });
+    const bid = translations[lang].bookingId;
+    const id = window.requestAnimationFrame(() => {
+      document.getElementById(bid)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [searchParams, servicesList, lang, setValue]);
 
   const inputBase =
     'w-full rounded-xl border border-slate-600/80 bg-slate-800/50 px-4 py-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/30';
@@ -198,11 +217,11 @@ export default function BookingForm({ lang, embed }) {
                             type="button"
                             className="block w-full px-4 py-2 text-left hover:bg-slate-800"
                             onClick={() => {
-                              setValue('service', service.name, { shouldValidate: true });
+                              setValue('service', getBookingServiceLabel(service, lang), { shouldValidate: true });
                               setServiceOpen(false);
                             }}
                           >
-                            {service.name}
+                            {getBookingServiceLabel(service, lang)}
                           </button>
                         ))}
                       </div>

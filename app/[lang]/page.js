@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Hero from '../../components/Hero';
 import Services from '../../components/Services';
 import BrandsSection from '../../components/BrandsSection';
@@ -95,7 +96,18 @@ export default function LangHomePage({ params }) {
       <Services t={t} lang={lang} />
       <BrandsSection t={t} />
       <AboutBlock t={t} />
-      <BookingForm lang={lang} />
+      <Suspense
+        fallback={
+          <section
+            id={t.bookingId}
+            className="min-h-[28rem] border-b border-slate-800 bg-slate-950"
+            aria-busy="true"
+            aria-label={lang === 'ru' ? 'Загрузка формы' : 'Ładowanie formularza'}
+          />
+        }
+      >
+        <BookingForm lang={lang} />
+      </Suspense>
       <LocationSection lang={lang} />
       <Reviews lang={lang} />
     </>

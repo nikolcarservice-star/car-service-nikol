@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import BookingForm from '../../../components/BookingForm';
@@ -201,7 +202,9 @@ export default function ContactPage({ params }) {
             {/* Right column: booking form */}
             <div className="relative overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-slate-900/80 to-slate-900/50 p-6 shadow-2xl shadow-black/30 ring-1 ring-orange-500/10 sm:p-8">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500/80 via-orange-400 to-amber-500/80" />
-              <BookingForm lang={lang} embed />
+              <Suspense fallback={<div className="min-h-[24rem]" aria-busy="true" />}>
+                <BookingForm lang={lang} embed />
+              </Suspense>
             </div>
           </div>
         </div>

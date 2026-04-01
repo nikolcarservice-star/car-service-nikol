@@ -148,7 +148,7 @@ export default function Services({ t, lang = 'pl' }) {
                       </Link>
                     ) : null}
                     <Link
-                      href={`/${lang}#${t.bookingId || 'booking'}`}
+                      href={`/${lang}?service=${encodeURIComponent(service.key)}#${t.bookingId || 'booking'}`}
                       className="inline-flex min-h-[2.75rem] flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/40 bg-white/5 px-3 py-2 text-xs font-semibold text-gray-100 backdrop-blur-sm transition hover:border-orange-400/60 hover:bg-orange-500/20 sm:min-h-[2.875rem] sm:flex-1 sm:px-4 sm:text-sm lg:flex-none lg:justify-center"
                     >
                       <CalendarDays className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" aria-hidden />

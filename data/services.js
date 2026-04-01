@@ -34,6 +34,13 @@ export const servicesData = {
         { label: 'Wymiana amortyzatora (1 szt.)', value: 'od 180 zł robocizna' },
         { label: 'Wymiana wahacza kompletnego', value: 'od 220 zł robocizna' },
       ],
+      symptoms: [
+        'Stuki lub pukanie z podwozia przy przejeździe przez dziury i krawężniki.',
+        '„Uciekanie” auta z toru jazdy, konieczność ciągłej korekty kierownicą.',
+        'Nierówne zużycie bieżnika opon, mimo poprawnej geometrii.',
+        'Pływanie nadwozia na falistym asfalcie, „miękkie” lub twarde odczucie amortyzacji.',
+        'Luz na kierownicy lub stuk przy skręcaniu.',
+      ],
     },
     ru: {
       name: 'Ремонт ходовой',
@@ -54,6 +61,12 @@ export const servicesData = {
         { label: 'Диагностика ходовой части', value: 'от 120 zł' },
         { label: 'Замена амортизатора (1 шт.)', value: 'от 180 zł работа' },
         { label: 'Замена рычага в сборе', value: 'от 220 zł работа' },
+      ],
+      symptoms: [
+        'Стуки или стоны подвески на неровностях и лежачих полицейских.',
+        'Увод автомобиля в сторону без вашего участия, «плавает» на волнах покрытия.',
+        'Неравномерный износ шин при нормальном развале.',
+        'Люфт руля или стук при повороте.',
       ],
     },
   },
@@ -79,6 +92,12 @@ export const servicesData = {
         { label: 'Wymiana filtra powietrza', value: 'od 40 zł robocizna' },
         { label: 'Wymiana filtra kabinowego', value: 'od 50 zł robocizna' },
       ],
+      symptoms: [
+        'Zbliża się interwał wymiany wg książki serwisowej lub ostatniej wizyty.',
+        'Ciemniejszy lub wyraźnie niski poziom oleju na bagnetcie.',
+        'Świeci kontrolka ciśnienia oleju lub „check oil”.',
+        'Suchy dźwięk silnika po rozgrzaniu, nietypowe „klikanie” rozrządu (warto sprawdzić stan oleju).',
+      ],
     },
     ru: {
       name: 'Замена масла и фильтров',
@@ -99,6 +118,12 @@ export const servicesData = {
         { label: 'Замена масла + масляный фильтр', value: 'от 220 zł с материалами' },
         { label: 'Замена воздушного фильтра', value: 'от 40 zł работа' },
         { label: 'Замена салонного фильтра', value: 'от 50 zł работа' },
+      ],
+      symptoms: [
+        'Подошёл срок замены по регламенту или записи в сервисной книжке.',
+        'Масло на щупе тёмное или уровень ниже отметки MIN.',
+        'Горит лампа давления масла.',
+        'Нестабильный холостой ход, смена звука мотора — имеет смысл проверить масло и фильтры.',
       ],
     },
   },
@@ -124,6 +149,13 @@ export const servicesData = {
         { label: 'Wymiana tarcz + klocków (oś)', value: 'od 260 zł robocizna' },
         { label: 'Wymiana płynu hamulcowego', value: 'od 150 zł z materiałem' },
       ],
+      symptoms: [
+        'Pisk, skrzyp lub stukanie przy hamowaniu — szczególnie po rozgrzaniu.',
+        'Drgania w kierownicy lub pedale przy lekkim hamowaniu z wyższej prędkości.',
+        'Wyraźnie dłuższa droga hamowania, „miękki” pedał.',
+        'Świeci kontrolka ABS / hamulca, nietypowy zapach przypaliny przy zjeździe z góry.',
+        'Auto ciągnie w bok podczas równomiernego hamowania.',
+      ],
     },
     ru: {
       name: 'Сервис тормозной системы',
@@ -144,6 +176,13 @@ export const servicesData = {
         { label: 'Замена тормозных колодок (ось)', value: 'от 160 zł работа' },
         { label: 'Замена дисков + колодок (ось)', value: 'от 260 zł работа' },
         { label: 'Замена тормозной жидкости', value: 'от 150 zł с материалами' },
+      ],
+      symptoms: [
+        'Скрип или писк при торможении, особенно после прогрева.',
+        'Вибрация в руле или педали при торможении со скорости.',
+        'Увеличенный тормозной путь, «ватный» педаль.',
+        'Индикация ABS / тормозов, запах гари при спусках.',
+        'Увод в сторону при ровном нажатии на педаль.',
       ],
     },
   },
@@ -168,6 +207,13 @@ export const servicesData = {
         { label: 'Podstawowa diagnostyka komputerowa', value: 'od 150 zł' },
         { label: 'Rozszerzona diagnostyka kilku układów', value: 'od 220 zł' },
       ],
+      symptoms: [
+        'Świeci się kontrolka „check engine” lub inna ostrzegawcza.',
+        'Uczucie utraty mocy, nierówna praca silnika na biegu jałowym.',
+        'Wyższe niż zwykle spalanie bez zmiany stylu jazdy.',
+        'Problemy z rozruchem, błędy wskazywane na wyświetlaczu.',
+        'Po wymianie części — kasowanie błędów i weryfikacja układów.',
+      ],
     },
     ru: {
       name: 'Компьютерная диагностика',
@@ -187,6 +233,12 @@ export const servicesData = {
       prices: [
         { label: 'Базовая компьютерная диагностика', value: 'от 150 zł' },
         { label: 'Расширенная диагностика нескольких систем', value: 'от 220 zł' },
+      ],
+      symptoms: [
+        'Горит «check engine» или другие предупреждения на панели.',
+        'Потеря тяги, нестабильные обороты на холостом ходу.',
+        'Расход топлива вырос без изменения маршрутов.',
+        'Трудности с запуском, сообщения об ошибках на дисплее.',
       ],
     },
   },
@@ -211,6 +263,13 @@ export const servicesData = {
         { label: 'Wymiana paska rozrządu (silnik 4-cyl.)', value: 'od 900 zł robocizna' },
         { label: 'Wymiana łańcucha rozrządu', value: 'wycena indywidualna' },
       ],
+      symptoms: [
+        'Zbliża się limit kilometrów / lat wymiany rozrządu wg producenta.',
+        'Suche stuki z okolic silnika, szczególnie na zimnym lub zaraz po odpaleniu.',
+        'Plamy płynu chłodzącego pod autem przy obudowie pompy wody.',
+        'Wycie cienkiego paska osprzętu lub „łoskot” przy przyspieszaniu.',
+        'Po zakupie używanego auta bez pewnej historii serwisu — warto zweryfikować interwał.',
+      ],
     },
     ru: {
       name: 'Замена ГРМ',
@@ -230,6 +289,12 @@ export const servicesData = {
       prices: [
         { label: 'Замена ремня ГРМ (4-цилиндровый двигатель)', value: 'от 900 zł работа' },
         { label: 'Замена цепи ГРМ', value: 'индивидуальный расчёт' },
+      ],
+      symptoms: [
+        'Близок регламент замены по пробегу или годам.',
+        'Стуки в области ГРМ на холодную или сразу после запуска.',
+        'Подтёки охлаждающей жидкости у помпы.',
+        'Покупка авто без истории — проверить, менялся ли ремень или цепь.',
       ],
     },
   },
@@ -255,6 +320,12 @@ export const servicesData = {
         { label: 'Wyważanie koła', value: 'od 25 zł / szt.' },
         { label: 'Naprawa przebicia (łata, standard)', value: 'od 60 zł' },
       ],
+      symptoms: [
+        'Zbliża się sezonowa wymiana (lato / zima) lub guma ma już mały bieżnik.',
+        'Utrata ciśnienia, śruba w oponie, widoczne uszkodzenie boku.',
+        'Drgania kierownicy przy 80–100 km/h — często niewyważone koło.',
+        'Opona „jedzie” w bok mimo prostej geometrii — warto sprawdzić montaż i stan opon.',
+      ],
     },
     ru: {
       name: 'Шиномонтаж',
@@ -275,6 +346,11 @@ export const servicesData = {
         { label: 'Замена комплекта шин (4 колеса, легковые)', value: 'от 120 zł' },
         { label: 'Балансировка колеса', value: 'от 25 zł / шт.' },
         { label: 'Ремонт прокола (заплатка)', value: 'от 60 zł' },
+      ],
+      symptoms: [
+        'Пора сезонной смены, низкий протектор или возраст резины.',
+        'Быстрая потеря давления, гвоздь или порез.',
+        'Вибрация руля на скорости — часто балансировка.',
       ],
     },
   },
@@ -300,6 +376,12 @@ export const servicesData = {
         { label: 'Uruchomienie auta boosterem / kablami', value: 'od 80 zł' },
         { label: 'Wymiana koła na zapas (w razie przygotowanego koła)', value: 'od 60 zł' },
       ],
+      symptoms: [
+        'Rozładowany akumulator — nie słychać rozrusznika lub słabe światła.',
+        'Przebita opona, brak miejsca lub narzędzi, by bezpiecznie ją wymienić.',
+        'Auto nie odpala po mrozie lub po dłuższym postoju.',
+        'Potrzebna szybka pomoc „na miejscu”, gdy nie możesz dojechać do warsztatu.',
+      ],
     },
     ru: {
       name: 'Выездной сервис',
@@ -320,6 +402,11 @@ export const servicesData = {
         { label: 'Выезд в районе Jastrowo (днём)', value: 'от 80 zł' },
         { label: 'Запуск автомобиля от внешнего источника', value: 'от 80 zł' },
         { label: 'Замена колеса на запаску', value: 'от 60 zł' },
+      ],
+      symptoms: [
+        'Разрядился аккумулятор, не крутит стартер, тусклый свет.',
+        'Прокол без возможности быстрой замены колеса.',
+        'Не заводится на морозе, нужен внешний запуск.',
       ],
     },
   },
@@ -345,6 +432,12 @@ export const servicesData = {
         { label: 'Dorobienie klucza z immobilizerem (wycena po VIN)', value: 'indywidualnie' },
         { label: 'Adaptacja / synchronizacja istniejącego klucza', value: 'od 200 zł' },
       ],
+      symptoms: [
+        'Zgubiony lub skradziony kluczyk — potrzebna kopia lub nowy komplet.',
+        'Pilot / centralny zamek nie reaguje mimo sprawnej baterii w pilocie.',
+        'Immobilizer blokuje rozruch — kontrolka klucza miga, silnik nie kręci.',
+        'Złamany klucz w stacyjce lub nie obraca się barrel.',
+      ],
     },
     ru: {
       name: 'Автомобильные ключи',
@@ -366,6 +459,12 @@ export const servicesData = {
         { label: 'Изготовление ключа с чипом (расчёт по VIN)', value: 'индивидуально' },
         { label: 'Синхронизация существующего ключа', value: 'от 200 zł' },
       ],
+      symptoms: [
+        'Потерян или украден ключ, нужен дубликат или новый набор.',
+        'Не работает брелок / центральный замок при исправной батарейке.',
+        'Иммобилайзер не даёт завести, индикатор ключа мигает.',
+        'Сломанный ключ в замке зажигания.',
+      ],
     },
   },
 };
@@ -384,12 +483,30 @@ export function getAllServices(lang) {
 
 export function getServiceBySlug(slug, lang) {
   const code = normalizeLang(lang);
-  const entry = Object.values(servicesData).find((service) => service.slug === slug);
-  if (!entry) return null;
+  const foundKey = SERVICE_KEYS.find((k) => servicesData[k].slug === slug);
+  if (!foundKey) return null;
+  const entry = servicesData[foundKey];
   return {
+    key: foundKey,
     slug: entry.slug,
     ...entry[code],
   };
+}
+
+/** Najniższa kwota „od …” z listy cen (PLN), pomija wyceny indywidualne. */
+export function getLowestFromPricePln(prices) {
+  if (!prices?.length) return null;
+  let min = null;
+  for (const p of prices) {
+    const raw = (p.value || '').toLowerCase();
+    if (/indywidual|wycena|индивиду/i.test(raw)) continue;
+    const m = (p.value || '').match(/(\d[\d\s]*)/);
+    if (!m) continue;
+    const n = parseInt(m[1].replace(/\s/g, ''), 10);
+    if (Number.isNaN(n)) continue;
+    if (min === null || n < min) min = n;
+  }
+  return min;
 }
 
 export function getServiceNavItems(lang) {

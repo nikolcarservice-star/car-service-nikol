@@ -142,6 +142,14 @@ export const translations = {
       sundayBadge: 'Dostępne terminy w najbliższą niedzielę!',
       serviceDetails: 'Zobacz szczegóły usługi',
     },
+    serviceDetail: {
+      symptomsHeading: 'Kiedy warto zająć się tym w serwisie?',
+      pricesDisclaimer:
+        'Orientacyjne ceny brutto w PLN (1 PLN = 1 zł). Końcowa wycena zależy od modelu auta, części i zakresu prac.',
+      fromPriceBand: 'Wiele pozycji w tej kategorii już od {amount} PLN.',
+      bookCta: 'Umów wizytę — ta usługa',
+      bookCtaHint: 'Formularz na dole strony głównej otworzy się z wybraną usługą.',
+    },
     aboutPage: {
       heroTitle: 'Car Service Nikol — Twój zaufany serwis w Jastrowo',
       heroSubtitle: 'Doświadczenie, uczciwość i terminowość. Pracujemy także w niedziele.',
@@ -361,6 +369,14 @@ export const translations = {
     servicesPage: {
       sundayBadge: 'Есть записи на ближайшее воскресенье!',
       serviceDetails: 'Подробнее об услуге',
+    },
+    serviceDetail: {
+      symptomsHeading: 'Когда пора обратиться в сервис?',
+      pricesDisclaimer:
+        'Ориентировочные цены в PLN-брутто (1 PLN = 1 zł). Итоговая стоимость зависит от модели авто, запчастей и объёма работ.',
+      fromPriceBand: 'Многие позиции в этой категории уже от {amount} PLN.',
+      bookCta: 'Записаться на эту услугу',
+      bookCtaHint: 'В форме на главной странице услуга будет выбрана автоматически.',
     },
     aboutPage: {
       heroTitle: 'Car Service Nikol — ваш надёжный сервис в Jastrowo',

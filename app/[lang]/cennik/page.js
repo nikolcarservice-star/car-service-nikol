@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { FileText, Phone, CalendarDays } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import {
+  getPhoneContactPageHref,
   getTranslations,
   normalizeLang,
-  PHONE_TEL_HREF,
   PHONE_DISPLAY,
 } from '../../../constants/translations';
 import {
@@ -154,13 +154,14 @@ export default function CennikPage({ params }) {
               : 'Dopasujemy dogodny termin i podamy dokładną wycenę.'}
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
-            <a
-              href={PHONE_TEL_HREF}
+            <Link
+              href={getPhoneContactPageHref(lang)}
+              prefetch={false}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:from-orange-400 hover:to-amber-400"
             >
               <Phone className="h-5 w-5" />
               {PHONE_DISPLAY}
-            </a>
+            </Link>
             <Link
               href={`/${lang}#booking`}
               className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-orange-500/60 bg-slate-800/80 px-5 py-3.5 text-sm font-bold text-white transition hover:border-orange-400 hover:bg-orange-500/20"

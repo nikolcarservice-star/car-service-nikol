@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Calendar, X } from 'lucide-react';
-import { getTranslations, PHONE_TEL_HREF } from '../constants/translations';
+import { getPhoneContactPageHref, getTranslations } from '../constants/translations';
 
 const STORAGE_KEY = 'car-service-nikol-prompt-seen';
 const DELAY_MS = 25000; // 25 секунд
@@ -130,14 +130,15 @@ export default function DelayedPrompt({ lang }) {
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-stretch">
-                <a
-                  href={PHONE_TEL_HREF}
+                <Link
+                  href={getPhoneContactPageHref(currentLang)}
+                  prefetch={false}
                   onClick={handleCallClick}
                   className="inline-flex flex-1 items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-4 text-base font-bold text-white shadow-lg shadow-orange-500/30 transition hover:from-orange-400 hover:to-orange-500 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-900"
                 >
                   <Phone className="h-5 w-5 shrink-0" />
                   {prompt.ctaCall}
-                </a>
+                </Link>
                 <Link
                   href={`${basePath}/contact`}
                   onClick={handleBookClick}

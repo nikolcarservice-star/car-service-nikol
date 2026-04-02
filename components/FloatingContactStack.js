@@ -1,8 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { siTelegram } from 'simple-icons';
-import { getTranslations, PHONE_TEL_HREF } from '../constants/translations';
+import { getPhoneContactPageHref, getTranslations } from '../constants/translations';
 import { WHATSAPP_HREF, TELEGRAM_HREF } from '../constants/contactLinks';
 
 const fabBase =
@@ -45,14 +46,15 @@ export default function FloatingContactStack({ lang = 'pl' }) {
         </svg>
       </a>
 
-      <a
-        href={PHONE_TEL_HREF}
+      <Link
+        href={getPhoneContactPageHref(lang)}
         aria-label={callLabel}
         title={callLabel}
+        prefetch={false}
         className={`${fabBase} h-12 w-12 bg-gradient-to-br from-orange-500 to-amber-500 focus:ring-orange-400 animate-cta-glow sm:h-14 sm:w-14`}
       >
         <Phone className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
-      </a>
+      </Link>
     </div>
   );
 }

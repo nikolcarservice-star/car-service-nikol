@@ -12,6 +12,17 @@ export const PHONE_RAW = '48794935734';
 /** RFC 3966 — zawsze z prefiksem kraju `+` dla `tel:`. */
 export const PHONE_TEL_HREF = `tel:+${PHONE_RAW}`;
 
+/**
+ * Kotwica na /[lang]/contact przy głównym przycisku z href={PHONE_TEL_HREF}.
+ * Nawigacja (header, FAB) wskazuje tu zamiast tel:, żeby crawlery nie raportowały „uncertain”.
+ */
+export const PHONE_CONTACT_ANCHOR_ID = 'telefon';
+
+export function getPhoneContactPageHref(lang) {
+  const l = lang === LANGUAGES.RU ? 'ru' : 'pl';
+  return `/${l}/contact#${PHONE_CONTACT_ANCHOR_ID}`;
+}
+
 export const translations = {
   pl: {
     langLabel: 'PL',

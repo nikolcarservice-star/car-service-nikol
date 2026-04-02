@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
-import { PHONE_DISPLAY, PHONE_TEL_HREF, LANGUAGES } from '../constants/translations';
+import { PHONE_DISPLAY, LANGUAGES, getPhoneContactPageHref } from '../constants/translations';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from '../constants/localeConfig';
 import { getServiceNavItems } from '../data/services';
 
@@ -159,14 +159,14 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
             </div>
           )}
 
-          <a
-            href={PHONE_TEL_HREF}
+          <Link
+            href={getPhoneContactPageHref(currentLang)}
             className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 sm:gap-2 sm:px-3 sm:text-xs"
             title={nav.phoneCta}
           >
             <Phone className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
             <span className="hidden lg:inline">{PHONE_DISPLAY}</span>
-          </a>
+          </Link>
 
           <Link
             href={bookHref}
@@ -321,14 +321,14 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
                   </div>
                 </>
               )}
-              <a
-                href={PHONE_TEL_HREF}
+              <Link
+                href={getPhoneContactPageHref(currentLang)}
                 onClick={() => setMobileMenuOpen(false)}
                 className="mt-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white"
               >
                 <Phone className="h-4 w-4" />
                 {PHONE_DISPLAY}
-              </a>
+              </Link>
               <Link
                 href={bookHref}
                 onClick={() => setMobileMenuOpen(false)}

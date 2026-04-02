@@ -7,6 +7,7 @@ import { TELEGRAM_HREF, WHATSAPP_HREF } from '../../../constants/contactLinks';
 import {
   getTranslations,
   normalizeLang,
+  PHONE_CONTACT_ANCHOR_ID,
   PHONE_DISPLAY,
   PHONE_TEL_HREF,
 } from '../../../constants/translations';
@@ -164,6 +165,7 @@ export default function ContactPage({ params }) {
               {/* Large CTA buttons */}
               <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <a
+                  id={PHONE_CONTACT_ANCHOR_ID}
                   href={PHONE_TEL_HREF}
                   className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-6 py-4 text-base font-bold text-white shadow-xl shadow-orange-500/25 ring-2 ring-orange-400/20 transition hover:scale-[1.02] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/35 hover:ring-orange-400/40"
                   title={lang === 'ru' ? 'Позвонить' : 'Zadzwoń'}

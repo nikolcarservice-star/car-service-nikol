@@ -8,7 +8,7 @@ const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const schemaDescriptions = {
   pl:
-    'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele.',
+    'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Car Service Nikol — pracujemy w soboty i niedziele.',
   ru:
     'Car Service Nikol – профессиональный автосервис Jastrowo и Шамотулы. Механик, диагностика, ремонт подвески и тормозов, замена масла. Работаем в субботу и воскресенье.',
 };
@@ -63,9 +63,13 @@ function buildJsonLdOrganization(lang) {
   };
 }
 
-const title = 'Car Service Nikol – Serwis samochodowy Jastrowo, Szamotuły | Weekendy';
+const title = 'Mechanik Jastrowo & Szamotuły | Serwis otwarty w niedziele';
 const description =
-  'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele.';
+  'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele! Umów wizytę online.';
+
+const openGraphTitle = 'Car Service Nikol - Serwis w Niedziele';
+const openGraphDescription =
+  'Naprawimy Twój samochód, gdy inni odpoczywają. Jastrowo i okolice.';
 
 export const viewport = {
   width: 'device-width',
@@ -79,7 +83,7 @@ export const metadata = {
   title,
   description,
   keywords:
-    'serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, mechanik Szamotuły, diagnostyka samochodowa Jastrowo, naprawa hamulców Szamotuły, wymiana oleju i filtrów Jastrowo, Car Service Nikol',
+    'mechanik Jastrowo, mechanik Szamotuły, serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, diagnostyka samochodowa, wymiana oleju Jastrowo, serwis w niedziele, Car Service Nikol',
   alternates: { canonical: '/pl' },
   authors: [{ name: 'Car Service Nikol', url: siteUrl }],
   creator: 'Car Service Nikol',
@@ -89,22 +93,22 @@ export const metadata = {
     locale: 'pl_PL',
     url: siteUrl,
     siteName: 'Car Service Nikol',
-    title,
-    description,
+    title: openGraphTitle,
+    description: openGraphDescription,
     images: [
       {
-        url: '/images/services/mechanic-changing-tires-car-service.jpg',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Car Service Nikol – serwis samochodowy Jastrowo, Szamotuły',
+        alt: 'Car Service Nikol – mechanik Jastrowo, serwis w niedziele',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title,
-    description,
-    images: ['/images/services/mechanic-changing-tires-car-service.jpg'],
+    title: openGraphTitle,
+    description: openGraphDescription,
+    images: ['/og-image.jpg'],
   },
   ...(googleSiteVerification && {
     verification: { google: googleSiteVerification },

@@ -16,7 +16,7 @@ export function generateMetadata({ params }) {
   const languages = { pl: `${SITE_URL}/pl`, ru: `${SITE_URL}/ru` };
 
   const ogImage = {
-    url: '/images/services/mechanic-changing-tires-car-service.jpg',
+    url: '/og-image.jpg',
     width: 1200,
     height: 630,
   };
@@ -45,14 +45,17 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Car Service Nikol – Serwis samochodowy Jastrowo, Szamotuły | Otwarte w niedziele';
+  const title = 'Mechanik Jastrowo & Szamotuły | Serwis otwarty w niedziele';
   const description =
-    'Car Service Nikol – profesjonalny serwis samochodowy Jastrowo i Szamotuły. Mechanik, diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Otwarte w soboty i niedziele. Umów wizytę online.';
+    'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele! Umów wizytę online.';
+  const openGraphTitle = 'Car Service Nikol - Serwis w Niedziele';
+  const openGraphDescription =
+    'Naprawimy Twój samochód, gdy inni odpoczywają. Jastrowo i okolice.';
   return {
     title,
     description,
     keywords:
-      'serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, mechanik Szamotuły, diagnostyka samochodowa, naprawa hamulców, wymiana oleju i filtrów, warsztat w niedzielę, Car Service Nikol',
+      'mechanik Jastrowo, mechanik Szamotuły, serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, diagnostyka samochodowa, wymiana oleju Jastrowo, serwis w niedziele, Car Service Nikol',
     alternates: { canonical, languages },
     openGraph: {
       type: 'website',
@@ -60,11 +63,16 @@ export function generateMetadata({ params }) {
       alternateLocale: 'ru_RU',
       url: `${SITE_URL}${canonical}`,
       siteName: 'Car Service Nikol',
-      title,
-      description,
-      images: [{ ...ogImage, alt: 'Car Service Nikol – serwis samochodowy Jastrowo, Szamotuły' }],
+      title: openGraphTitle,
+      description: openGraphDescription,
+      images: [{ ...ogImage, alt: 'Car Service Nikol – mechanik Jastrowo, serwis w niedziele' }],
     },
-    twitter: { card: 'summary_large_image', title, description, images: [ogImage.url] },
+    twitter: {
+      card: 'summary_large_image',
+      title: openGraphTitle,
+      description: openGraphDescription,
+      images: [ogImage.url],
+    },
   };
 }
 

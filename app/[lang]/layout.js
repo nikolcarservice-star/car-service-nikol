@@ -1,6 +1,7 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import FloatingContactStack from '../../components/FloatingContactStack';
+import SosRoadsideButton from '../../components/SosRoadsideButton';
 import DelayedPrompt from '../../components/DelayedPrompt';
 import LangAttr from '../../components/LangAttr';
 import { getTranslations, normalizeLang } from '../../constants/translations';
@@ -15,6 +16,7 @@ export default function LangLayout({ children, params }) {
       <Header lang={lang} t={t} />
       <main>{children}</main>
       <Footer lang={lang} />
+      <SosRoadsideButton lang={lang} />
       <FloatingContactStack lang={lang} />
       <DelayedPrompt lang={lang} />
     </div>

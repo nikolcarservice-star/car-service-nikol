@@ -267,6 +267,16 @@ export const translations = {
       intro:
         'Odpowiedzi na typowe pytania — wiele z nich pada przy pierwszym kontakcie telefonicznym. Jeśli nie znalazłeś odpowiedzi, zadzwoń lub umów wizytę online.',
     },
+    sosRoadside: {
+      label: 'SOS / Pomoc drogowa',
+      ariaLabel:
+        'SOS — wyślij wiadomość WhatsApp z lokalizacją GPS do warsztatu lub zadzwoń w nagłym wypadku',
+      busyLabel: 'Pobieranie lokalizacji…',
+      messageWithLocation:
+        'Potrzebuję pomocy drogowej. Jestem tutaj (mapa / GPS): {link}\nProszę o pilny kontakt.',
+      messageNoLocation:
+        'Potrzebuję pomocy drogowej — proszę o pilny kontakt.\nNie udało się pobrać GPS; jestem w okolicy Jastrowo / Szamotuły.',
+    },
     reviews: {
       title: 'Opinia Google',
       subtitle: 'Co mówią o nas klienci',
@@ -520,6 +530,16 @@ export const translations = {
     faqPage: {
       intro:
         'Ответы на типичные вопросы — многие звучат при первом звонке. Если не нашли ответ, позвоните или запишитесь онлайн.',
+    },
+    sosRoadside: {
+      label: 'SOS / Помощь на дороге',
+      ariaLabel:
+        'SOS — отправить в WhatsApp сообщение с геолокацией в автосервис или позвонить в экстренном случае',
+      busyLabel: 'Определяем местоположение…',
+      messageWithLocation:
+        'Мне нужна помощь, я застрял рядом с этим местом: {link}\nПрошу срочно связаться.',
+      messageNoLocation:
+        'Мне нужна помощь на дороге — прошу срочно связаться.\nНе удалось получить геолокацию; я в районе Jastrowo / Szamotuły.',
     },
     reviews: {
       title: 'Отзывы Google',

@@ -31,7 +31,11 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
   const bookHref = `${buildPath(currentLang)}${querySuffix}#${t.bookingId || 'booking'}`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 shadow-md shadow-black/20 backdrop-blur-md">
+    <header
+      className={`sticky top-0 border-b border-slate-800/80 bg-slate-950/95 shadow-md shadow-black/20 backdrop-blur-md ${
+        mobileMenuOpen ? 'z-[100]' : 'z-40'
+      }`}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-4">
         <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
           <Link
@@ -190,25 +194,19 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
         </button>
       </div>
 
-      {/* Mobile menu overlay — solid background so menu is visible on all devices */}
+      {/* Mobile menu: fixed layers + flex scroll (avoids collapse under overflow/min-h on mobile) */}
       {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-50 md:hidden"
-          aria-modal="true"
-          role="dialog"
-          aria-label={nav.menuLabel ?? 'Menu nawigacji'}
-        >
+        <div className="md:hidden" aria-modal="true" role="dialog" aria-label={nav.menuLabel ?? 'Menu nawigacji'}>
           <button
             type="button"
-            className="absolute inset-0 z-0 bg-black/75 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
             aria-label={nav.closeMenu ?? 'Zamknij menu'}
           />
           <div
-            className="absolute right-0 top-0 z-10 h-full w-full max-w-[min(100vw,22rem)] overflow-y-auto border-l-2 border-slate-700 bg-slate-900 shadow-2xl"
+            className="fixed inset-y-0 right-0 z-[101] flex h-[100dvh] w-[min(100vw,22rem)] flex-col overflow-hidden border-l-2 border-slate-700 bg-slate-900 shadow-2xl"
           >
-            <div className="flex min-h-full flex-col">
-            <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 flex-shrink-0">
+            <div className="flex shrink-0 items-center justify-between border-b border-slate-800 px-4 py-3">
               <span className="text-sm font-semibold text-gray-300">Menu</span>
               <button
                 type="button"
@@ -219,7 +217,7 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <nav className="flex flex-col gap-0 p-4">
+            <nav className="flex min-h-0 flex-1 flex-col gap-0 overflow-y-auto overscroll-contain p-4">
               <Link
                 href={buildPath(currentLang)}
                 onClick={() => setMobileMenuOpen(false)}
@@ -338,7 +336,6 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
                 {nav.bookCta ?? 'Umów wizytę'}
               </Link>
             </nav>
-            </div>
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import { Phone } from 'lucide-react';
 import { siTelegram } from 'simple-icons';
-import { getTranslations, PHONE_RAW } from '../constants/translations';
+import { getTranslations, PHONE_TEL_HREF } from '../constants/translations';
 import { WHATSAPP_HREF, TELEGRAM_HREF } from '../constants/contactLinks';
 
 const fabBase =
@@ -46,7 +46,7 @@ export default function FloatingContactStack({ lang = 'pl' }) {
       </a>
 
       <a
-        href={`tel:${PHONE_RAW}`}
+        href={PHONE_TEL_HREF}
         aria-label={callLabel}
         title={callLabel}
         className={`${fabBase} h-12 w-12 bg-gradient-to-br from-orange-500 to-amber-500 focus:ring-orange-400 animate-cta-glow sm:h-14 sm:w-14`}

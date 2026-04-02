@@ -9,6 +9,8 @@ export const SUPPORTED_LANGS = [LANGUAGES.PL, LANGUAGES.RU];
 
 export const PHONE_DISPLAY = '+48 794 935 734';
 export const PHONE_RAW = '48794935734';
+/** RFC 3966 — zawsze z prefiksem kraju `+` dla `tel:`. */
+export const PHONE_TEL_HREF = `tel:+${PHONE_RAW}`;
 
 export const translations = {
   pl: {

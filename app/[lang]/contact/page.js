@@ -3,11 +3,13 @@ import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import BookingForm from '../../../components/BookingForm';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../../../constants/googleBusiness';
+import { TELEGRAM_HREF } from '../../../constants/contactLinks';
 import {
   getTranslations,
   normalizeLang,
   PHONE_DISPLAY,
   PHONE_RAW,
+  PHONE_TEL_HREF,
 } from '../../../constants/translations';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
@@ -163,7 +165,7 @@ export default function ContactPage({ params }) {
               {/* Large CTA buttons */}
               <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <a
-                  href={`tel:${PHONE_RAW}`}
+                  href={PHONE_TEL_HREF}
                   className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-6 py-4 text-base font-bold text-white shadow-xl shadow-orange-500/25 ring-2 ring-orange-400/20 transition hover:scale-[1.02] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/35 hover:ring-orange-400/40"
                   title={lang === 'ru' ? 'Позвонить' : 'Zadzwoń'}
                 >
@@ -184,7 +186,7 @@ export default function ContactPage({ params }) {
                   <span>{t.location.whatsapp}</span>
                 </a>
                 <a
-                  href="https://t.me/+48794935734"
+                  href={TELEGRAM_HREF}
                   target="_blank"
                   rel="noreferrer"
                   className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl border-2 border-slate-600 bg-slate-800/80 px-6 py-4 text-base font-bold text-gray-100 shadow-lg transition hover:scale-[1.02] hover:border-orange-500/60 hover:bg-slate-700/80 hover:text-orange-300 hover:shadow-orange-500/10"

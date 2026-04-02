@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import { FileText, Phone, CalendarDays } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import { getTranslations, normalizeLang, PHONE_RAW, PHONE_DISPLAY } from '../../../constants/translations';
+import {
+  getTranslations,
+  normalizeLang,
+  PHONE_TEL_HREF,
+  PHONE_DISPLAY,
+} from '../../../constants/translations';
 import {
   priceListPl,
   priceListRu,
@@ -150,7 +155,7 @@ export default function CennikPage({ params }) {
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <a
-              href={`tel:${PHONE_RAW}`}
+              href={PHONE_TEL_HREF}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:from-orange-400 hover:to-amber-400"
             >
               <Phone className="h-5 w-5" />

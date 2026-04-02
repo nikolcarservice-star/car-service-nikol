@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
-import { PHONE_DISPLAY, PHONE_RAW, LANGUAGES } from '../constants/translations';
+import { PHONE_DISPLAY, PHONE_TEL_HREF, LANGUAGES } from '../constants/translations';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from '../constants/localeConfig';
 import { getServiceNavItems } from '../data/services';
 
@@ -160,7 +160,7 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
           )}
 
           <a
-            href={`tel:${PHONE_RAW}`}
+            href={PHONE_TEL_HREF}
             className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-400/30 transition hover:from-orange-400 hover:to-amber-400 sm:gap-2 sm:px-3 sm:text-xs"
             title={nav.phoneCta}
           >
@@ -322,7 +322,7 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
                 </>
               )}
               <a
-                href={`tel:${PHONE_RAW}`}
+                href={PHONE_TEL_HREF}
                 onClick={() => setMobileMenuOpen(false)}
                 className="mt-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white"
               >

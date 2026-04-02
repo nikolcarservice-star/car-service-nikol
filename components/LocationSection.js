@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Send } from 'lucide-react';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../constants/googleBusiness';
+import { TELEGRAM_HREF } from '../constants/contactLinks';
 import { translations, PHONE_DISPLAY, PHONE_RAW } from '../constants/translations';
 
 export default function LocationSection({ lang }) {
@@ -109,7 +110,7 @@ export default function LocationSection({ lang }) {
                 <span>{t.whatsapp}</span>
               </a>
               <a
-                href="https://t.me/+48794935734"
+                href={TELEGRAM_HREF}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-xs font-semibold text-gray-100 shadow-md hover:border-orange-500 hover:text-orange-300"

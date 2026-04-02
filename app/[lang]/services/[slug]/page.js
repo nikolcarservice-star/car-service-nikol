@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { CalendarDays, Phone, Stethoscope } from 'lucide-react';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import { getServiceBySlug, getLowestFromPricePln, SERVICE_KEYS, servicesData } from '../../../../data/services';
-import { getTranslations, normalizeLang } from '../../../../constants/translations';
+import { getTranslations, normalizeLang, PHONE_TEL_HREF } from '../../../../constants/translations';
 import { getSitemapLangs } from '../../../../constants/localeConfig';
 
 function displayPriceInPln(value) {
@@ -160,7 +160,7 @@ export default function ServiceDetailPage({ params }) {
                   : 'Szybko powiemy, ile będzie kosztować naprawa w Twoim konkretnym przypadku.'}
               </p>
               <a
-                href="tel:+48794935734"
+                href={PHONE_TEL_HREF}
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-glow transition hover:bg-orange-400 sm:w-auto"
               >
                 <Phone className="h-4 w-4" />

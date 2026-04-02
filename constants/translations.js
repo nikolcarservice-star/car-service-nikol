@@ -269,9 +269,8 @@ export const translations = {
     },
     sosRoadside: {
       label: 'SOS / Pomoc drogowa',
-      ariaLabel: 'SOS — wiadomość WhatsApp z prośbą o pomoc i wskazówką, jak wysłać lokalizację w czacie',
-      whatsAppMessage:
-        'SOS! Potrzebuję pilnej pomocy drogowej — proszę o kontakt.\n\nW WhatsApp: ikona spinacza obok pola wiadomości → Lokalizacja → wyślij bieżącą pozycję (nie trzeba geolokacji w przeglądarce).',
+      ariaLabel: 'SOS — wyślij wiadomość WhatsApp z prośbą o pomoc drogową',
+      whatsAppMessage: 'SOS! Potrzebuję pilnej pomocy drogowej — proszę o kontakt.',
     },
     reviews: {
       title: 'Opinia Google',
@@ -529,9 +528,8 @@ export const translations = {
     },
     sosRoadside: {
       label: 'SOS / Помощь на дороге',
-      ariaLabel: 'SOS — сообщение в WhatsApp о помощи и как отправить геолокацию в чате',
-      whatsAppMessage:
-        'SOS! Нужна срочная помощь на дороге — прошу связаться.\n\nВ WhatsApp: скрепка у поля ввода → Геолокация → отправить текущее местоположение (геолокация в браузере не нужна).',
+      ariaLabel: 'SOS — отправить в WhatsApp сообщение о помощи на дороге',
+      whatsAppMessage: 'SOS! Нужна срочная помощь на дороге — прошу связаться.',
     },
     reviews: {
       title: 'Отзывы Google',

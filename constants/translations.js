@@ -269,15 +269,9 @@ export const translations = {
     },
     sosRoadside: {
       label: 'SOS / Pomoc drogowa',
-      ariaLabel:
-        'SOS — wyślij wiadomość WhatsApp z lokalizacją GPS do warsztatu lub zadzwoń w nagłym wypadku',
-      permissionConfirm:
-        'Aby wstawić link do mapy w WhatsApp, przeglądarka poprosi o dostęp do lokalizacji (odczyt pozycji GPS). Kontynuować?',
-      busyLabel: 'Pobieranie lokalizacji…',
-      messageWithLocation:
-        'Potrzebuję pomocy drogowej. Jestem tutaj (mapa / GPS): {link}\nProszę o pilny kontakt.',
-      messageNoLocation:
-        'Potrzebuję pomocy drogowej — proszę o pilny kontakt.\nNie udało się pobrać GPS; jestem w okolicy Jastrowo / Szamotuły.',
+      ariaLabel: 'SOS — szybka wiadomość WhatsApp do warsztatu o pomocy drogowej',
+      whatsAppMessage:
+        'Potrzebuję pilnej pomocy drogowej — proszę o kontakt w odpowiedzi na tę wiadomość.\nMój numer telefonu jest widoczny po Waszej stronie w WhatsApp (nad czatem).\nKontakt do warsztatu:',
     },
     reviews: {
       title: 'Opinia Google',
@@ -535,15 +529,9 @@ export const translations = {
     },
     sosRoadside: {
       label: 'SOS / Помощь на дороге',
-      ariaLabel:
-        'SOS — отправить в WhatsApp сообщение с геолокацией в автосервис или позвонить в экстренном случае',
-      permissionConfirm:
-        'Чтобы добавить метку на карте в WhatsApp, браузер запросит разрешение на чтение геопозиции (GPS). Продолжить?',
-      busyLabel: 'Определяем местоположение…',
-      messageWithLocation:
-        'Мне нужна помощь, я застрял рядом с этим местом: {link}\nПрошу срочно связаться.',
-      messageNoLocation:
-        'Мне нужна помощь на дороге — прошу срочно связаться.\nНе удалось получить геолокацию; я в районе Jastrowo / Szamotuły.',
+      ariaLabel: 'SOS — быстрое сообщение в WhatsApp автосервису о помощи на дороге',
+      whatsAppMessage:
+        'Мне нужна срочная помощь на дороге — прошу связаться в ответ на это сообщение.\nМой номер телефона автоматически виден вам в WhatsApp (в шапке чата).\nТелефон сервиса:',
     },
     reviews: {
       title: 'Отзывы Google',

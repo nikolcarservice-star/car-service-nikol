@@ -270,8 +270,7 @@ export const translations = {
     sosRoadside: {
       label: 'SOS / Pomoc drogowa',
       ariaLabel: 'SOS — szybka wiadomość WhatsApp do warsztatu o pomocy drogowej',
-      whatsAppMessage:
-        'Potrzebuję pilnej pomocy drogowej — proszę o kontakt w odpowiedzi na tę wiadomość.\nMój numer telefonu jest widoczny po Waszej stronie w WhatsApp (nad czatem).\nKontakt do warsztatu:',
+      whatsAppMessage: 'Potrzebuję pomocy.',
     },
     reviews: {
       title: 'Opinia Google',
@@ -530,8 +529,7 @@ export const translations = {
     sosRoadside: {
       label: 'SOS / Помощь на дороге',
       ariaLabel: 'SOS — быстрое сообщение в WhatsApp автосервису о помощи на дороге',
-      whatsAppMessage:
-        'Мне нужна срочная помощь на дороге — прошу связаться в ответ на это сообщение.\nМой номер телефона автоматически виден вам в WhatsApp (в шапке чата).\nТелефон сервиса:',
+      whatsAppMessage: 'Нужна помощь.',
     },
     reviews: {
       title: 'Отзывы Google',

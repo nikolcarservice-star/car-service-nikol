@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { Siren } from 'lucide-react';
-import { getTranslations, PHONE_DISPLAY, PHONE_RAW } from '../constants/translations';
+import { getTranslations, PHONE_RAW } from '../constants/translations';
 
 function whatsAppSendHref(text) {
   return `https://api.whatsapp.com/send/?phone=${PHONE_RAW}&text=${encodeURIComponent(text)}`;
@@ -14,7 +14,7 @@ export default function SosRoadsideButton({ lang }) {
 
   const handleClick = useCallback(() => {
     if (!copy) return;
-    const body = `${copy.whatsAppMessage.trim()}\n${PHONE_DISPLAY}`;
+    const body = copy.whatsAppMessage.trim();
     window.location.assign(whatsAppSendHref(body));
   }, [copy]);
 

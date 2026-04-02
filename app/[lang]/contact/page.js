@@ -3,12 +3,11 @@ import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import BookingForm from '../../../components/BookingForm';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../../../constants/googleBusiness';
-import { TELEGRAM_HREF } from '../../../constants/contactLinks';
+import { TELEGRAM_HREF, WHATSAPP_HREF } from '../../../constants/contactLinks';
 import {
   getTranslations,
   normalizeLang,
   PHONE_DISPLAY,
-  PHONE_RAW,
   PHONE_TEL_HREF,
 } from '../../../constants/translations';
 
@@ -175,7 +174,7 @@ export default function ContactPage({ params }) {
                   <span>{PHONE_DISPLAY}</span>
                 </a>
                 <a
-                  href={`https://wa.me/${PHONE_RAW}`}
+                  href={WHATSAPP_HREF}
                   target="_blank"
                   rel="noreferrer"
                   className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-xl shadow-[#25D366]/25 transition hover:scale-[1.02] hover:bg-[#20bd5a] hover:shadow-[#25D366]/35"

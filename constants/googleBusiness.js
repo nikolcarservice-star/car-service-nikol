@@ -5,7 +5,7 @@
 
 /** Profil wizytówki + opinie (bezpośredni link dla użytkownika i SEO lokalne). */
 export const GOOGLE_BUSINESS_PROFILE_URL =
-  'https://www.google.com/maps/place/Car+Service+Nikol+%7C+Serwis+samochodowy/@52.5908447,16.5381048,148m/data=!3m1!1e3!4m6!3m5!1s0x47041785835568fb:0xfad9f08b31a08d7!8m2!3d52.5908375!4d16.5384497!16s%2Fg%2F11wv2f39s2';
+  'https://www.google.com/maps/place/Car+Service+Nikol+%7C+Serwis+samochodowy/@52.5908375,16.5384497,17z/data=!4m6!3m5!1s0x47041785835568fb%3A0xfad9f08b31a08d7!8m2!3d52.5908375!4d16.5384497!16s%2Fg%2F11wv2f39s2';
 
 /** @deprecated Użyj GOOGLE_BUSINESS_PROFILE_URL — ten sam adres. */
 export const GOOGLE_BUSINESS_REVIEWS_URL = GOOGLE_BUSINESS_PROFILE_URL;

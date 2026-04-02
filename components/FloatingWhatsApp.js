@@ -1,11 +1,12 @@
 'use client';
 
-import { PHONE_RAW, getTranslations } from '../constants/translations';
+import { WHATSAPP_HREF } from '../constants/contactLinks';
+import { getTranslations } from '../constants/translations';
 
 export default function FloatingWhatsApp({ lang = 'pl' }) {
   const t = getTranslations(lang);
   const label = t?.location?.whatsapp ?? 'Napisz na WhatsApp';
-  const href = `https://wa.me/${PHONE_RAW}`;
+  const href = WHATSAPP_HREF;
 
   return (
     <a

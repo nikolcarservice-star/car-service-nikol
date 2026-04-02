@@ -78,7 +78,7 @@ export default function BlogPostPage({ params }) {
                 : 'Car Service Nikol — serwis w Jastrowo i Szamotułach. Diagnostyka, naprawa zawieszenia i hamulców, wymiana oleju. Pracujemy w weekendy.'}
             </p>
             <Link
-              href={`${basePath}/#booking`}
+              href={`${basePath}#booking`}
               className="mt-3 inline-flex items-center gap-2 text-orange-400 hover:text-orange-300"
             >
               <ArrowLeft className="h-4 w-4" />

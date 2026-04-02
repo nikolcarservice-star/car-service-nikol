@@ -17,7 +17,8 @@ import {
   Wrench,
   X,
 } from 'lucide-react';
-import { LANGUAGES, PHONE_DISPLAY, PHONE_RAW, translations } from '../constants/translations';
+import { WHATSAPP_HREF } from '../constants/contactLinks';
+import { LANGUAGES, PHONE_DISPLAY, translations } from '../constants/translations';
 
 const GA_FORM_CATEGORY = 'booking_form';
 
@@ -502,7 +503,7 @@ export default function BookingForm({ lang, embed }) {
                   <p className="text-xs text-gray-400">
                     {lang === LANGUAGES.RU ? 'Или напишите в' : 'Lub napisz na'}{' '}
                     <a
-                      href={`https://wa.me/${PHONE_RAW}`}
+                      href={WHATSAPP_HREF}
                       target="_blank"
                       rel="noreferrer"
                       className="font-semibold text-[#25D366] hover:text-[#2ee56a]"

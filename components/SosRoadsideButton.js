@@ -14,34 +14,20 @@ function isValidCoord(lat, lon) {
   );
 }
 
-/** Dwie równoległe próby — często sieć/Wi‑Fi zwraca szybciej niż sam „wysoki” GPS. */
-function getPositionParallel(maxWaitMs) {
+function getOnce(options) {
   return new Promise((resolve, reject) => {
-    let settled = false;
-    const ok = (pos) => {
-      if (settled) return;
-      const { latitude: lat, longitude: lon } = pos.coords;
-      if (!isValidCoord(lat, lon)) return;
-      settled = true;
-      clearTimeout(master);
-      resolve(pos);
-    };
-    const master = setTimeout(() => {
-      if (settled) return;
-      settled = true;
-      reject(new Error('timeout'));
-    }, maxWaitMs);
-
-    navigator.geolocation.getCurrentPosition(ok, () => {}, {
-      enableHighAccuracy: false,
-      timeout: maxWaitMs,
-      maximumAge: 600_000,
-    });
-    navigator.geolocation.getCurrentPosition(ok, () => {}, {
-      enableHighAccuracy: true,
-      timeout: maxWaitMs,
-      maximumAge: 120_000,
-    });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude: lat, longitude: lon } = pos.coords;
+        if (!isValidCoord(lat, lon)) {
+          reject(new Error('invalid'));
+          return;
+        }
+        resolve(pos);
+      },
+      reject,
+      options,
+    );
   });
 }
 
@@ -71,16 +57,29 @@ function watchFirstFix(options, timeoutMs) {
 }
 
 /**
- * Start wywołania synchronicznie z kliknięcia (bez await przed pierwszym getCurrentPosition).
+ * Kolejno (bez równoległych dwóch getCurrentPosition — na części telefonów to psuje GPS):
+ * 1) szybko sieć / cache, 2) GPS, 3–4) krótki watch.
+ * Pierwszy sukces kończy łańcuch — zwykle <3 s w mieście z Wi‑Fi.
  */
 function requestBestPosition() {
   if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
     return Promise.reject(new Error('no-api'));
   }
 
-  return getPositionParallel(16_000)
-    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 10_000))
-    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 14_000));
+  return getOnce({
+    enableHighAccuracy: false,
+    timeout: 3500,
+    maximumAge: 600_000,
+  })
+    .catch(() =>
+      getOnce({
+        enableHighAccuracy: true,
+        timeout: 6500,
+        maximumAge: 0,
+      }),
+    )
+    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 3500))
+    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 5000));
 }
 
 function openWhatsAppWaMe(message) {
@@ -104,8 +103,9 @@ export default function SosRoadsideButton({ lang }) {
     };
 
     if (typeof navigator !== 'undefined' && 'geolocation' in navigator) {
+      const geoPromise = requestBestPosition();
       setBusy(true);
-      requestBestPosition()
+      geoPromise
         .then((position) => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;

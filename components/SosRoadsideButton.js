@@ -18,13 +18,38 @@ function isValidGeo(lat, lng) {
   );
 }
 
-function getCurrentPositionPromise(options) {
+/** Dwie równoległe próby getCurrentPosition — pierwsza poprawna wygrywa (szybsza niż szeregowe długie timeouty). */
+function getPositionParallel(maxWaitMs) {
   return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    let settled = false;
+    const ok = (pos) => {
+      if (settled) return;
+      const { latitude: lat, longitude: lng } = pos.coords;
+      if (!isValidGeo(lat, lng)) return;
+      settled = true;
+      clearTimeout(master);
+      resolve(pos);
+    };
+    const master = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error('parallel-timeout'));
+    }, maxWaitMs);
+
+    navigator.geolocation.getCurrentPosition(ok, () => {}, {
+      enableHighAccuracy: false,
+      timeout: maxWaitMs,
+      maximumAge: 600_000,
+    });
+    navigator.geolocation.getCurrentPosition(ok, () => {}, {
+      enableHighAccuracy: true,
+      timeout: maxWaitMs,
+      maximumAge: 120_000,
+    });
   });
 }
 
-/** Pierwsza aktualizacja z watchPosition (często skuteczna, gdy getCurrentPosition mija timeout). */
+/** Krótki watch, gdy oba getCurrentPosition się nie zdążą lub zwrócą błąd. */
 function watchFirstFix(options, timeoutMs) {
   return new Promise((resolve, reject) => {
     let done = false;
@@ -38,60 +63,43 @@ function watchFirstFix(options, timeoutMs) {
         if (timer !== undefined) clearTimeout(timer);
         resolve(pos);
       },
-      () => {
-        /* błędy mogą się powtarzać — kończymy po timeout */
-      },
+      () => {},
       options,
     );
     timer = setTimeout(() => {
       if (done) return;
       done = true;
       navigator.geolocation.clearWatch(watchId);
-      reject(new Error('watch timeout'));
+      reject(new Error('watch-timeout'));
     }, timeoutMs);
   });
 }
 
-/**
- * Kolejno prób pod kątem telefonów: szybka lokalizacja sieciowa → GPS → starsze cache → watch.
- */
 async function requestBestPosition() {
   if (typeof navigator === 'undefined' || !navigator.geolocation) {
     throw new Error('no geolocation');
   }
 
-  const attempts = [
-    { enableHighAccuracy: false, timeout: 12_000, maximumAge: 120_000 },
-    { enableHighAccuracy: true, timeout: 22_000, maximumAge: 0 },
-    { enableHighAccuracy: true, timeout: 14_000, maximumAge: 60_000 },
-    { enableHighAccuracy: false, timeout: 14_000, maximumAge: 600_000 },
-  ];
+  try {
+    const perm = await navigator.permissions?.query?.({ name: 'geolocation' });
+    if (perm?.state === 'denied') throw new Error('denied');
+  } catch (e) {
+    if (e?.message === 'denied') throw e;
+  }
 
-  for (const opts of attempts) {
+  try {
+    return await getPositionParallel(8_000);
+  } catch {
     try {
-      const pos = await getCurrentPositionPromise(opts);
-      const { latitude: lat, longitude: lng } = pos.coords;
-      if (isValidGeo(lat, lng)) return pos;
+      return await watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 5_000);
     } catch {
-      /* kolejna próba */
+      try {
+        return await watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 6_000);
+      } catch {
+        throw new Error('geolocation-failed');
+      }
     }
   }
-
-  try {
-    const pos = await watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 26_000);
-    if (isValidGeo(pos.coords.latitude, pos.coords.longitude)) return pos;
-  } catch {
-    /* dalej */
-  }
-
-  try {
-    const pos = await watchFirstFix({ enableHighAccuracy: false, maximumAge: 120_000 }, 18_000);
-    if (isValidGeo(pos.coords.latitude, pos.coords.longitude)) return pos;
-  } catch {
-    /* */
-  }
-
-  throw new Error('geolocation failed');
 }
 
 function buildMapsUrl(lat, lng) {
@@ -110,13 +118,10 @@ export default function SosRoadsideButton({ lang }) {
 
     const withPhoneFooter = (body) => `${body.trim()}\n${PHONE_DISPLAY}`;
 
+    /** Po async zawsze pełna nawigacja — window.open po długim oczekiwaniu jest blokowany (Safari / iOS). */
     const openWhatsApp = (message) => {
       setBusy(false);
-      const url = whatsAppSendHref(withPhoneFooter(message));
-      const win = typeof window !== 'undefined' ? window.open(url, '_blank', 'noopener,noreferrer') : null;
-      if (!win) {
-        window.location.assign(url);
-      }
+      window.location.assign(whatsAppSendHref(withPhoneFooter(message)));
     };
 
     setBusy(true);

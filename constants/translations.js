@@ -269,8 +269,11 @@ export const translations = {
     },
     sosRoadside: {
       label: 'SOS / Pomoc drogowa',
-      ariaLabel: 'SOS — szybka wiadomość WhatsApp do warsztatu o pomocy drogowej',
-      whatsAppMessage: 'Potrzebuję pomocy.',
+      ariaLabel: 'SOS — szybka wiadomość WhatsApp z lokalizacją (jeśli dostępna)',
+      busyLabel: 'Pobieranie lokalizacji…',
+      whatsAppMessageBase: 'SOS! Potrzebuję pomocy drogowej. ',
+      locationPrefix: 'Moja lokalizacja:',
+      noGpsSuffix: '(Nie udało się pobrać lokalizacji — wyślij ją ręcznie.)',
     },
     reviews: {
       title: 'Opinia Google',
@@ -528,8 +531,11 @@ export const translations = {
     },
     sosRoadside: {
       label: 'SOS / Помощь на дороге',
-      ariaLabel: 'SOS — быстрое сообщение в WhatsApp автосервису о помощи на дороге',
-      whatsAppMessage: 'Нужна помощь.',
+      ariaLabel: 'SOS — быстрое сообщение в WhatsApp с локацией (если доступна)',
+      busyLabel: 'Получаем координаты…',
+      whatsAppMessageBase: 'SOS! Нужна помощь на дороге. ',
+      locationPrefix: 'Моя локация:',
+      noGpsSuffix: '(Не удалось получить координаты — отправьте их вручную.)',
     },
     reviews: {
       title: 'Отзывы Google',

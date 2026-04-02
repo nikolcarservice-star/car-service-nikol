@@ -8,6 +8,98 @@ function whatsAppSendHref(text) {
   return `https://api.whatsapp.com/send/?phone=${PHONE_RAW}&text=${encodeURIComponent(text)}`;
 }
 
+function isValidGeo(lat, lng) {
+  return (
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lng) <= 180 &&
+    !(Math.abs(lat) < 1e-6 && Math.abs(lng) < 1e-6)
+  );
+}
+
+function getCurrentPositionPromise(options) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+}
+
+/** Pierwsza aktualizacja z watchPosition (często skuteczna, gdy getCurrentPosition mija timeout). */
+function watchFirstFix(options, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    let done = false;
+    let timer;
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude: lat, longitude: lng } = pos.coords;
+        if (!isValidGeo(lat, lng) || done) return;
+        done = true;
+        navigator.geolocation.clearWatch(watchId);
+        if (timer !== undefined) clearTimeout(timer);
+        resolve(pos);
+      },
+      () => {
+        /* błędy mogą się powtarzać — kończymy po timeout */
+      },
+      options,
+    );
+    timer = setTimeout(() => {
+      if (done) return;
+      done = true;
+      navigator.geolocation.clearWatch(watchId);
+      reject(new Error('watch timeout'));
+    }, timeoutMs);
+  });
+}
+
+/**
+ * Kolejno prób pod kątem telefonów: szybka lokalizacja sieciowa → GPS → starsze cache → watch.
+ */
+async function requestBestPosition() {
+  if (typeof navigator === 'undefined' || !navigator.geolocation) {
+    throw new Error('no geolocation');
+  }
+
+  const attempts = [
+    { enableHighAccuracy: false, timeout: 12_000, maximumAge: 120_000 },
+    { enableHighAccuracy: true, timeout: 22_000, maximumAge: 0 },
+    { enableHighAccuracy: true, timeout: 14_000, maximumAge: 60_000 },
+    { enableHighAccuracy: false, timeout: 14_000, maximumAge: 600_000 },
+  ];
+
+  for (const opts of attempts) {
+    try {
+      const pos = await getCurrentPositionPromise(opts);
+      const { latitude: lat, longitude: lng } = pos.coords;
+      if (isValidGeo(lat, lng)) return pos;
+    } catch {
+      /* kolejna próba */
+    }
+  }
+
+  try {
+    const pos = await watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 26_000);
+    if (isValidGeo(pos.coords.latitude, pos.coords.longitude)) return pos;
+  } catch {
+    /* dalej */
+  }
+
+  try {
+    const pos = await watchFirstFix({ enableHighAccuracy: false, maximumAge: 120_000 }, 18_000);
+    if (isValidGeo(pos.coords.latitude, pos.coords.longitude)) return pos;
+  } catch {
+    /* */
+  }
+
+  throw new Error('geolocation failed');
+}
+
+function buildMapsUrl(lat, lng) {
+  const la = lat.toFixed(7);
+  const lo = lng.toFixed(7);
+  return `https://www.google.com/maps?q=${encodeURIComponent(`${la},${lo}`)}`;
+}
+
 export default function SosRoadsideButton({ lang }) {
   const t = getTranslations(lang);
   const copy = t.sosRoadside;
@@ -20,26 +112,27 @@ export default function SosRoadsideButton({ lang }) {
 
     const openWhatsApp = (message) => {
       setBusy(false);
-      window.location.assign(whatsAppSendHref(withPhoneFooter(message)));
+      const url = whatsAppSendHref(withPhoneFooter(message));
+      const win = typeof window !== 'undefined' ? window.open(url, '_blank', 'noopener,noreferrer') : null;
+      if (!win) {
+        window.location.assign(url);
+      }
     };
 
     setBusy(true);
 
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      openWhatsApp(copy.messageNoLocation);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const link = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-        openWhatsApp(copy.messageWithLocation.replace('{link}', link));
-      },
-      () => {
+    void (async () => {
+      try {
+        const pos = await requestBestPosition();
+        const { latitude: lat, longitude: lng } = pos.coords;
+        const mapsUrl = buildMapsUrl(lat, lng);
+        const coordsPlain = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        const body = `${copy.messageWithLocation.replace('{link}', mapsUrl)}\n${coordsPlain}`;
+        openWhatsApp(body);
+      } catch {
         openWhatsApp(copy.messageNoLocation);
-      },
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 },
-    );
+      }
+    })();
   }, [busy, copy]);
 
   if (!copy) return null;

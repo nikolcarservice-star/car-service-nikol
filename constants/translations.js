@@ -271,6 +271,8 @@ export const translations = {
       label: 'SOS / Pomoc drogowa',
       ariaLabel:
         'SOS — wyślij wiadomość WhatsApp z lokalizacją GPS do warsztatu lub zadzwoń w nagłym wypadku',
+      permissionConfirm:
+        'Aby wstawić link do mapy w WhatsApp, przeglądarka poprosi o dostęp do lokalizacji (odczyt pozycji GPS). Kontynuować?',
       busyLabel: 'Pobieranie lokalizacji…',
       messageWithLocation:
         'Potrzebuję pomocy drogowej. Jestem tutaj (mapa / GPS): {link}\nProszę o pilny kontakt.',
@@ -535,6 +537,8 @@ export const translations = {
       label: 'SOS / Помощь на дороге',
       ariaLabel:
         'SOS — отправить в WhatsApp сообщение с геолокацией в автосервис или позвонить в экстренном случае',
+      permissionConfirm:
+        'Чтобы добавить метку на карте в WhatsApp, браузер запросит разрешение на чтение геопозиции (GPS). Продолжить?',
       busyLabel: 'Определяем местоположение…',
       messageWithLocation:
         'Мне нужна помощь, я застрял рядом с этим местом: {link}\nПрошу срочно связаться.',

@@ -75,31 +75,18 @@ function watchFirstFix(options, timeoutMs) {
   });
 }
 
-async function requestBestPosition() {
+/**
+ * Bez `async` na początku: wywołanie getCurrentPosition musi wystartować synchronicznie
+ * w tym samym „user gesture”, co kliknięcie — inaczej iOS/Safari nie pokaże prośby o GPS.
+ */
+function requestBestPosition() {
   if (typeof navigator === 'undefined' || !navigator.geolocation) {
-    throw new Error('no geolocation');
+    return Promise.reject(new Error('no geolocation'));
   }
 
-  try {
-    const perm = await navigator.permissions?.query?.({ name: 'geolocation' });
-    if (perm?.state === 'denied') throw new Error('denied');
-  } catch (e) {
-    if (e?.message === 'denied') throw e;
-  }
-
-  try {
-    return await getPositionParallel(8_000);
-  } catch {
-    try {
-      return await watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 5_000);
-    } catch {
-      try {
-        return await watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 6_000);
-      } catch {
-        throw new Error('geolocation-failed');
-      }
-    }
-  }
+  return getPositionParallel(8_000)
+    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 5_000))
+    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 6_000));
 }
 
 function buildMapsUrl(lat, lng) {
@@ -124,20 +111,23 @@ export default function SosRoadsideButton({ lang }) {
       window.location.assign(whatsAppSendHref(withPhoneFooter(message)));
     };
 
+    if (copy.permissionConfirm && !window.confirm(copy.permissionConfirm)) {
+      return;
+    }
+
     setBusy(true);
 
-    void (async () => {
-      try {
-        const pos = await requestBestPosition();
+    requestBestPosition()
+      .then((pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
         const mapsUrl = buildMapsUrl(lat, lng);
         const coordsPlain = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
         const body = `${copy.messageWithLocation.replace('{link}', mapsUrl)}\n${coordsPlain}`;
         openWhatsApp(body);
-      } catch {
+      })
+      .catch(() => {
         openWhatsApp(copy.messageNoLocation);
-      }
-    })();
+      });
   }, [busy, copy]);
 
   if (!copy) return null;

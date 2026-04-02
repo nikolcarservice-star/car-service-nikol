@@ -57,9 +57,11 @@ function watchFirstFix(options, timeoutMs) {
 }
 
 /**
- * Kolejno (bez równoległych dwóch getCurrentPosition — na części telefonów to psuje GPS):
- * 1) szybko sieć / cache, 2) GPS, 3–4) krótki watch.
- * Pierwszy sukces kończy łańcuch — zwykle <3 s w mieście z Wi‑Fi.
+ * Kolejno (bez równoległych wywołań):
+ * 1) cache do 24h — często natychmiast po wcześniejszej zgodzie na GPS
+ * 2) świeża pozycja przybliżona (sieć), maximumAge 0
+ * 3) GPS z dłuższym timeoutem (na zewnątrzu potrzeba więcej czasu)
+ * 4–5) watch jako ostatnia deska ratunku
  */
 function requestBestPosition() {
   if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
@@ -68,18 +70,25 @@ function requestBestPosition() {
 
   return getOnce({
     enableHighAccuracy: false,
-    timeout: 3500,
-    maximumAge: 600_000,
+    timeout: 6000,
+    maximumAge: 86_400_000,
   })
     .catch(() =>
       getOnce({
-        enableHighAccuracy: true,
-        timeout: 6500,
+        enableHighAccuracy: false,
+        timeout: 12_000,
         maximumAge: 0,
       }),
     )
-    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 3500))
-    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 5000));
+    .catch(() =>
+      getOnce({
+        enableHighAccuracy: true,
+        timeout: 20_000,
+        maximumAge: 0,
+      }),
+    )
+    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 8000))
+    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 14_000));
 }
 
 function openWhatsAppWaMe(message) {

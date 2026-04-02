@@ -4,12 +4,88 @@ import { useCallback, useState } from 'react';
 import { Loader2, Siren } from 'lucide-react';
 import { getTranslations, PHONE_RAW } from '../constants/translations';
 
+function isValidCoord(lat, lon) {
+  return (
+    Number.isFinite(lat) &&
+    Number.isFinite(lon) &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lon) <= 180 &&
+    !(Math.abs(lat) < 1e-6 && Math.abs(lon) < 1e-6)
+  );
+}
+
+/** Dwie równoległe próby — często sieć/Wi‑Fi zwraca szybciej niż sam „wysoki” GPS. */
+function getPositionParallel(maxWaitMs) {
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const ok = (pos) => {
+      if (settled) return;
+      const { latitude: lat, longitude: lon } = pos.coords;
+      if (!isValidCoord(lat, lon)) return;
+      settled = true;
+      clearTimeout(master);
+      resolve(pos);
+    };
+    const master = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error('timeout'));
+    }, maxWaitMs);
+
+    navigator.geolocation.getCurrentPosition(ok, () => {}, {
+      enableHighAccuracy: false,
+      timeout: maxWaitMs,
+      maximumAge: 600_000,
+    });
+    navigator.geolocation.getCurrentPosition(ok, () => {}, {
+      enableHighAccuracy: true,
+      timeout: maxWaitMs,
+      maximumAge: 120_000,
+    });
+  });
+}
+
+function watchFirstFix(options, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    let done = false;
+    let timer;
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude: lat, longitude: lon } = pos.coords;
+        if (!isValidCoord(lat, lon) || done) return;
+        done = true;
+        navigator.geolocation.clearWatch(watchId);
+        if (timer !== undefined) clearTimeout(timer);
+        resolve(pos);
+      },
+      () => {},
+      options,
+    );
+    timer = setTimeout(() => {
+      if (done) return;
+      done = true;
+      navigator.geolocation.clearWatch(watchId);
+      reject(new Error('watch-timeout'));
+    }, timeoutMs);
+  });
+}
+
+/**
+ * Start wywołania synchronicznie z kliknięcia (bez await przed pierwszym getCurrentPosition).
+ */
+function requestBestPosition() {
+  if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
+    return Promise.reject(new Error('no-api'));
+  }
+
+  return getPositionParallel(16_000)
+    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 10_000))
+    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 14_000));
+}
+
 function openWhatsAppWaMe(message) {
   const url = `https://wa.me/${PHONE_RAW}?text=${encodeURIComponent(message)}`;
-  const win = typeof window !== 'undefined' ? window.open(url, '_blank', 'noopener,noreferrer') : null;
-  if (!win) {
-    window.location.assign(url);
-  }
+  window.location.assign(url);
 }
 
 export default function SosRoadsideButton({ lang }) {
@@ -29,19 +105,17 @@ export default function SosRoadsideButton({ lang }) {
 
     if (typeof navigator !== 'undefined' && 'geolocation' in navigator) {
       setBusy(true);
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+      requestBestPosition()
+        .then((position) => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
           const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
           const fullMessage = `${base}${copy.locationPrefix} ${mapLink}`;
           finish(fullMessage);
-        },
-        () => {
+        })
+        .catch(() => {
           finish(`${base}${copy.noGpsSuffix}`);
-        },
-        { enableHighAccuracy: true, timeout: 15_000, maximumAge: 60_000 },
-      );
+        });
     } else {
       openWhatsAppWaMe(base.trimEnd());
     }

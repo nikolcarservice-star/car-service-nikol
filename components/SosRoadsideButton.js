@@ -5,90 +5,77 @@ import { Loader2, Siren } from 'lucide-react';
 import { getTranslations, PHONE_RAW } from '../constants/translations';
 
 function isValidCoord(lat, lon) {
+  const la = Number(lat);
+  const lo = Number(lon);
   return (
-    Number.isFinite(lat) &&
-    Number.isFinite(lon) &&
-    Math.abs(lat) <= 90 &&
-    Math.abs(lon) <= 180 &&
-    !(Math.abs(lat) < 1e-6 && Math.abs(lon) < 1e-6)
+    Number.isFinite(la) &&
+    Number.isFinite(lo) &&
+    Math.abs(la) <= 90 &&
+    Math.abs(lo) <= 180 &&
+    !(Math.abs(la) < 1e-6 && Math.abs(lo) < 1e-6)
   );
 }
 
-function getOnce(options) {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude: lat, longitude: lon } = pos.coords;
-        if (!isValidCoord(lat, lon)) {
-          reject(new Error('invalid'));
-          return;
-        }
-        resolve(pos);
-      },
-      reject,
-      options,
-    );
-  });
-}
-
-function watchFirstFix(options, timeoutMs) {
-  return new Promise((resolve, reject) => {
-    let done = false;
-    let timer;
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        const { latitude: lat, longitude: lon } = pos.coords;
-        if (!isValidCoord(lat, lon) || done) return;
-        done = true;
-        navigator.geolocation.clearWatch(watchId);
-        if (timer !== undefined) clearTimeout(timer);
-        resolve(pos);
-      },
-      () => {},
-      options,
-    );
-    timer = setTimeout(() => {
-      if (done) return;
-      done = true;
-      navigator.geolocation.clearWatch(watchId);
-      reject(new Error('watch-timeout'));
-    }, timeoutMs);
-  });
-}
-
 /**
- * Kolejno (bez równoległych wywołań):
- * 1) cache do 24h — często natychmiast po wcześniejszej zgodzie na GPS
- * 2) świeża pozycja przybliżona (sieć), maximumAge 0
- * 3) GPS z dłuższym timeoutem (na zewnątrzu potrzeba więcej czasu)
- * 4–5) watch jako ostatnia deska ratunku
+ * Jeden „pakiet” wywołań w synchronicznym executorze Promise — to samo kliknięcie użytkownika.
+ * Kolejne getCurrentPosition w .catch() tracą user activation (Safari/iOS) i mogą nigdy nie dostać fixu.
+ *
+ * watchPosition + jedno getCurrentPosition — pierwsza poprawna pozycja wygrywa; wspólny limit czasu.
  */
 function requestBestPosition() {
   if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
     return Promise.reject(new Error('no-api'));
   }
 
-  return getOnce({
-    enableHighAccuracy: false,
-    timeout: 6000,
-    maximumAge: 86_400_000,
-  })
-    .catch(() =>
-      getOnce({
+  if (typeof window !== 'undefined' && window.isSecureContext === false) {
+    return Promise.reject(new Error('insecure'));
+  }
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let watchId;
+
+    const cleanup = () => {
+      if (watchId != null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = undefined;
+      }
+    };
+
+    const finishOk = (pos) => {
+      if (settled) return;
+      const lat = Number(pos.coords.latitude);
+      const lon = Number(pos.coords.longitude);
+      if (!isValidCoord(lat, lon)) return;
+      settled = true;
+      clearTimeout(masterTimer);
+      cleanup();
+      resolve(pos);
+    };
+
+    const masterTimer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('timeout'));
+    }, 32_000);
+
+    watchId = navigator.geolocation.watchPosition(
+      finishOk,
+      () => {},
+      { enableHighAccuracy: true, maximumAge: 0 },
+    );
+
+    navigator.geolocation.getCurrentPosition(
+      finishOk,
+      () => {},
+      {
         enableHighAccuracy: false,
-        timeout: 12_000,
-        maximumAge: 0,
-      }),
-    )
-    .catch(() =>
-      getOnce({
-        enableHighAccuracy: true,
-        timeout: 20_000,
-        maximumAge: 0,
-      }),
-    )
-    .catch(() => watchFirstFix({ enableHighAccuracy: false, maximumAge: 300_000 }, 8000))
-    .catch(() => watchFirstFix({ enableHighAccuracy: true, maximumAge: 0 }, 14_000));
+        timeout: 30_000,
+        maximumAge: 600_000,
+      },
+    );
+  });
 }
 
 function openWhatsAppWaMe(message) {

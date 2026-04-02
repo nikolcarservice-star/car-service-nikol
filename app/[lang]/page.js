@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import Hero from '../../components/Hero';
 import Services from '../../components/Services';
+import ServiceCalculator from '../../components/ServiceCalculator';
 import BrandsSection from '../../components/BrandsSection';
 import AboutBlock from '../../components/AboutBlock';
 import BookingForm from '../../components/BookingForm';
@@ -102,6 +103,14 @@ export default function LangHomePage({ params }) {
         </div>
       </section>
       <Services t={t} lang={lang} />
+      <section className="border-b border-slate-800 bg-slate-950" aria-labelledby="calculator-heading">
+        <div className="mx-auto max-w-2xl px-4 py-8 sm:py-10">
+          <h2 id="calculator-heading" className="sr-only">
+            {lang === 'ru' ? 'Калькулятор услуг' : 'Kalkulator usług'}
+          </h2>
+          <ServiceCalculator lang={lang} />
+        </div>
+      </section>
       <BrandsSection t={t} />
       <AboutBlock t={t} />
       <Suspense

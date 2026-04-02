@@ -224,6 +224,23 @@ export const translations = {
         dateRequired: 'Wybierz preferowaną datę.',
       },
     },
+    serviceCalculator: {
+      title: 'Kalkulator orientacyjny — robocizna',
+      subtitle:
+        'Zaznacz usługi (w tym przegląd przed zakupem lub przygotowanie do przeglądu). Części i materiały rozliczamy osobno.',
+      partsLegend: 'Części',
+      servicesLegend: 'Usługi',
+      partsOwn: 'Własne części',
+      partsWorkshop:
+        'Części z serwisu (gwarancja na montaż; −10% na robociznę w końcowej wycenie)',
+      sumLabel: 'Suma robocizny (orientacyjnie)',
+      sumDiscounted: 'Po rabacie −10% przy częściach z serwisu',
+      savingsLine: 'Oszczędzasz ok. {amount} PLN na robociznie w wycenie.',
+      bookCta: 'Umów wizytę na te usługi',
+      selectHint: 'Wybierz co najmniej jedną pozycję.',
+      disclaimer:
+        '*Orientacyjna robocizna bez kosztu części i materiałów. Dokładną kwotę podamy po kontakcie lub oględzinach pojazdu.',
+    },
     location: {
       title: 'Lokalizacja i kontakt',
       subtitle: 'Łatwy dojazd z Jastrowo, Szamotuł i okolicznych miejscowości.',
@@ -482,6 +499,23 @@ export const translations = {
         serviceRequired: 'Выберите тип услуги.',
         dateRequired: 'Выберите предпочтительную дату.',
       },
+    },
+    serviceCalculator: {
+      title: 'Ориентировочный калькулятор — работа',
+      subtitle:
+        'Отметьте услуги (в т.ч. осмотр перед покупкой или подготовку к техосмотру). Запчасти и материалы — отдельно.',
+      partsLegend: 'Запчасти',
+      servicesLegend: 'Услуги',
+      partsOwn: 'Свои запчасти',
+      partsWorkshop:
+        'Запчасти из сервиса (гарантия на монтаж; −10% на работу в итоговой смете)',
+      sumLabel: 'Сумма работ (ориентировочно)',
+      sumDiscounted: 'После скидки −10% при запчастях из сервиса',
+      savingsLine: 'Экономия ок. {amount} PLN на работе в смете.',
+      bookCta: 'Записаться на эти позиции',
+      selectHint: 'Выберите хотя бы одну позицию.',
+      disclaimer:
+        '*Ориентировочная работа без стоимости запчастей и расходников. Точную сумму сообщим после контакта или осмотра.',
     },
     location: {
       title: 'Локация и контакты',

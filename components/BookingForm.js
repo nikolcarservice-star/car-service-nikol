@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { WHATSAPP_HREF } from '../constants/contactLinks';
 import { LANGUAGES, PHONE_DISPLAY, translations } from '../constants/translations';
+import { parseCalculatorServiceIds, buildCalculatorBookingLine } from '../data/serviceCalculator';
 
 const GA_FORM_CATEGORY = 'booking_form';
 
@@ -206,8 +207,26 @@ export default function BookingForm({ lang, embed }) {
   const selectedService = watch('service');
   const [serviceOpen, setServiceOpen] = useState(false);
   useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const multi = searchParams.get('services');
+    if (multi) {
+      const ids = parseCalculatorServiceIds(multi);
+      if (ids.length > 0) {
+        const cp = searchParams.get('calc_parts');
+        const partsMode = cp === 'workshop' ? 'workshop' : cp === 'own' ? 'own' : null;
+        const line = buildCalculatorBookingLine(ids, lang, partsMode);
+        setValue('service', line, { shouldValidate: true });
+        const bid = translations[lang].bookingId;
+        const id = window.requestAnimationFrame(() => {
+          document.getElementById(bid)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return () => window.cancelAnimationFrame(id);
+      }
+    }
+
     const key = searchParams.get('service');
-    if (!key || typeof document === 'undefined') return;
+    if (!key) return;
     const item = servicesList.find((s) => s.key === key);
     if (!item) return;
     setValue('service', getBookingServiceLabel(item, lang), { shouldValidate: true });

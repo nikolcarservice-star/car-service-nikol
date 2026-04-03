@@ -226,8 +226,7 @@ export const translations = {
     },
     serviceCalculator: {
       title: 'Kalkulator orientacyjny — robocizna',
-      subtitle:
-        'Tylko usługi z częściami (olej, hamulce, rozrząd). Bez diagnostyki i wymiany opon — orientacyjna robocizna; części osobno (pełny cennik: Cennik).',
+      subtitle: 'Rabat −10% na robociznę obowiązuje przy wyborze części z serwisu.',
       partsLegend: 'Części',
       servicesLegend: 'Usługi',
       partsOwn: 'Własne części',
@@ -502,8 +501,7 @@ export const translations = {
     },
     serviceCalculator: {
       title: 'Ориентировочный калькулятор — работа',
-      subtitle:
-        'Только работы с запчастями (масло, тормоза, ГРМ). Без диагностики и шиномонтажа — ориентировочная работа; запчасти отдельно (прайс: «Цены»).',
+      subtitle: 'Скидка −10% на работу действует при выборе запчастей из сервиса.',
       partsLegend: 'Запчасти',
       servicesLegend: 'Услуги',
       partsOwn: 'Свои запчасти',

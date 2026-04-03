@@ -42,21 +42,41 @@ function sanitizeAttachments(raw) {
   return list;
 }
 
+function normalizeTelegramChatId(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return null;
+  if (/^-?\d+$/.test(s)) {
+    const n = Number(s);
+    if (Number.isSafeInteger(n)) return n;
+  }
+  return s;
+}
+
+function sanitizeTelegramText(text) {
+  return String(text).replace(/\0/g, '');
+}
+
 async function sendTelegramNotification(text) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
   const chatIdRaw = process.env.TELEGRAM_CHAT_ID;
   if (!token || chatIdRaw === undefined || String(chatIdRaw).trim() === '') {
     return { ok: false, skipped: true };
   }
 
-  const messageText =
-    text.length > MAX_TELEGRAM_TEXT ? `${text.slice(0, MAX_TELEGRAM_TEXT - 1)}…` : text;
+  const chatId = normalizeTelegramChatId(chatIdRaw);
+  if (chatId === null) {
+    return { ok: false, error: 'Invalid TELEGRAM_CHAT_ID' };
+  }
+
+  const messageText = sanitizeTelegramText(
+    text.length > MAX_TELEGRAM_TEXT ? `${text.slice(0, MAX_TELEGRAM_TEXT - 1)}…` : text
+  );
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      chat_id: String(chatIdRaw).trim(),
+      chat_id: chatId,
       text: messageText,
       disable_web_page_preview: true,
     }),
@@ -64,12 +84,20 @@ async function sendTelegramNotification(text) {
 
   const json = await res.json().catch(() => ({}));
   if (!res.ok || json.ok === false) {
-    return {
-      ok: false,
-      error: json.description || json.error || res.statusText || 'Telegram sendMessage failed',
-    };
+    const errMsg = json.description || json.error || res.statusText || 'Telegram sendMessage failed';
+    console.error('[booking] Telegram sendMessage failed:', errMsg, json);
+    return { ok: false, error: errMsg };
   }
   return { ok: true };
+}
+
+/** Diagnostyka: GET /api/booking — czy na serwerze ustawiono Telegram (bez ujawniania sekretów). */
+export async function GET() {
+  return NextResponse.json({
+    telegramConfigured: !!(
+      process.env.TELEGRAM_BOT_TOKEN?.trim() && process.env.TELEGRAM_CHAT_ID?.trim()
+    ),
+  });
 }
 
 export async function POST(request) {
@@ -126,11 +154,12 @@ export async function POST(request) {
   });
 
   const hasTelegram =
-    !!process.env.TELEGRAM_BOT_TOKEN &&
+    !!process.env.TELEGRAM_BOT_TOKEN?.trim() &&
     process.env.TELEGRAM_CHAT_ID !== undefined &&
     String(process.env.TELEGRAM_CHAT_ID).trim() !== '';
   const webhookUrl = process.env.BOOKING_WEBHOOK_URL;
 
+  let telegramSent = false;
   if (hasTelegram) {
     const tg = await sendTelegramNotification(notifyText);
     if (!tg.ok) {
@@ -139,6 +168,7 @@ export async function POST(request) {
         { status: 502 }
       );
     }
+    telegramSent = true;
   }
 
   if (webhookUrl) {
@@ -179,5 +209,10 @@ export async function POST(request) {
     );
   }
 
-  return NextResponse.json({ ok: true, received: true });
+  return NextResponse.json({
+    ok: true,
+    received: true,
+    /** true tylko gdy faktycznie wysłano na Telegram (sprawdź na Vercel: TELEGRAM_*) */
+    telegramSent,
+  });
 }

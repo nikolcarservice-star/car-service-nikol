@@ -56,6 +56,8 @@ function getBookingServiceLabel(serviceItem, lang) {
 
 export default function BookingForm({ lang, embed }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [submitErrorDetail, setSubmitErrorDetail] = useState('');
+  const [telegramSentOnServer, setTelegramSentOnServer] = useState(null); // null | true | false
   const [photoFiles, setPhotoFiles] = useState([]);
   const [photoError, setPhotoError] = useState('');
   const dateInputRef = useRef(null);
@@ -122,6 +124,8 @@ export default function BookingForm({ lang, embed }) {
 
   const onSubmit = async (values) => {
     setPhotoError('');
+    setSubmitErrorDetail('');
+    setTelegramSentOnServer(null);
     setStatus('loading');
     trackFormEvent('form_submit');
     const phoneFull = values.phone.replace(/\D/g, '').length > 0 ? '+48' + values.phone.replace(/\D/g, '') : '';
@@ -161,8 +165,13 @@ export default function BookingForm({ lang, embed }) {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error('booking failed');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSubmitErrorDetail(typeof data.error === 'string' ? data.error : '');
+        throw new Error(data.error || 'booking failed');
+      }
 
+      setTelegramSentOnServer(data.telegramSent === true ? true : data.telegramSent === false ? false : null);
       setStatus('success');
       trackFormEvent('form_success');
       setPhotoFiles([]);
@@ -600,14 +609,25 @@ export default function BookingForm({ lang, embed }) {
               </div>
 
               {status === 'success' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"
-                >
-                  <p className="font-semibold">{t.successTitle}</p>
-                  <p className="mt-1 text-emerald-200/90">{t.successBody}</p>
-                </motion.div>
+                <div className="mt-5 space-y-3">
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"
+                  >
+                    <p className="font-semibold">{t.successTitle}</p>
+                    <p className="mt-1 text-emerald-200/90">{t.successBody}</p>
+                  </motion.div>
+                  {telegramSentOnServer === false && t.telegramNotConfiguredHint && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100"
+                    >
+                      {t.telegramNotConfiguredHint}
+                    </motion.div>
+                  )}
+                </div>
               )}
               {status === 'error' && (
                 <motion.div
@@ -615,7 +635,10 @@ export default function BookingForm({ lang, embed }) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-5 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200"
                 >
-                  {t.errorMessage}
+                  <p>{t.errorMessage}</p>
+                  {submitErrorDetail && (
+                    <p className="mt-2 text-xs text-red-300/90 break-words">{submitErrorDetail}</p>
+                  )}
                 </motion.div>
               )}
             </div>

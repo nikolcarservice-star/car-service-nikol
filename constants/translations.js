@@ -217,6 +217,8 @@ export const translations = {
       successBody: 'Powiadomienie trafiło do warsztatu (Telegram) — skontaktujemy się, aby potwierdzić termin.',
       errorMessage:
         'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę lub zadzwoń do nas.',
+      telegramNotConfiguredHint:
+        'Powiadomienie Telegram nie wyszło: na hostingu (Vercel) ustaw zmienne TELEGRAM_BOT_TOKEN i TELEGRAM_CHAT_ID, potem Redeploy. Musisz też napisać /start do bota w Telegramie.',
       validation: {
         nameRequired: 'Podaj imię i nazwisko.',
         phoneRequired: 'Podaj numer telefonu.',
@@ -493,6 +495,8 @@ export const translations = {
       successBody: 'Уведомление получено сервисом (Telegram) — свяжемся, чтобы подтвердить время.',
       errorMessage:
         'Не удалось отправить заявку. Попробуйте позже или позвоните нам.',
+      telegramNotConfiguredHint:
+        'Уведомление в Telegram не ушло: на Vercel задайте TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID, затем Redeploy. Также напишите боту /start в Telegram.',
       validation: {
         nameRequired: 'Укажите имя и фамилию.',
         phoneRequired: 'Укажите номер телефона.',

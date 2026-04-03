@@ -217,6 +217,8 @@ export const translations = {
       successBody: 'Skontaktujemy się z Tobą, aby potwierdzić termin i szczegóły naprawy.',
       errorMessage:
         'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę lub zadzwoń do nas.',
+      notifyNotDelivered:
+        'Zgłoszenie zapisane, ale automatyczne powiadomienie do warsztatu nie wyszło (brak konfiguracji na serwerze). Zadzwoń lub napisz — żeby nic nie umknęło.',
       validation: {
         nameRequired: 'Podaj imię i nazwisko.',
         phoneRequired: 'Podaj numer telefonu.',
@@ -493,6 +495,8 @@ export const translations = {
       successBody: 'Мы свяжемся с вами, чтобы подтвердить дату и детали ремонта.',
       errorMessage:
         'Не удалось отправить заявку. Попробуйте позже или позвоните нам.',
+      notifyNotDelivered:
+        'Заявка принята, но автоматическое уведомление в сервис не ушло (нет настройки на сервере). Позвоните или напишите — чтобы ничего не потерялось.',
       validation: {
         nameRequired: 'Укажите имя и фамилию.',
         phoneRequired: 'Укажите номер телефона.',

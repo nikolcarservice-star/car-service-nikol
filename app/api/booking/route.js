@@ -1,6 +1,6 @@
 /**
  * Zgłoszenia z formularza: powiadomienie Telegram (Bot API) i/lub webhook / Supabase.
- * Na Vercel ustaw TELEGRAM_BOT_TOKEN (sekret). TELEGRAM_CHAT_ID w vercel.json lub zmiennych.
+ * Zmienne: TELEGRAM_BOT_TOKEN (lub TELEGRAM_TOKEN) + TELEGRAM_CHAT_ID — Vercel → Environment Variables → Production → Redeploy.
  */
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
@@ -8,8 +8,29 @@ import { buildBookingNotifyText } from '../../../data/bookingNotifyText';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-/** Vercel / serverless — wystarczający limit na sendMessage + Telegram API */
 export const maxDuration = 60;
+
+function json(data, init = {}) {
+  const headers = new Headers(init.headers);
+  headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  return NextResponse.json(data, { ...init, headers });
+}
+
+function getTelegramToken() {
+  return (
+    process.env.TELEGRAM_BOT_TOKEN?.trim() ||
+    process.env.TELEGRAM_TOKEN?.trim() ||
+    ''
+  );
+}
+
+function getTelegramChatId() {
+  const raw =
+    process.env.TELEGRAM_CHAT_ID ??
+    process.env.TELEGRAM_BOT_CHAT_ID ??
+    '';
+  return String(raw).trim();
+}
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -67,9 +88,9 @@ function sanitizeTelegramText(text) {
 }
 
 async function sendTelegramNotification(text) {
-  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
-  const chatIdRaw = process.env.TELEGRAM_CHAT_ID;
-  if (!token || chatIdRaw === undefined || String(chatIdRaw).trim() === '') {
+  const token = getTelegramToken();
+  const chatIdRaw = getTelegramChatId();
+  if (!token || !chatIdRaw) {
     return { ok: false, skipped: true };
   }
 
@@ -98,10 +119,10 @@ async function sendTelegramNotification(text) {
       signal: controller.signal,
     });
 
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok || json.ok === false) {
-      const errMsg = json.description || json.error || res.statusText || 'Telegram sendMessage failed';
-      console.error('[booking] Telegram sendMessage failed:', errMsg, json);
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || j.ok === false) {
+      const errMsg = j.description || j.error || res.statusText || 'Telegram sendMessage failed';
+      console.error('[booking] Telegram sendMessage failed:', errMsg, JSON.stringify(j));
       return { ok: false, error: errMsg };
     }
     return { ok: true };
@@ -114,11 +135,10 @@ async function sendTelegramNotification(text) {
   }
 }
 
-/** Diagnostyka (bez ujawniania tokenu). */
 export async function GET() {
-  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
-  const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
-  return NextResponse.json({
+  const token = getTelegramToken();
+  const chatId = getTelegramChatId();
+  return json({
     telegramConfigured: !!(token && chatId),
     hasToken: !!token,
     tokenLength: token ? token.length : 0,
@@ -127,7 +147,7 @@ export async function GET() {
     hint:
       !token || !chatId
         ? 'Ustaw TELEGRAM_BOT_TOKEN i TELEGRAM_CHAT_ID w Vercel → Environment Variables (Production), potem Redeploy.'
-        : 'OK — jeśli formularz nadal nie wysyła, sprawdź logi Vercel (Functions) przy POST /api/booking.',
+        : 'OK — sprawdź konsolę przeglądarki (F12) po wysłaniu formularza: pole telegramSent w odpowiedzi POST.',
   });
 }
 
@@ -136,7 +156,7 @@ export async function POST(request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
+    return json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
   }
 
   const {
@@ -152,10 +172,9 @@ export async function POST(request) {
 
   const attachmentSlots = countAttachmentSlots(body.attachments);
 
-  const hasTelegram =
-    !!process.env.TELEGRAM_BOT_TOKEN?.trim() &&
-    process.env.TELEGRAM_CHAT_ID !== undefined &&
-    String(process.env.TELEGRAM_CHAT_ID).trim() !== '';
+  const token = getTelegramToken();
+  const chatIdEnv = getTelegramChatId();
+  const hasTelegram = !!token && !!chatIdEnv;
   const webhookUrl = process.env.BOOKING_WEBHOOK_URL;
 
   const nameT = String(name).trim();
@@ -182,7 +201,7 @@ export async function POST(request) {
   if (hasTelegram) {
     const tg = await sendTelegramNotification(notifyText);
     if (!tg.ok) {
-      return NextResponse.json(
+      return json(
         { ok: false, error: tg.error || 'Telegram notification failed' },
         { status: 502 }
       );
@@ -238,13 +257,13 @@ export async function POST(request) {
       if (telegramSent) {
         console.error('[booking] Supabase insert failed after Telegram OK:', error.message);
       } else {
-        return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+        return json({ ok: false, error: error.message }, { status: 500 });
       }
     }
   }
 
   if (!hasTelegram && !webhookUrl && !supabase) {
-    return NextResponse.json(
+    return json(
       {
         ok: false,
         error:
@@ -257,12 +276,14 @@ export async function POST(request) {
   if (telegramSent) {
     console.log('[booking] Telegram sendMessage OK');
   } else {
-    console.warn(
-      '[booking] HTTP 200 but Telegram NOT sent — TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID missing on this deployment (check Vercel → this project → Env → Production → Redeploy).'
+    console.error(
+      '[booking] OK 200 BUT notify NOT sent — add TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID to this Vercel project (Production), Redeploy. hasToken=%s hasChatId=%s',
+      String(!!token),
+      String(!!chatIdEnv)
     );
   }
 
-  return NextResponse.json(
+  return json(
     {
       ok: true,
       received: true,

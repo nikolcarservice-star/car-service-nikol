@@ -57,6 +57,7 @@ function getBookingServiceLabel(serviceItem, lang) {
 export default function BookingForm({ lang, embed }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const [submitErrorDetail, setSubmitErrorDetail] = useState('');
+  const [notifyNotDelivered, setNotifyNotDelivered] = useState(false);
   const [photoFiles, setPhotoFiles] = useState([]);
   const [photoError, setPhotoError] = useState('');
   const dateInputRef = useRef(null);
@@ -124,6 +125,7 @@ export default function BookingForm({ lang, embed }) {
   const onSubmit = async (values) => {
     setPhotoError('');
     setSubmitErrorDetail('');
+    setNotifyNotDelivered(false);
     setStatus('loading');
     trackFormEvent('form_submit');
     const phoneFull = values.phone.replace(/\D/g, '').length > 0 ? '+48' + values.phone.replace(/\D/g, '') : '';
@@ -164,9 +166,25 @@ export default function BookingForm({ lang, embed }) {
       });
 
       const data = await res.json().catch(() => ({}));
+
+      if (typeof window !== 'undefined') {
+        console.info('[booking] POST /api/booking →', {
+          ok: data.ok,
+          telegramSent: data.telegramSent,
+          status: res.status,
+        });
+      }
+
       if (!res.ok) {
         setSubmitErrorDetail(typeof data.error === 'string' ? data.error : '');
         throw new Error(data.error || 'booking failed');
+      }
+
+      setNotifyNotDelivered(data.telegramSent === false);
+      if (data.telegramSent === false && typeof window !== 'undefined') {
+        console.warn(
+          '[booking] Powiadomienie nie wyszło (telegramSent=false). Otwórz w nowej karcie: /api/booking — sprawdź hasToken / tokenLength. Na Vercel: Environment Variables → Production → TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID → Redeploy.'
+        );
       }
 
       setStatus('success');
@@ -606,14 +624,25 @@ export default function BookingForm({ lang, embed }) {
               </div>
 
               {status === 'success' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"
-                >
-                  <p className="font-semibold">{t.successTitle}</p>
-                  <p className="mt-1 text-emerald-200/90">{t.successBody}</p>
-                </motion.div>
+                <div className="mt-5 space-y-3">
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"
+                  >
+                    <p className="font-semibold">{t.successTitle}</p>
+                    <p className="mt-1 text-emerald-200/90">{t.successBody}</p>
+                  </motion.div>
+                  {notifyNotDelivered && t.notifyNotDelivered && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="rounded-xl border border-amber-500/45 bg-amber-500/10 px-4 py-3 text-sm text-amber-100"
+                    >
+                      {t.notifyNotDelivered}
+                    </motion.div>
+                  )}
+                </div>
               )}
               {status === 'error' && (
                 <motion.div

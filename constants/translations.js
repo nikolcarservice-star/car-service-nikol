@@ -188,9 +188,10 @@ export const translations = {
     },
     booking: {
       title: 'Umów wizytę online',
-      subtitle: 'Zostaw nam swoje dane – oddzwonimy i potwierdzimy termin wizyty w serwisie.',
+      subtitle:
+        'Zostaw dane — zgłoszenie trafi do warsztatu (powiadomienie na WhatsApp po stronie serwera).',
       trustLine: 'Szybka odpowiedź · Termin dopasowany do Ciebie',
-      ctaSubtext: 'Odpowiemy w ciągu kilku godzin',
+      ctaSubtext: 'Odpowiadamy w ciągu kilku godzin (także w WhatsApp)',
       nameLabel: 'Imię i nazwisko',
       phoneLabel: 'Telefon',
       carLabel: 'Marka i model samochodu',
@@ -205,7 +206,7 @@ export const translations = {
       timeAfternoon: 'Popołudnie 12:00–16:00',
       photosLabel: 'Zdjęcia (opcjonalnie)',
       photosHint:
-        'Np. dowód rejestracyjny, miejsce wycieku, uszkodzenie — do 3 zdjęć (JPG, PNG, WebP), ok. 4 MB łącznie. Ułatwia wstępną wycenę.',
+        'Np. dowód rejestracyjny, miejsce wycieku — do 3 zdjęć (JPG, PNG, WebP), ok. 4 MB łącznie. Ułatwia wstępną wycenę.',
       photoRemove: 'Usuń',
       photoTooBig: 'Plik jest za duży (max ok. 1,5 MB na zdjęcie).',
       photoWrongType: 'Dozwolone są tylko pliki graficzne (JPG, PNG, WebP).',
@@ -213,8 +214,9 @@ export const translations = {
       servicePlaceholder: 'Wybierz usługę',
       submitLabel: 'Wyślij zgłoszenie',
       successTitle: 'Dziękujemy! Zgłoszenie zostało wysłane.',
-      successBody: 'Skontaktujemy się z Tobą, aby potwierdzić termin i szczegóły naprawy.',
-      errorMessage: 'Coś poszło nie tak. Spróbuj ponownie za chwilę.',
+      successBody: 'Powiadomienie trafiło do warsztatu — skontaktujemy się, aby potwierdzić termin.',
+      errorMessage:
+        'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę lub zadzwoń do nas.',
       validation: {
         nameRequired: 'Podaj imię i nazwisko.',
         phoneRequired: 'Podaj numer telefonu.',
@@ -463,9 +465,9 @@ export const translations = {
     booking: {
       title: 'Онлайн-запись в сервис',
       subtitle:
-        'Оставьте свои данные — мы перезвоним и согласуем удобное время посещения сервиса.',
+        'Оставьте данные — заявка уйдёт в сервис (уведомление на WhatsApp обрабатывается на сервере).',
       trustLine: 'Быстрый ответ · Удобное для вас время',
-      ctaSubtext: 'Ответим в течение нескольких часов',
+      ctaSubtext: 'Ответим в течение нескольких часов (в том числе в WhatsApp)',
       nameLabel: 'Имя и фамилия',
       phoneLabel: 'Телефон',
       carLabel: 'Марка и модель автомобиля',
@@ -487,9 +489,10 @@ export const translations = {
       messageLabel: 'Дополнительное описание (необязательно)',
       servicePlaceholder: 'Выберите услугу',
       submitLabel: 'Отправить заявку',
-      successTitle: 'Спасибо! Ваша заявка отправлена.',
-      successBody: 'Мы свяжемся с вами, чтобы подтвердить дату и детали ремонта.',
-      errorMessage: 'Что-то пошло не так. Попробуйте ещё раз позже.',
+      successTitle: 'Спасибо! Заявка отправлена.',
+      successBody: 'Уведомление получено сервисом — свяжемся, чтобы подтвердить время.',
+      errorMessage:
+        'Не удалось отправить заявку. Попробуйте позже или позвоните нам.',
       validation: {
         nameRequired: 'Укажите имя и фамилию.',
         phoneRequired: 'Укажите номер телефона.',

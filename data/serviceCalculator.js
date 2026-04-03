@@ -1,6 +1,6 @@
 /**
- * Pozycje kalkulatora orientacyjnego (robocizna w PLN, bez części).
- * ID używane w ?services=id1,id2 dla formularza zapisu.
+ * Kalkulator: tylko typowe usługi, gdzie zakłada się wymianę części / materiałów
+ * (robocizna w PLN, bez kosztu części). ID w ?services=id1,id2.
  */
 
 export const CALCULATOR_ITEMS = [
@@ -23,28 +23,10 @@ export const CALCULATOR_ITEMS = [
     nameRu: 'Замена дисков + колодок (ось)',
   },
   {
-    id: 'diagnostics',
-    price: 100,
-    namePl: 'Diagnostyka komputerowa',
-    nameRu: 'Компьютерная диагностика',
-  },
-  {
-    id: 'suspension_diag',
-    price: 100,
-    namePl: 'Diagnostyka zawieszenia',
-    nameRu: 'Диагностика подвески',
-  },
-  {
     id: 'timing_belt',
     price: 700,
     namePl: 'Wymiana rozrządu 4-cyl. (robocizna)',
     nameRu: 'Замена ГРМ 4-цил. (работа)',
-  },
-  {
-    id: 'tires_4',
-    price: 100,
-    namePl: 'Wymiana opon (4 szt.)',
-    nameRu: 'Замена шин (4 шт.)',
   },
 ];
 

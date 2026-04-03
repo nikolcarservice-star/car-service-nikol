@@ -53,6 +53,13 @@ export const priceListPl = [
     ],
   },
   {
+    category: 'Przegląd i przygotowanie',
+    items: [
+      { name: 'Przegląd przed zakupem auta', price: 'od 200 zł', note: 'robocizna' },
+      { name: 'Przygotowanie do przeglądu technicznego', price: 'od 250 zł', note: 'robocizna' },
+    ],
+  },
+  {
     category: 'Diagnostyka',
     items: [
       { name: 'Komputerowa diagnostyka (odczyt błędów)', price: 'od 100 zł', note: '' },
@@ -119,6 +126,13 @@ export const priceListRu = [
       { name: 'Замена амортизатора (1 шт.)', price: 'от 180 zł', note: 'работа' },
       { name: 'Замена рычага (в сборе)', price: 'от 220 zł', note: 'работа' },
       { name: 'Замена сайлентблока рычага', price: 'от 120 zł', note: 'работа' },
+    ],
+  },
+  {
+    category: 'Осмотр и подготовка',
+    items: [
+      { name: 'Осмотр перед покупкой автомобиля', price: 'от 200 zł', note: 'работа' },
+      { name: 'Подготовка к техосмотру', price: 'от 250 zł', note: 'работа' },
     ],
   },
   {

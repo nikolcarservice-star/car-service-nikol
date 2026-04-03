@@ -5,18 +5,6 @@
 
 export const CALCULATOR_ITEMS = [
   {
-    id: 'pre_purchase',
-    price: 200,
-    namePl: 'Przegląd przed zakupem auta',
-    nameRu: 'Осмотр перед покупкой авто',
-  },
-  {
-    id: 'inspection_prep',
-    price: 250,
-    namePl: 'Przygotowanie do przeglądu technicznego',
-    nameRu: 'Подготовка к техосмотру',
-  },
-  {
     id: 'oil_change',
     price: 80,
     namePl: 'Wymiana oleju + filtr (robocizna)',
@@ -57,12 +45,6 @@ export const CALCULATOR_ITEMS = [
     price: 100,
     namePl: 'Wymiana opon (4 szt.)',
     nameRu: 'Замена шин (4 шт.)',
-  },
-  {
-    id: 'geometry',
-    price: 120,
-    namePl: 'Geometria / zbieżność',
-    nameRu: 'Развал-схождение',
   },
 ];
 

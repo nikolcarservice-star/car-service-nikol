@@ -227,7 +227,7 @@ export const translations = {
     serviceCalculator: {
       title: 'Kalkulator orientacyjny — robocizna',
       subtitle:
-        'Zaznacz usługi (w tym przegląd przed zakupem lub przygotowanie do przeglądu). Części i materiały rozliczamy osobno.',
+        'Zaznacz pozycje z listy — orientacyjna suma robocizny. Części i materiały rozliczamy osobno (pełny cennik na stronie Cennik).',
       partsLegend: 'Części',
       servicesLegend: 'Usługi',
       partsOwn: 'Własne części',
@@ -503,7 +503,7 @@ export const translations = {
     serviceCalculator: {
       title: 'Ориентировочный калькулятор — работа',
       subtitle:
-        'Отметьте услуги (в т.ч. осмотр перед покупкой или подготовку к техосмотру). Запчасти и материалы — отдельно.',
+        'Отметьте позиции из списка — ориентировочная сумма работ. Запчасти и расходники — отдельно (полный прайс на странице «Цены»).',
       partsLegend: 'Запчасти',
       servicesLegend: 'Услуги',
       partsOwn: 'Свои запчасти',

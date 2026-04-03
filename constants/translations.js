@@ -189,9 +189,9 @@ export const translations = {
     booking: {
       title: 'Umów wizytę online',
       subtitle:
-        'Zostaw dane — zgłoszenie trafi do warsztatu (powiadomienie na WhatsApp po stronie serwera).',
+        'Zostaw dane — zgłoszenie trafi do warsztatu (powiadomienie na Telegram po stronie serwera).',
       trustLine: 'Szybka odpowiedź · Termin dopasowany do Ciebie',
-      ctaSubtext: 'Odpowiadamy w ciągu kilku godzin (także w WhatsApp)',
+      ctaSubtext: 'Odpowiadamy w ciągu kilku godzin',
       nameLabel: 'Imię i nazwisko',
       phoneLabel: 'Telefon',
       carLabel: 'Marka i model samochodu',
@@ -214,7 +214,7 @@ export const translations = {
       servicePlaceholder: 'Wybierz usługę',
       submitLabel: 'Wyślij zgłoszenie',
       successTitle: 'Dziękujemy! Zgłoszenie zostało wysłane.',
-      successBody: 'Powiadomienie trafiło do warsztatu — skontaktujemy się, aby potwierdzić termin.',
+      successBody: 'Powiadomienie trafiło do warsztatu (Telegram) — skontaktujemy się, aby potwierdzić termin.',
       errorMessage:
         'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę lub zadzwoń do nas.',
       validation: {
@@ -465,9 +465,9 @@ export const translations = {
     booking: {
       title: 'Онлайн-запись в сервис',
       subtitle:
-        'Оставьте данные — заявка уйдёт в сервис (уведомление на WhatsApp обрабатывается на сервере).',
+        'Оставьте данные — заявка уйдёт в сервис (уведомление в Telegram на сервере).',
       trustLine: 'Быстрый ответ · Удобное для вас время',
-      ctaSubtext: 'Ответим в течение нескольких часов (в том числе в WhatsApp)',
+      ctaSubtext: 'Ответим в течение нескольких часов',
       nameLabel: 'Имя и фамилия',
       phoneLabel: 'Телефон',
       carLabel: 'Марка и модель автомобиля',
@@ -490,7 +490,7 @@ export const translations = {
       servicePlaceholder: 'Выберите услугу',
       submitLabel: 'Отправить заявку',
       successTitle: 'Спасибо! Заявка отправлена.',
-      successBody: 'Уведомление получено сервисом — свяжемся, чтобы подтвердить время.',
+      successBody: 'Уведомление получено сервисом (Telegram) — свяжемся, чтобы подтвердить время.',
       errorMessage:
         'Не удалось отправить заявку. Попробуйте позже или позвоните нам.',
       validation: {

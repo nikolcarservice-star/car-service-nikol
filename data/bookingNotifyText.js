@@ -1,13 +1,13 @@
 /**
- * Tekst powiadomienia o zapisie (np. WhatsApp CallMeBot) — PL / RU.
+ * Tekst powiadomienia o zapisie (Telegram) — PL / RU.
  */
 
 import { LANGUAGES } from '../constants/translations';
 
 const PHOTO_PL =
-  'Załączone zdjęcia ({count}): proszę przesłać je w tym czacie w kolejnej wiadomości po wysłaniu tej treści.';
+  'Załączone zdjęcia ({count}): proszę przesłać je w Telegramie w odpowiedzi na to powiadomienie.';
 const PHOTO_RU =
-  'Фото ({count}): отправьте их в этом чате следующим сообщением после этой заявки.';
+  'Фото ({count}): отправьте в Telegram в ответ на это сообщение.';
 
 /**
  * @param {{

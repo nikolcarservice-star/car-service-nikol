@@ -1,10 +1,13 @@
 /**
  * Zgłoszenia z formularza: powiadomienie Telegram (Bot API) i/lub webhook / Supabase.
- * Ustaw TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID (patrz .env.example).
+ * Na Vercel ustaw TELEGRAM_BOT_TOKEN (sekret). TELEGRAM_CHAT_ID może być w vercel.json lub w zmiennych.
  */
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { buildBookingNotifyText } from '../../../data/bookingNotifyText';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -194,7 +197,11 @@ export async function POST(request) {
       lang: payload.lang,
     });
     if (error) {
-      return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+      if (telegramSent) {
+        console.error('[booking] Supabase insert failed after Telegram OK:', error.message);
+      } else {
+        return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+      }
     }
   }
 

@@ -1,0 +1,10 @@
+{
+  "env": {
+    "TELEGRAM_CHAT_ID": "5916910236"
+  },
+  "functions": {
+    "app/api/booking/route.js": {
+      "maxDuration": 30
+    }
+  }
+}

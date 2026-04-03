@@ -189,7 +189,7 @@ export const translations = {
     booking: {
       title: 'Umów wizytę online',
       subtitle:
-        'Zostaw dane — zgłoszenie trafi do warsztatu (powiadomienie na Telegram po stronie serwera).',
+        'Zostaw dane — zgłoszenie trafi do warsztatu. Oddzwonimy lub odpowiemy, aby potwierdzić termin.',
       trustLine: 'Szybka odpowiedź · Termin dopasowany do Ciebie',
       ctaSubtext: 'Odpowiadamy w ciągu kilku godzin',
       nameLabel: 'Imię i nazwisko',
@@ -214,11 +214,9 @@ export const translations = {
       servicePlaceholder: 'Wybierz usługę',
       submitLabel: 'Wyślij zgłoszenie',
       successTitle: 'Dziękujemy! Zgłoszenie zostało wysłane.',
-      successBody: 'Powiadomienie trafiło do warsztatu (Telegram) — skontaktujemy się, aby potwierdzić termin.',
+      successBody: 'Skontaktujemy się z Tobą, aby potwierdzić termin i szczegóły naprawy.',
       errorMessage:
         'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę lub zadzwoń do nas.',
-      telegramNotConfiguredHint:
-        'Powiadomienie Telegram nie wyszło: na hostingu (Vercel) ustaw zmienne TELEGRAM_BOT_TOKEN i TELEGRAM_CHAT_ID, potem Redeploy. Musisz też napisać /start do bota w Telegramie.',
       validation: {
         nameRequired: 'Podaj imię i nazwisko.',
         phoneRequired: 'Podaj numer telefonu.',
@@ -467,7 +465,7 @@ export const translations = {
     booking: {
       title: 'Онлайн-запись в сервис',
       subtitle:
-        'Оставьте данные — заявка уйдёт в сервис (уведомление в Telegram на сервере).',
+        'Оставьте данные — заявка попадёт в сервис. Мы перезвоним или ответим, чтобы согласовать время.',
       trustLine: 'Быстрый ответ · Удобное для вас время',
       ctaSubtext: 'Ответим в течение нескольких часов',
       nameLabel: 'Имя и фамилия',
@@ -492,11 +490,9 @@ export const translations = {
       servicePlaceholder: 'Выберите услугу',
       submitLabel: 'Отправить заявку',
       successTitle: 'Спасибо! Заявка отправлена.',
-      successBody: 'Уведомление получено сервисом (Telegram) — свяжемся, чтобы подтвердить время.',
+      successBody: 'Мы свяжемся с вами, чтобы подтвердить дату и детали ремонта.',
       errorMessage:
         'Не удалось отправить заявку. Попробуйте позже или позвоните нам.',
-      telegramNotConfiguredHint:
-        'Уведомление в Telegram не ушло: на Vercel задайте TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID, затем Redeploy. Также напишите боту /start в Telegram.',
       validation: {
         nameRequired: 'Укажите имя и фамилию.',
         phoneRequired: 'Укажите номер телефона.',

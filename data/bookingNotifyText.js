@@ -1,13 +1,13 @@
 /**
- * Tekst powiadomienia o zapisie (Telegram) — PL / RU.
+ * Tekst powiadomienia o zapisie — PL / RU.
  */
 
 import { LANGUAGES } from '../constants/translations';
 
 const PHOTO_PL =
-  'Załączone zdjęcia ({count}): proszę przesłać je w Telegramie w odpowiedzi na to powiadomienie.';
+  'Załączone zdjęcia ({count}): proszę przesłać je w odpowiedzi na to powiadomienie.';
 const PHOTO_RU =
-  'Фото ({count}): отправьте в Telegram в ответ на это сообщение.';
+  'Фото ({count}): отправьте в ответном сообщении.';
 
 /**
  * @param {{

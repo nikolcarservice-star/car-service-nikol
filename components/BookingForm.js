@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import {
   Calendar,
   CheckCircle2,
+  ChevronDown,
   Clock,
   ImagePlus,
   Loader2,
@@ -205,7 +206,21 @@ export default function BookingForm({ lang, embed }) {
   const serviceRegister = register('service', { required: t.validation.serviceRequired });
   const servicesList = translations[lang].services.list;
   const selectedService = watch('service');
+  const preferredTimeValue = watch('preferredTime');
   const [serviceOpen, setServiceOpen] = useState(false);
+  const [timeOpen, setTimeOpen] = useState(false);
+  const timeDropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (!timeOpen) return;
+    const onDocMouseDown = (e) => {
+      if (timeDropdownRef.current && !timeDropdownRef.current.contains(e.target)) {
+        setTimeOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDocMouseDown);
+    return () => document.removeEventListener('mousedown', onDocMouseDown);
+  }, [timeOpen]);
   useEffect(() => {
     if (typeof document === 'undefined') return;
 
@@ -417,14 +432,65 @@ export default function BookingForm({ lang, embed }) {
                   <label className="text-xs font-semibold uppercase tracking-wider text-gray-300">
                     {t.timePreferenceLabel}
                   </label>
-                  <select
-                    className={inputBase}
-                    {...register('preferredTime')}
-                  >
-                    <option value="any">{t.timeAny}</option>
-                    <option value="morning">{t.timeMorning}</option>
-                    <option value="afternoon">{t.timeAfternoon}</option>
-                  </select>
+                  <input type="hidden" {...register('preferredTime')} />
+                  <div ref={timeDropdownRef} className="relative">
+                    <button
+                      type="button"
+                      id="preferred-time-trigger"
+                      aria-haspopup="listbox"
+                      aria-expanded={timeOpen}
+                      onClick={() => setTimeOpen((o) => !o)}
+                      className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-600/80 bg-slate-800/60 px-4 py-3 text-left text-sm text-gray-100 shadow-inner transition hover:border-orange-500/70 focus:outline-none focus-visible:border-orange-500 focus-visible:ring-2 focus-visible:ring-orange-500/30"
+                    >
+                      <span className="flex min-w-0 flex-1 items-center gap-3">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800/80 text-orange-400 ring-1 ring-orange-500/20">
+                          <Clock className="h-4 w-4 shrink-0" aria-hidden />
+                        </span>
+                        <span className="truncate">
+                          {preferredTimeLabel(preferredTimeValue, t)}
+                        </span>
+                      </span>
+                      <ChevronDown
+                        className={`h-4 w-4 shrink-0 text-orange-400/80 transition ${timeOpen ? 'rotate-180' : ''}`}
+                        aria-hidden
+                      />
+                    </button>
+                    {timeOpen && (
+                      <ul
+                        role="listbox"
+                        aria-labelledby="preferred-time-trigger"
+                        className="absolute z-40 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-orange-500/25 bg-slate-900/98 py-1 text-sm shadow-xl ring-1 ring-slate-700/60 backdrop-blur-sm"
+                      >
+                        {[
+                          { value: 'any', label: t.timeAny },
+                          { value: 'morning', label: t.timeMorning },
+                          { value: 'afternoon', label: t.timeAfternoon },
+                        ].map(({ value, label }) => {
+                          const active = preferredTimeValue === value;
+                          return (
+                            <li key={value} role="presentation">
+                              <button
+                                type="button"
+                                role="option"
+                                aria-selected={active}
+                                className={`w-full px-4 py-2.5 text-left transition ${
+                                  active
+                                    ? 'bg-orange-500/20 text-orange-100'
+                                    : 'text-gray-200 hover:bg-slate-800/90 hover:text-orange-100'
+                                }`}
+                                onClick={() => {
+                                  setValue('preferredTime', value, { shouldValidate: true });
+                                  setTimeOpen(false);
+                                }}
+                              >
+                                {label}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">

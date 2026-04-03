@@ -254,9 +254,24 @@ export async function POST(request) {
     );
   }
 
-  return NextResponse.json({
-    ok: true,
-    received: true,
-    telegramSent,
-  });
+  if (telegramSent) {
+    console.log('[booking] Telegram sendMessage OK');
+  } else {
+    console.warn(
+      '[booking] HTTP 200 but Telegram NOT sent — TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID missing on this deployment (check Vercel → this project → Env → Production → Redeploy).'
+    );
+  }
+
+  return NextResponse.json(
+    {
+      ok: true,
+      received: true,
+      telegramSent,
+    },
+    {
+      headers: {
+        'X-Booking-Telegram-Sent': telegramSent ? '1' : '0',
+      },
+    }
+  );
 }

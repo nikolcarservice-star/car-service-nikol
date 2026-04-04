@@ -171,6 +171,7 @@ export default function BookingForm({ lang, embed }) {
         console.info('[booking] POST /api/booking →', {
           ok: data.ok,
           telegramSent: data.telegramSent,
+          telegramPhotosSent: data.telegramPhotosSent,
           status: res.status,
         });
       }

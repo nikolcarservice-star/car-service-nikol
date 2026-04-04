@@ -1,6 +1,7 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import FloatingContactStack from '../../components/FloatingContactStack';
+import NikolChatWidget from '../../components/NikolChatWidget';
 import SosRoadsideButton from '../../components/SosRoadsideButton';
 import DelayedPrompt from '../../components/DelayedPrompt';
 import LangAttr from '../../components/LangAttr';
@@ -18,6 +19,7 @@ export default function LangLayout({ children, params }) {
       <Footer lang={lang} />
       <SosRoadsideButton lang={lang} />
       <FloatingContactStack lang={lang} />
+      <NikolChatWidget lang={lang} />
       <DelayedPrompt lang={lang} />
     </div>
   );

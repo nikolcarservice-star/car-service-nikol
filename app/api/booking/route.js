@@ -16,12 +16,20 @@ function json(data, init = {}) {
   return NextResponse.json(data, { ...init, headers });
 }
 
+function looksLikeTelegramToken(s) {
+  return typeof s === 'string' && /^\d+:[A-Za-z0-9_-]+$/.test(s.trim());
+}
+
 function getTelegramToken() {
-  return (
+  const primary =
     process.env.TELEGRAM_BOT_TOKEN?.trim() ||
     process.env.TELEGRAM_TOKEN?.trim() ||
-    ''
-  );
+    '';
+  if (primary) return primary;
+  // Vercel UI mistake: env name "Key" instead of TELEGRAM_BOT_TOKEN
+  const keyMistake = process.env.Key?.trim();
+  if (looksLikeTelegramToken(keyMistake)) return keyMistake;
+  return '';
 }
 
 function getTelegramChatId() {
@@ -29,7 +37,12 @@ function getTelegramChatId() {
     process.env.TELEGRAM_CHAT_ID ??
     process.env.TELEGRAM_BOT_CHAT_ID ??
     '';
-  return String(raw).trim();
+  const primary = String(raw).trim();
+  if (primary) return primary;
+  // Vercel UI mistake: env name "Value" instead of TELEGRAM_CHAT_ID
+  const valueMistake = process.env.Value?.trim();
+  if (valueMistake && /^-?\d+$/.test(valueMistake)) return valueMistake;
+  return '';
 }
 
 const SUPABASE_URL =
@@ -49,11 +62,8 @@ const supabase =
 const MAX_ATTACHMENTS = 3;
 const MAX_TOTAL_ATTACHMENT_BYTES = 4 * 1024 * 1024;
 const MAX_TELEGRAM_TEXT = 4090;
-
-function countAttachmentSlots(raw) {
-  if (!Array.isArray(raw)) return 0;
-  return Math.min(raw.length, MAX_ATTACHMENTS);
-}
+/** Telegram sendPhoto file limit (bytes) */
+const MAX_TELEGRAM_PHOTO_BYTES = 10 * 1024 * 1024;
 
 function sanitizeAttachments(raw) {
   if (!Array.isArray(raw)) return [];
@@ -135,6 +145,66 @@ async function sendTelegramNotification(text) {
   }
 }
 
+async function sendTelegramPhotos(token, chatIdRaw, items) {
+  const chatId = normalizeTelegramChatId(chatIdRaw);
+  if (chatId === null || !items?.length) {
+    return { sent: 0, errors: [] };
+  }
+
+  const errors = [];
+  let sent = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const buf = Buffer.from(item.data, 'base64');
+    if (!buf.length || buf.length > MAX_TELEGRAM_PHOTO_BYTES) {
+      errors.push(`photo ${i + 1}: invalid or too large for Telegram`);
+      console.error('[booking] Telegram sendPhoto skip:', errors[errors.length - 1]);
+      continue;
+    }
+
+    const url = `https://api.telegram.org/bot${token}/sendPhoto`;
+    const safeName = String(item.name || `photo-${i + 1}.jpg`)
+      .replace(/[^\w.\-]/g, '_')
+      .slice(0, 80) || `photo-${i + 1}.jpg`;
+
+    const form = new FormData();
+    form.append('chat_id', String(chatId));
+    form.append(
+      'photo',
+      new Blob([new Uint8Array(buf)], { type: item.type || 'image/jpeg' }),
+      safeName
+    );
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45_000);
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        body: form,
+        signal: controller.signal,
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok || j.ok === false) {
+        const errMsg = j.description || j.error || res.statusText || 'sendPhoto failed';
+        errors.push(`photo ${i + 1}: ${errMsg}`);
+        console.error('[booking] Telegram sendPhoto failed:', errMsg, JSON.stringify(j));
+      } else {
+        sent += 1;
+      }
+    } catch (e) {
+      const msg = e?.name === 'AbortError' ? 'Telegram API timeout' : String(e?.message || e);
+      errors.push(`photo ${i + 1}: ${msg}`);
+      console.error('[booking] Telegram sendPhoto error:', msg);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  return { sent, errors };
+}
+
 export async function GET() {
   const token = getTelegramToken();
   const chatId = getTelegramChatId();
@@ -170,7 +240,7 @@ export async function POST(request) {
     preferredTime = '',
   } = body;
 
-  const attachmentSlots = countAttachmentSlots(body.attachments);
+  const attachments = sanitizeAttachments(body.attachments);
 
   const token = getTelegramToken();
   const chatIdEnv = getTelegramChatId();
@@ -193,11 +263,14 @@ export async function POST(request) {
     date: dateT,
     message: String(message).trim(),
     preferredTimeStr: preferredTimeT || '—',
-    photoCount: attachmentSlots,
+    photoCount: attachments.length,
     lang: langT,
   });
 
   let telegramSent = false;
+  let telegramPhotosSent = 0;
+  const telegramPhotoErrors = [];
+
   if (hasTelegram) {
     const tg = await sendTelegramNotification(notifyText);
     if (!tg.ok) {
@@ -207,9 +280,13 @@ export async function POST(request) {
       );
     }
     telegramSent = true;
-  }
 
-  const attachments = sanitizeAttachments(body.attachments);
+    if (attachments.length) {
+      const pr = await sendTelegramPhotos(token, chatIdEnv, attachments);
+      telegramPhotosSent = pr.sent;
+      telegramPhotoErrors.push(...pr.errors);
+    }
+  }
 
   const extras = [];
   if (preferredTimeT) extras.push(`Przedział godzin (orientacyjnie): ${preferredTimeT}`);
@@ -283,16 +360,21 @@ export async function POST(request) {
     );
   }
 
-  return json(
-    {
-      ok: true,
-      received: true,
-      telegramSent,
+  const responseBody = {
+    ok: true,
+    received: true,
+    telegramSent,
+    ...(attachments.length
+      ? {
+          telegramPhotosSent,
+          ...(telegramPhotoErrors.length ? { telegramPhotoErrors } : {}),
+        }
+      : {}),
+  };
+
+  return json(responseBody, {
+    headers: {
+      'X-Booking-Telegram-Sent': telegramSent ? '1' : '0',
     },
-    {
-      headers: {
-        'X-Booking-Telegram-Sent': telegramSent ? '1' : '0',
-      },
-    }
-  );
+  });
 }

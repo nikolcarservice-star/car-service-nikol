@@ -287,6 +287,19 @@ export const translations = {
       intro:
         'Odpowiedzi na typowe pytania — wiele z nich pada przy pierwszym kontakcie telefonicznym. Jeśli nie znalazłeś odpowiedzi, zadzwoń lub umów wizytę online.',
     },
+    nikolChat: {
+      fabAria: 'Otwórz czat z Nikol — wirtualną recepcjonistką',
+      title: 'Nikol — recepcja online',
+      welcome:
+        'Cześć! Tu Nikol z Car Service Nikol w Jastrowo. Jak mogę pomóc — orientacyjna wycena, termin wizyty, czy coś z autem? Napisz krótko.',
+      placeholder: 'Napisz wiadomość…',
+      send: 'Wyślij',
+      close: 'Zamknij czat',
+      thinking: 'Nikol pisze…',
+      errorGeneric: 'Nie udało się wysłać wiadomości. Spróbuj ponownie lub zadzwoń.',
+      errorUnavailable:
+        'Czat chwilowo niedostępny. Zadzwoń (+48 794 935 734) lub napisz na WhatsApp — pomożemy tak samo.',
+    },
     sosRoadside: {
       label: 'SOS / Pomoc drogowa',
       ariaLabel: 'SOS — wyślij wiadomość WhatsApp z prośbą o pomoc drogową',
@@ -564,6 +577,19 @@ export const translations = {
     faqPage: {
       intro:
         'Ответы на типичные вопросы — многие звучат при первом звонке. Если не нашли ответ, позвоните или запишитесь онлайн.',
+    },
+    nikolChat: {
+      fabAria: 'Открыть чат с Николь — виртуальным администратором',
+      title: 'Николь — онлайн-приёмная',
+      welcome:
+        'Привет! Это Николь из Car Service Nikol в Jastrowo. Чем помочь — ориентировочная цена, запись на визит или вопрос по авто? Напишите коротко.',
+      placeholder: 'Ваше сообщение…',
+      send: 'Отправить',
+      close: 'Закрыть чат',
+      thinking: 'Николь печатает…',
+      errorGeneric: 'Не удалось отправить сообщение. Попробуйте снова или позвоните.',
+      errorUnavailable:
+        'Чат временно недоступен. Позвоните (+48 794 935 734) или напишите в WhatsApp — поможем так же.',
     },
     sosRoadside: {
       label: 'SOS / Помощь на дороге',

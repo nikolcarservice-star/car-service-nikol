@@ -17,7 +17,7 @@ export default function FloatingContactStack({ lang = 'pl' }) {
 
   return (
     <div
-      className="fixed bottom-5 right-4 z-[55] flex flex-col-reverse items-end gap-3 pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6"
+      className="fixed bottom-5 right-4 z-[55] flex flex-col-reverse items-end gap-3 pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6 md:hidden"
       aria-label={lang === 'ru' ? 'Быстрый контакт' : 'Szybki kontakt'}
     >
       <a

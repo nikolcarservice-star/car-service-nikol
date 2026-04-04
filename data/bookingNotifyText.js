@@ -4,10 +4,8 @@
 
 import { LANGUAGES } from '../constants/translations';
 
-const PHOTO_PL =
-  'Załączone zdjęcia ({count}): proszę przesłać je w odpowiedzi na to powiadomienie.';
-const PHOTO_RU =
-  'Фото ({count}): отправьте в ответном сообщении.';
+const PHOTO_PL = 'Załączone zdjęcia ({count}): w kolejnych wiadomościach.';
+const PHOTO_RU = 'Фото ({count}): отдельными сообщениями ниже.';
 
 /**
  * @param {{

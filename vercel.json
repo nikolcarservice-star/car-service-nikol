@@ -5,6 +5,9 @@
   "functions": {
     "app/api/booking/route.js": {
       "maxDuration": 30
+    },
+    "app/api/chat/route.js": {
+      "maxDuration": 60
     }
   }
 }

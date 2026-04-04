@@ -42,19 +42,30 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
           messages: historyForApi.map(({ role, content }) => ({ role, content })),
         }),
       });
-      const data = await res.json().catch(() => ({}));
+      const raw = await res.text();
+      let data = {};
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        data = {};
+      }
 
       if (res.status === 503 && data.error === 'missing_key') {
         setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorUnavailable }]);
         return;
       }
 
-      if (!res.ok || !data.message) {
+      if (typeof data.message === 'string' && data.message.trim()) {
+        setMessages((prev) => [...prev, { role: 'assistant', content: data.message.trim() }]);
+        return;
+      }
+
+      if (!res.ok) {
         setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
         return;
       }
 
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.message }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
     } catch {
       setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
     } finally {

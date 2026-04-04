@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Bot, Send, X } from 'lucide-react';
 import { getTranslations, LANGUAGES } from '../constants/translations';
+import { NikolAssistantMessageBody } from '../utils/nikolMessageLinks';
 
 const fabBase =
   'flex min-h-[52px] min-w-[52px] items-center justify-center rounded-full text-white shadow-xl transition hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950';
@@ -120,7 +121,14 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                       : 'bg-slate-800 text-slate-100'
                   }`}
                 >
-                  <p className="whitespace-pre-wrap break-words">{m.content}</p>
+                  {m.role === 'user' ? (
+                    <p className="whitespace-pre-wrap break-words">{m.content}</p>
+                  ) : (
+                    <NikolAssistantMessageBody
+                      text={m.content}
+                      linkClassName="font-medium text-orange-300 underline decoration-orange-400/80 underline-offset-2 hover:text-orange-200"
+                    />
+                  )}
                 </div>
               </div>
             ))}

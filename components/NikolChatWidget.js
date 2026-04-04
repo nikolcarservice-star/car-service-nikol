@@ -50,17 +50,17 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         data = {};
       }
 
-      if (res.status === 503 && data.error === 'missing_key') {
-        setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorUnavailable }]);
-        return;
-      }
-
       if (typeof data.message === 'string' && data.message.trim()) {
         setMessages((prev) => [...prev, { role: 'assistant', content: data.message.trim() }]);
         return;
       }
 
-      if (!res.ok) {
+      if (data.error === 'missing_key') {
+        setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorUnavailable }]);
+        return;
+      }
+
+      if (data.error === 'upstream' || data.error === 'server' || data.error) {
         setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
         return;
       }

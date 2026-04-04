@@ -8,6 +8,14 @@ const PRIMARY_MODEL = process.env.OPENAI_CHAT_MODEL?.trim() || 'gpt-4o-mini';
 const FALLBACK_MODEL = process.env.OPENAI_CHAT_FALLBACK_MODEL?.trim() || 'gpt-3.5-turbo';
 const FETCH_MS = 55_000;
 
+/** Zawsze 200 + JSON — unika czerwonego „502” w konsoli przeglądarki; błąd w polu `error`. */
+function chatJson(payload, status = 200) {
+  return Response.json(payload, {
+    status,
+    headers: { 'Cache-Control': 'no-store' },
+  });
+}
+
 function getOpenAIApiKey() {
   return (
     process.env.OPENAI_API_KEY?.trim() ||
@@ -31,13 +39,6 @@ function sanitizeMessages(raw) {
     out.push({ role, content });
   }
   return out;
-}
-
-function upstreamError(status, detail) {
-  return Response.json(
-    { error: 'upstream', status, detail: detail?.slice?.(0, 300) },
-    { status: 502 }
-  );
 }
 
 function sleep(ms) {
@@ -102,76 +103,81 @@ async function fetchOnce(apiKey, model, system, messages) {
 }
 
 export async function POST(request) {
-  let body;
   try {
-    body = await request.json();
-  } catch {
-    return Response.json({ error: 'invalid_json' }, { status: 400 });
-  }
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return chatJson({ error: 'invalid_json' });
+    }
 
-  const lang = body.lang === LANGUAGES.RU ? LANGUAGES.RU : LANGUAGES.PL;
-  const messages = sanitizeMessages(body.messages);
-  if (!messages.length) {
-    return Response.json({ error: 'no_messages' }, { status: 400 });
-  }
+    const lang = body.lang === LANGUAGES.RU ? LANGUAGES.RU : LANGUAGES.PL;
+    const messages = sanitizeMessages(body.messages);
+    if (!messages.length) {
+      return chatJson({ error: 'no_messages' });
+    }
 
-  const apiKey = getOpenAIApiKey();
-  if (!apiKey) {
-    return Response.json(
-      { error: 'missing_key', message: 'Chat is not configured (OPENAI_API_KEY).' },
-      { status: 503 }
-    );
-  }
+    const apiKey = getOpenAIApiKey();
+    if (!apiKey) {
+      return chatJson({ error: 'missing_key' });
+    }
 
-  const system = getNikolSystemPrompt(lang);
+    const system = getNikolSystemPrompt(lang);
 
-  let model = PRIMARY_MODEL;
-  let res = await fetchOnce(apiKey, model, system, messages);
+    let model = PRIMARY_MODEL;
+    let res = await fetchOnce(apiKey, model, system, messages);
 
-  if (res.status === 429) {
-    await sleep(2000);
-    res = await fetchOnce(apiKey, model, system, messages);
-  }
-
-  let errText = '';
-  if (!res.ok) {
-    errText = await res.text().catch(() => '');
-    console.error('[chat] OpenAI error', model, res.status, errText.slice(0, 600));
-
-    if (
-      FALLBACK_MODEL &&
-      FALLBACK_MODEL !== PRIMARY_MODEL &&
-      looksLikeModelError(res.status, errText)
-    ) {
-      model = FALLBACK_MODEL;
-      console.warn('[chat] Retrying with fallback model', model);
+    if (res.status === 429) {
+      await sleep(2000);
       res = await fetchOnce(apiKey, model, system, messages);
-      if (res.status === 429) {
-        await sleep(2000);
+    }
+
+    let errText = '';
+    if (!res.ok) {
+      errText = await res.text().catch(() => '');
+      console.error('[chat] OpenAI error', model, res.status, errText.slice(0, 600));
+
+      if (
+        FALLBACK_MODEL &&
+        FALLBACK_MODEL !== PRIMARY_MODEL &&
+        looksLikeModelError(res.status, errText)
+      ) {
+        model = FALLBACK_MODEL;
+        console.warn('[chat] Retrying with fallback model', model);
         res = await fetchOnce(apiKey, model, system, messages);
+        if (res.status === 429) {
+          await sleep(2000);
+          res = await fetchOnce(apiKey, model, system, messages);
+        }
       }
     }
-  }
 
-  if (!res.ok) {
-    errText = await res.text().catch(() => '');
-    console.error('[chat] OpenAI error final', model, res.status, errText.slice(0, 600));
-    return upstreamError(res.status, errText);
-  }
+    if (!res.ok) {
+      errText = await res.text().catch(() => '');
+      console.error('[chat] OpenAI error final', model, res.status, errText.slice(0, 600));
+      return chatJson({
+        error: 'upstream',
+        upstreamStatus: res.status,
+      });
+    }
 
-  let data;
-  try {
-    data = await res.json();
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      console.error('[chat] OpenAI JSON parse error', e);
+      return chatJson({ error: 'upstream', reason: 'invalid_json_body' });
+    }
+
+    const text = extractAssistantText(data);
+    if (!text) {
+      console.error('[chat] OpenAI empty content', JSON.stringify(data)?.slice(0, 500));
+      return chatJson({ error: 'upstream', reason: 'empty_content' });
+    }
+
+    return chatJson({ message: text });
   } catch (e) {
-    console.error('[chat] OpenAI JSON parse error', e);
-    return upstreamError(res.status, 'invalid_json_body');
+    console.error('[chat] unhandled', e);
+    return chatJson({ error: 'server' });
   }
-
-  const text = extractAssistantText(data);
-  if (!text) {
-    console.error('[chat] OpenAI empty content', JSON.stringify(data)?.slice(0, 500));
-    return upstreamError(502, 'empty_content');
-  }
-
-  return Response.json({ message: text });
 }

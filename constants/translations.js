@@ -303,6 +303,8 @@ export const translations = {
       close: 'Zamknij czat',
       thinking: 'Nikol pisze…',
       errorGeneric: 'Nie udało się wysłać wiadomości. Spróbuj ponownie lub zadzwoń.',
+      errorUpstream:
+        'Asystent chwilowo nie mógł wygenerować odpowiedzi (problem z usługą AI). Spróbuj za chwilę albo zadzwoń — pomożemy.',
       errorUnavailable:
         'Czat chwilowo niedostępny. Zadzwoń (+48 794 935 734) lub napisz na WhatsApp — pomożemy tak samo.',
     },
@@ -600,6 +602,8 @@ export const translations = {
       close: 'Закрыть чат',
       thinking: 'Nikol печатает…',
       errorGeneric: 'Не удалось отправить сообщение. Попробуйте снова или позвоните.',
+      errorUpstream:
+        'Ассистент сейчас не смог получить ответ от сервиса ИИ. Попробуйте чуть позже или позвоните — поможем.',
       errorUnavailable:
         'Чат временно недоступен. Позвоните (+48 794 935 734) или напишите в WhatsApp — поможем так же.',
     },

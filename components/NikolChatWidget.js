@@ -72,7 +72,15 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         return;
       }
 
-      if (data.error === 'upstream' || data.error === 'server' || data.error) {
+      if (data.error === 'upstream' || data.error === 'server') {
+        setMessages((prev) => [
+          ...prev,
+          { role: 'assistant', content: copy.errorUpstream ?? copy.errorGeneric },
+        ]);
+        return;
+      }
+
+      if (data.error) {
         setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
         return;
       }

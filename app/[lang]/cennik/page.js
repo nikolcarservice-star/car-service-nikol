@@ -15,7 +15,7 @@ import {
   getCennikIntroParagraph,
 } from '../../../data/prices';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);

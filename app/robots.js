@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 
 export default function robots() {
   return {

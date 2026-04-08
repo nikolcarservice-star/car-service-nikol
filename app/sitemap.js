@@ -2,7 +2,7 @@ import { SERVICE_KEYS, servicesData } from '../data/services';
 import { getAllBlogSlugs } from '../data/blog';
 import { GALLERY_ENABLED, getSitemapLangs } from '../constants/localeConfig';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 
 function url(path) {
   return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;

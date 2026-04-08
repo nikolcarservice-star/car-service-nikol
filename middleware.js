@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from './constants/localeConfig';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://carservicenikol.pl';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 
 function getLangFromPathname(pathname) {
   if (!RUSSIAN_LOCALE_ENABLED) return 'pl';

@@ -262,28 +262,46 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`${fabBase} h-14 w-14 animate-cta-glow sm:h-16 sm:w-16`}
+        className="group flex flex-row-reverse items-end gap-2 sm:gap-3"
         aria-expanded={open}
         aria-label={open ? copy.close : copy.fabAria}
         title={open ? copy.close : copy.fabAria}
       >
-        {open ? (
-          <>
-            <span className="absolute inset-0 bg-slate-950/90" aria-hidden />
-            <X className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8" strokeWidth={2.25} aria-hidden />
-          </>
-        ) : (
-          <img
-            src={AVATAR_SRC}
-            alt=""
-            width={64}
-            height={64}
-            className="absolute inset-0 h-full w-full object-cover"
-            aria-hidden
-            loading="eager"
-            decoding="async"
-          />
+        {!open && copy.fabCaptionTitle && (
+          <span className="mb-2 max-w-[10rem] select-none text-right sm:max-w-[12rem]">
+            <span className="block text-sm font-bold leading-tight text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
+              {copy.fabCaptionTitle}
+            </span>
+            {copy.fabCaptionSubtitle ? (
+              <span className="mt-0.5 block text-[11px] leading-snug text-slate-200 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                {copy.fabCaptionSubtitle}
+              </span>
+            ) : null}
+          </span>
         )}
+        <span className={`${fabBase} relative h-14 w-14 shrink-0 animate-cta-glow sm:h-16 sm:w-16`}>
+          {open ? (
+            <>
+              <span className="absolute inset-0 rounded-full bg-slate-950/90" aria-hidden />
+              <X
+                className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8"
+                strokeWidth={2.25}
+                aria-hidden
+              />
+            </>
+          ) : (
+            <img
+              src={AVATAR_SRC}
+              alt=""
+              width={64}
+              height={64}
+              className="absolute inset-0 h-full w-full rounded-full object-cover"
+              aria-hidden
+              loading="eager"
+              decoding="async"
+            />
+          )}
+        </span>
       </button>
     </div>
   );

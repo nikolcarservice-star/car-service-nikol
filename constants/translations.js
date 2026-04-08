@@ -289,11 +289,13 @@ export const translations = {
     },
     nikolChat: {
       assistantName: 'Nikol',
-      headerDisplayName: 'Nicole',
+      headerDisplayName: 'Nikol',
       headerTagline: 'Twój Asystent Nikol',
       statusOnline: 'Online',
       headerSubtitle: 'recepcja online',
       avatarAlt: 'Nikol — wirtualna recepcjonistka Car Service Nikol',
+      fabCaptionTitle: 'Czat',
+      fabCaptionSubtitle: 'Kliknij — napisz do Nikol',
       fabAria: 'Otwórz czat z Nikol — wirtualną recepcjonistką',
       title: 'Nikol — recepcja online',
       welcome:
@@ -588,11 +590,13 @@ export const translations = {
     },
     nikolChat: {
       assistantName: 'Nikol',
-      headerDisplayName: 'Nicole',
+      headerDisplayName: 'Nikol',
       headerTagline: 'Ваш ассистент Nikol',
       statusOnline: 'Online',
       headerSubtitle: 'онлайн-приёмная',
       avatarAlt: 'Nikol — виртуальный администратор Car Service Nikol',
+      fabCaptionTitle: 'Чат',
+      fabCaptionSubtitle: 'Нажмите — напишите Nikol',
       fabAria: 'Открыть чат с Nikol — виртуальным администратором',
       title: 'Nikol — онлайн-приёмная',
       welcome:

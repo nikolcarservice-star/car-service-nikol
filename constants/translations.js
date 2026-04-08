@@ -636,4 +636,10 @@ export function getTranslations(lang) {
   return translations[code];
 }
 
+/** Sekcja `nikolChat` zawsze z PL lub RU (także gdy RU jest wyłączone na stronie). */
+export function getNikolChatStringsRawLocale(langCode) {
+  const code = langCode === LANGUAGES.RU ? LANGUAGES.RU : LANGUAGES.PL;
+  return translations[code]?.nikolChat ?? translations[LANGUAGES.PL].nikolChat;
+}
+
 

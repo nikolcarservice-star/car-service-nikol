@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Send, X } from 'lucide-react';
 import { getTranslations, LANGUAGES } from '../constants/translations';
 import { NikolAssistantMessageBody } from '../utils/nikolMessageLinks';
+import { nikolErrorCopyForUserMessage } from '../utils/nikolChatErrorCopy';
 
 /**
  * Awatar z /public. Pełny URL z NEXT_PUBLIC_SITE_URL (np. https://autoserwis-nikol.pl),
@@ -45,6 +46,8 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
     setInput('');
     setLoading(true);
 
+    const errCopy = nikolErrorCopyForUserMessage(copy, text);
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -67,27 +70,31 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         return;
       }
 
+      if (process.env.NODE_ENV === 'development' && (data.error || data.upstreamStatus)) {
+        console.warn('[NikolChat] API:', data.error, data);
+      }
+
       if (data.error === 'missing_key') {
-        setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorUnavailable }]);
+        setMessages((prev) => [...prev, { role: 'assistant', content: errCopy.errorUnavailable }]);
         return;
       }
 
       if (data.error === 'upstream' || data.error === 'server') {
         setMessages((prev) => [
           ...prev,
-          { role: 'assistant', content: copy.errorUpstream ?? copy.errorGeneric },
+          { role: 'assistant', content: errCopy.errorUpstream ?? errCopy.errorGeneric },
         ]);
         return;
       }
 
       if (data.error) {
-        setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
+        setMessages((prev) => [...prev, { role: 'assistant', content: errCopy.errorGeneric }]);
         return;
       }
 
-      setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: errCopy.errorGeneric }]);
     } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: copy.errorGeneric }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: errCopy.errorGeneric }]);
     } finally {
       setLoading(false);
     }

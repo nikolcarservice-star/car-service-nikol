@@ -6,8 +6,24 @@ export const maxDuration = 60;
 
 const FETCH_MS = 55_000;
 
-const GEMINI_PRIMARY = process.env.GEMINI_MODEL?.trim() || 'gemini-2.0-flash';
-const GEMINI_FALLBACK = process.env.GEMINI_MODEL_FALLBACK?.trim() || 'gemini-1.5-flash';
+/** Kolejność prób — często jedna nazwa modelu działa, a inna zwraca 404/400 dla danego klucza (AI Studio vs region). */
+function buildGeminiModelTryList() {
+  const seen = new Set();
+  const list = [];
+  const add = (m) => {
+    const t = typeof m === 'string' ? m.trim() : '';
+    if (!t || seen.has(t)) return;
+    seen.add(t);
+    list.push(t);
+  };
+  add(process.env.GEMINI_MODEL);
+  add(process.env.GEMINI_MODEL_FALLBACK);
+  add('gemini-2.0-flash');
+  add('gemini-2.0-flash-001');
+  add('gemini-1.5-flash');
+  add('gemini-1.5-flash-002');
+  return list;
+}
 
 /** Zawsze 200 + JSON — unika czerwonego błędu statusu w konsoli; błąd w polu `error`. */
 function chatJson(payload, status = 200) {
@@ -56,13 +72,6 @@ function extractGeminiText(data) {
     .trim();
 }
 
-function looksLikeGeminiModelError(status, errBody) {
-  if (status === 404) return true;
-  if (status !== 400) return false;
-  const s = (errBody || '').toLowerCase();
-  return s.includes('model') || s.includes('not found') || s.includes('invalid');
-}
-
 function toGeminiContents(messages) {
   return messages.map((m) => ({
     role: m.role === 'assistant' ? 'model' : 'user',
@@ -99,56 +108,55 @@ async function fetchGeminiOnce(apiKey, model, system, contents) {
 
 async function runGeminiChat(system, messages, apiKey) {
   const contents = toGeminiContents(messages);
-  let model = GEMINI_PRIMARY;
-  let res = await fetchGeminiOnce(apiKey, model, system, contents);
+  const models = buildGeminiModelTryList();
+  let lastStatus = null;
+  let lastReason = null;
 
-  if (res.status === 429) {
-    await sleep(2000);
-    res = await fetchGeminiOnce(apiKey, model, system, contents);
-  }
+  for (const model of models) {
+    let res = await fetchGeminiOnce(apiKey, model, system, contents);
 
-  let errText = '';
-  if (!res.ok) {
-    errText = await res.text().catch(() => '');
-    console.error('[chat] Gemini error', model, res.status, errText.slice(0, 600));
-
-    if (
-      GEMINI_FALLBACK &&
-      GEMINI_FALLBACK !== GEMINI_PRIMARY &&
-      looksLikeGeminiModelError(res.status, errText)
-    ) {
-      model = GEMINI_FALLBACK;
-      console.warn('[chat] Gemini retry fallback model', model);
+    if (res.status === 429) {
+      await sleep(2000);
       res = await fetchGeminiOnce(apiKey, model, system, contents);
-      if (res.status === 429) {
-        await sleep(2000);
-        res = await fetchGeminiOnce(apiKey, model, system, contents);
-      }
     }
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.error('[chat] Gemini error', model, res.status, errText.slice(0, 600));
+      lastStatus = res.status;
+      continue;
+    }
+
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      console.error('[chat] Gemini JSON parse error', model, e);
+      lastReason = 'invalid_json_body';
+      continue;
+    }
+
+    const text = extractGeminiText(data);
+    if (text) {
+      return { message: text };
+    }
+
+    const cand = data?.candidates?.[0];
+    const reason =
+      cand?.finishReason ||
+      data?.promptFeedback?.blockReason ||
+      data?.error?.message ||
+      'empty_content';
+    console.error('[chat] Gemini empty/blocked', model, reason, JSON.stringify(data)?.slice(0, 500));
+    lastReason = String(reason);
+    lastStatus = 200;
   }
 
-  if (!res.ok) {
-    errText = await res.text().catch(() => '');
-    console.error('[chat] Gemini error final', model, res.status, errText.slice(0, 600));
-    return { error: 'upstream', upstreamStatus: res.status };
-  }
-
-  let data;
-  try {
-    data = await res.json();
-  } catch (e) {
-    console.error('[chat] Gemini JSON parse error', e);
-    return { error: 'upstream', reason: 'invalid_json_body' };
-  }
-
-  const text = extractGeminiText(data);
-  if (!text) {
-    const reason = data?.candidates?.[0]?.finishReason || 'empty_content';
-    console.error('[chat] Gemini empty/blocked', reason, JSON.stringify(data)?.slice(0, 500));
-    return { error: 'upstream', reason: String(reason) };
-  }
-
-  return { message: text };
+  return {
+    error: 'upstream',
+    upstreamStatus: lastStatus,
+    reason: lastReason,
+  };
 }
 
 export async function POST(request) {

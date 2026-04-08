@@ -6,25 +6,25 @@
 export const CALCULATOR_ITEMS = [
   {
     id: 'oil_change',
-    price: 80,
+    price: 120,
     namePl: 'Wymiana oleju + filtr (robocizna)',
     nameRu: 'Замена масла + фильтр (работа)',
   },
   {
     id: 'brakes_pads',
-    price: 150,
+    price: 180,
     namePl: 'Wymiana klocków hamulcowych (oś)',
     nameRu: 'Замена тормозных колодок (ось)',
   },
   {
     id: 'brakes_discs',
-    price: 280,
-    namePl: 'Wymiana tarcz + klocków (oś)',
-    nameRu: 'Замена дисков + колодок (ось)',
+    price: 350,
+    namePl: 'Wymiana tarcz i klocków (oś)',
+    nameRu: 'Замена дисков и колодок (ось)',
   },
   {
     id: 'timing_belt',
-    price: 700,
+    price: 900,
     namePl: 'Wymiana rozrządu 4-cyl. (robocizna)',
     nameRu: 'Замена ГРМ 4-цил. (работа)',
   },

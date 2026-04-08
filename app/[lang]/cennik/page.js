@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FileText, Phone, CalendarDays } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import ServiceCalculator from '../../../components/ServiceCalculator';
+// import ServiceCalculator from '../../../components/ServiceCalculator';
 import {
   getPhoneContactPageHref,
   getTranslations,
@@ -105,9 +105,10 @@ export default function CennikPage({ params }) {
           {introParagraph}
         </p>
 
-        <div className="mb-10">
+        {/* Калькулятор временно скрыт — раскомментируйте импорт и блок */}
+        {/* <div className="mb-10">
           <ServiceCalculator lang={lang} />
-        </div>
+        </div> */}
 
         <div className="space-y-6">
           {priceList.map((group) => (

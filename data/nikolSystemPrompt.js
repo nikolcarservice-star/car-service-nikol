@@ -6,7 +6,7 @@ const MAPS_LAT = '52.5908375';
 const MAPS_LNG = '16.5384497';
 
 /**
- * System prompt dla czatu „Nikol” (OpenAI) — rola, USP, HTML linków, cennik orientacyjny.
+ * System prompt dla czatu „Nikol” (Google Gemini) — rola, USP, HTML linków, cennik orientacyjny.
  */
 export function getNikolSystemPrompt(lang) {
   const isRu = lang === 'ru';

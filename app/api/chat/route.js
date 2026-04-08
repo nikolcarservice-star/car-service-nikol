@@ -18,6 +18,7 @@ function buildGeminiModelTryList() {
   add(process.env.GEMINI_MODEL);
   add(process.env.GEMINI_MODEL_FALLBACK);
   add('gemini-1.5-flash');
+  add('gemini-1.5-flash-latest');
   add('gemini-1.5-flash-002');
   add('gemini-2.0-flash');
   add('gemini-2.0-flash-001');
@@ -59,6 +60,24 @@ function sanitizeMessages(raw) {
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+/** Czytelny log z obiektu błędu SDK / Google (bez sekretów). */
+function formatGeminiCaughtError(err) {
+  if (!err || typeof err !== 'object') return String(err);
+  const bits = [];
+  if (err.message) bits.push(err.message);
+  if (err.status != null) bits.push(`status=${err.status}`);
+  if (err.statusText) bits.push(String(err.statusText));
+  if (Array.isArray(err.errorDetails) && err.errorDetails.length) {
+    try {
+      bits.push(JSON.stringify(err.errorDetails).slice(0, 400));
+    } catch {
+      /* ignore */
+    }
+  }
+  const s = bits.join(' | ');
+  return s.length > 900 ? `${s.slice(0, 900)}…` : s;
 }
 
 /**
@@ -122,12 +141,12 @@ async function runGeminiChat(system, messages, apiKey) {
           const out2 = await runOnce();
           if (out2) return out2;
         } catch (e2) {
-          lastReason = e2?.message || String(e2);
-          console.error('[chat] Gemini SDK error after 429 retry', modelName, lastReason?.slice?.(0, 400));
+          lastReason = formatGeminiCaughtError(e2);
+          console.error('[chat] Gemini SDK error after 429 retry', modelName, lastReason);
         }
       } else {
-        lastReason = msg;
-        console.error('[chat] Gemini SDK error', modelName, msg?.slice?.(0, 500));
+        lastReason = formatGeminiCaughtError(e);
+        console.error('[chat] Gemini SDK error', modelName, lastReason);
       }
     }
   }

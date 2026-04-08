@@ -1,12 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Bot, Send, X } from 'lucide-react';
+import Image from 'next/image';
+import { Send, X } from 'lucide-react';
 import { getTranslations, LANGUAGES } from '../constants/translations';
 import { NikolAssistantMessageBody } from '../utils/nikolMessageLinks';
 
+const AVATAR_SRC = '/nikol-chat-avatar.png';
+
 const fabBase =
-  'flex min-h-[52px] min-w-[52px] items-center justify-center rounded-full text-white shadow-xl transition hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950';
+  'relative flex min-h-[52px] min-w-[52px] items-center justify-center overflow-hidden rounded-full shadow-xl ring-2 ring-orange-400/60 ring-offset-2 ring-offset-slate-950 transition hover:scale-110 hover:shadow-2xl hover:ring-orange-300/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
 
 export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
   const t = getTranslations(lang);
@@ -95,16 +98,33 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
           aria-modal="true"
         >
           <div className="flex items-center justify-between gap-2 border-b border-slate-700/80 bg-slate-900/90 px-4 py-3">
-            <div className="flex min-w-0 items-center gap-2">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-md">
-                <Bot className="h-5 w-5" strokeWidth={2} aria-hidden />
-              </span>
-              <span className="truncate text-sm font-semibold text-white">{copy.title}</span>
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <Image
+                src={AVATAR_SRC}
+                alt={copy.avatarAlt}
+                width={40}
+                height={40}
+                className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-orange-500/45"
+                priority
+              />
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="text-sm font-semibold text-white">{copy.assistantName}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-300">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                    {copy.statusOnline}
+                  </span>
+                </div>
+                <p className="truncate text-xs text-slate-400">{copy.headerSubtitle}</p>
+              </div>
             </div>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-full p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+              className="shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
               aria-label={copy.close}
             >
               <X className="h-5 w-5" strokeWidth={2} aria-hidden />
@@ -180,16 +200,23 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`${fabBase} h-14 w-14 bg-gradient-to-br from-orange-500 via-amber-500 to-rose-600 focus:ring-orange-400 animate-cta-glow sm:h-16 sm:w-16`}
+        className={`${fabBase} h-14 w-14 animate-cta-glow sm:h-16 sm:w-16`}
         aria-expanded={open}
         aria-label={open ? copy.close : copy.fabAria}
         title={open ? copy.close : copy.fabAria}
       >
+        <span
+          aria-hidden
+          className="absolute inset-0 bg-slate-950 bg-cover bg-center"
+          style={
+            open
+              ? { backgroundImage: 'none', backgroundColor: 'rgb(15 23 42 / 0.92)' }
+              : { backgroundImage: `url(${AVATAR_SRC})` }
+          }
+        />
         {open ? (
-          <X className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2} aria-hidden />
-        ) : (
-          <Bot className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2} aria-hidden />
-        )}
+          <X className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8" strokeWidth={2.25} aria-hidden />
+        ) : null}
       </button>
     </div>
   );

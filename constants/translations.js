@@ -289,6 +289,8 @@ export const translations = {
     },
     nikolChat: {
       assistantName: 'Nikol',
+      headerDisplayName: 'Nicole',
+      headerTagline: 'Twój Asystent Nikol',
       statusOnline: 'Online',
       headerSubtitle: 'recepcja online',
       avatarAlt: 'Nikol — wirtualna recepcjonistka Car Service Nikol',
@@ -584,6 +586,8 @@ export const translations = {
     },
     nikolChat: {
       assistantName: 'Nikol',
+      headerDisplayName: 'Nicole',
+      headerTagline: 'Ваш ассистент Nikol',
       statusOnline: 'Online',
       headerSubtitle: 'онлайн-приёмная',
       avatarAlt: 'Nikol — виртуальный администратор Car Service Nikol',

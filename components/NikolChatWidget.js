@@ -120,7 +120,9 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
               />
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="text-sm font-semibold text-white">{copy.assistantName}</span>
+                  <span className="text-base font-bold text-white">
+                    {copy.headerDisplayName ?? copy.assistantName}
+                  </span>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-300">
                     <span className="relative flex h-2 w-2">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40" />
@@ -129,7 +131,9 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                     {copy.statusOnline}
                   </span>
                 </div>
-                <p className="truncate text-xs text-slate-400">{copy.headerSubtitle}</p>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-400 sm:text-xs">
+                  {copy.headerTagline ?? copy.headerSubtitle}
+                </p>
               </div>
             </div>
             <button

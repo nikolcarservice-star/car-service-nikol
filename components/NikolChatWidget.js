@@ -1,12 +1,19 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { Send, X } from 'lucide-react';
 import { getTranslations, LANGUAGES } from '../constants/translations';
 import { NikolAssistantMessageBody } from '../utils/nikolMessageLinks';
 
-const AVATAR_SRC = '/nikol-chat-avatar.png';
+/**
+ * Awatar z /public. Pełny URL z NEXT_PUBLIC_SITE_URL (np. https://autoserwis-nikol.pl),
+ * żeby <img> zawsze brał plik z produkcji — unika problemów z relatywną ścieżką/cache.
+ */
+const siteBase = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, '');
+const AVATAR_SRC = siteBase ? `${siteBase}/nikol-chat-avatar.png` : '/nikol-chat-avatar.png';
+
+const avatarBubbleClass =
+  'h-8 w-8 shrink-0 self-end rounded-full object-cover ring-2 ring-orange-500/40';
 
 const fabBase =
   'relative flex min-h-[52px] min-w-[52px] items-center justify-center overflow-hidden rounded-full shadow-xl ring-2 ring-orange-400/60 ring-offset-2 ring-offset-slate-950 transition hover:scale-110 hover:shadow-2xl hover:ring-orange-300/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
@@ -20,6 +27,8 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
   const [messages, setMessages] = useState(() => []);
   const [loading, setLoading] = useState(false);
   const listRef = useRef(null);
+
+  const avatarAlt = copy?.avatarAlt || 'Nikol — Car Service Nikol';
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -99,13 +108,15 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         >
           <div className="flex items-center justify-between gap-2 border-b border-slate-700/80 bg-slate-900/90 px-4 py-3">
             <div className="flex min-w-0 flex-1 items-center gap-3">
-              <Image
+              {/* Zwykły <img> z /public — bez next/image (pewniejsze na Vercel / bez optymalizacji). */}
+              <img
                 src={AVATAR_SRC}
-                alt={copy.avatarAlt}
+                alt={avatarAlt}
                 width={40}
                 height={40}
                 className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-orange-500/45"
-                priority
+                loading="eager"
+                decoding="async"
               />
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -135,18 +146,40 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             ref={listRef}
             className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3"
           >
-            <div className="flex justify-start">
-              <div className="max-w-[90%] rounded-2xl bg-slate-800 px-3 py-2 text-sm leading-relaxed text-slate-100">
+            <div className="flex justify-start gap-2">
+              <img
+                src={AVATAR_SRC}
+                alt=""
+                width={32}
+                height={32}
+                className={avatarBubbleClass}
+                aria-hidden
+                loading="eager"
+                decoding="async"
+              />
+              <div className="max-w-[min(100%,18rem)] rounded-2xl bg-slate-800 px-3 py-2 text-sm leading-relaxed text-slate-100 sm:max-w-[85%]">
                 <p className="whitespace-pre-wrap break-words">{copy.welcome}</p>
               </div>
             </div>
             {messages.map((m, i) => (
               <div
                 key={`${i}-${m.role}-${m.content.slice(0, 24)}`}
-                className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
+                {m.role === 'assistant' ? (
+                  <img
+                    src={AVATAR_SRC}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className={avatarBubbleClass}
+                    aria-hidden
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : null}
                 <div
-                  className={`max-w-[90%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
+                  className={`max-w-[min(100%,18rem)] rounded-2xl px-3 py-2 text-sm leading-relaxed sm:max-w-[85%] ${
                     m.role === 'user'
                       ? 'bg-gradient-to-br from-orange-600 to-amber-600 text-white'
                       : 'bg-slate-800 text-slate-100'
@@ -164,7 +197,17 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
               </div>
             ))}
             {loading && (
-              <div className="flex justify-start">
+              <div className="flex justify-start gap-2">
+                <img
+                  src={AVATAR_SRC}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className={avatarBubbleClass}
+                  aria-hidden
+                  loading="eager"
+                  decoding="async"
+                />
                 <div className="rounded-2xl bg-slate-800 px-3 py-2 text-sm text-slate-400">
                   {copy.thinking}
                 </div>
@@ -205,18 +248,23 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         aria-label={open ? copy.close : copy.fabAria}
         title={open ? copy.close : copy.fabAria}
       >
-        <span
-          aria-hidden
-          className="absolute inset-0 bg-slate-950 bg-cover bg-center"
-          style={
-            open
-              ? { backgroundImage: 'none', backgroundColor: 'rgb(15 23 42 / 0.92)' }
-              : { backgroundImage: `url(${AVATAR_SRC})` }
-          }
-        />
         {open ? (
-          <X className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8" strokeWidth={2.25} aria-hidden />
-        ) : null}
+          <>
+            <span className="absolute inset-0 bg-slate-950/90" aria-hidden />
+            <X className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8" strokeWidth={2.25} aria-hidden />
+          </>
+        ) : (
+          <img
+            src={AVATAR_SRC}
+            alt=""
+            width={64}
+            height={64}
+            className="absolute inset-0 h-full w-full object-cover"
+            aria-hidden
+            loading="eager"
+            decoding="async"
+          />
+        )}
       </button>
     </div>
   );

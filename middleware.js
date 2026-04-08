@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from './constants/localeConfig';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
-
 function getLangFromPathname(pathname) {
   if (!RUSSIAN_LOCALE_ENABLED) return 'pl';
   const segment = pathname.split('/').filter(Boolean)[0];
@@ -29,21 +27,12 @@ export function middleware(request) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-lang', lang);
 
-  if (request.nextUrl.pathname === '/robots.txt') {
-    // Явно разрешаем индексацию всего сайта; запрещаем только служебные пути
-    const body = `User-agent: *
-Allow: /
-
-Disallow: /api/
-
-Sitemap: ${siteUrl}/sitemap.xml
-`;
-    return new NextResponse(body, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-      },
-    });
-  }
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
+
+/** Bez middleware dla statycznych plików z /public (png, xml…) — zawsze serwuje się prawdziwy asset, nie HTML strony. */
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|xml|txt|woff2?)$).*)',
+  ],
+};

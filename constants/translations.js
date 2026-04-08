@@ -294,9 +294,12 @@ export const translations = {
       statusOnline: 'Online',
       headerSubtitle: 'recepcja online',
       avatarAlt: 'Nikol — wirtualna recepcjonistka Car Service Nikol',
-      fabCaptionTitle: 'Czat',
-      fabCaptionSubtitle: 'Kliknij — napisz do Nikol',
       fabAria: 'Otwórz czat z Nikol — wirtualną recepcjonistką',
+      nudgeTitle: 'Jesteśmy do Twojej dyspozycji',
+      nudgeBody:
+        'Orientacyjna wycena, termin wizyty albo pytanie o auto — napisz w czacie. Nikol odpowie tak szybko, jak to możliwe.',
+      nudgeCta: 'Otwórz czat',
+      nudgeDismissAria: 'Zamknij powiadomienie',
       title: 'Nikol — recepcja online',
       welcome:
         'Cześć! Tu Nikol z Car Service Nikol w Jastrowo. Jak mogę pomóc — orientacyjna wycena, termin wizyty, czy coś z autem? Napisz krótko.',
@@ -595,9 +598,12 @@ export const translations = {
       statusOnline: 'Online',
       headerSubtitle: 'онлайн-приёмная',
       avatarAlt: 'Nikol — виртуальный администратор Car Service Nikol',
-      fabCaptionTitle: 'Чат',
-      fabCaptionSubtitle: 'Нажмите — напишите Nikol',
       fabAria: 'Открыть чат с Nikol — виртуальным администратором',
+      nudgeTitle: 'Чем можем помочь?',
+      nudgeBody:
+        'Ориентир по цене, запись в сервис или вопрос по авто — напишите в чат. Nikol ответит как можно скорее.',
+      nudgeCta: 'Открыть чат',
+      nudgeDismissAria: 'Закрыть уведомление',
       title: 'Nikol — онлайн-приёмная',
       welcome:
         'Привет! Это Nikol из Car Service Nikol в Jastrowo. Чем помочь — ориентировочная цена, запись на визит или вопрос по авто? Напишите коротко.',

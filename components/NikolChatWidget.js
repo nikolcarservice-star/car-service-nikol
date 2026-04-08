@@ -1,10 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Send, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Send, Sparkles, X } from 'lucide-react';
 import { getTranslations, LANGUAGES } from '../constants/translations';
 import { NikolAssistantMessageBody } from '../utils/nikolMessageLinks';
 import { nikolErrorCopyForUserMessage } from '../utils/nikolChatErrorCopy';
+
+const NUDGE_DELAY_MS = 20_000;
+const NUDGE_AUTOHIDE_MS = 50_000;
+const NUDGE_SESSION_KEY = 'nikol_chat_nudge_v1';
 
 /**
  * Awatar z /public. Pełny URL z NEXT_PUBLIC_SITE_URL (np. https://autoserwis-nikol.pl),
@@ -27,6 +32,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
   /** Wymiana z API (bez lokalnego powitania). */
   const [messages, setMessages] = useState(() => []);
   const [loading, setLoading] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
   const listRef = useRef(null);
 
   const avatarAlt = copy?.avatarAlt || 'Nikol — Car Service Nikol';
@@ -35,6 +41,38 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages, loading, open]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !copy) return;
+    if (sessionStorage.getItem(NUDGE_SESSION_KEY)) return;
+    const id = window.setTimeout(() => setShowNudge(true), NUDGE_DELAY_MS);
+    return () => window.clearTimeout(id);
+  }, [copy]);
+
+  useEffect(() => {
+    if (!showNudge || typeof window === 'undefined') return;
+    const id = window.setTimeout(() => setShowNudge(false), NUDGE_AUTOHIDE_MS);
+    return () => window.clearTimeout(id);
+  }, [showNudge]);
+
+  useEffect(() => {
+    if (!open) return;
+    setShowNudge(false);
+    try {
+      sessionStorage.setItem(NUDGE_SESSION_KEY, '1');
+    } catch {
+      /* ignore */
+    }
+  }, [open]);
+
+  const dismissNudge = useCallback(() => {
+    setShowNudge(false);
+    try {
+      sessionStorage.setItem(NUDGE_SESSION_KEY, '1');
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const send = useCallback(async () => {
     const text = input.trim();
@@ -111,9 +149,74 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
 
   return (
     <div
-      className="fixed bottom-5 right-4 z-[55] hidden pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6 md:block"
+      className="fixed bottom-5 right-4 z-[55] hidden flex-col items-end pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6 md:flex"
       aria-live="polite"
     >
+      <AnimatePresence>
+        {showNudge && !open && copy.nudgeTitle && (
+          <motion.div
+            key="nikol-nudge"
+            role="dialog"
+            aria-label={copy.nudgeTitle}
+            initial={{ opacity: 0, y: 24, scale: 0.92, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 320, mass: 0.8 }}
+            className="relative mb-3 w-[min(calc(100vw-2rem),300px)] overflow-hidden rounded-2xl border border-orange-400/25 bg-gradient-to-br from-slate-900 via-slate-900/98 to-slate-800/95 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_48px_-12px_rgba(249,115,22,0.35)] backdrop-blur-md"
+          >
+            <div
+              className="pointer-events-none absolute -right-8 -top-12 h-32 w-32 rounded-full bg-orange-500/20 blur-2xl"
+              aria-hidden
+            />
+            <button
+              type="button"
+              onClick={dismissNudge}
+              className="absolute right-2 top-2 z-10 rounded-full p-1.5 text-slate-400 transition hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+              aria-label={copy.nudgeDismissAria}
+            >
+              <X className="h-4 w-4" strokeWidth={2} aria-hidden />
+            </button>
+            <div className="relative px-3.5 pb-3.5 pt-3 pr-10">
+              <div className="flex gap-3">
+                <div className="relative shrink-0">
+                  <img
+                    src={AVATAR_SRC}
+                    alt=""
+                    width={44}
+                    height={44}
+                    className="h-11 w-11 rounded-full object-cover ring-2 ring-orange-400/60 shadow-md"
+                    loading="eager"
+                    decoding="async"
+                    aria-hidden
+                  />
+                  <span
+                    className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-slate-900 bg-emerald-500 shadow-sm"
+                    aria-hidden
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-orange-300/95">
+                    <Sparkles className="h-3 w-3 shrink-0 text-amber-400" aria-hidden />
+                    Nikol
+                  </p>
+                  <p className="mt-0.5 text-sm font-bold leading-snug text-white">{copy.nudgeTitle}</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-slate-300">{copy.nudgeBody}</p>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(true)}
+                    className="mt-3 w-full rounded-xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 py-2.5 text-xs font-bold text-white shadow-lg shadow-orange-600/25 transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                  >
+                    {copy.nudgeCta}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {open && (
         <div
           className="mb-3 flex max-h-[min(70vh,520px)] min-h-0 w-[min(100vw-2rem,400px)] flex-col overflow-hidden rounded-2xl border border-slate-700/90 bg-slate-900/95 shadow-2xl backdrop-blur-sm"
@@ -123,7 +226,6 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         >
           <div className="flex items-center justify-between gap-2 border-b border-slate-700/80 bg-slate-900/90 px-4 py-3">
             <div className="flex min-w-0 flex-1 items-center gap-3">
-              {/* Zwykły <img> z /public — bez next/image (pewniejsze na Vercel / bez optymalizacji). */}
               <img
                 src={AVATAR_SRC}
                 alt={avatarAlt}
@@ -161,10 +263,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             </button>
           </div>
 
-          <div
-            ref={listRef}
-            className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3"
-          >
+          <div ref={listRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
             <div className="flex justify-start gap-2">
               <img
                 src={AVATAR_SRC}
@@ -262,46 +361,32 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="group flex flex-row-reverse items-end gap-2 sm:gap-3"
+        className={`${fabBase} h-14 w-14 shrink-0 animate-cta-glow sm:h-16 sm:w-16`}
         aria-expanded={open}
         aria-label={open ? copy.close : copy.fabAria}
         title={open ? copy.close : copy.fabAria}
       >
-        {!open && copy.fabCaptionTitle && (
-          <span className="mb-2 max-w-[10rem] select-none text-right sm:max-w-[12rem]">
-            <span className="block text-sm font-bold leading-tight text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
-              {copy.fabCaptionTitle}
-            </span>
-            {copy.fabCaptionSubtitle ? (
-              <span className="mt-0.5 block text-[11px] leading-snug text-slate-200 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-                {copy.fabCaptionSubtitle}
-              </span>
-            ) : null}
-          </span>
-        )}
-        <span className={`${fabBase} relative h-14 w-14 shrink-0 animate-cta-glow sm:h-16 sm:w-16`}>
-          {open ? (
-            <>
-              <span className="absolute inset-0 rounded-full bg-slate-950/90" aria-hidden />
-              <X
-                className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8"
-                strokeWidth={2.25}
-                aria-hidden
-              />
-            </>
-          ) : (
-            <img
-              src={AVATAR_SRC}
-              alt=""
-              width={64}
-              height={64}
-              className="absolute inset-0 h-full w-full rounded-full object-cover"
+        {open ? (
+          <>
+            <span className="absolute inset-0 rounded-full bg-slate-950/90" aria-hidden />
+            <X
+              className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8"
+              strokeWidth={2.25}
               aria-hidden
-              loading="eager"
-              decoding="async"
             />
-          )}
-        </span>
+          </>
+        ) : (
+          <img
+            src={AVATAR_SRC}
+            alt=""
+            width={64}
+            height={64}
+            className="absolute inset-0 h-full w-full rounded-full object-cover"
+            aria-hidden
+            loading="eager"
+            decoding="async"
+          />
+        )}
       </button>
     </div>
   );

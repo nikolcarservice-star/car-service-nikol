@@ -1,12 +1,11 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getNikolSystemPrompt } from '../../../data/nikolSystemPrompt';
 import { LANGUAGES } from '../../../constants/translations';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-const FETCH_MS = 55_000;
-
-/** Kolejność prób — często jedna nazwa modelu działa, a inna zwraca 404/400 dla danego klucza (AI Studio vs region). */
+/** Kolejność: env → potem modele najczęściej działające z kluczem AI Studio. */
 function buildGeminiModelTryList() {
   const seen = new Set();
   const list = [];
@@ -18,14 +17,13 @@ function buildGeminiModelTryList() {
   };
   add(process.env.GEMINI_MODEL);
   add(process.env.GEMINI_MODEL_FALLBACK);
-  add('gemini-2.0-flash');
-  add('gemini-2.0-flash-001');
   add('gemini-1.5-flash');
   add('gemini-1.5-flash-002');
+  add('gemini-2.0-flash');
+  add('gemini-2.0-flash-001');
   return list;
 }
 
-/** Zawsze 200 + JSON — unika czerwonego błędu statusu w konsoli; błąd w polu `error`. */
 function chatJson(payload, status = 200) {
   return Response.json(payload, {
     status,
@@ -63,98 +61,79 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function extractGeminiText(data) {
-  const parts = data?.candidates?.[0]?.content?.parts;
-  if (!Array.isArray(parts)) return '';
-  return parts
-    .map((p) => (typeof p?.text === 'string' ? p.text : ''))
-    .join('')
-    .trim();
-}
-
-function toGeminiContents(messages) {
-  return messages.map((m) => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }],
-  }));
-}
-
-async function geminiGenerateContent(apiKey, model, system, contents, signal) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  return fetch(url, {
-    method: 'POST',
-    signal,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: system }] },
-      contents,
-      generationConfig: {
-        temperature: 0.65,
-        maxOutputTokens: 900,
-      },
-    }),
-  });
-}
-
-async function fetchGeminiOnce(apiKey, model, system, contents) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), FETCH_MS);
-  try {
-    return await geminiGenerateContent(apiKey, model, system, contents, controller.signal);
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
+/**
+ * Oficjalny SDK poprawnie składa historię czatu (startChat + sendMessage);
+ * surowy REST z pełną tablicą `contents` bywa problematyczny przy wielu turach.
+ */
 async function runGeminiChat(system, messages, apiKey) {
-  const contents = toGeminiContents(messages);
   const models = buildGeminiModelTryList();
-  let lastStatus = null;
+  const last = messages[messages.length - 1];
+  if (!last || last.role !== 'user') {
+    return { error: 'upstream', reason: 'last_not_user' };
+  }
+
   let lastReason = null;
 
-  for (const model of models) {
-    let res = await fetchGeminiOnce(apiKey, model, system, contents);
+  for (const modelName of models) {
+    const runOnce = async () => {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction: system,
+        generationConfig: {
+          temperature: 0.65,
+          maxOutputTokens: 900,
+        },
+      });
 
-    if (res.status === 429) {
-      await sleep(2000);
-      res = await fetchGeminiOnce(apiKey, model, system, contents);
-    }
+      let text;
+      if (messages.length === 1) {
+        const result = await model.generateContent(last.content);
+        text = result.response.text();
+      } else {
+        const history = messages.slice(0, -1).map((m) => ({
+          role: m.role === 'user' ? 'user' : 'model',
+          parts: [{ text: m.content }],
+        }));
+        const chat = model.startChat({ history });
+        const result = await chat.sendMessage(last.content);
+        text = result.response.text();
+      }
 
-    if (!res.ok) {
-      const errText = await res.text().catch(() => '');
-      console.error('[chat] Gemini error', model, res.status, errText.slice(0, 600));
-      lastStatus = res.status;
-      continue;
-    }
+      const trimmed = typeof text === 'string' ? text.trim() : '';
+      if (trimmed) return { message: trimmed };
+      lastReason = 'empty_response';
+      console.error('[chat] Gemini SDK empty text', modelName);
+      return null;
+    };
 
-    let data;
     try {
-      data = await res.json();
+      const out = await runOnce();
+      if (out) return out;
     } catch (e) {
-      console.error('[chat] Gemini JSON parse error', model, e);
-      lastReason = 'invalid_json_body';
-      continue;
+      const msg = e?.message || String(e);
+      const is429 =
+        msg.includes('429') ||
+        msg.toLowerCase().includes('resource exhausted') ||
+        msg.toLowerCase().includes('too many requests');
+      if (is429) {
+        await sleep(2500);
+        try {
+          const out2 = await runOnce();
+          if (out2) return out2;
+        } catch (e2) {
+          lastReason = e2?.message || String(e2);
+          console.error('[chat] Gemini SDK error after 429 retry', modelName, lastReason?.slice?.(0, 400));
+        }
+      } else {
+        lastReason = msg;
+        console.error('[chat] Gemini SDK error', modelName, msg?.slice?.(0, 500));
+      }
     }
-
-    const text = extractGeminiText(data);
-    if (text) {
-      return { message: text };
-    }
-
-    const cand = data?.candidates?.[0];
-    const reason =
-      cand?.finishReason ||
-      data?.promptFeedback?.blockReason ||
-      data?.error?.message ||
-      'empty_content';
-    console.error('[chat] Gemini empty/blocked', model, reason, JSON.stringify(data)?.slice(0, 500));
-    lastReason = String(reason);
-    lastStatus = 200;
   }
 
   return {
     error: 'upstream',
-    upstreamStatus: lastStatus,
     reason: lastReason,
   };
 }

@@ -7,7 +7,7 @@ export const maxDuration = 60;
 
 const FETCH_MS = 55_000;
 
-/** Kolejność: env → potem modele najczęściej działające z kluczem AI Studio. */
+/** Kolejność: env → modele stabilne dla AI Studio. */
 function buildGeminiModelTryList() {
   const seen = new Set();
   const list = [];
@@ -19,11 +19,11 @@ function buildGeminiModelTryList() {
   };
   add(process.env.GEMINI_MODEL);
   add(process.env.GEMINI_MODEL_FALLBACK);
-  add('gemini-1.5-flash');
-  add('gemini-1.5-flash-latest');
-  add('gemini-1.5-flash-002');
   add('gemini-2.0-flash');
   add('gemini-2.0-flash-001');
+  add('gemini-1.5-flash');
+  add('gemini-1.5-flash-002');
+  add('gemini-1.5-flash-latest');
   return list;
 }
 
@@ -34,9 +34,6 @@ function chatJson(payload, status = 200) {
   });
 }
 
-/**
- * Vercel/UI czasem wkleja wartość w cudzysłowach; bearer też się zdarza.
- */
 function getGeminiApiKey() {
   let k =
     process.env.GEMINI_API_KEY?.trim() ||
@@ -107,22 +104,32 @@ function extractRestText(data) {
     .trim();
 }
 
-/** Zapasowe wywołanie HTTP, gdy SDK na serwerze zawiedzie (bundler / wersja API). */
-async function geminiRestGenerateContent(apiKey, model, system, messages, signal) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+async function geminiRestGenerateContent(apiVersion, apiKey, model, system, messages, signal) {
+  const ver = apiVersion === 'v1' ? 'v1' : 'v1beta';
+  const url = `https://generativelanguage.googleapis.com/${ver}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const body = {
+    systemInstruction: { parts: [{ text: system }] },
+    contents: toGeminiRestContents(messages),
+    generationConfig: {
+      temperature: 0.65,
+      maxOutputTokens: 900,
+    },
+  };
   return fetch(url, {
     method: 'POST',
     signal,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: system }] },
-      contents: toGeminiRestContents(messages),
-      generationConfig: {
-        temperature: 0.65,
-        maxOutputTokens: 900,
-      },
-    }),
+    body: JSON.stringify(body),
   });
+}
+
+/** Jedno żądanie REST: v1beta, przy 404 ten sam payload na v1. */
+async function geminiRestTryModel(apiKey, modelName, system, messages, signal) {
+  let res = await geminiRestGenerateContent('v1beta', apiKey, modelName, system, messages, signal);
+  if (res.status === 404) {
+    res = await geminiRestGenerateContent('v1', apiKey, modelName, system, messages, signal);
+  }
+  return res;
 }
 
 async function runGeminiRestChat(system, messages, apiKey) {
@@ -133,14 +140,14 @@ async function runGeminiRestChat(system, messages, apiKey) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_MS);
     try {
-      let res = await geminiRestGenerateContent(apiKey, modelName, system, messages, controller.signal);
+      let res = await geminiRestTryModel(apiKey, modelName, system, messages, controller.signal);
       if (res.status === 429) {
         await sleep(2000);
-        res = await geminiRestGenerateContent(apiKey, modelName, system, messages, controller.signal);
+        res = await geminiRestTryModel(apiKey, modelName, system, messages, controller.signal);
       }
       const raw = await res.text();
       if (!res.ok) {
-        lastReason = `REST ${res.status}: ${raw.slice(0, 350)}`;
+        lastReason = `REST ${res.status}: ${raw.slice(0, 400)}`;
         console.error('[chat] Gemini REST', modelName, lastReason);
         continue;
       }
@@ -167,7 +174,60 @@ async function runGeminiRestChat(system, messages, apiKey) {
   return { error: 'upstream', reason: lastReason };
 }
 
-async function runGeminiChat(system, messages, apiKey) {
+/**
+ * Obejście: czasem API odrzuca `systemInstruction`; jedna wiadomość user = instrukcja + treść.
+ * Tylko pierwsza wiadomość w wątku (najczęstszy case „czat nie działa”).
+ */
+async function runGeminiMergedFirstTurn(system, userText, apiKey) {
+  const combined = `[Instrukcja systemowa dla asystenta]\n${system}\n\n---\n[Wiadomość klienta]\n${userText}`;
+  const models = buildGeminiModelTryList();
+  let lastReason = null;
+
+  for (const modelName of models) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_MS);
+    try {
+      const verTry = async (apiVersion) => {
+        const ver = apiVersion === 'v1' ? 'v1' : 'v1beta';
+        const url = `https://generativelanguage.googleapis.com/${ver}/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        return fetch(url, {
+          method: 'POST',
+          signal: controller.signal,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: combined }] }],
+            generationConfig: { temperature: 0.65, maxOutputTokens: 900 },
+          }),
+        });
+      };
+
+      let res = await verTry('v1beta');
+      if (res.status === 404) res = await verTry('v1');
+      const raw = await res.text();
+      if (!res.ok) {
+        lastReason = `merged REST ${res.status}: ${raw.slice(0, 350)}`;
+        continue;
+      }
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        lastReason = 'merged invalid JSON';
+        continue;
+      }
+      const text = extractRestText(data);
+      if (text) return { message: text };
+      lastReason = 'merged empty';
+    } catch (e) {
+      lastReason = e?.message || String(e);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  return { error: 'upstream', reason: lastReason };
+}
+
+async function runGeminiSdkChat(system, messages, apiKey) {
   const models = buildGeminiModelTryList();
   const last = messages[messages.length - 1];
   if (!last || last.role !== 'user') {
@@ -234,11 +294,29 @@ async function runGeminiChat(system, messages, apiKey) {
     }
   }
 
-  console.warn('[chat] SDK path failed, trying REST fallback');
-  return runGeminiRestChat(system, messages, apiKey);
+  return { error: 'upstream', reason: lastReason };
 }
 
-/** Szybki test w przeglądarce: czy endpoint żyje i czy klucz jest wczytany (tylko długość). */
+async function runGeminiChat(system, messages, apiKey) {
+  const rest = await runGeminiRestChat(system, messages, apiKey);
+  if (rest.message) return rest;
+
+  if (messages.length === 1 && messages[0].role === 'user') {
+    console.warn('[chat] REST failed, trying merged first-turn fallback');
+    const merged = await runGeminiMergedFirstTurn(system, messages[0].content, apiKey);
+    if (merged.message) return merged;
+  }
+
+  console.warn('[chat] merged failed, trying SDK');
+  const sdk = await runGeminiSdkChat(system, messages, apiKey);
+  if (sdk.message) return sdk;
+
+  return {
+    error: 'upstream',
+    reason: sdk.reason || rest.reason,
+  };
+}
+
 export async function GET() {
   const key = getGeminiApiKey();
   return Response.json(
@@ -249,7 +327,7 @@ export async function GET() {
       hint:
         key.length === 0
           ? 'Set GEMINI_API_KEY on Vercel, then Redeploy.'
-          : 'Key loaded. If chat still fails: open DevTools → Network → POST /api/chat → Response field `reason`; in Google Cloud set API key Application restrictions to None for server-side use.',
+          : 'Key loaded. If chat fails: DevTools → Network → POST /api/chat → `reason`. AI Studio: enable billing if quota errors. Key must work for server (not referrer-only).',
     },
     { headers: { 'Cache-Control': 'no-store' } }
   );

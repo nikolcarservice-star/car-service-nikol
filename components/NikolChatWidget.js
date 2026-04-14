@@ -108,8 +108,8 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         return;
       }
 
-      if (process.env.NODE_ENV === 'development' && (data.error || data.upstreamStatus)) {
-        console.warn('[NikolChat] API:', data.error, data);
+      if (data.error === 'upstream' || data.error === 'server' || data.reason) {
+        console.warn('[NikolChat] /api/chat:', data.error || 'fail', data.reason || data);
       }
 
       if (data.error === 'missing_key') {

@@ -104,8 +104,10 @@ function getGeminiApiKey() {
   let k =
     process.env.GEMINI_API_KEY?.trim() ||
     process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim() ||
+    process.env.GOOGLE_AI_API_KEY?.trim() ||
     '';
   if (!k) return '';
+  k = k.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
   if ((k.startsWith('"') && k.endsWith('"')) || (k.startsWith("'") && k.endsWith("'"))) {
     k = k.slice(1, -1).trim();
   }
@@ -384,15 +386,22 @@ async function runGeminiChat(system, messages, apiKey) {
 
 export async function GET() {
   const key = getGeminiApiKey();
+  const rawGemini = process.env.GEMINI_API_KEY;
+  const rawGoogleGen = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
   return Response.json(
     {
       ok: true,
       service: 'nikol-chat',
       geminiKeyChars: key.length,
+      /** Czy nazwa zmiennej w ogóle istnieje w środowisku (bez ujawniania wartości). */
+      envPresent: {
+        GEMINI_API_KEY: typeof rawGemini === 'string' && rawGemini.length > 0,
+        GOOGLE_GENERATIVE_AI_API_KEY: typeof rawGoogleGen === 'string' && rawGoogleGen.length > 0,
+      },
       hint:
         key.length === 0
-          ? 'Set GEMINI_API_KEY on Vercel, then Redeploy.'
-          : 'Open DevTools → Console after sending a message: [NikolChat] logs `reason`. Billing/quota: Google AI Studio. Key: server-safe (not referrer-only).',
+          ? 'geminiKeyChars=0: add GEMINI_API_KEY for Production in Vercel, Save, Redeploy. If envPresent.GEMINI_API_KEY is false, the variable is missing or not deployed to this environment.'
+          : 'Key resolved. If chat still fails, check POST response `error` and `reason`.',
     },
     { headers: { 'Cache-Control': 'no-store' } }
   );
@@ -415,7 +424,11 @@ export async function POST(request) {
 
     const apiKey = getGeminiApiKey();
     if (!apiKey) {
-      return chatJson({ error: 'missing_key' });
+      console.error('[chat] missing_key — GEMINI_API_KEY empty after normalize; check Vercel Production + Redeploy');
+      return chatJson({
+        error: 'missing_key',
+        hint: 'Server has no usable GEMINI_API_KEY. Vercel → Env → Production → Redeploy.',
+      });
     }
 
     const system = getNikolSystemPrompt(lang);

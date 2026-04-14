@@ -312,6 +312,8 @@ export const translations = {
         'Asystent chwilowo nie mógł wygenerować odpowiedzi (problem z usługą AI). Spróbuj za chwilę albo zadzwoń — pomożemy.',
       errorUnavailable:
         'Czat chwilowo niedostępny. Zadzwoń (+48 794 935 734) lub napisz na WhatsApp — pomożemy tak samo.',
+      errorMissingKey:
+        'Czat nie ma klucza API na serwerze (GEMINI_API_KEY). W Vercel: Settings → Environment Variables → dodaj zmienną dla środowiska Production, zapisz i wykonaj Redeploy. Tymczasem: zadzwoń (+48 794 935 734) lub napisz na WhatsApp.',
     },
     sosRoadside: {
       label: 'SOS / Pomoc drogowa',
@@ -616,6 +618,8 @@ export const translations = {
         'Ассистент сейчас не смог получить ответ от сервиса ИИ. Попробуйте чуть позже или позвоните — поможем.',
       errorUnavailable:
         'Чат временно недоступен. Позвоните (+48 794 935 734) или напишите в WhatsApp — поможем так же.',
+      errorMissingKey:
+        'На сервере не задан ключ чата (GEMINI_API_KEY). В Vercel: Settings → Environment Variables — добавьте переменную для окружения Production, сохраните и сделайте Redeploy. Пока так: звоните (+48 794 935 734) или пишите в WhatsApp.',
     },
     sosRoadside: {
       label: 'SOS / Помощь на дороге',

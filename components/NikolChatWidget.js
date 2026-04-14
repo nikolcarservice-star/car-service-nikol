@@ -118,7 +118,11 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       }
 
       if (data.error === 'missing_key') {
-        setMessages((prev) => [...prev, { role: 'assistant', content: errCopy.errorUnavailable }]);
+        if (data.hint) console.warn('[NikolChat] missing_key:', data.hint);
+        setMessages((prev) => [
+          ...prev,
+          { role: 'assistant', content: errCopy.errorMissingKey ?? errCopy.errorUnavailable },
+        ]);
         return;
       }
 

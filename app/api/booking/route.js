@@ -61,9 +61,19 @@ const supabase =
 
 const MAX_ATTACHMENTS = 3;
 const MAX_TOTAL_ATTACHMENT_BYTES = 4 * 1024 * 1024;
+/** Zgodnie z limitem w BookingForm (na klientcie) — pojedyncze zdjęcie */
+const MAX_SINGLE_ATTACHMENT_BYTES = 1_500_000;
 const MAX_TELEGRAM_TEXT = 4090;
 /** Telegram sendPhoto file limit (bytes) */
 const MAX_TELEGRAM_PHOTO_BYTES = 10 * 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+
+function isAllowedImageType(type, name) {
+  const t = String(type || '').trim().toLowerCase();
+  if (ALLOWED_IMAGE_TYPES.has(t)) return true;
+  return /\.(jpe?g|png|webp)$/i.test(String(name || ''));
+}
 
 function sanitizeAttachments(raw) {
   if (!Array.isArray(raw)) return [];
@@ -72,13 +82,27 @@ function sanitizeAttachments(raw) {
   for (const item of raw.slice(0, MAX_ATTACHMENTS)) {
     if (!item || typeof item !== 'object') continue;
     const name = String(item.name || 'photo').slice(0, 120);
-    const type = String(item.type || 'image/jpeg').slice(0, 80);
-    const data = typeof item.data === 'string' ? item.data : '';
-    const buf = Buffer.from(data, 'base64');
+    let type = String(item.type || 'image/jpeg').slice(0, 80);
+    if (!isAllowedImageType(type, name)) continue;
+
+    let buf;
+    if (Buffer.isBuffer(item.buffer)) {
+      buf = item.buffer;
+    } else {
+      const data = typeof item.data === 'string' ? item.data.replace(/\s+/g, '') : '';
+      buf = Buffer.from(data, 'base64');
+    }
     if (!buf.length) continue;
+    if (buf.length > MAX_SINGLE_ATTACHMENT_BYTES) continue;
     total += buf.length;
     if (total > MAX_TOTAL_ATTACHMENT_BYTES) break;
-    list.push({ name, type, data });
+    if (!type || !ALLOWED_IMAGE_TYPES.has(type.toLowerCase())) {
+      const lower = String(name).toLowerCase();
+      if (lower.endsWith('.png')) type = 'image/png';
+      else if (lower.endsWith('.webp')) type = 'image/webp';
+      else type = 'image/jpeg';
+    }
+    list.push({ name, type, data: buf.toString('base64') });
   }
   return list;
 }
@@ -170,11 +194,8 @@ async function sendTelegramPhotos(token, chatIdRaw, items) {
 
     const form = new FormData();
     form.append('chat_id', String(chatId));
-    form.append(
-      'photo',
-      new Blob([new Uint8Array(buf)], { type: item.type || 'image/jpeg' }),
-      safeName
-    );
+    const mime = item.type || 'image/jpeg';
+    form.append('photo', new Blob([buf], { type: mime }), safeName);
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 45_000);
@@ -222,11 +243,46 @@ export async function GET() {
 }
 
 export async function POST(request) {
+  const contentType = request.headers.get('content-type') || '';
   let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
+  let attachmentRaw = [];
+
+  if (contentType.includes('multipart/form-data')) {
+    let fd;
+    try {
+      fd = await request.formData();
+    } catch (e) {
+      console.error('[booking] formData parse failed:', e?.message || e);
+      return json({ ok: false, error: 'Invalid multipart body' }, { status: 400 });
+    }
+    const payloadField = fd.get('payload');
+    if (typeof payloadField !== 'string') {
+      return json({ ok: false, error: 'Missing payload' }, { status: 400 });
+    }
+    try {
+      body = JSON.parse(payloadField);
+    } catch {
+      return json({ ok: false, error: 'Invalid payload JSON' }, { status: 400 });
+    }
+
+    const files = fd.getAll('photos');
+    for (const file of files) {
+      if (!file || typeof file.arrayBuffer !== 'function') continue;
+      const ab = await file.arrayBuffer();
+      const buffer = Buffer.from(ab);
+      attachmentRaw.push({
+        name: String(file.name || 'photo.jpg').slice(0, 120),
+        type: file.type || '',
+        buffer,
+      });
+    }
+  } else {
+    try {
+      body = await request.json();
+    } catch {
+      return json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
+    }
+    attachmentRaw = body.attachments;
   }
 
   const {
@@ -240,7 +296,9 @@ export async function POST(request) {
     preferredTime = '',
   } = body;
 
-  const attachments = sanitizeAttachments(body.attachments);
+  const attachments = sanitizeAttachments(
+    contentType.includes('multipart/form-data') ? attachmentRaw : attachmentRaw || []
+  );
 
   const token = getTelegramToken();
   const chatIdEnv = getTelegramChatId();

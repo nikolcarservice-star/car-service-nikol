@@ -110,18 +110,6 @@ export default function BookingForm({ lang, embed }) {
     },
   });
 
-  const readFileAsAttachment = (file) =>
-    new Promise((resolve, reject) => {
-      const r = new FileReader();
-      r.onload = () => {
-        const res = r.result;
-        const data = typeof res === 'string' ? res.replace(/^data:[^;]+;base64,/, '') : '';
-        resolve({ name: file.name.slice(0, 120), type: file.type || 'image/jpeg', data });
-      };
-      r.onerror = reject;
-      r.readAsDataURL(file);
-    });
-
   const onSubmit = async (values) => {
     setPhotoError('');
     setSubmitErrorDetail('');
@@ -130,7 +118,6 @@ export default function BookingForm({ lang, embed }) {
     trackFormEvent('form_submit');
     const phoneFull = values.phone.replace(/\D/g, '').length > 0 ? '+48' + values.phone.replace(/\D/g, '') : '';
     try {
-      const attachments = [];
       for (const f of photoFiles) {
         if (!f.type.startsWith('image/')) {
           setPhotoError(t.photoWrongType);
@@ -142,7 +129,6 @@ export default function BookingForm({ lang, embed }) {
           setStatus('idle');
           return;
         }
-        attachments.push(await readFileAsAttachment(f));
       }
 
       const payload = {
@@ -154,15 +140,19 @@ export default function BookingForm({ lang, embed }) {
         date: values.date,
         message: values.message,
         preferredTime: preferredTimeLabel(values.preferredTime, t),
-        attachments,
         lang: lang === LANGUAGES.RU ? 'ru' : 'pl',
         createdAt: new Date().toISOString(),
       };
 
+      const formData = new FormData();
+      formData.append('payload', JSON.stringify(payload));
+      for (const f of photoFiles) {
+        formData.append('photos', f, f.name.slice(0, 120));
+      }
+
       const res = await fetch('/api/booking', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const data = await res.json().catch(() => ({}));

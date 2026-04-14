@@ -22,14 +22,14 @@ export function generateMetadata({ params }) {
   };
 
   if (lang === 'ru') {
-    const title = 'Автосервис Nikol Jastrowo | Механик Шамотулы | Работаем в воскресенье';
+    const title = 'Автосервис Nikol Jastrowo | Механик Шамотулы | Ремонт в воскресенье';
     const description =
-      'Автосервис в Jastrowo для клиентов из Шамотул и гмины: диагностика, замена ГРМ, кодирование ключей, помощь на дороге с бустером. Работаем в воскресенье — удобно, когда другие закрыты.';
+      'Профессиональный ремонт авто в Jastrowo. Замена ГРМ, ключи, диагностика. Работаем в субботу и воскресенье! Гмина Шамотулы.';
     return {
       title,
       description,
       keywords:
-        'автосервис Jastrowo, механик Шамотулы, замена ГРМ, кодирование ключей, автосервис воскресенье, помощь на дороге бустер, Car Service Nikol, ремонт в выходные',
+        'автосервис Jastrowo, механик Шамотулы, замена ГРМ, диагностика, гмина Шамотулы, сервис воскресенье, Car Service Nikol',
       alternates: { canonical, languages },
       openGraph: {
         type: 'website',
@@ -39,7 +39,7 @@ export function generateMetadata({ params }) {
         siteName: 'Car Service Nikol',
         title,
         description,
-        images: [{ ...ogImage, alt: 'Car Service Nikol – автосервис Jastrowo, Шамотулы' }],
+        images: [{ ...ogImage, alt: 'Автосервис Nikol Jastrowo — механик, ремонт в выходные' }],
       },
       twitter: { card: 'summary_large_image', title, description, images: [ogImage.url] },
     };
@@ -181,11 +181,23 @@ export default function LangHomePage({ params }) {
       )}
       {lang === 'ru' && (
         <footer className="border-t border-slate-800 bg-slate-950" aria-label="SEO">
-          <div className="mx-auto max-w-3xl px-4 py-8 text-center sm:px-6 sm:text-left">
+          <div className="mx-auto max-w-3xl space-y-4 px-4 py-8 text-center sm:px-6 sm:text-left">
             <p className="text-sm leading-relaxed text-gray-400">
-              Ищете надежного механика в районе Шамотулы? Наш автосервис в Ястрово (Jastrowo) предлагает
-              профессиональную диагностику, замену ГРМ и программирование ключей. Мы открыты для вас каждую
-              субботу и воскресенье.
+              Ищете надёжного механика в гмине Шамотулы и рядом с Jastrowo? Car Service Nikol выполняет
+              компьютерную диагностику, ремонт ходовой и тормозов, замену масла и фильтров, шиномонтаж,
+              замену ремня и цепи ГРМ, программирование и изготовление ключей, а также выезд мастера и помощь
+              на дороге. Перед началом работ согласуем объём и стоимость — без сюрпризов в счёте.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-400">
+              Мы специализируемся на легковых автомобилях распространённых марок (BMW, VW, Audi, Toyota и др.)
+              и понимаем, что в будни машина нужна на работу: поэтому принимаем клиентов в субботу и воскресенье,
+              когда многие сервисы в регионе не работают. Удобный подъезд из Шамотул, Jastrowo и соседних
+              населённых пунктов — адрес: ul. Wernisażowa 21, 64-500 Jastrowo.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-400">
+              Запишитесь онлайн через форму на сайте, позвоните или напишите в WhatsApp и Telegram — подберём
+              время визита и ответим на вопросы по ремонту, ориентировочной цене и запчастям. Car Service Nikol —
+              ваш контактный автосервис в Jastrowo для жителей gminy Szamotuły и окрестностей.
             </p>
           </div>
         </footer>

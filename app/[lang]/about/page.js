@@ -90,7 +90,7 @@ export default function AboutPage({ params }) {
       <div className="relative h-[280px] w-full overflow-hidden sm:h-[320px] md:h-[380px]">
         <Image
           src={HERO_IMAGE}
-          alt=""
+          alt={isRu ? 'Диагностика авто в Car Service Nikol, Jastrowo' : 'Diagnostyka samochodu w Car Service Nikol, Jastrowo'}
           fill
           className="object-cover"
           priority

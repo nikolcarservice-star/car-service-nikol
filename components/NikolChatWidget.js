@@ -190,7 +190,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                 <div className="relative shrink-0">
                   <img
                     src={AVATAR_SRC}
-                    alt=""
+                    alt={avatarAlt}
                     width={44}
                     height={44}
                     className="h-11 w-11 rounded-full object-cover ring-2 ring-orange-400/60 shadow-md"
@@ -276,7 +276,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             <div className="flex justify-start gap-2">
               <img
                 src={AVATAR_SRC}
-                alt=""
+                alt={avatarAlt}
                 width={32}
                 height={32}
                 className={avatarBubbleClass}
@@ -296,7 +296,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                 {m.role === 'assistant' ? (
                   <img
                     src={AVATAR_SRC}
-                    alt=""
+                    alt={avatarAlt}
                     width={32}
                     height={32}
                     className={avatarBubbleClass}
@@ -327,7 +327,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
               <div className="flex justify-start gap-2">
                 <img
                   src={AVATAR_SRC}
-                  alt=""
+                  alt={avatarAlt}
                   width={32}
                   height={32}
                   className={avatarBubbleClass}
@@ -387,7 +387,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         ) : (
           <img
             src={AVATAR_SRC}
-            alt=""
+            alt={avatarAlt}
             width={64}
             height={64}
             className="absolute inset-0 h-full w-full rounded-full object-cover"

@@ -599,7 +599,7 @@ export const translations = {
       headerTagline: 'Ваш ассистент Nikol',
       statusOnline: 'Online',
       headerSubtitle: 'онлайн-приёмная',
-      avatarAlt: 'Nikol — виртуальный администратор Car Service Nikol',
+      avatarAlt: 'Николь Автосервис Чатик',
       fabAria: 'Открыть чат с Nikol — виртуальным администратором',
       nudgeTitle: 'Чем можем помочь?',
       nudgeBody:

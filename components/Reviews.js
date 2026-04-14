@@ -97,7 +97,13 @@ export default function Reviews({ lang = 'pl' }) {
                     {current.profile_photo_url ? (
                       <img
                         src={current.profile_photo_url}
-                        alt=""
+                        alt={
+                          current.author_name
+                            ? `${lang === 'ru' ? 'Фото' : 'Zdjęcie'} ${current.author_name}`
+                            : lang === 'ru'
+                              ? 'Фото автора отзыва Google'
+                              : 'Zdjęcie autora opinii Google'
+                        }
                         className="h-12 w-12 flex-shrink-0 rounded-full border-2 border-amber-400/30 object-cover"
                         loading="lazy"
                       />

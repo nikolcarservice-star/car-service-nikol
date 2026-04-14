@@ -6,8 +6,9 @@ export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 const FETCH_MS = 55_000;
+const LIST_MODELS_MS = 12_000;
 
-/** Kolejność: env → modele stabilne dla AI Studio. */
+/** Bazowa kolejność (gdy listowanie modeli z API się nie uda). */
 function buildGeminiModelTryList() {
   const seen = new Set();
   const list = [];
@@ -25,6 +26,71 @@ function buildGeminiModelTryList() {
   add('gemini-1.5-flash-002');
   add('gemini-1.5-flash-latest');
   return list;
+}
+
+/**
+ * Pobiera z Google listę modeli z generateContent dla tego klucza — unika „404 model not found”.
+ */
+async function buildFullModelList(apiKey) {
+  const base = buildGeminiModelTryList();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), LIST_MODELS_MS);
+  const extra = [];
+  try {
+    const res = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models?pageSize=100',
+      {
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
+        },
+      }
+    );
+    const raw = await res.text();
+    if (!res.ok) {
+      console.error('[chat] listModels', res.status, raw.slice(0, 400));
+    } else {
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        console.error('[chat] listModels JSON', e?.message);
+        data = { models: [] };
+      }
+      for (const m of data.models || []) {
+        const id = String(m.name || '').replace(/^models\//, '');
+        const methods = m.supportedGenerationMethods || [];
+        if (!id || !methods.includes('generateContent')) continue;
+        if (/embed/i.test(id) && !/flash/i.test(id)) continue;
+        extra.push(id);
+      }
+      extra.sort((a, b) => {
+        const rank = (s) => {
+          if (/gemini-2\.\d+.*flash/i.test(s)) return 0;
+          if (/gemini-2\.0.*flash/i.test(s)) return 1;
+          if (/gemini-1\.5.*flash/i.test(s)) return 2;
+          if (/flash/i.test(s)) return 3;
+          return 50;
+        };
+        return rank(a) - rank(b);
+      });
+    }
+  } catch (e) {
+    console.error('[chat] listModels catch', e?.message || e);
+  } finally {
+    clearTimeout(timer);
+  }
+
+  const seen = new Set();
+  const out = [];
+  for (const id of [...base, ...extra]) {
+    if (!seen.has(id)) {
+      seen.add(id);
+      out.push(id);
+    }
+  }
+  return out;
 }
 
 function chatJson(payload, status = 200) {
@@ -104,50 +170,63 @@ function extractRestText(data) {
     .trim();
 }
 
-async function geminiRestGenerateContent(apiVersion, apiKey, model, system, messages, signal) {
-  const ver = apiVersion === 'v1' ? 'v1' : 'v1beta';
-  const url = `https://generativelanguage.googleapis.com/${ver}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const body = {
-    systemInstruction: { parts: [{ text: system }] },
-    contents: toGeminiRestContents(messages),
-    generationConfig: {
-      temperature: 0.65,
-      maxOutputTokens: 900,
-    },
-  };
-  return fetch(url, {
-    method: 'POST',
-    signal,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-}
-
-/** Jedno żądanie REST: v1beta, przy 404 ten sam payload na v1. */
-async function geminiRestTryModel(apiKey, modelName, system, messages, signal) {
-  let res = await geminiRestGenerateContent('v1beta', apiKey, modelName, system, messages, signal);
-  if (res.status === 404) {
-    res = await geminiRestGenerateContent('v1', apiKey, modelName, system, messages, signal);
+/**
+ * POST generateContent: najpierw nagłówek x-goog-api-key, potem ?key= (niektóre środowiska/proxy).
+ * Kolejność API: v1beta → v1.
+ */
+async function geminiRestExecute(apiKey, model, body, signal) {
+  const attempts = [
+    ['v1beta', false],
+    ['v1beta', true],
+    ['v1', false],
+    ['v1', true],
+  ];
+  let lastRes = null;
+  for (const [ver, useQueryKey] of attempts) {
+    const pathVer = ver === 'v1' ? 'v1' : 'v1beta';
+    const path = `https://generativelanguage.googleapis.com/${pathVer}/models/${encodeURIComponent(model)}:generateContent`;
+    const url = useQueryKey ? `${path}?key=${encodeURIComponent(apiKey)}` : path;
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(useQueryKey ? {} : { 'x-goog-api-key': apiKey }),
+    };
+    const res = await fetch(url, {
+      method: 'POST',
+      signal,
+      headers,
+      body: JSON.stringify(body),
+    });
+    lastRes = res;
+    if (res.ok) return res;
+    if (res.status === 429) return res;
   }
-  return res;
+  return lastRes;
 }
 
-async function runGeminiRestChat(system, messages, apiKey) {
-  const models = buildGeminiModelTryList();
+async function runGeminiRestChat(system, messages, apiKey, modelIds) {
   let lastReason = null;
 
-  for (const modelName of models) {
+  for (const modelName of modelIds) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_MS);
     try {
-      let res = await geminiRestTryModel(apiKey, modelName, system, messages, controller.signal);
+      const body = {
+        systemInstruction: { parts: [{ text: system }] },
+        contents: toGeminiRestContents(messages),
+        generationConfig: {
+          temperature: 0.65,
+          maxOutputTokens: 900,
+        },
+      };
+
+      let res = await geminiRestExecute(apiKey, modelName, body, controller.signal);
       if (res.status === 429) {
         await sleep(2000);
-        res = await geminiRestTryModel(apiKey, modelName, system, messages, controller.signal);
+        res = await geminiRestExecute(apiKey, modelName, body, controller.signal);
       }
       const raw = await res.text();
       if (!res.ok) {
-        lastReason = `REST ${res.status}: ${raw.slice(0, 400)}`;
+        lastReason = `REST ${res.status}: ${raw.slice(0, 450)}`;
         console.error('[chat] Gemini REST', modelName, lastReason);
         continue;
       }
@@ -174,35 +253,19 @@ async function runGeminiRestChat(system, messages, apiKey) {
   return { error: 'upstream', reason: lastReason };
 }
 
-/**
- * Obejście: czasem API odrzuca `systemInstruction`; jedna wiadomość user = instrukcja + treść.
- * Tylko pierwsza wiadomość w wątku (najczęstszy case „czat nie działa”).
- */
-async function runGeminiMergedFirstTurn(system, userText, apiKey) {
+async function runGeminiMergedFirstTurn(system, userText, apiKey, modelIds) {
   const combined = `[Instrukcja systemowa dla asystenta]\n${system}\n\n---\n[Wiadomość klienta]\n${userText}`;
-  const models = buildGeminiModelTryList();
   let lastReason = null;
 
-  for (const modelName of models) {
+  for (const modelName of modelIds) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_MS);
     try {
-      const verTry = async (apiVersion) => {
-        const ver = apiVersion === 'v1' ? 'v1' : 'v1beta';
-        const url = `https://generativelanguage.googleapis.com/${ver}/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-        return fetch(url, {
-          method: 'POST',
-          signal: controller.signal,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ role: 'user', parts: [{ text: combined }] }],
-            generationConfig: { temperature: 0.65, maxOutputTokens: 900 },
-          }),
-        });
+      const body = {
+        contents: [{ role: 'user', parts: [{ text: combined }] }],
+        generationConfig: { temperature: 0.65, maxOutputTokens: 900 },
       };
-
-      let res = await verTry('v1beta');
-      if (res.status === 404) res = await verTry('v1');
+      let res = await geminiRestExecute(apiKey, modelName, body, controller.signal);
       const raw = await res.text();
       if (!res.ok) {
         lastReason = `merged REST ${res.status}: ${raw.slice(0, 350)}`;
@@ -227,8 +290,7 @@ async function runGeminiMergedFirstTurn(system, userText, apiKey) {
   return { error: 'upstream', reason: lastReason };
 }
 
-async function runGeminiSdkChat(system, messages, apiKey) {
-  const models = buildGeminiModelTryList();
+async function runGeminiSdkChat(system, messages, apiKey, modelIds) {
   const last = messages[messages.length - 1];
   if (!last || last.role !== 'user') {
     return { error: 'upstream', reason: 'last_not_user' };
@@ -236,7 +298,7 @@ async function runGeminiSdkChat(system, messages, apiKey) {
 
   let lastReason = null;
 
-  for (const modelName of models) {
+  for (const modelName of modelIds) {
     const runOnce = async () => {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({
@@ -298,17 +360,20 @@ async function runGeminiSdkChat(system, messages, apiKey) {
 }
 
 async function runGeminiChat(system, messages, apiKey) {
-  const rest = await runGeminiRestChat(system, messages, apiKey);
+  const modelIds = await buildFullModelList(apiKey);
+  console.info('[chat] models to try (first 8):', modelIds.slice(0, 8).join(', '));
+
+  const rest = await runGeminiRestChat(system, messages, apiKey, modelIds);
   if (rest.message) return rest;
 
   if (messages.length === 1 && messages[0].role === 'user') {
-    console.warn('[chat] REST failed, trying merged first-turn fallback');
-    const merged = await runGeminiMergedFirstTurn(system, messages[0].content, apiKey);
+    console.warn('[chat] REST failed, merged first-turn fallback');
+    const merged = await runGeminiMergedFirstTurn(system, messages[0].content, apiKey, modelIds);
     if (merged.message) return merged;
   }
 
-  console.warn('[chat] merged failed, trying SDK');
-  const sdk = await runGeminiSdkChat(system, messages, apiKey);
+  console.warn('[chat] merged failed, SDK');
+  const sdk = await runGeminiSdkChat(system, messages, apiKey, modelIds);
   if (sdk.message) return sdk;
 
   return {
@@ -327,7 +392,7 @@ export async function GET() {
       hint:
         key.length === 0
           ? 'Set GEMINI_API_KEY on Vercel, then Redeploy.'
-          : 'Key loaded. If chat fails: DevTools → Network → POST /api/chat → `reason`. AI Studio: enable billing if quota errors. Key must work for server (not referrer-only).',
+          : 'Open DevTools → Console after sending a message: [NikolChat] logs `reason`. Billing/quota: Google AI Studio. Key: server-safe (not referrer-only).',
     },
     { headers: { 'Cache-Control': 'no-store' } }
   );

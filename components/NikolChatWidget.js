@@ -11,6 +11,11 @@ const NUDGE_DELAY_MS = 20_000;
 const NUDGE_AUTOHIDE_MS = 50_000;
 const NUDGE_SESSION_KEY = 'nikol_chat_nudge_v1';
 
+function sanitizeApiReason(r) {
+  if (typeof r !== 'string' || !r.trim()) return '';
+  return r.replace(/AIza[\w-]{10,}/gi, '***').trim().slice(0, 480);
+}
+
 /**
  * Awatar z /public. Pełny URL z NEXT_PUBLIC_SITE_URL (np. https://autoserwis-nikol.pl),
  * żeby <img> zawsze brał plik z produkcji — unika problemów z relatywną ścieżką/cache.
@@ -118,10 +123,10 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       }
 
       if (data.error === 'upstream' || data.error === 'server') {
-        setMessages((prev) => [
-          ...prev,
-          { role: 'assistant', content: errCopy.errorUpstream ?? errCopy.errorGeneric },
-        ]);
+        const base = errCopy.errorUpstream ?? errCopy.errorGeneric;
+        const tech = sanitizeApiReason(data.reason);
+        const content = tech ? `${base}\n\n—\n${tech}` : base;
+        setMessages((prev) => [...prev, { role: 'assistant', content }]);
         return;
       }
 

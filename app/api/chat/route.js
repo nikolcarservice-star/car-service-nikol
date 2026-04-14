@@ -105,6 +105,8 @@ function getGeminiApiKey() {
     process.env.GEMINI_API_KEY?.trim() ||
     process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim() ||
     process.env.GOOGLE_AI_API_KEY?.trim() ||
+    process.env.API_Gemini?.trim() ||
+    process.env.API_GEMINI?.trim() ||
     '';
   if (!k) return '';
   k = k.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
@@ -388,6 +390,7 @@ export async function GET() {
   const key = getGeminiApiKey();
   const rawGemini = process.env.GEMINI_API_KEY;
   const rawGoogleGen = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  const rawApiGemini = process.env.API_Gemini ?? process.env.API_GEMINI;
   return Response.json(
     {
       ok: true,
@@ -397,6 +400,7 @@ export async function GET() {
       envPresent: {
         GEMINI_API_KEY: typeof rawGemini === 'string' && rawGemini.length > 0,
         GOOGLE_GENERATIVE_AI_API_KEY: typeof rawGoogleGen === 'string' && rawGoogleGen.length > 0,
+        API_Gemini: typeof rawApiGemini === 'string' && rawApiGemini.length > 0,
       },
       hint:
         key.length === 0

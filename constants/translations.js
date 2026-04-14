@@ -49,7 +49,7 @@ export const translations = {
       menuLabel: 'Menu nawigacji',
     },
     hero: {
-      title: 'Naprawimy Twój samochód, gdy inni odpoczywają',
+      title: 'Autoserwis Jastrowo – Mechanik Szamotuły | Naprawy w weekendy',
       subtitle:
         'Serwis samochodowy Jastrowo i Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców i wymiana oleju – Twój zaufany mechanik.',
       ctaPrimary: 'Umów wizytę online',
@@ -353,7 +353,7 @@ export const translations = {
       menuLabel: 'Меню навигации',
     },
     hero: {
-      title: 'Починим ваш авто, пока другие отдыхают',
+      title: 'Автосервис Jastrowo – механик Шамотулы | Ремонт в выходные',
       subtitle:
         'Ваш надёжный автосервис в Ястрове. Специализируемся на быстрой диагностике и ремонтах в выходные дни.',
       ctaPrimary: 'Записаться онлайн',

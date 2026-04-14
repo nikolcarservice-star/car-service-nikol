@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import Hero from '../../components/Hero';
 import Services from '../../components/Services';
-// import ServiceCalculator from '../../components/ServiceCalculator';
 import BrandsSection from '../../components/BrandsSection';
 import AboutBlock from '../../components/AboutBlock';
 import BookingForm from '../../components/BookingForm';
@@ -23,14 +22,14 @@ export function generateMetadata({ params }) {
   };
 
   if (lang === 'ru') {
-    const title = 'Car Service Nikol – автосервис в Jastrowo и Шамотулы | Работаем в воскресенье';
+    const title = 'Автосервис Nikol Jastrowo | Механик Шамотулы | Работаем в воскресенье';
     const description =
-      'Car Service Nikol – профессиональный автосервис Jastrowo и Шамотулы. Механик, диагностика, ремонт подвески и тормозов, замена масла. Работаем в субботу и воскресенье. Запишитесь онлайн.';
+      'Автосервис в Jastrowo для клиентов из Шамотул и гмины: диагностика, замена ГРМ, кодирование ключей, помощь на дороге с бустером. Работаем в воскресенье — удобно, когда другие закрыты.';
     return {
       title,
       description,
       keywords:
-        'автосервис Jastrowo, механик Шамотулы, ремонт авто Jastrowo, диагностика авто, замена масла, сервис в воскресенье, Car Service Nikol',
+        'автосервис Jastrowo, механик Шамотулы, замена ГРМ, кодирование ключей, автосервис воскресенье, помощь на дороге бустер, Car Service Nikol, ремонт в выходные',
       alternates: { canonical, languages },
       openGraph: {
         type: 'website',
@@ -46,17 +45,15 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Mechanik Jastrowo - Car Service Nikol | Otwarte w niedziele';
+  const title = 'Mechanik Jastrowo - Autoserwis Nikol | Rozrządy, Klucze | Niedziela';
   const description =
-    'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele! Umów wizytę online.';
-  const openGraphTitle = 'Car Service Nikol - Serwis w Niedziele';
-  const openGraphDescription =
-    'Naprawimy Twój samochód, gdy inni odpoczywają. Jastrowo i okolice.';
+    'Jedyny serwis samochodowy w gminie Szamotuły otwarty w każdą niedzielę. Jastrowo: wymiana rozrządu, kodowanie i dorabianie kluczyków, diagnostyka, pomoc drogowa z boosterem. Umów wizytę w weekend.';
+
   return {
     title,
     description,
     keywords:
-      'mechanik Jastrowo, mechanik Szamotuły, serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, diagnostyka samochodowa, wymiana oleju Jastrowo, serwis w niedziele, Car Service Nikol',
+      'mechanik Jastrowo, mechanik Szamotuły, wymiana rozrządu Szamotuły, kodowanie kluczyków, dorabianie kluczy Jastrowo, serwis samochodowy niedziela, pomoc drogowa booster, Car Service Nikol, gmina Szamotuły',
     alternates: { canonical, languages },
     openGraph: {
       type: 'website',
@@ -64,14 +61,14 @@ export function generateMetadata({ params }) {
       alternateLocale: 'ru_RU',
       url: `${SITE_URL}${canonical}`,
       siteName: 'Car Service Nikol',
-      title: openGraphTitle,
-      description: openGraphDescription,
+      title,
+      description,
       images: [{ ...ogImage, alt: 'Car Service Nikol – mechanik Jastrowo, serwis w niedziele' }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: openGraphTitle,
-      description: openGraphDescription,
+      title,
+      description,
       images: [ogImage.url],
     },
   };
@@ -81,9 +78,57 @@ export default function LangHomePage({ params }) {
   const lang = normalizeLang(params.lang);
   const t = getTranslations(lang);
 
+  // Schema.org JSON-LD для Google
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    "name": "Car Service Nikol",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Wernisażowa 21",
+      "addressLocality": "Jastrowo",
+      "addressRegion": "Wielkopolskie",
+      "postalCode": "64-500",
+      "addressCountry": "PL"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "52.6288", // Проверь координаты в Google Maps
+      "longitude": "16.5933"
+    },
+    "url": SITE_URL,
+    "telephone": "+48574135546", // Твой номер телефона
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Sunday",
+        "opens": "10:00",
+        "closes": "16:00"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "11"
+    }
+  };
+
   return (
     <>
+      {/* Вставляем JSON-LD в голову страницы */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
       <Hero t={t} />
+      
       <section id="features" className="border-b border-slate-800 bg-slate-950" aria-labelledby="features-heading">
         <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
           <h2 id="features-heading" className="text-sm font-semibold uppercase tracking-[0.18em] text-gray-400">
@@ -102,18 +147,12 @@ export default function LangHomePage({ params }) {
           </div>
         </div>
       </section>
+
       <Services t={t} lang={lang} />
-      {/* Калькулятор временно скрыт — раскомментируйте импорт ServiceCalculator и блок ниже */}
-      {/* <section className="border-b border-slate-800 bg-slate-950" aria-labelledby="calculator-heading">
-        <div className="mx-auto max-w-2xl px-4 py-8 sm:py-10">
-          <h2 id="calculator-heading" className="sr-only">
-            {lang === 'ru' ? 'Калькулятор услуг' : 'Kalkulator usług'}
-          </h2>
-          <ServiceCalculator lang={lang} />
-        </div>
-      </section> */}
+      
       <BrandsSection t={t} />
       <AboutBlock t={t} />
+      
       <Suspense
         fallback={
           <section
@@ -126,9 +165,31 @@ export default function LangHomePage({ params }) {
       >
         <BookingForm lang={lang} />
       </Suspense>
+      
       <LocationSection lang={lang} />
       <Reviews lang={lang} />
+
+      {lang === 'pl' && (
+        <footer className="border-t border-slate-800 bg-slate-950" aria-label="Informacje SEO">
+          <div className="mx-auto max-w-3xl px-4 py-8 text-center sm:px-6 sm:text-left">
+            <p className="text-sm leading-relaxed text-gray-400">
+              Szukasz mechanika w okolicy Szamotuł? Nasz warsztat w Jastrowie oferuje profesjonalną diagnostykę,
+              wymianę rozrządu oraz kodowanie kluczy. Jesteśmy otwarci w każdą niedzielę.
+            </p>
+          </div>
+        </footer>
+      )}
+      {lang === 'ru' && (
+        <footer className="border-t border-slate-800 bg-slate-950" aria-label="SEO">
+          <div className="mx-auto max-w-3xl px-4 py-8 text-center sm:px-6 sm:text-left">
+            <p className="text-sm leading-relaxed text-gray-400">
+              Ищете надежного механика в районе Шамотулы? Наш автосервис в Ястрово (Jastrowo) предлагает
+              профессиональную диагностику, замену ГРМ и программирование ключей. Мы открыты для вас каждую
+              субботу и воскресенье.
+            </p>
+          </div>
+        </footer>
+      )}
     </>
   );
 }
-

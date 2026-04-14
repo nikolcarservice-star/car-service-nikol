@@ -1,10 +1,9 @@
 /**
- * RU-версия временно отключена. Включить снова:
- * в .env.local задать NEXT_PUBLIC_RUSSIAN_LOCALE_ENABLED=true и пересобрать.
+ * RU-версия включена по умолчанию (/ru, переключатель в шапке).
+ * Чтобы отключить: NEXT_PUBLIC_RUSSIAN_LOCALE_ENABLED=false в .env.local и пересборка.
  */
 export const RUSSIAN_LOCALE_ENABLED =
-  typeof process.env.NEXT_PUBLIC_RUSSIAN_LOCALE_ENABLED === 'string' &&
-  process.env.NEXT_PUBLIC_RUSSIAN_LOCALE_ENABLED === 'true';
+  process.env.NEXT_PUBLIC_RUSSIAN_LOCALE_ENABLED !== 'false';
 
 /** Galeria — wyłączona domyślnie. Włącz: NEXT_PUBLIC_GALLERY_ENABLED=true */
 export const GALLERY_ENABLED =

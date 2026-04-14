@@ -3,7 +3,7 @@ import Script from 'next/script';
 import { headers } from 'next/headers';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
-const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-8ZGESKN77X';
+const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-KW9TL1C06J';
 const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const schemaDescriptions = {

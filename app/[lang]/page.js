@@ -6,7 +6,7 @@ import AboutBlock from '../../components/AboutBlock';
 import BookingForm from '../../components/BookingForm';
 import LocationSection from '../../components/LocationSection';
 import Reviews from '../../components/Reviews';
-import { getTranslations, normalizeLang } from '../../constants/translations';
+import { getTranslations, normalizeLang, PHONE_DISPLAY } from '../../constants/translations';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 
@@ -97,7 +97,7 @@ export default function LangHomePage({ params }) {
       "longitude": "16.5933"
     },
     "url": SITE_URL,
-    "telephone": "+48574135546", // Твой номер телефона
+    "telephone": PHONE_DISPLAY,
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",

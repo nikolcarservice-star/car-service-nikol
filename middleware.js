@@ -1,6 +1,20 @@
 import { NextResponse } from 'next/server';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from './constants/localeConfig';
 
+const DEFAULT_SITE_URL = 'https://autoserwis-nikol.pl';
+
+/** Kanoniczny host bez „www” (z NEXT_PUBLIC_SITE_URL). */
+function getApexHostname() {
+  try {
+    const raw = process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL;
+    let h = new URL(raw).hostname.toLowerCase();
+    if (h.startsWith('www.')) h = h.slice(4);
+    return h;
+  } catch {
+    return new URL(DEFAULT_SITE_URL).hostname.replace(/^www\./i, '');
+  }
+}
+
 function getLangFromPathname(pathname) {
   if (!RUSSIAN_LOCALE_ENABLED) return 'pl';
   const segment = pathname.split('/').filter(Boolean)[0];
@@ -8,6 +22,20 @@ function getLangFromPathname(pathname) {
 }
 
 export function middleware(request) {
+  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase() ?? '';
+  const apex = getApexHostname();
+  const skipWwwRedirect =
+    !host ||
+    host === 'localhost' ||
+    host.startsWith('127.') ||
+    host === '0.0.0.0' ||
+    host.endsWith('.vercel.app');
+
+  if (!skipWwwRedirect && host === `www.${apex}`) {
+    const dest = new URL(request.nextUrl.pathname + request.nextUrl.search, `https://${apex}`);
+    return NextResponse.redirect(dest, 301);
+  }
+
   const pathname = request.nextUrl.pathname || '';
 
   if (!RUSSIAN_LOCALE_ENABLED && (pathname === '/ru' || pathname.startsWith('/ru/'))) {

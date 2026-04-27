@@ -84,7 +84,6 @@ export const metadata = {
   description,
   keywords:
     'mechanik Jastrowo, mechanik Szamotuły, serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, diagnostyka samochodowa, wymiana oleju Jastrowo, serwis w niedziele, Car Service Nikol',
-  alternates: { canonical: '/pl' },
   authors: [{ name: 'Car Service Nikol', url: siteUrl }],
   creator: 'Car Service Nikol',
   publisher: 'Car Service Nikol',
@@ -125,6 +124,7 @@ export default async function RootLayout({ children }) {
     <html lang={lang} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       </head>
       <body>
         <script

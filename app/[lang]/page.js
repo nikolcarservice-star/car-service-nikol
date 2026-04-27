@@ -12,8 +12,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.p
 
 export function generateMetadata({ params }) {
   const lang = normalizeLang(params.lang);
-  const canonical = `/${lang}`;
-  const languages = { pl: `${SITE_URL}/pl`, ru: `${SITE_URL}/ru` };
+  const baseUrl = SITE_URL.replace(/\/$/, '');
+  /** Абсолютный canonical — чтобы Google не ссылался на главную (/pl). */
+  const canonicalUrl = `${baseUrl}/${lang}`;
+  const languages = { pl: `${baseUrl}/pl`, ru: `${baseUrl}/ru` };
 
   const ogImage = {
     url: '/og-image.jpg',
@@ -30,12 +32,12 @@ export function generateMetadata({ params }) {
       description,
       keywords:
         'автосервис Jastrowo, механик Шамотулы, замена ГРМ, диагностика, гмина Шамотулы, сервис воскресенье, Car Service Nikol',
-      alternates: { canonical, languages },
+      alternates: { canonical: canonicalUrl, languages },
       openGraph: {
         type: 'website',
         locale: 'ru_RU',
         alternateLocale: 'pl_PL',
-        url: `${SITE_URL}${canonical}`,
+        url: canonicalUrl,
         siteName: 'Car Service Nikol',
         title,
         description,
@@ -54,12 +56,12 @@ export function generateMetadata({ params }) {
     description,
     keywords:
       'mechanik Jastrowo, mechanik Szamotuły, wymiana rozrządu Szamotuły, kodowanie kluczyków, dorabianie kluczy Jastrowo, serwis samochodowy niedziela, pomoc drogowa booster, Car Service Nikol, gmina Szamotuły',
-    alternates: { canonical, languages },
+    alternates: { canonical: canonicalUrl, languages },
     openGraph: {
       type: 'website',
       locale: 'pl_PL',
       alternateLocale: 'ru_RU',
-      url: `${SITE_URL}${canonical}`,
+      url: canonicalUrl,
       siteName: 'Car Service Nikol',
       title,
       description,

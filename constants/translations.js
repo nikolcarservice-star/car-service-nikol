@@ -42,7 +42,7 @@ export const translations = {
       gallery: 'Galeria',
       faq: 'FAQ',
       phoneCta: 'Zadzwoń',
-      bookCta: 'Umów wizytę',
+      bookCta: 'Kontakt',
       languageToggleLabel: 'Wybierz język',
       openMenu: 'Otwórz menu',
       closeMenu: 'Zamknij menu',
@@ -52,7 +52,7 @@ export const translations = {
       title: 'Autoserwis Jastrowo – Mechanik Szamotuły | Naprawy w weekendy',
       subtitle:
         'Serwis samochodowy Jastrowo i Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców i wymiana oleju – Twój zaufany mechanik.',
-      ctaPrimary: 'Umów wizytę online',
+      ctaPrimary: 'Skontaktuj się',
       ctaSecondary: 'Zadzwoń teraz',
       sundayBadge: 'Otwarte w niedziele!',
       sundayUniqueBadge:
@@ -164,8 +164,8 @@ export const translations = {
       pricesDisclaimer:
         'Orientacyjne ceny brutto w PLN (1 PLN = 1 zł). Końcowa wycena zależy od modelu auta, części i zakresu prac.',
       fromPriceBand: 'Wiele pozycji w tej kategorii już od {amount} PLN.',
-      bookCta: 'Umów wizytę — ta usługa',
-      bookCtaHint: 'Formularz na dole strony głównej otworzy się z wybraną usługą.',
+      bookCta: 'Skontaktuj się — ta usługa',
+      bookCtaHint: 'Przejdziesz do kontaktu i szybko ustalimy dogodny termin.',
     },
     aboutPage: {
       heroTitle: 'Car Service Nikol — Twój zaufany serwis w Jastrowo',
@@ -176,8 +176,8 @@ export const translations = {
         { title: 'Diagnostyka', description: 'Nowoczesny sprzęt i doświadczenie. Szybka diagnoza to podstawa trafnego i ekonomicznego naprawy.' },
       ],
       sundayParagraph: 'Rozumiemy, że w tygodniu potrzebujesz auta do pracy – dlatego jako nieliczni w regionie Jastrowo i Szamotuły pracujemy dla Ciebie także w niedzielę.',
-      ctaTitle: 'Chcesz sprawdzić swój samochód? Umów się na wizytę!',
-      ctaButton: 'Umów wizytę',
+      ctaTitle: 'Chcesz sprawdzić swój samochód? Skontaktuj się z nami!',
+      ctaButton: 'Kontakt',
     },
     aboutBlock: {
       title: 'O nas — Pasja i Profesjonalizm w Jastrowo',
@@ -185,48 +185,6 @@ export const translations = {
         'Car Service Nikol powstał z myślą o kierowcach, którzy cenią swój czas i szukają niezawodnego mechanika w okolicy Szamotuł i Jastrowo. Wiemy, że awaria auta nie wybiera godziny, dlatego jako jedni z nielicznych jesteśmy do Twojej dyspozycji również w soboty i niedziele.',
       paragraph2:
         'Specjalizujemy się w kompleksowej mechanice: od diagnostyki komputerowej, przez serwis zawieszenia, aż po kodowanie kluczy. Nasz priorytet to uczciwe podejście — zawsze tłumaczymy zakres prac i dbamy o to, by Twój samochód wrócił na drogę w idealnym stanie.',
-    },
-    booking: {
-      title: 'Umów wizytę online',
-      subtitle:
-        'Zostaw dane — zgłoszenie trafi do warsztatu. Oddzwonimy lub odpowiemy, aby potwierdzić termin.',
-      trustLine: 'Szybka odpowiedź · Termin dopasowany do Ciebie',
-      ctaSubtext: 'Odpowiadamy w ciągu kilku godzin',
-      nameLabel: 'Imię i nazwisko',
-      phoneLabel: 'Telefon',
-      carLabel: 'Marka i model samochodu',
-      serviceLabel: 'Rodzaj usługi',
-      dateLabel: 'Preferowana data',
-      dateQuickHint: 'Szybki wybór weekendów (sob.–niedz.); inny dzień ustawisz w kalendarzu:',
-      calendarHelp:
-        'Kalendarz poniżej — możesz wybrać dowolny dzień; proponowana data jest orientacyjna, dokładny termin potwierdzimy telefonicznie.',
-      timePreferenceLabel: 'Preferowany przedział godzin (orientacyjnie)',
-      timeAny: 'Dowolna pora (w godzinach otwarcia)',
-      timeMorning: 'Rano 8:00–12:00',
-      timeAfternoon: 'Popołudnie 12:00–16:00',
-      photosLabel: 'Zdjęcia (opcjonalnie)',
-      photosHint:
-        'Np. dowód rejestracyjny, miejsce wycieku — do 3 zdjęć (JPG, PNG, WebP), ok. 4 MB łącznie. Ułatwia wstępną wycenę.',
-      photoRemove: 'Usuń',
-      photoTooBig: 'Plik jest za duży (max ok. 1,5 MB na zdjęcie).',
-      photoWrongType: 'Dozwolone są tylko pliki graficzne (JPG, PNG, WebP).',
-      messageLabel: 'Dodatkowy opis (opcjonalnie)',
-      servicePlaceholder: 'Wybierz usługę',
-      submitLabel: 'Wyślij zgłoszenie',
-      successTitle: 'Dziękujemy! Zgłoszenie zostało wysłane.',
-      successBody: 'Skontaktujemy się z Tobą, aby potwierdzić termin i szczegóły naprawy.',
-      errorMessage:
-        'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę lub zadzwoń do nas.',
-      notifyNotDelivered:
-        'Zgłoszenie zapisane, ale automatyczne powiadomienie do warsztatu nie wyszło (brak konfiguracji na serwerze). Zadzwoń lub napisz — żeby nic nie umknęło.',
-      validation: {
-        nameRequired: 'Podaj imię i nazwisko.',
-        phoneRequired: 'Podaj numer telefonu.',
-        phoneInvalid: 'Podaj poprawny numer telefonu w formacie +48 XXX XXX XXX.',
-        carRequired: 'Podaj markę i model samochodu.',
-        serviceRequired: 'Wybierz rodzaj usługi.',
-        dateRequired: 'Wybierz preferowaną datę.',
-      },
     },
     serviceCalculator: {
       title: 'Kalkulator orientacyjny — robocizna',
@@ -239,7 +197,7 @@ export const translations = {
       sumLabel: 'Suma robocizny (orientacyjnie)',
       sumDiscounted: 'Po rabacie −10% przy częściach z serwisu',
       savingsLine: 'Oszczędzasz ok. {amount} PLN na robociznie w wycenie.',
-      bookCta: 'Umów wizytę na te usługi',
+      bookCta: 'Skontaktuj się w sprawie tych usług',
       selectHint: 'Wybierz co najmniej jedną pozycję.',
       disclaimer:
         '*Orientacyjna robocizna bez kosztu części i materiałów. Dokładną kwotę podamy po kontakcie lub oględzinach pojazdu.',
@@ -273,9 +231,9 @@ export const translations = {
     },
     prompt: {
       title: 'Potrzebujesz pomocy z autem?',
-      text: 'Umów wizytę lub zadzwoń – pomożemy w Jastrowo i okolicach. Pracujemy też w weekendy.',
+      text: 'Zadzwoń lub napisz – pomożemy w Jastrowo i okolicach. Pracujemy też w weekendy.',
       ctaCall: 'Zadzwoń',
-      ctaBook: 'Umów wizytę',
+      ctaBook: 'Kontakt',
       close: 'Zamknij',
     },
     galleryPage: {
@@ -285,7 +243,7 @@ export const translations = {
     },
     faqPage: {
       intro:
-        'Odpowiedzi na typowe pytania — wiele z nich pada przy pierwszym kontakcie telefonicznym. Jeśli nie znalazłeś odpowiedzi, zadzwoń lub umów wizytę online.',
+        'Odpowiedzi na typowe pytania — wiele z nich pada przy pierwszym kontakcie telefonicznym. Jeśli nie znalazłeś odpowiedzi, zadzwoń lub napisz do nas.',
     },
     nikolChat: {
       assistantName: 'Nikol',
@@ -348,7 +306,7 @@ export const translations = {
       gallery: 'Галерея',
       faq: 'Вопросы и ответы',
       phoneCta: 'Позвонить',
-      bookCta: 'Записаться',
+      bookCta: 'Контакт',
       languageToggleLabel: 'Выбор языка',
       openMenu: 'Открыть меню',
       closeMenu: 'Закрыть меню',
@@ -358,7 +316,7 @@ export const translations = {
       title: 'Автосервис Jastrowo – механик Шамотулы | Ремонт в выходные',
       subtitle:
         'Ваш надёжный автосервис в Ястрове. Специализируемся на быстрой диагностике и ремонтах в выходные дни.',
-      ctaPrimary: 'Записаться онлайн',
+      ctaPrimary: 'Связаться с нами',
       ctaSecondary: 'Позвонить сейчас',
       sundayBadge: 'Работаем по воскресеньям!',
       sundayUniqueBadge:
@@ -470,8 +428,8 @@ export const translations = {
       pricesDisclaimer:
         'Ориентировочные цены в PLN-брутто (1 PLN = 1 zł). Итоговая стоимость зависит от модели авто, запчастей и объёма работ.',
       fromPriceBand: 'Многие позиции в этой категории уже от {amount} PLN.',
-      bookCta: 'Записаться на эту услугу',
-      bookCtaHint: 'В форме на главной странице услуга будет выбрана автоматически.',
+      bookCta: 'Связаться по этой услуге',
+      bookCtaHint: 'Перейдёте к контактам и быстро согласуем удобное время визита.',
     },
     aboutPage: {
       heroTitle: 'Car Service Nikol — ваш надёжный сервис в Jastrowo',
@@ -482,8 +440,8 @@ export const translations = {
         { title: 'Диагностика', description: 'Современное оборудование и опыт. Быстрая и точная диагностика – основа правильного и выгодного ремонта.' },
       ],
       sundayParagraph: 'Мы понимаем, что в будни машина нужна для работы – поэтому мы одни из немногих в районе Jastrowo и Шамотул работаем для вас и в воскресенье.',
-      ctaTitle: 'Хотите проверить автомобиль? Запишитесь на визит!',
-      ctaButton: 'Записаться',
+      ctaTitle: 'Хотите проверить автомобиль? Свяжитесь с нами!',
+      ctaButton: 'Контакт',
     },
     aboutBlock: {
       title: 'О нас — Страсть и профессионализм в Ястрово',
@@ -491,48 +449,6 @@ export const translations = {
         'Car Service Nikol был создан для водителей, которые ценят свое время и ищут надежного механика в районе Шамотулы и Ястрово. Мы знаем, что поломка случается неожиданно, поэтому мы — одни из немногих, кто доступен для вас также в субботу и воскресенье.',
       paragraph2:
         'Мы специализируемся на комплексной механике: от компьютерной диагностики и ремонта ходовой до программирования ключей. Наш приоритет — честность: мы всегда объясняем объем работ и заботимся о том, чтобы ваш автомобиль вернулся на дорогу в идеальном состоянии.',
-    },
-    booking: {
-      title: 'Онлайн-запись в сервис',
-      subtitle:
-        'Оставьте данные — заявка попадёт в сервис. Мы перезвоним или ответим, чтобы согласовать время.',
-      trustLine: 'Быстрый ответ · Удобное для вас время',
-      ctaSubtext: 'Ответим в течение нескольких часов',
-      nameLabel: 'Имя и фамилия',
-      phoneLabel: 'Телефон',
-      carLabel: 'Марка и модель автомобиля',
-      serviceLabel: 'Тип услуги',
-      dateLabel: 'Предпочтительная дата',
-      dateQuickHint: 'Быстрый выбор выходных (сб–вс); другой день — в календаре:',
-      calendarHelp:
-        'В календаре можно выбрать любой день; дата ориентировочная, точное время согласуем по телефону после заявки.',
-      timePreferenceLabel: 'Предпочтительное время визита (ориентировочно)',
-      timeAny: 'Любое время (в часы работы)',
-      timeMorning: 'Утро 8:00–12:00',
-      timeAfternoon: 'День 12:00–16:00',
-      photosLabel: 'Фото (необязательно)',
-      photosHint:
-        'Например, техпаспорт, место течи, повреждение — до 3 фото (JPG, PNG, WebP), около 4 МБ всего. Упрощает предварительную оценку.',
-      photoRemove: 'Удалить',
-      photoTooBig: 'Файл слишком большой (макс. около 1,5 МБ на фото).',
-      photoWrongType: 'Допустимы только изображения (JPG, PNG, WebP).',
-      messageLabel: 'Дополнительное описание (необязательно)',
-      servicePlaceholder: 'Выберите услугу',
-      submitLabel: 'Отправить заявку',
-      successTitle: 'Спасибо! Заявка отправлена.',
-      successBody: 'Мы свяжемся с вами, чтобы подтвердить дату и детали ремонта.',
-      errorMessage:
-        'Не удалось отправить заявку. Попробуйте позже или позвоните нам.',
-      notifyNotDelivered:
-        'Заявка принята, но автоматическое уведомление в сервис не ушло (нет настройки на сервере). Позвоните или напишите — чтобы ничего не потерялось.',
-      validation: {
-        nameRequired: 'Укажите имя и фамилию.',
-        phoneRequired: 'Укажите номер телефона.',
-        phoneInvalid: 'Укажите корректный номер телефона в формате +48 XXX XXX XXX.',
-        carRequired: 'Укажите марку и модель автомобиля.',
-        serviceRequired: 'Выберите тип услуги.',
-        dateRequired: 'Выберите предпочтительную дату.',
-      },
     },
     serviceCalculator: {
       title: 'Ориентировочный калькулятор — работа',
@@ -545,7 +461,7 @@ export const translations = {
       sumLabel: 'Сумма работ (ориентировочно)',
       sumDiscounted: 'После скидки −10% при запчастях из сервиса',
       savingsLine: 'Экономия ок. {amount} PLN на работе в смете.',
-      bookCta: 'Записаться на эти позиции',
+      bookCta: 'Связаться по этим позициям',
       selectHint: 'Выберите хотя бы одну позицию.',
       disclaimer:
         '*Ориентировочная работа без стоимости запчастей и расходников. Точную сумму сообщим после контакта или осмотра.',
@@ -555,7 +471,7 @@ export const translations = {
       subtitle: 'Удобный подъезд из Ястрово, Шамотул и ближайших населённых пунктов.',
       addressLabel: 'Адрес сервиса',
       addressValue: 'ул. Wernisażowa 21, 64-500 Jastrowo, Польша',
-      mapNote: 'Точный маршрут подтверждаем по телефону при записи.',
+      mapNote: 'Если нужно — подскажем маршрут по телефону или в мессенджере.',
       whatsapp: 'Написать в WhatsApp',
       telegram: 'Написать в Telegram',
       scheduleSundayHighlight: 'Работаем, когда другие закрыты!',
@@ -571,7 +487,7 @@ export const translations = {
       regonLabel: 'REGON',
       regonValue: '[placeholder]',
       privacy: 'Политика конфиденциальности (RODO)',
-      invoices: 'Документы по продаже по запросу — детали при записи',
+      invoices: 'Документы по продаже по запросу — детали при обращении',
       mapLinkLabel: 'Google Maps — профиль и отзывы (Jastrowo)',
       seoKeywordsLine:
         'Автосервис Ястрово · Механик Шамотулы · Ремонт авто Jastrowo · Сервис по воскресеньям',
@@ -579,9 +495,9 @@ export const translations = {
     },
     prompt: {
       title: 'Нужна помощь с авто?',
-      text: 'Запишитесь на приём или позвоните – поможем в Jastrowo и окрестностях. Работаем и в выходные.',
+      text: 'Позвоните или напишите – поможем в Jastrowo и окрестностях. Работаем и в выходные.',
       ctaCall: 'Позвонить',
-      ctaBook: 'Записаться',
+      ctaBook: 'Контакт',
       close: 'Закрыть',
     },
     galleryPage: {
@@ -591,7 +507,7 @@ export const translations = {
     },
     faqPage: {
       intro:
-        'Ответы на типичные вопросы — многие звучат при первом звонке. Если не нашли ответ, позвоните или запишитесь онлайн.',
+        'Ответы на типичные вопросы — многие звучат при первом звонке. Если не нашли ответ, позвоните или напишите нам.',
     },
     nikolChat: {
       assistantName: 'Nikol',

@@ -155,7 +155,7 @@ export default function DelayedPrompt({ lang }) {
                   onClick={handleFormLinkClick}
                   className="text-sm text-gray-400 underline decoration-gray-500 underline-offset-2 transition hover:text-orange-400 hover:decoration-orange-500"
                 >
-                  {currentLang === 'ru' ? 'Или перейти к форме записи' : 'Lub przejdź do formularza'}
+                  {currentLang === 'ru' ? 'Или перейти к контактам' : 'Lub przejdź do kontaktu'}
                 </button>
               </p>
             </div>

@@ -30,9 +30,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Przykładowe ceny usług związanych z zawieszeniem:',
       prices: [
-        { label: 'Diagnostyka zawieszenia', value: 'od 120 zł' },
-        { label: 'Wymiana amortyzatora (1 szt.)', value: 'od 180 zł robocizna' },
-        { label: 'Wymiana wahacza kompletnego', value: 'od 220 zł robocizna' },
+        { label: 'Diagnostyka zawieszenia', value: '100 zł' },
+        { label: 'Wymiana amortyzatora (1 szt.)', value: 'od 200 zł robocizna' },
+        { label: 'Wymiana wahacza kompletnego', value: 'od 200 zł robocizna' },
       ],
       symptoms: [
         'Stuki lub pukanie z podwozia przy przejeździe przez dziury i krawężniki.',
@@ -58,9 +58,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Примеры цен на работы по ходовой части:',
       prices: [
-        { label: 'Диагностика ходовой части', value: 'от 120 zł' },
-        { label: 'Замена амортизатора (1 шт.)', value: 'от 180 zł работа' },
-        { label: 'Замена рычага в сборе', value: 'от 220 zł работа' },
+        { label: 'Диагностика ходовой части', value: '100 zł' },
+        { label: 'Замена амортизатора (1 шт.)', value: 'от 200 zł работа' },
+        { label: 'Замена рычага в сборе', value: 'от 200 zł работа' },
       ],
       symptoms: [
         'Стуки или стоны подвески на неровностях и лежачих полицейских.',
@@ -88,9 +88,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Przykładowe ceny związane z wymianą oleju i filtrów:',
       prices: [
-        { label: 'Wymiana oleju + filtr oleju', value: 'od 220 zł z materiałem' },
-        { label: 'Wymiana filtra powietrza', value: 'od 40 zł robocizna' },
-        { label: 'Wymiana filtra kabinowego', value: 'od 50 zł robocizna' },
+        { label: 'Wymiana oleju + filtr oleju (robocizna)', value: 'od 120 zł' },
+        { label: 'Serwis olejowy (olej + filtr + materiały)', value: 'od 350 zł' },
+        { label: 'Wymiana filtra powietrza / kabinowego', value: 'od 50 zł' },
       ],
       symptoms: [
         'Zbliża się interwał wymiany wg książki serwisowej lub ostatniej wizyty.',
@@ -115,9 +115,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Примеры цен на замену масла и фильтров:',
       prices: [
-        { label: 'Замена масла + масляный фильтр', value: 'от 220 zł с материалами' },
-        { label: 'Замена воздушного фильтра', value: 'от 40 zł работа' },
-        { label: 'Замена салонного фильтра', value: 'от 50 zł работа' },
+        { label: 'Замена масла + масляный фильтр (работа)', value: 'от 120 zł' },
+        { label: 'Маслообслуживание (масло + фильтр + материалы)', value: 'от 350 zł' },
+        { label: 'Замена воздушного / салонного фильтра', value: 'от 50 zł' },
       ],
       symptoms: [
         'Подошёл срок замены по регламенту или записи в сервисной книжке.',
@@ -145,9 +145,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Przykładowe ceny serwisu hamulców:',
       prices: [
-        { label: 'Wymiana klocków hamulcowych (oś)', value: 'od 160 zł robocizna' },
-        { label: 'Wymiana tarcz + klocków (oś)', value: 'od 260 zł robocizna' },
-        { label: 'Wymiana płynu hamulcowego', value: 'od 150 zł z materiałem' },
+        { label: 'Wymiana klocków hamulcowych (oś)', value: 'od 150 zł robocizna' },
+        { label: 'Wymiana tarcz i klocków (oś)', value: 'od 300 zł robocizna' },
+        { label: 'Regeneracja zacisku hamulcowego (szt.)', value: 'od 200 zł' },
       ],
       symptoms: [
         'Pisk, skrzyp lub stukanie przy hamowaniu — szczególnie po rozgrzaniu.',
@@ -173,9 +173,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Примеры цен на сервис тормозов:',
       prices: [
-        { label: 'Замена тормозных колодок (ось)', value: 'от 160 zł работа' },
-        { label: 'Замена дисков + колодок (ось)', value: 'от 260 zł работа' },
-        { label: 'Замена тормозной жидкости', value: 'от 150 zł с материалами' },
+        { label: 'Замена тормозных колодок (ось)', value: 'от 150 zł работа' },
+        { label: 'Замена дисков и колодок (ось)', value: 'от 300 zł работа' },
+        { label: 'Регенерация суппорта (шт.)', value: 'от 200 zł' },
       ],
       symptoms: [
         'Скрип или писк при торможении, особенно после прогрева.',
@@ -205,7 +205,7 @@ export const servicesData = {
       pricesIntro: 'Przykładowe ceny diagnostyki komputerowej:',
       prices: [
         { label: 'Podstawowa diagnostyka komputerowa', value: 'od 150 zł' },
-        { label: 'Rozszerzona diagnostyka kilku układów', value: 'od 220 zł' },
+        { label: 'Pełna diagnostyka (szukanie przyczyny)', value: 'od 200 zł' },
       ],
       symptoms: [
         'Świeci się kontrolka „check engine” lub inna ostrzegawcza.',
@@ -232,7 +232,7 @@ export const servicesData = {
       pricesIntro: 'Примеры цен на компьютерную диагностику:',
       prices: [
         { label: 'Базовая компьютерная диагностика', value: 'от 150 zł' },
-        { label: 'Расширенная диагностика нескольких систем', value: 'от 220 zł' },
+        { label: 'Полная диагностика (поиск причины)', value: 'от 200 zł' },
       ],
       symptoms: [
         'Горит «check engine» или другие предупреждения на панели.',
@@ -260,7 +260,8 @@ export const servicesData = {
       ],
       pricesIntro: 'Przykładowe ceny wymiany rozrządu:',
       prices: [
-        { label: 'Wymiana paska rozrządu (silnik 4-cyl.)', value: 'od 900 zł robocizna' },
+        { label: 'Wymiana paska rozrządu (silnik 4-cyl.)', value: 'od 800 zł robocizna' },
+        { label: 'Wymiana paska + pompa wody', value: '1000 zł' },
         { label: 'Wymiana łańcucha rozrządu', value: 'wycena indywidualna' },
       ],
       symptoms: [
@@ -287,7 +288,8 @@ export const servicesData = {
       ],
       pricesIntro: 'Примеры цен на замену ГРМ:',
       prices: [
-        { label: 'Замена ремня ГРМ (4-цилиндровый двигатель)', value: 'от 900 zł работа' },
+        { label: 'Замена ремня ГРМ (4-цилиндровый двигатель)', value: 'от 800 zł работа' },
+        { label: 'Замена ремня + помпа воды', value: '1000 zł' },
         { label: 'Замена цепи ГРМ', value: 'индивидуальный расчёт' },
       ],
       symptoms: [
@@ -316,9 +318,8 @@ export const servicesData = {
       ],
       pricesIntro: 'Przykładowe ceny usług oponiarskich:',
       prices: [
-        { label: 'Wymiana kompletu opon (4 koła, osobowe)', value: 'od 120 zł' },
-        { label: 'Wyważanie koła', value: 'od 25 zł / szt.' },
-        { label: 'Naprawa przebicia (łata, standard)', value: 'od 60 zł' },
+        { label: 'Wymiana kompletu opon (4 koła, osobowe)', value: 'od 160 zł' },
+        { label: 'Naprawa przebicia (kołek / łata)', value: '80 zł' },
       ],
       symptoms: [
         'Zbliża się sezonowa wymiana (lato / zima) lub guma ma już mały bieżnik.',
@@ -343,9 +344,8 @@ export const servicesData = {
       ],
       pricesIntro: 'Примеры цен на шиномонтаж:',
       prices: [
-        { label: 'Замена комплекта шин (4 колеса, легковые)', value: 'от 120 zł' },
-        { label: 'Балансировка колеса', value: 'от 25 zł / шт.' },
-        { label: 'Ремонт прокола (заплатка)', value: 'от 60 zł' },
+        { label: 'Замена комплекта шин (4 колеса, легковые)', value: 'от 160 zł' },
+        { label: 'Ремонт прокола (жгут / заплатка)', value: '80 zł' },
       ],
       symptoms: [
         'Пора сезонной смены, низкий протектор или возраст резины.',
@@ -372,9 +372,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Przykładowe stawki (zależnie od odległości i godziny):',
       prices: [
-        { label: 'Dojazd w okolicy Jastrowo (w ciągu dnia)', value: 'od 80 zł' },
-        { label: 'Uruchomienie auta boosterem / kablami', value: 'od 80 zł' },
-        { label: 'Wymiana koła na zapas (w razie przygotowanego koła)', value: 'od 60 zł' },
+        { label: 'Pomoc drogowa / dojazd', value: '250 zł' },
+        { label: 'Awaryjne odpalanie (booster)', value: '150 zł' },
+        { label: 'Wymiana koła na zapas (gdy gotowe koło / zapas)', value: 'wycena wg zakresu' },
       ],
       symptoms: [
         'Rozładowany akumulator — nie słychać rozrusznika lub słabe światła.',
@@ -399,9 +399,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Примерные цены (зависят от расстояния и времени):',
       prices: [
-        { label: 'Выезд в районе Jastrowo (днём)', value: 'от 80 zł' },
-        { label: 'Запуск автомобиля от внешнего источника', value: 'от 80 zł' },
-        { label: 'Замена колеса на запаску', value: 'от 60 zł' },
+        { label: 'Помощь на дороге / выезд', value: '250 zł' },
+        { label: 'Аварийный запуск (бустер)', value: '150 zł' },
+        { label: 'Замена колеса на запаску', value: 'по согласованию' },
       ],
       symptoms: [
         'Разрядился аккумулятор, не крутит стартер, тусклый свет.',
@@ -428,9 +428,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Ceny są mocno zależne od marki – przykłady orientacyjne:',
       prices: [
-        { label: 'Programowanie dodatkowego klucza (popularne modele)', value: 'od 350 zł' },
-        { label: 'Dorobienie klucza z immobilizerem (wycena po VIN)', value: 'indywidualnie' },
-        { label: 'Adaptacja / synchronizacja istniejącego klucza', value: 'od 200 zł' },
+        { label: 'Kodowanie / programowanie kluczyka', value: 'od 400 zł' },
+        { label: 'Odzyskiwanie / duplikat klucza', value: 'wycena indywidualna' },
+        { label: 'Adaptacja / synchronizacja istniejącego klucza', value: 'wycena wg marki' },
       ],
       symptoms: [
         'Zgubiony lub skradziony kluczyk — potrzebna kopia lub nowy komplet.',
@@ -455,9 +455,9 @@ export const servicesData = {
       ],
       pricesIntro: 'Стоимость сильно зависит от марки — ориентиры:',
       prices: [
-        { label: 'Программирование дополнительного ключа (распространённые модели)', value: 'от 350 zł' },
-        { label: 'Изготовление ключа с чипом (расчёт по VIN)', value: 'индивидуально' },
-        { label: 'Синхронизация существующего ключа', value: 'от 200 zł' },
+        { label: 'Кодирование / программирование ключа', value: 'от 400 zł' },
+        { label: 'Восстановление / дубликат ключа', value: 'индивидуальная оценка' },
+        { label: 'Синхронизация существующего ключа', value: 'по марке и объёму работ' },
       ],
       symptoms: [
         'Потерян или украден ключ, нужен дубликат или новый набор.',

@@ -3,7 +3,7 @@ import Hero from '../../components/Hero';
 import Services from '../../components/Services';
 import BrandsSection from '../../components/BrandsSection';
 import AboutBlock from '../../components/AboutBlock';
-import BookingForm from '../../components/BookingForm';
+import ContactCtaSection from '../../components/ContactCtaSection';
 import LocationSection from '../../components/LocationSection';
 import Reviews from '../../components/Reviews';
 import { getTranslations, normalizeLang, PHONE_DISPLAY } from '../../constants/translations';
@@ -159,11 +159,11 @@ export default function LangHomePage({ params }) {
             id={t.bookingId}
             className="min-h-[28rem] border-b border-slate-800 bg-slate-950"
             aria-busy="true"
-            aria-label={lang === 'ru' ? 'Загрузка формы' : 'Ładowanie formularza'}
+            aria-label={lang === 'ru' ? 'Загрузка контактов' : 'Ładowanie kontaktu'}
           />
         }
       >
-        <BookingForm lang={lang} />
+        <ContactCtaSection lang={lang} t={t} id={t.bookingId} />
       </Suspense>
       
       <LocationSection lang={lang} />
@@ -195,9 +195,9 @@ export default function LangHomePage({ params }) {
               населённых пунктов — адрес: ul. Wernisażowa 21, 64-500 Jastrowo.
             </p>
             <p className="text-sm leading-relaxed text-gray-400">
-              Запишитесь онлайн через форму на сайте, позвоните или напишите в WhatsApp и Telegram — подберём
-              время визита и ответим на вопросы по ремонту, ориентировочной цене и запчастям. Car Service Nikol —
-              ваш контактный автосервис в Jastrowo для жителей gminy Szamotuły и окрестностей.
+              Позвоните или напишите в WhatsApp и Telegram — подберём время визита и ответим на вопросы по
+              ремонту, ориентировочной цене и запчастям. Car Service Nikol — ваш автосервис в Jastrowo для
+              жителей gminy Szamotuły и окрестностей.
             </p>
           </div>
         </footer>

@@ -65,7 +65,7 @@ function buildJsonLdOrganization(lang) {
 
 const title = 'Mechanik Jastrowo - Car Service Nikol | Otwarte w niedziele';
 const description =
-  'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele! Umów wizytę online.';
+  'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele!';
 
 const openGraphTitle = 'Car Service Nikol - Serwis w Niedziele';
 const openGraphDescription =

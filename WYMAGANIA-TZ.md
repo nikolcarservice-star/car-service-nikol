@@ -16,14 +16,13 @@ Strona ma **bezpłatnie przyciągać klientów z wyszukiwarki** (SEO) i **szybko
 
 2. **Konwersje (klient pisze/dzwoni)**
    - Wyraźne CTA: **WhatsApp** i **Zadzwoń** (z napisem „Zadzwoń”, nie tylko numer).
-   - **Online rezerwacja** — formularz (np. preferowany termin) → wiadomość na WhatsApp/mail, żeby klient mógł od razu „zarezerwować”.
    - Godziny otwarcia widoczne (sobota 8–18, niedziela 10–16).
    - Sekcja **Dlaczego my** — osobna strona z argumentami (ceny, dojazd, uczciwość, itd.).
 
 3. **Metryki**
    - **Google Analytics 4 (GA4)** — ruch, skąd wchodzą, które strony.
    - **Google Tag Manager (GTM)** — jedna skrzynka na tagi (GA4, konwersje, ewentualnie reklamy).
-   - Śledzenie **konwersji**: klik w WhatsApp, klik „Zadzwoń”, wysłanie formularza rezerwacji.
+   - Śledzenie **konwersji**: klik w WhatsApp, klik „Zadzwoń”, klik w Telegram.
 
 4. **Zaufanie**
    - Opinie z Google (live widget).
@@ -80,20 +79,7 @@ Bez tych ID strona będzie działać normalnie; w kodzie będą tylko **placehol
 
 ---
 
-### 4. **Online rezerwacja**
-Obecnie rezerwacja = **formularz** (imię, telefon, preferowany termin, krótki opis) → po wysłaniu:
-- wiadomość leci na **WhatsApp** (link z prefilled tekstem), **albo**
-- mailem na Twój adres (jeśli podasz).
-
-Czy chcesz:
-- tylko **link do WhatsApp** z tekstem typu „Chcę umówić wizytę na…” (bez formularza),  
-- czy **formularz na stronie**, który np. otwiera WhatsApp z uzupełnioną wiadomością?
-
-Napisz, co wolisz — dostosuję.
-
----
-
-### 5. **Mapa Google**
+### 4. **Mapa Google**
 Jeśli masz **gotowy kod do osadzenia mapy** (Google Maps → Udostępnij → W osadź mapę) — wklej go. Wstawię go na stronę Kontakt.  
 Jeśli nie — zostawiam link „Otwórz w Google Maps” i placeholder pod iframe; możesz później wkleić kod.
 
@@ -107,7 +93,6 @@ Jeśli nie — zostawiam link „Otwórz w Google Maps” i placeholder pod ifra
 | **Adres** | Potwierdzenie: Wernisazowa 21, Jastrowo (Szamotuły), kod pocztowy |
 | **GA4** (opcjonalnie) | ID pomiaru, np. `G-XXXXXXXXXX` |
 | **GTM** (opcjonalnie) | ID kontenera, np. `GTM-XXXXXXX` |
-| **Rezerwacja** | Decyzja: tylko WhatsApp vs formularz → WhatsApp/mail |
 | **Mapa** | Opcjonalnie: kod iframe z Google Maps |
 
-Jak tylko to prześlesz, dokończę: wstawię opinie, poprawię adres wszędzie, podłączę metryki i ewentualnie formularz rezerwacji.
+Jak tylko to prześlesz, dokończę: wstawię opinie, poprawię adres wszędzie i podłączę metryki.

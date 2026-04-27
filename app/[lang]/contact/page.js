@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import BookingForm from '../../../components/BookingForm';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../../../constants/googleBusiness';
 import { TELEGRAM_HREF, WHATSAPP_HREF } from '../../../constants/contactLinks';
 import {
@@ -24,7 +23,7 @@ export function generateMetadata({ params }) {
   if (lang === 'ru') {
     const title = 'Контакты Car Service Nikol – Jastrowo, Шамотулы | Адрес, телефон, запись';
     const description =
-      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21, Jastrowo, телефон, WhatsApp, Telegram и форма записи. Обслуживаем клиентов из Jastrowo, Шамотул и окрестностей. Работаем в воскресенье.';
+      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21, Jastrowo, телефон, WhatsApp и Telegram. Обслуживаем клиентов из Jastrowo, Шамотул и окрестностей. Работаем в воскресенье.';
     return {
       title,
       description,
@@ -46,7 +45,7 @@ export function generateMetadata({ params }) {
 
   const title = 'Kontakt – Car Service Nikol Jastrowo, Szamotuły | Adres, telefon, umów wizytę';
   const description =
-    'Skontaktuj się z Car Service Nikol: Jastrowo (ul. Wernisażowa 21), obsługa kierowców z Szamotuł i okolic. Telefon, WhatsApp, Telegram i formularz wizyty. Otwarte w niedziele.';
+    'Skontaktuj się z Car Service Nikol: Jastrowo (ul. Wernisażowa 21), obsługa kierowców z Szamotuł i okolic. Telefon, WhatsApp i Telegram. Otwarte w niedziele.';
   return {
     title,
     description,
@@ -98,8 +97,8 @@ export default function ContactPage({ params }) {
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
               {lang === 'ru'
-                ? 'Звоните, пишите в мессенджеры или оставляйте заявку через форму — ответим и подскажем удобное время визита.'
-                : 'Zadzwoń, napisz na komunikator lub skorzystaj z formularza – doradzimy i zaproponujemy dogodny termin wizyty.'}
+                ? 'Звоните или пишите в мессенджеры — ответим и подскажем удобное время визита.'
+                : 'Zadzwoń lub napisz na komunikator – doradzimy i zaproponujemy dogodny termin wizyty.'}
             </p>
           </div>
 
@@ -200,11 +199,41 @@ export default function ContactPage({ params }) {
               </div>
             </div>
 
-            {/* Right column: booking form */}
+            {/* Right column: map (desktop), contact highlight */}
             <div className="relative overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-slate-900/80 to-slate-900/50 p-6 shadow-2xl shadow-black/30 ring-1 ring-orange-500/10 sm:p-8">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500/80 via-orange-400 to-amber-500/80" />
-              <Suspense fallback={<div className="min-h-[24rem]" aria-busy="true" />}>
-                <BookingForm lang={lang} embed />
+              <Suspense fallback={<div className="min-h-[18rem]" aria-busy="true" />}>
+                <div className="space-y-4">
+                  <h2 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
+                    {lang === 'ru' ? 'Маршрут в Google Maps' : 'Trasa w Google Maps'}
+                  </h2>
+                  <p className="text-sm leading-relaxed text-gray-300">
+                    {lang === 'ru'
+                      ? 'Откройте карту и постройте маршрут — адрес: ul. Wernisażowa 21, 64-500 Jastrowo.'
+                      : 'Otwórz mapę i wyznacz trasę — adres: ul. Wernisażowa 21, 64-500 Jastrowo.'}
+                  </p>
+                  <iframe
+                    title={lang === 'ru' ? 'Карта – адрес сервиса' : 'Mapa – adres serwisu'}
+                    src={GOOGLE_MAPS_EMBED_URL}
+                    width="100%"
+                    height="320"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="h-[280px] w-full rounded-2xl border border-slate-700/70 sm:h-[320px]"
+                  />
+                  <a
+                    href={GOOGLE_BUSINESS_PROFILE_URL}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center justify-center rounded-2xl border border-slate-700/80 bg-slate-900/60 px-5 py-3 text-sm font-semibold text-orange-300 transition hover:border-orange-500/60 hover:bg-slate-800/70"
+                  >
+                    {lang === 'ru'
+                      ? 'Открыть профиль в Google (отзывы и маршрут)'
+                      : 'Otwórz profil w Google (opinie i nawigacja)'}
+                  </a>
+                </div>
               </Suspense>
             </div>
           </div>

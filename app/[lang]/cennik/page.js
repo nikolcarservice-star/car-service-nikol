@@ -151,8 +151,8 @@ export default function CennikPage({ params }) {
         <div className="mt-12 rounded-2xl border border-orange-500/30 bg-gradient-to-b from-orange-500/10 to-transparent p-6 text-center sm:p-8">
           <h2 className="text-lg font-bold text-gray-50 sm:text-xl">
             {lang === 'ru'
-              ? 'Готовы записаться? Позвоните или оставьте заявку'
-              : 'Gotowy na wizytę? Zadzwoń lub wypełnij formularz'}
+              ? 'Готовы связаться? Позвоните или напишите'
+              : 'Gotowy? Zadzwoń lub napisz'}
           </h2>
           <p className="mt-2 text-sm text-gray-400">
             {lang === 'ru'
@@ -169,11 +169,11 @@ export default function CennikPage({ params }) {
               {PHONE_DISPLAY}
             </Link>
             <Link
-              href={`/${lang}#booking`}
+              href={`/${lang}/contact`}
               className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-orange-500/60 bg-slate-800/80 px-5 py-3.5 text-sm font-bold text-white transition hover:border-orange-400 hover:bg-orange-500/20"
             >
               <CalendarDays className="h-5 w-5" />
-              {lang === 'ru' ? 'Записаться онлайн' : 'Umów wizytę online'}
+              {lang === 'ru' ? 'Контакты' : 'Kontakt'}
             </Link>
           </div>
         </div>

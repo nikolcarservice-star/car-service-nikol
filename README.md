@@ -8,7 +8,6 @@ Strona wielojęzyczna (PL, EN, RU) dla warsztatu samochodowego Car Service Nikol
 - **Usługi** — lista z linkami do osobnych podstron: przeglądy/olej, diagnostyka, hamulce, zawieszenie, rozrząd/napęd, silnik/elektryka, wydech, dojazd mistrza (każda z opisem, cenami, „dlaczego u nas”)
 - **Dlaczego my** — osobna strona z argumentami
 - **Cennik** — pełna tabela (z dojazdem mistrza; bez klimatyzacji)
-- **Rezerwacja** — umów wizytę (link WhatsApp + telefon)
 - **O nas** — lokalizacja, sposób pracy
 - **Kontakt** — adres, telefon (Zadzwoń), WhatsApp, mapa
 

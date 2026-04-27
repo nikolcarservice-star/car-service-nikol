@@ -12,19 +12,19 @@ export const CALCULATOR_ITEMS = [
   },
   {
     id: 'brakes_pads',
-    price: 180,
+    price: 150,
     namePl: 'Wymiana klocków hamulcowych (oś)',
     nameRu: 'Замена тормозных колодок (ось)',
   },
   {
     id: 'brakes_discs',
-    price: 350,
+    price: 300,
     namePl: 'Wymiana tarcz i klocków (oś)',
     nameRu: 'Замена дисков и колодок (ось)',
   },
   {
     id: 'timing_belt',
-    price: 900,
+    price: 800,
     namePl: 'Wymiana rozrządu 4-cyl. (robocizna)',
     nameRu: 'Замена ГРМ 4-цил. (работа)',
   },
@@ -62,7 +62,7 @@ export function computeCalculatorLaborTotal(selectedIds, workshopParts) {
 }
 
 /**
- * Tekst do pola „Rodzaj usługi” w formularzu.
+ * Tekst do szybkiej wiadomości / kontaktu.
  * @param {'own' | 'workshop' | null} partsMode
  */
 export function buildCalculatorBookingLine(selectedIds, lang, partsMode) {

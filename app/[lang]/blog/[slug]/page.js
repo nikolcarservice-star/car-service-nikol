@@ -23,10 +23,10 @@ export function generateMetadata({ params }) {
   const siteName = 'Car Service Nikol';
   const descriptionSuffix =
     lang === 'ru'
-      ? 'Car Service Nikol — Jastrowo, Шамотулы.'
-      : 'Car Service Nikol — Jastrowo, Szamotuły.';
+      ? 'Car Service Nikol — Jastrowo, в Шамотулах.'
+      : 'Car Service Nikol — Jastrowo, w Szamotułach.';
   return {
-    title: `${post.title} – ${siteName} | Jastrowo, ${lang === 'ru' ? 'Шамотулы' : 'Szamotuły'}`,
+    title: `${post.title} – ${siteName} | Jastrowo, ${lang === 'ru' ? 'в Шамотулах' : 'w Szamotułach'}`,
     description: `${post.excerpt} ${descriptionSuffix}`,
     alternates: { canonical: `/${lang}/blog/${params.slug}` },
     openGraph: {

@@ -13,7 +13,7 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Галерея работ – Car Service Nikol Jastrowo, Шамотулы';
+    const title = 'Галерея — Jastrowo, в Шамотулах | Car Service Nikol';
     const description =
       'Фото автосервиса в Jastrowo: ремонт, диагностика, шиномонтаж. Car Service Nikol — клиенты из Jastrowo и Шамотул.';
     return {
@@ -34,7 +34,7 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Galeria realizacji – Car Service Nikol Jastrowo, Szamotuły';
+  const title = 'Galeria — Jastrowo, w Szamotułach | Car Service Nikol';
   const description =
     'Zdjęcia z warsztatu w Jastrowo: naprawy, diagnostyka, opony. Car Service Nikol — kierowcy z Jastrowo i Szamotuł.';
   return {
@@ -78,7 +78,7 @@ export default function GalleryPage({ params }) {
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/15 text-orange-400 ring-1 ring-orange-500/30">
             <Images className="h-6 w-6" aria-hidden />
           </span>
-          {isRu ? 'Галерея' : 'Galeria'}
+          {isRu ? 'Галерея — Jastrowo, в Шамотулах' : 'Galeria — Jastrowo, w Szamotułach'}
         </h1>
         {page.intro && (
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-400 sm:text-base">{page.intro}</p>

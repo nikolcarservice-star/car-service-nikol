@@ -21,7 +21,7 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Контакты Car Service Nikol – Jastrowo, Шамотулы | Адрес, телефон, запись';
+    const title = 'Контакты — Jastrowo, в Шамотулах | Car Service Nikol | Адрес и запись';
     const description =
       'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21, Jastrowo, телефон, WhatsApp и Telegram. Обслуживаем клиентов из Jastrowo, Шамотул и окрестностей. Работаем в воскресенье.';
     return {
@@ -43,7 +43,7 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Kontakt – Car Service Nikol Jastrowo, Szamotuły | Adres, telefon, umów wizytę';
+  const title = 'Kontakt — Jastrowo, w Szamotułach | Car Service Nikol | Adres i wizyta';
   const description =
     'Skontaktuj się z Car Service Nikol: Jastrowo (ul. Wernisażowa 21), obsługa kierowców z Szamotuł i okolic. Telefon, WhatsApp i Telegram. Otwarte w niedziele.';
   return {
@@ -92,8 +92,8 @@ export default function ContactPage({ params }) {
                 <MapPin className="h-6 w-6" />
               </span>
               {lang === 'ru'
-                ? 'Контакт и как нас найти'
-                : 'Kontakt i jak do nas trafić'}
+                ? 'Контакт — Jastrowo, в Шамотулах'
+                : 'Kontakt — Jastrowo, w Szamotułach'}
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
               {lang === 'ru'

@@ -24,9 +24,9 @@ export function generateMetadata({ params }) {
   };
 
   if (lang === 'ru') {
-    const title = 'Автосервис Nikol Jastrowo | Механик Шамотулы | Ремонт в воскресенье';
+    const title = 'Автосервис Nikol — Jastrowo, в Шамотулах | Ремонт в воскресенье';
     const description =
-      'Профессиональный ремонт авто в Jastrowo. Замена ГРМ, ключи, диагностика. Работаем в субботу и воскресенье! Гмина Шамотулы.';
+      'Автосервис Nikol в Ястрово. Работаем в ВОСКРЕСЕНЬЕ. Замена ГРМ, ремонт ключей. Быстро и надежно!';
     return {
       title,
       description,
@@ -41,15 +41,15 @@ export function generateMetadata({ params }) {
         siteName: 'Car Service Nikol',
         title,
         description,
-        images: [{ ...ogImage, alt: 'Автосервис Nikol Jastrowo — механик, ремонт в выходные' }],
+        images: [{ ...ogImage, alt: 'Автосервис Nikol — Jastrowo, в Шамотулах, ремонт в выходные' }],
       },
       twitter: { card: 'summary_large_image', title, description, images: [ogImage.url] },
     };
   }
 
-  const title = 'Mechanik Jastrowo - Autoserwis Nikol | Rozrządy, Klucze | Niedziela';
+  const title = 'Mechanik Jastrowo, w Szamotułach | Autoserwis Nikol | Rozrząd, klucze | Niedziela';
   const description =
-    'Jedyny serwis samochodowy w gminie Szamotuły otwarty w każdą niedzielę. Jastrowo: wymiana rozrządu, kodowanie i dorabianie kluczyków, diagnostyka, pomoc drogowa z boosterem. Umów wizytę w weekend.';
+    'Jedyny serwis w gminie Szamotuły otwarty w każdą niedzielę — Jastrowo, obsługa kierowców w Szamotułach. Rozrząd, klucze, diagnostyka, pomoc drogowa. Umów wizytę w weekend.';
 
   return {
     title,
@@ -65,7 +65,7 @@ export function generateMetadata({ params }) {
       siteName: 'Car Service Nikol',
       title,
       description,
-      images: [{ ...ogImage, alt: 'Car Service Nikol – mechanik Jastrowo, serwis w niedziele' }],
+      images: [{ ...ogImage, alt: 'Car Service Nikol – mechanik Jastrowo i w Szamotułach' }],
     },
     twitter: {
       card: 'summary_large_image',

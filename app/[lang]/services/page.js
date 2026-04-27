@@ -26,7 +26,7 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Услуги автосервиса Nikol Jastrowo | Механик Шамотулы | Воскресенье';
+    const title = 'Услуги автосервиса — Jastrowo, в Шамотулах | Nikol | Воскресенье';
     const description =
       'Услуги в Jastrowo: ГРМ, кодирование ключей, диагностика, ходовая, шины, выезд и бустер. Удобный сервис для гмины Шамотулы — работаем в воскресенье.';
     return {
@@ -49,7 +49,7 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Usługi mechaniczne Jastrowo | Autoserwis Nikol | Rozrząd, klucze | Niedziela';
+  const title = 'Usługi mechaniczne — Jastrowo, w Szamotułach | Autoserwis Nikol | Niedziela';
   const description =
     'Pełna oferta: wymiana rozrządu Szamotuły, kodowanie kluczyków, dorabianie kluczy Jastrowo, diagnostyka, pomoc drogowa z boosterem. Jedyny serwis w gminie Szamotuły otwarty w każdą niedzielę.';
 
@@ -119,7 +119,7 @@ export default function ServicesIndexPage({ params }) {
             <div className="mb-2 flex items-center gap-2">
               <Wrench className="h-6 w-6 text-orange-400" />
               <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                {isRu ? 'Профессиональные услуги автосервиса' : 'Profesjonalne Usługi Serwisowe'}
+                {isRu ? 'Услуги — Jastrowo, в Шамотулах' : 'Usługi serwisowe — Jastrowo, w Szamotułach'}
               </h1>
             </div>
             <p className="max-w-2xl text-base text-gray-400">

@@ -12,14 +12,14 @@ export function generateMetadata({ params }) {
 
   if (lang === 'ru') {
     return {
-      title: 'Политика конфиденциальности (RODO) – Car Service Nikol, Jastrowo, Шамотулы',
+      title: 'Политика конфиденциальности (RODO) — Jastrowo, в Шамотулах | Car Service Nikol',
       description:
         'Политика конфиденциальности Car Service Nikol (Jastrowo, клиенты из Шамотул и окрестностей): обработка данных при записи в сервис и на сайте, RODO, контакт.',
       alternates: { canonical, languages },
     };
   }
   return {
-    title: 'Polityka prywatności (RODO) – Car Service Nikol Jastrowo, Szamotuły',
+    title: 'Polityka prywatności (RODO) — Jastrowo, w Szamotułach | Car Service Nikol',
     description:
       'Polityka prywatności Car Service Nikol (Jastrowo, klienci z Szamotuł): przetwarzanie danych przy umawianiu wizyt i na stronie, RODO, kontakt.',
     alternates: { canonical, languages },
@@ -28,7 +28,7 @@ export function generateMetadata({ params }) {
 
 const privacyContent = {
   pl: {
-    title: 'Polityka Prywatności (RODO)',
+    title: 'Polityka prywatności (RODO) — Jastrowo, w Szamotułach',
     intro:
       'Car Service Nikol z siedzibą w Jastrowo (ul. Wernisażowa 21, 64-500) przetwarza dane osobowe w związku z obsługą klientów, umawianiem wizyt i wystawianiem faktur.',
     sections: [
@@ -48,7 +48,7 @@ const privacyContent = {
     back: 'Wróć do strony głównej',
   },
   ru: {
-    title: 'Политика конфиденциальности (RODO)',
+    title: 'Политика конфиденциальности (RODO) — Jastrowo, в Шамотулах',
     intro:
       'Car Service Nikol (адрес: Jastrowo, ul. Wernisażowa 21, 64-500) обрабатывает персональные данные в связи с обслуживанием клиентов, записью на приём и выставлением счетов.',
     sections: [

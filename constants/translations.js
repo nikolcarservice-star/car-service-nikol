@@ -49,7 +49,7 @@ export const translations = {
       menuLabel: 'Menu nawigacji',
     },
     hero: {
-      title: 'Autoserwis Jastrowo – Mechanik Szamotuły | Naprawy w weekendy',
+      title: 'Autoserwis Jastrowo, w Szamotułach — mechanik | Weekendy',
       subtitle:
         'Serwis samochodowy Jastrowo i Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców i wymiana oleju – Twój zaufany mechanik.',
       ctaPrimary: 'Skontaktuj się',
@@ -168,7 +168,7 @@ export const translations = {
       bookCtaHint: 'Przejdziesz do kontaktu i szybko ustalimy dogodny termin.',
     },
     aboutPage: {
-      heroTitle: 'Car Service Nikol — Twój zaufany serwis w Jastrowo',
+      heroTitle: 'Car Service Nikol — Twój serwis w Jastrowo i w Szamotułach',
       heroSubtitle: 'Doświadczenie, uczciwość i terminowość. Pracujemy także w niedziele.',
       values: [
         { title: 'Uczciwość', description: 'Przed naprawą omawiamy wyniki diagnostyki i warianty. Klient wybiera części – oryginały lub sprawdzone zamienniki. Bez ukrytych kosztów.' },
@@ -180,7 +180,7 @@ export const translations = {
       ctaButton: 'Kontakt',
     },
     aboutBlock: {
-      title: 'O nas — Pasja i Profesjonalizm w Jastrowo',
+      title: 'O nas — pasja i profesjonalizm | Jastrowo, w Szamotułach',
       paragraph1:
         'Car Service Nikol powstał z myślą o kierowcach, którzy cenią swój czas i szukają niezawodnego mechanika w okolicy Szamotuł i Jastrowo. Wiemy, że awaria auta nie wybiera godziny, dlatego jako jedni z nielicznych jesteśmy do Twojej dyspozycji również w soboty i niedziele.',
       paragraph2:
@@ -313,7 +313,7 @@ export const translations = {
       menuLabel: 'Меню навигации',
     },
     hero: {
-      title: 'Автосервис Jastrowo – механик Шамотулы | Ремонт в выходные',
+      title: 'Автосервис Jastrowo, в Шамотулах — механик | Выходные',
       subtitle:
         'Ваш надёжный автосервис в Ястрове. Специализируемся на быстрой диагностике и ремонтах в выходные дни.',
       ctaPrimary: 'Связаться с нами',
@@ -432,7 +432,7 @@ export const translations = {
       bookCtaHint: 'Перейдёте к контактам и быстро согласуем удобное время визита.',
     },
     aboutPage: {
-      heroTitle: 'Car Service Nikol — ваш надёжный сервис в Jastrowo',
+      heroTitle: 'Car Service Nikol — ваш сервис в Jastrowo и в Шамотулах',
       heroSubtitle: 'Опыт, честность и соблюдение сроков. Работаем и по воскресеньям.',
       values: [
         { title: 'Честность', description: 'Перед ремонтом обсуждаем результаты диагностики и варианты. Клиент выбирает запчасти – оригинал или проверенные аналоги. Без скрытых доплат.' },
@@ -444,7 +444,7 @@ export const translations = {
       ctaButton: 'Контакт',
     },
     aboutBlock: {
-      title: 'О нас — Страсть и профессионализм в Ястрово',
+      title: 'О нас — страсть и профессионализм | Jastrowo, в Шамотулах',
       paragraph1:
         'Car Service Nikol был создан для водителей, которые ценят свое время и ищут надежного механика в районе Шамотулы и Ястрово. Мы знаем, что поломка случается неожиданно, поэтому мы — одни из немногих, кто доступен для вас также в субботу и воскресенье.',
       paragraph2:

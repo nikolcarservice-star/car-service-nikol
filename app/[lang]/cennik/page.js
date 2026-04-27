@@ -25,7 +25,7 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Прайс-лист – Car Service Nikol Jastrowo, Шамотулы | Цены на услуги';
+    const title = 'Прайс-лист — Jastrowo, в Шамотулах | Car Service Nikol | Цены';
     const description = `${getCennikSeoSnippet('ru')} Полная таблица: масла, тормоза, диагностика, ГРМ, шины, ключи.`;
     return {
       title,
@@ -40,12 +40,12 @@ export function generateMetadata({ params }) {
         siteName: 'Car Service Nikol',
         title,
         description,
-        images: [{ ...ogImage, alt: 'Прайс-лист Car Service Nikol – Jastrowo' }],
+        images: [{ ...ogImage, alt: 'Прайс Car Service Nikol – Jastrowo, в Шамотулах' }],
       },
       twitter: { card: 'summary_large_image', title, description },
     };
   }
-  const title = 'Cennik usług – Car Service Nikol Jastrowo, Szamotuły | Ceny orientacyjne';
+  const title = 'Cennik usług — Jastrowo, w Szamotułach | Car Service Nikol | Ceny';
   const description = `${getCennikSeoSnippet('pl')} Pełna tabela: oleje, hamulce, diagnostyka, rozrząd, opony, klucze.`;
   return {
     title,
@@ -60,7 +60,7 @@ export function generateMetadata({ params }) {
       siteName: 'Car Service Nikol',
       title,
       description,
-      images: [{ ...ogImage, alt: 'Cennik Car Service Nikol – Jastrowo' }],
+        images: [{ ...ogImage, alt: 'Cennik Car Service Nikol – Jastrowo, w Szamotułach' }],
     },
     twitter: { card: 'summary_large_image', title, description },
   };
@@ -72,7 +72,7 @@ export default function CennikPage({ params }) {
   const basePath = `/${lang}`;
   const priceList = lang === 'ru' ? priceListRu : priceListPl;
 
-  const title = lang === 'ru' ? 'Прайс-лист' : 'Cennik usług';
+  const title = lang === 'ru' ? 'Прайс-лист — Jastrowo, в Шамотулах' : 'Cennik usług — Jastrowo, w Szamotułach';
   const subtitle =
     lang === 'ru'
       ? 'Текстовый прайс ниже — ориентировочные цены в злотых. Уточнение по телефону перед визитом.'

@@ -22,7 +22,7 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'О компании Car Service Nikol – автосервис Jastrowo, Шамотулы';
+    const title = 'О компании — Jastrowo, в Шамотулах | Car Service Nikol';
     const description =
       'Узнайте больше о Car Service Nikol в Jastrowo: опыт, ценности сервиса, работа в воскресенье. Честность, сроки, диагностика. Запишитесь на визит.';
     return {
@@ -44,7 +44,7 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'O nas – Car Service Nikol Jastrowo, Szamotuły | Wartości, niedziele';
+  const title = 'O nas — Jastrowo, w Szamotułach | Car Service Nikol | Wartości';
   const description =
     'Poznaj Car Service Nikol w Jastrowo: doświadczenie, wartości serwisu, praca w niedzielę. Uczciwość, terminy, diagnostyka. Umów wizytę w serwisie.';
   return {
@@ -77,7 +77,7 @@ export default function AboutPage({ params }) {
     footer.nipValue && footer.regonValue &&
     !footer.nipValue.includes('placeholder') && !footer.regonValue.includes('placeholder');
 
-  const heroTitle = aboutPage.heroTitle || (isRu ? 'Car Service Nikol — ваш надёжный сервис в Jastrowo' : 'Car Service Nikol — Twój zaufany serwis w Jastrowo');
+  const heroTitle = aboutPage.heroTitle || (isRu ? 'Car Service Nikol — сервис в Jastrowo и в Шамотулах' : 'Car Service Nikol — Twój serwis w Jastrowo i w Szamotułach');
   const heroSubtitle = aboutPage.heroSubtitle || (isRu ? 'Опыт, честность и соблюдение сроков. Работаем и по воскресеньям.' : 'Doświadczenie, uczciwość i terminowość. Pracujemy także w niedziele.');
   const values = aboutPage.values || [];
   const sundayParagraph = aboutPage.sundayParagraph;

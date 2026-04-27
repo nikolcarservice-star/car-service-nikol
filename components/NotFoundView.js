@@ -15,10 +15,10 @@ export default function NotFoundView({ embedded = false }) {
   const otherHref = isRu ? '/pl' : '/ru';
   const otherLabel = isRu ? 'PL' : 'RU';
 
-  const title = isRu ? 'Страница не найдена' : 'Strona nie została znaleziona';
+  const title = isRu ? 'Страница не найдена — Jastrowo, в Шамотулах' : 'Nie znaleziono strony — Jastrowo, w Szamotułach';
   const lead = isRu
-    ? 'Ссылка устарела или страницы не существует. Вернитесь на главную — сервис в Jastrowo и для клиентов из Шамотул.'
-    : 'Ten adres mógł się zmienić lub strona nie istnieje. Wróć na stronę główną — serwis w Jastrowo i dla kierowców z Szamotuł.';
+    ? 'Ссылка устарела. Сервис в Jastrowo и в Шамотулах — вернитесь на главную.'
+    : 'Ten adres mógł się zmienić. Serwis w Jastrowo i w Szamotułach — wróć na stronę główną.';
   const primaryCta = isRu ? 'Вернуться на главную' : 'Wróć na stronę główną';
   const secondaryHint = isRu ? 'Версия на другом языке:' : 'Druga wersja językowa:';
 

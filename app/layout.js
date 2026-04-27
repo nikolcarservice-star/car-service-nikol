@@ -8,9 +8,9 @@ const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const schemaDescriptions = {
   pl:
-    'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Car Service Nikol — pracujemy w soboty i niedziele.',
+    'Mechanik w Jastrowo i w Szamotułach. Naprawy, diagnostyka i wymiana oleju. Car Service Nikol — pracujemy w soboty i niedziele.',
   ru:
-    'Car Service Nikol – профессиональный автосервис Jastrowo и Шамотулы. Механик, диагностика, ремонт подвески и тормозов, замена масла. Работаем в субботу и воскресенье.',
+    'Механик Jastrowo и для водителей в Шамотулах. Car Service Nikol — ремонт, диагностика и замена масла. Работаем в субботу и воскресенье.',
 };
 
 function buildJsonLd(lang) {
@@ -63,13 +63,13 @@ function buildJsonLdOrganization(lang) {
   };
 }
 
-const title = 'Mechanik Jastrowo - Car Service Nikol | Otwarte w niedziele';
+const title = 'Mechanik Jastrowo, w Szamotułach | Car Service Nikol | Niedziela';
 const description =
-  'Mechanik w Jastrowo i Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele!';
+  'Mechanik w Jastrowo i w Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele!';
 
-const openGraphTitle = 'Car Service Nikol - Serwis w Niedziele';
+const openGraphTitle = 'Car Service Nikol — Jastrowo, w Szamotułach';
 const openGraphDescription =
-  'Naprawimy Twój samochód, gdy inni odpoczywają. Jastrowo i okolice.';
+  'Naprawimy Twój samochód w Jastrowo i dla klientów w Szamotułach, gdy inni odpoczywają.';
 
 export const viewport = {
   width: 'device-width',
@@ -99,7 +99,7 @@ export const metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Car Service Nikol – mechanik Jastrowo, serwis w niedziele',
+        alt: 'Car Service Nikol — mechanik Jastrowo, w Szamotułach',
       },
     ],
   },

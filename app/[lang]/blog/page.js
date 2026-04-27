@@ -13,7 +13,7 @@ export function generateMetadata({ params }) {
   const languages = { pl: `${SITE_URL}/pl/blog`, ru: `${SITE_URL}/ru/blog` };
 
   return {
-    title: isRu ? 'Блог – Car Service Nikol Jastrowo, Шамотулы' : 'Blog – Car Service Nikol Jastrowo, Szamotuły',
+    title: isRu ? 'Блог — Jastrowo, в Шамотулах | Car Service Nikol' : 'Blog — Jastrowo, w Szamotułach | Car Service Nikol',
     description: isRu
       ? 'Полезные статьи об автосервисе в Jastrowo и Шамотулах: диагностика, подвеска, тормоза, замена масла, выходной сервис. Car Service Nikol.'
       : 'Poradniki dla kierowców z Jastrowo i Szamotuł: diagnostyka, zawieszenie, hamulce, wymiana oleju, serwis w niedziele. Car Service Nikol.',
@@ -38,7 +38,7 @@ export default function BlogPage({ params }) {
         />
         <h1 className="mt-4 flex items-center gap-2 text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">
           <FileText className="h-7 w-7 text-orange-400" />
-          {isRu ? 'Блог' : 'Blog'}
+          {isRu ? 'Блог — Jastrowo, в Шамотулах' : 'Blog — Jastrowo, w Szamotułach'}
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-gray-300 sm:text-base">
           {isRu

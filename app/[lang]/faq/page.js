@@ -12,7 +12,7 @@ export function generateMetadata({ params }) {
   const ogImage = { url: '/images/services/mechanic-changing-tires-car-service.jpg', width: 1200, height: 630 };
 
   if (lang === 'ru') {
-    const title = 'Вопросы и ответы – Car Service Nikol Jastrowo, Шамотулы';
+    const title = 'FAQ — Jastrowo, в Шамотулах | Car Service Nikol';
     const description =
       'Частые вопросы: ночная стоянка, гарантия на запчасти, оплата картой, запись, воскресенье. Автосервис Jastrowo, клиенты из Шамотул.';
     return {
@@ -33,7 +33,7 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'FAQ – pytania i odpowiedzi | Car Service Nikol Jastrowo, Szamotuły';
+  const title = 'FAQ — Jastrowo, w Szamotułach | Car Service Nikol';
   const description =
     'Najczęstsze pytania: parkowanie na noc, gwarancja na części, płatność kartą, umówienie wizyty, niedziele. Serwis Jastrowo, Szamotuły.';
   return {
@@ -95,7 +95,7 @@ export default function FaqPage({ params }) {
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/15 text-orange-400 ring-1 ring-orange-500/30">
               <CircleHelp className="h-6 w-6" aria-hidden />
             </span>
-            {isRu ? 'Вопросы и ответы' : 'Najczęstsze pytania'}
+            {isRu ? 'Вопросы и ответы — Jastrowo, в Шамотулах' : 'Najczęstsze pytania — Jastrowo, w Szamotułach'}
           </h1>
           {page.intro && (
             <p className="mt-3 text-sm leading-relaxed text-gray-400 sm:text-base">{page.intro}</p>

@@ -4,6 +4,9 @@ import { headers } from 'next/headers';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-1N7H9RJBMX';
+const hubspotPortalIdRaw = process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID;
+const hubspotPortalId =
+  hubspotPortalIdRaw === '' ? null : hubspotPortalIdRaw || '148417505';
 const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const schemaDescriptions = {
@@ -145,6 +148,13 @@ export default async function RootLayout({ children }) {
               {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gaId}');`}
             </Script>
           </>
+        )}
+        {hubspotPortalId && (
+          <Script
+            id="hs-script-loader"
+            src={`https://js.hs-scripts.com/${hubspotPortalId}.js`}
+            strategy="afterInteractive"
+          />
         )}
         {children}
       </body>

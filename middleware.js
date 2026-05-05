@@ -1,7 +1,15 @@
 import { NextResponse } from 'next/server';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from './constants/localeConfig';
 
-const DEFAULT_SITE_URL = 'https://autoserwis-nikol.pl';
+/** Kanoniczny host (bez www) — produkcja zawsze https://autoserwis-nikol.pl */
+const CANONICAL_HOST = 'autoserwis-nikol.pl';
+const DEFAULT_SITE_URL = `https://${CANONICAL_HOST}`;
+
+function forwardedProto(request) {
+  const raw = request.headers.get('x-forwarded-proto');
+  if (raw) return raw.split(',')[0].trim().toLowerCase();
+  return (request.nextUrl.protocol || 'https:').replace(':', '').toLowerCase() || 'https';
+}
 
 /** Kanoniczny host bez „www” (z NEXT_PUBLIC_SITE_URL). */
 function getApexHostname() {
@@ -11,7 +19,7 @@ function getApexHostname() {
     if (h.startsWith('www.')) h = h.slice(4);
     return h;
   } catch {
-    return new URL(DEFAULT_SITE_URL).hostname.replace(/^www\./i, '');
+    return CANONICAL_HOST;
   }
 }
 
@@ -32,6 +40,11 @@ export function middleware(request) {
     host.endsWith('.vercel.app');
 
   if (!skipWwwRedirect && host === `www.${apex}`) {
+    const dest = new URL(request.nextUrl.pathname + request.nextUrl.search, `https://${apex}`);
+    return NextResponse.redirect(dest, 301);
+  }
+
+  if (!skipWwwRedirect && host === apex && forwardedProto(request) === 'http') {
     const dest = new URL(request.nextUrl.pathname + request.nextUrl.search, `https://${apex}`);
     return NextResponse.redirect(dest, 301);
   }

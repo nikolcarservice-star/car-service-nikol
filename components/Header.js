@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { CalendarDays, ChevronDown, Languages, Menu, Phone, Wrench, X } from 'lucide-react';
-import { PHONE_DISPLAY, LANGUAGES, getPhoneContactPageHref } from '../constants/translations';
+import { PHONE_DISPLAY, PHONE_TEL_HREF, LANGUAGES, getPhoneContactPageHref } from '../constants/translations';
 import { GALLERY_ENABLED, RUSSIAN_LOCALE_ENABLED } from '../constants/localeConfig';
 import { getServiceNavItems } from '../data/services';
 
@@ -182,16 +182,26 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
           </Link>
         </div>
 
-        {/* Mobile: only menu button */}
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen(true)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-gray-100 transition hover:bg-slate-700 hover:text-orange-400 md:hidden"
-          aria-label={nav.openMenu ?? 'Otwórz menu'}
-          aria-expanded={mobileMenuOpen}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+        {/* Mobile: duży przycisk tel + menu (min. ~48×48 dla palca) */}
+        <div className="flex shrink-0 items-center gap-2 md:hidden">
+          <a
+            href={PHONE_TEL_HREF}
+            className="flex h-12 min-h-[48px] w-12 min-w-[48px] touch-manipulation items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-400/30 transition active:scale-[0.97] hover:from-orange-400 hover:to-amber-400"
+            aria-label={`${nav.phoneCta} — ${PHONE_DISPLAY}`}
+            title={`${nav.phoneCta} — ${PHONE_DISPLAY}`}
+          >
+            <Phone className="h-6 w-6" strokeWidth={2.25} aria-hidden />
+          </a>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex h-12 min-h-[48px] w-12 min-w-[48px] touch-manipulation items-center justify-center rounded-xl border border-slate-700 bg-slate-800 text-gray-100 transition hover:bg-slate-700 hover:text-orange-400"
+            aria-label={nav.openMenu ?? 'Otwórz menu'}
+            aria-expanded={mobileMenuOpen}
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu: fixed layers + flex scroll (avoids collapse under overflow/min-h on mobile) */}
@@ -319,14 +329,17 @@ function HeaderContent({ lang, t, querySuffix = '' }) {
                   </div>
                 </>
               )}
-              <Link
-                href={getPhoneContactPageHref(currentLang)}
+              <a
+                href={PHONE_TEL_HREF}
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white"
+                className="mt-2 flex min-h-[56px] touch-manipulation items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-4 text-base font-bold text-white active:opacity-95"
               >
-                <Phone className="h-4 w-4" />
-                {PHONE_DISPLAY}
-              </Link>
+                <Phone className="h-6 w-6 shrink-0" strokeWidth={2.25} aria-hidden />
+                <span className="flex flex-col items-start leading-tight sm:flex-row sm:items-center sm:gap-2">
+                  <span>{nav.phoneCta}</span>
+                  <span className="text-sm font-semibold opacity-95 sm:text-base">{PHONE_DISPLAY}</span>
+                </span>
+              </a>
               <Link
                 href={bookHref}
                 onClick={() => setMobileMenuOpen(false)}

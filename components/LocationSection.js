@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Phone, Send } from 'lucide-react';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../constants/googleBusiness';
 import { TELEGRAM_HREF, WHATSAPP_HREF } from '../constants/contactLinks';
-import { translations, PHONE_DISPLAY } from '../constants/translations';
+import { translations, PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
 
 export default function LocationSection({ lang }) {
   const t = translations[lang].location;
@@ -88,10 +88,13 @@ export default function LocationSection({ lang }) {
             </div>
 
             <div className="space-y-2 rounded-2xl bg-slate-900/80 p-3">
-              <p className="flex items-center gap-2 text-sm font-medium text-gray-100">
-                <Phone className="h-4 w-4 text-orange-400" />
-                <span>{PHONE_DISPLAY}</span>
-              </p>
+              <a
+                href={PHONE_TEL_HREF}
+                className="flex min-h-[48px] touch-manipulation items-center gap-3 rounded-xl px-1 py-1 text-sm font-medium text-gray-100 transition hover:bg-white/5 active:bg-white/10"
+              >
+                <Phone className="h-5 w-5 shrink-0 text-orange-400" aria-hidden />
+                <span className="text-orange-100">{PHONE_DISPLAY}</span>
+              </a>
               <p className="text-[11px] text-gray-400">
                 {lang === 'ru'
                   ? 'Звоните или напишите нам в мессенджерах — договоримся о времени визита.'

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CalendarDays, Check, Clock, ExternalLink, PhoneCall, Star } from 'lucide-react';
-import { PHONE_DISPLAY } from '../constants/translations';
+import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
 import { GOOGLE_BUSINESS_REVIEWS_URL } from '../constants/googleBusiness';
 import { getGoogleReviewsStats } from '../data/googleReviews';
 
@@ -195,15 +195,22 @@ export default function Hero({ t }) {
                 <p className="mt-2 text-orange-300">{t.footer.saturday}</p>
                 <p className="mt-1 text-emerald-300">{t.footer.sunday}</p>
               </div>
-              <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+              <a
+                href={PHONE_TEL_HREF}
+                className="block rounded-xl border border-white/10 bg-black/20 p-3 touch-manipulation transition hover:border-orange-400/30 hover:bg-black/30 active:scale-[0.99]"
+              >
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gray-300">
                   WhatsApp / Telegram
                 </p>
-                <p className="mt-2 text-sm font-semibold text-gray-50">{PHONE_DISPLAY}</p>
-                <p className="mt-1 text-[11px] text-gray-300">
-                  Preferujesz czat? Napisz, a oddzwonimy i potwierdzimy termin.
+                <p className="mt-2 min-h-[44px] text-sm font-semibold leading-snug text-orange-200 sm:min-h-0">
+                  {PHONE_DISPLAY}
                 </p>
-              </div>
+                <p className="mt-1 text-[11px] text-gray-300">
+                  {lang === 'ru'
+                    ? 'Напишите в мессенджер — перезвоним и согласуем время. Нажмите на номер, чтобы позвонить.'
+                    : 'Preferujesz czat? Napisz, a oddzwonimy i potwierdzimy termin. Dotknij numeru, aby zadzwonić.'}
+                </p>
+              </a>
             </div>
           </div>
         </motion.div>

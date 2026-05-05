@@ -241,6 +241,28 @@ export const translations = {
       subtitle:
         'Zadzwoń lub napisz na WhatsApp — podpowiemy w sprawie usługi i ustalimy dogodny termin wizyty (sobota / niedziela).',
     },
+    bookingForm: {
+      formTitle: 'Formularz zapisu online',
+      nameLabel: 'Imię i nazwisko',
+      phoneLabel: 'Telefon',
+      emailLabel: 'E-mail',
+      emailOptional: 'opcjonalnie',
+      serviceLabel: 'Usługa',
+      serviceNone: '— wybierz, jeśli wiesz —',
+      messageLabel: 'Preferowany termin / auto / uwagi',
+      messagePlaceholder: 'Np. sobota ok. 10:00, VW Golf, wymiana oleju…',
+      submit: 'Wyślij zgłoszenie',
+      sending: 'Wysyłanie…',
+      success: 'Dziękujemy! Odezwiemy się i potwierdzimy termin wizyty w weekend.',
+      errorGeneric: 'Nie udało się zapisać. Zadzwoń lub napisz na WhatsApp — pomożemy.',
+      notConfigured:
+        'Formularz nie jest skonfigurowany na serwerze: potrzebny jest Google Sheets (arkusz + klucz) i/lub Telegram (bot + chat_id) — patrz .env.example. Tymczasem zadzwoń lub napisz na WhatsApp.',
+      errName: 'Podaj co najmniej 2 znaki.',
+      errPhone: 'Podaj numer z min. 9 cyframi.',
+      errEmail: 'Nieprawidłowy adres e-mail.',
+      privacyNote:
+        'Dane wykorzystujemy wyłącznie w celu kontaktu i umówienia wizyty (RODO). Bez newslettera, jeśli o to nie poprosisz.',
+    },
     galleryPage: {
       intro:
         'Zdjęcia z naszego warsztatu w Jastrowo — prace serwisowe, stanowiska i sprzęt. Galerię regularnie uzupełniamy o nowe realizacje (także dla klientów z Szamotuł i okolic).',
@@ -511,6 +533,28 @@ export const translations = {
       title: 'Запишитесь на выходные',
       subtitle:
         'Позвоните или напишите в WhatsApp — подскажем по услуге и согласуем удобное время визита (суббота / воскресенье).',
+    },
+    bookingForm: {
+      formTitle: 'Онлайн-заявка',
+      nameLabel: 'Имя и фамилия',
+      phoneLabel: 'Телефон',
+      emailLabel: 'E-mail',
+      emailOptional: 'необязательно',
+      serviceLabel: 'Услуга',
+      serviceNone: '— выберите, если знаете —',
+      messageLabel: 'Удобное время / авто / комментарий',
+      messagePlaceholder: 'Например: суббота около 10:00, VW Golf, замена масла…',
+      submit: 'Отправить заявку',
+      sending: 'Отправка…',
+      success: 'Спасибо! Мы свяжемся с вами и подтвердим время визита на выходные.',
+      errorGeneric: 'Не удалось отправить. Позвоните или напишите в WhatsApp — поможем.',
+      notConfigured:
+        'Форма не настроена на сервере: нужны Google Таблицы (ID + ключ) и/или Telegram (токен бота + chat_id) — см. .env.example. Пока позвоните или напишите в WhatsApp.',
+      errName: 'Укажите не менее 2 символов.',
+      errPhone: 'Укажите номер с минимум 9 цифрами.',
+      errEmail: 'Некорректный e-mail.',
+      privacyNote:
+        'Данные используем только для связи и записи (RODO). Рассылок без вашей просьбы не делаем.',
     },
     galleryPage: {
       intro:

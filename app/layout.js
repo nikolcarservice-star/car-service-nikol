@@ -63,13 +63,13 @@ function buildJsonLdOrganization(lang) {
   };
 }
 
-const title = 'Mechanik Jastrowo, w Szamotułach | Car Service Nikol | Niedziela';
+const title = 'Autoserwis Nikol: mechanik Jastrowo i Szamotuły, naprawa aut';
 const description =
-  'Mechanik w Jastrowo i w Szamotułach. Naprawy, diagnostyka i wymiana oleju. Pracujemy w soboty i niedziele!';
+  'Autoserwis w Jastrowo i dla klientów z Szamotuł: mechanik, naprawa aut (ремонт авто), diagnostyka, rozrząd, klucze. Czynni także w niedzielę — umów wizytę.';
 
-const openGraphTitle = 'Car Service Nikol — Jastrowo, w Szamotułach';
+const openGraphTitle = 'Autoserwis Nikol — mechanik Jastrowo i Szamotuły';
 const openGraphDescription =
-  'Naprawimy Twój samochód w Jastrowo i dla klientów w Szamotułach, gdy inni odpoczywają.';
+  'Naprawa aut, diagnostyka i rozrząd w Jastrowo. Obsługujemy kierowców z Szamotuł i okolic — także w niedzielę.';
 
 export const viewport = {
   width: 'device-width',
@@ -83,7 +83,7 @@ export const metadata = {
   title,
   description,
   keywords:
-    'mechanik Jastrowo, mechanik Szamotuły, serwis samochodowy Jastrowo, weekendowy serwis Jastrowo, diagnostyka samochodowa, wymiana oleju Jastrowo, serwis w niedziele, Car Service Nikol',
+    'Autoserwis, mechanik, Szamotuły, Jastrowo, naprawa aut, ремонт авто, serwis samochodowy, diagnostyka, rozrząd, Car Service Nikol',
   authors: [{ name: 'Car Service Nikol', url: siteUrl }],
   creator: 'Car Service Nikol',
   publisher: 'Car Service Nikol',

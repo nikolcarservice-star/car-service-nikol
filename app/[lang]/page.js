@@ -47,15 +47,15 @@ export function generateMetadata({ params }) {
     };
   }
 
-  const title = 'Mechanik Jastrowo, w Szamotułach | Autoserwis Nikol | Rozrząd, klucze | Niedziela';
+  const title = 'Autoserwis Nikol: mechanik Jastrowo i Szamotuły, naprawa aut';
   const description =
-    'Jedyny serwis w gminie Szamotuły otwarty w każdą niedzielę — Jastrowo, obsługa kierowców w Szamotułach. Rozrząd, klucze, diagnostyka, pomoc drogowa. Umów wizytę w weekend.';
+    'Autoserwis w Jastrowo i dla klientów z Szamotuł: mechanik, naprawa aut (ремонт авто), diagnostyka, rozrząd, klucze. Czynni także w niedzielę — umów wizytę.';
 
   return {
     title,
     description,
     keywords:
-      'mechanik Jastrowo, mechanik Szamotuły, wymiana rozrządu Szamotuły, kodowanie kluczyków, dorabianie kluczy Jastrowo, serwis samochodowy niedziela, pomoc drogowa booster, Car Service Nikol, gmina Szamotuły',
+      'Autoserwis, mechanik, Szamotuły, Jastrowo, naprawa aut, ремонт авто, rozrząd, kluczyki, diagnostyka, serwis niedziela, gmina Szamotuły, Car Service Nikol',
     alternates: { canonical: canonicalUrl, languages },
     openGraph: {
       type: 'website',

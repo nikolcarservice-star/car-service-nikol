@@ -71,7 +71,7 @@ export default function Hero({ t }) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/65 to-black/82" />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-10 md:flex-row md:items-center md:gap-10 md:pb-20 md:pt-16 sm:px-6">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-10 max-md:pb-[min(9.5rem,42svh)] md:flex-row md:items-center md:gap-10 md:pb-20 md:pt-16 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ export default function Hero({ t }) {
             </div>
             <Link
               href={`/${lang}/contact`}
-              className="text-center text-sm font-medium text-orange-200/90 underline decoration-orange-400/50 underline-offset-4 transition hover:text-white"
+              className="relative z-0 mx-auto mt-1 max-w-md px-2 pb-1 text-center text-sm font-medium text-orange-200/90 underline decoration-orange-400/50 underline-offset-4 transition hover:text-white max-md:mb-1"
             >
               {lang === 'ru' ? 'Страница контакта и карта →' : 'Kontakt, adres i mapa →'}
             </Link>

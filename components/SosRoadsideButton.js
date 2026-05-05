@@ -22,7 +22,7 @@ export default function SosRoadsideButton({ lang }) {
 
   return (
     <div
-      className="fixed bottom-5 left-4 z-[58] pb-[env(safe-area-inset-bottom,0)] md:hidden"
+      className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] left-4 z-[58] md:hidden"
       role="region"
       aria-label={copy.ariaLabel}
     >
@@ -31,7 +31,7 @@ export default function SosRoadsideButton({ lang }) {
         onClick={handleClick}
         aria-label={copy.ariaLabel}
         title={copy.ariaLabel}
-        className="flex max-w-[min(100vw-2rem,14rem)] items-center gap-2 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-500 px-3.5 py-3 text-left text-xs font-bold uppercase leading-tight tracking-wide text-white shadow-lg ring-2 ring-red-300/90 transition hover:from-red-500 hover:via-rose-500 hover:to-red-400 hover:ring-red-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/80 sm:text-[13px] animate-sos-beacon"
+        className="flex max-w-[min(100vw-8.5rem,12.5rem)] items-center gap-2 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-500 px-3 py-2.5 text-left text-[11px] font-bold uppercase leading-tight tracking-wide text-white shadow-lg ring-2 ring-red-300/90 transition hover:from-red-500 hover:via-rose-500 hover:to-red-400 hover:ring-red-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/80 sm:text-[13px] animate-sos-beacon"
       >
         <Siren className="h-5 w-5 shrink-0" strokeWidth={2.25} aria-hidden />
         <span className="min-w-0">{copy.label}</span>

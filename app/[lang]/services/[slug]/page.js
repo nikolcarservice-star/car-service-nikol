@@ -2,7 +2,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CalendarDays, Phone, Stethoscope } from 'lucide-react';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
-import { getServiceBySlug, getLowestFromPricePln, SERVICE_KEYS, servicesData } from '../../../../data/services';
+import {
+  getAllServicePageSlugs,
+  getServiceBySlug,
+  getLowestFromPricePln,
+} from '../../../../data/services';
 import { getPhoneContactPageHref, getTranslations, normalizeLang } from '../../../../constants/translations';
 import { getSitemapLangs } from '../../../../constants/localeConfig';
 
@@ -14,11 +18,11 @@ function displayPriceInPln(value) {
 export function generateStaticParams() {
   const params = [];
   const langs = getSitemapLangs();
+  const slugs = getAllServicePageSlugs();
 
   langs.forEach((lang) => {
-    SERVICE_KEYS.forEach((key) => {
-      const entry = servicesData[key];
-      params.push({ lang, slug: entry.slug });
+    slugs.forEach((slug) => {
+      params.push({ lang, slug });
     });
   });
 
@@ -78,6 +82,12 @@ export default function ServiceDetailPage({ params }) {
         />
 
         <h1 className="text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">{service.h1}</h1>
+
+        {service.sectionH2 ? (
+          <h2 className="mt-4 text-lg font-semibold tracking-tight text-orange-100/95 sm:text-xl">
+            {service.sectionH2}
+          </h2>
+        ) : null}
 
         <p className="mt-3 max-w-3xl text-sm text-gray-300 sm:text-base">{service.intro}</p>
 

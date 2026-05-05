@@ -1,4 +1,11 @@
-import { LANGUAGES, normalizeLang } from '../constants/translations';
+import { normalizeLang } from '../constants/translations';
+import {
+  buildCityLandingCopy,
+  buildCityServiceSlug,
+  parseCityServiceSlug,
+  SERVICE_CITY_LANDING_KEYS,
+  SERVICE_LANDING_CITIES,
+} from './serviceCityLandings';
 
 export const SERVICE_KEYS = [
   'suspension',
@@ -481,8 +488,42 @@ export function getAllServices(lang) {
   });
 }
 
+export function getAllServicePageSlugs() {
+  const slugs = [];
+  for (const key of SERVICE_KEYS) {
+    if (SERVICE_CITY_LANDING_KEYS.includes(key)) {
+      for (const city of SERVICE_LANDING_CITIES) {
+        const s = buildCityServiceSlug(key, city.slug);
+        if (s) slugs.push(s);
+      }
+    } else {
+      slugs.push(servicesData[key].slug);
+    }
+  }
+  return slugs;
+}
+
 export function getServiceBySlug(slug, lang) {
   const code = normalizeLang(lang);
+  const cityParsed = parseCityServiceSlug(slug);
+  if (cityParsed) {
+    const { serviceKey, city } = cityParsed;
+    const entry = servicesData[serviceKey];
+    if (!entry) return null;
+    const landing = buildCityLandingCopy(serviceKey, city, entry.pl, entry.ru, code);
+    return {
+      key: serviceKey,
+      slug,
+      cityLanding: { city },
+      sectionH2: landing.sectionH2,
+      ...entry[code],
+      h1: landing.h1,
+      seoTitle: landing.seoTitle,
+      seoDescription: landing.seoDescription,
+      intro: landing.intro,
+    };
+  }
+
   const foundKey = SERVICE_KEYS.find((k) => servicesData[k].slug === slug);
   if (!foundKey) return null;
   const entry = servicesData[foundKey];

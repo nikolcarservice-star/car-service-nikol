@@ -17,7 +17,7 @@ export function openNikolChatFromUi() {
 }
 
 const messengerFabClass =
-  'flex h-12 w-12 shrink-0 touch-manipulation items-center justify-center rounded-full text-white shadow-lg transition hover:scale-105 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 active:scale-95';
+  'flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full text-white shadow-lg transition hover:scale-105 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 active:scale-95 sm:h-12 sm:w-12';
 
 const NUDGE_DELAY_MS = 20_000;
 const NUDGE_AUTOHIDE_MS = 50_000;
@@ -87,6 +87,31 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
     window.addEventListener(NIKOL_CHAT_OPEN_EVENT, onOpen);
     return () => window.removeEventListener(NIKOL_CHAT_OPEN_EVENT, onOpen);
   }, []);
+
+  /** Na mobile pełny ekran — blokuj scroll strony pod czatem. */
+  useEffect(() => {
+    if (!open || typeof document === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const root = document.documentElement;
+    const body = document.body;
+    const apply = () => {
+      if (!open) return;
+      if (mq.matches) {
+        root.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
+      } else {
+        root.style.overflow = '';
+        body.style.overflow = '';
+      }
+    };
+    apply();
+    mq.addEventListener('change', apply);
+    return () => {
+      mq.removeEventListener('change', apply);
+      root.style.overflow = '';
+      body.style.overflow = '';
+    };
+  }, [open]);
 
   const dismissNudge = useCallback(() => {
     setShowNudge(false);
@@ -179,7 +204,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
 
   return (
     <div
-      className="fixed bottom-5 right-4 z-[60] flex flex-col items-end gap-2 pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6"
+      className="fixed bottom-4 right-3 z-[60] flex max-w-[calc(100vw-1rem)] flex-col items-end gap-2 pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6"
       aria-live="polite"
     >
       <AnimatePresence>
@@ -248,13 +273,21 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       </AnimatePresence>
 
       {open && (
-        <div
-          className="mb-3 flex max-h-[min(70vh,520px)] min-h-0 w-[min(100vw-2rem,400px)] flex-col overflow-hidden rounded-2xl border border-slate-700/90 bg-slate-900/95 shadow-2xl backdrop-blur-sm"
-          role="dialog"
-          aria-label={copy.title}
-          aria-modal="true"
-        >
-          <div className="flex items-center justify-between gap-2 border-b border-slate-700/80 bg-slate-900/90 px-4 py-3">
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-[105] bg-slate-950/70 backdrop-blur-[2px] md:hidden"
+            aria-label={copy.close}
+            onClick={() => setOpen(false)}
+          />
+          <div
+            className="fixed inset-0 z-[110] flex h-[100dvh] max-h-[100dvh] min-h-0 w-full flex-col overflow-hidden rounded-none border-0 bg-slate-950 pt-[env(safe-area-inset-top,0px)] shadow-2xl max-md:border-t max-md:border-slate-800 md:relative md:inset-auto md:z-auto md:mb-3 md:h-auto md:max-h-[min(70vh,520px)] md:w-[min(100vw-2rem,400px)] md:rounded-2xl md:border md:border-slate-700/90 md:bg-slate-900/95 md:pt-0 md:shadow-2xl md:backdrop-blur-sm"
+            role="dialog"
+            aria-label={copy.title}
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
+          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-slate-700/80 bg-slate-900/95 px-4 py-3 max-md:py-3.5">
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <img
                 src={AVATAR_SRC}
@@ -293,7 +326,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             </button>
           </div>
 
-          <div ref={listRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
+          <div ref={listRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-3 py-3 pb-2">
             <div className="flex justify-start gap-2">
               <img
                 src={AVATAR_SRC}
@@ -305,7 +338,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                 loading="eager"
                 decoding="async"
               />
-              <div className="max-w-[min(100%,18rem)] rounded-2xl bg-slate-800 px-3 py-2 text-sm leading-relaxed text-slate-100 sm:max-w-[85%]">
+              <div className="max-w-[min(92%,22rem)] rounded-2xl bg-slate-800 px-3 py-2.5 text-sm leading-relaxed text-slate-100 sm:max-w-[85%]">
                 <p className="whitespace-pre-wrap break-words">{copy.welcome}</p>
               </div>
             </div>
@@ -327,7 +360,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                   />
                 ) : null}
                 <div
-                  className={`max-w-[min(100%,18rem)] rounded-2xl px-3 py-2 text-sm leading-relaxed sm:max-w-[85%] ${
+                  className={`max-w-[min(92%,22rem)] rounded-2xl px-3 py-2.5 text-sm leading-relaxed sm:max-w-[85%] ${
                     m.role === 'user'
                       ? 'bg-gradient-to-br from-orange-600 to-amber-600 text-white'
                       : 'bg-slate-800 text-slate-100'
@@ -363,7 +396,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             )}
           </div>
 
-          <div className="border-t border-slate-700/80 p-3">
+          <div className="shrink-0 border-t border-slate-700/80 bg-slate-900/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <div className="flex gap-2">
               <textarea
                 value={input}
@@ -372,7 +405,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
                 placeholder={copy.placeholder}
                 rows={2}
                 disabled={loading}
-                className="min-h-[44px] flex-1 resize-none rounded-xl border border-slate-600 bg-slate-950/80 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:opacity-60"
+                className="min-h-[48px] flex-1 resize-none rounded-xl border border-slate-600 bg-slate-950/90 px-3 py-2.5 text-[15px] leading-snug text-white placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:opacity-60 max-md:text-base"
               />
               <button
                 type="button"
@@ -386,11 +419,14 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             </div>
           </div>
         </div>
+        </>
       )}
 
-      <div className="flex flex-row items-end gap-2">
+      <div
+        className={`flex shrink-0 flex-row items-end justify-end gap-1.5 sm:gap-2 ${open ? 'max-md:hidden' : ''}`}
+      >
         <div
-          className="flex flex-row items-end gap-2 md:hidden"
+          className="flex shrink-0 flex-row items-end gap-1.5 sm:gap-2 md:hidden"
           role="group"
           aria-label={lang === 'ru' ? 'Мессенджеры' : 'Szybki kontakt — komunikatory'}
         >
@@ -402,7 +438,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             title={waLabel}
             className={`${messengerFabClass} bg-[#25D366] focus-visible:ring-[#25D366]`}
           >
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+            <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.865 9.865 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
             </svg>
           </a>
@@ -414,7 +450,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
             title={tgLabel}
             className={`${messengerFabClass} bg-[#229ED9] focus-visible:ring-[#229ED9]`}
           >
-            <svg className="h-5 w-5" fill="currentColor" role="img" viewBox="0 0 24 24" aria-hidden>
+            <svg className="h-[1.15rem] w-[1.15rem] sm:h-5 sm:w-5" fill="currentColor" role="img" viewBox="0 0 24 24" aria-hidden>
               <path d={siTelegram.path} />
             </svg>
           </a>
@@ -422,7 +458,7 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
-          className={`${fabBase} h-14 w-14 shrink-0 animate-cta-glow sm:h-16 sm:w-16`}
+          className={`${fabBase} max-sm:!min-h-12 max-sm:!min-w-12 h-12 w-12 shrink-0 animate-cta-glow sm:h-14 sm:w-16`}
           aria-expanded={open}
           aria-label={open ? copy.close : copy.fabAria}
           title={open ? copy.close : copy.fabAria}

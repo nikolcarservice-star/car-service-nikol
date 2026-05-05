@@ -258,7 +258,7 @@ export const translations = {
       nudgeDismissAria: 'Zamknij powiadomienie',
       title: 'Nikol — recepcja online',
       welcome:
-        'Cześć! Tu Nikol z Car Service Nikol w Jastrowo. Jak mogę pomóc — orientacyjna wycena, termin wizyty, czy coś z autem? Napisz krótko.',
+        'Cześć! Tu Nikol z Car Service Nikol w Jastrowo. Przyjmujemy w warsztacie tylko w weekend: sobota 8:00–18:00, niedziela 10:00–16:00. Jak mogę pomóc — wycena, termin na weekend albo pytanie o auto? Napisz krótko.',
       placeholder: 'Napisz wiadomość…',
       send: 'Wyślij',
       close: 'Zamknij czat',
@@ -523,7 +523,7 @@ export const translations = {
       nudgeDismissAria: 'Закрыть уведомление',
       title: 'Nikol — онлайн-приёмная',
       welcome:
-        'Привет! Это Nikol из Car Service Nikol в Jastrowo. Чем помочь — ориентировочная цена, запись на визит или вопрос по авто? Напишите коротко.',
+        'Привет! Это Nikol из Car Service Nikol в Jastrowo. В сервисе принимаем только в выходные: суббота 8:00–18:00, воскресенье 10:00–16:00. Чем помочь — цена, запись на выходные или вопрос по авто? Напишите коротко.',
       placeholder: 'Ваше сообщение…',
       send: 'Отправить',
       close: 'Закрыть чат',

@@ -3,8 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CalendarDays, Check, Clock, ExternalLink, PhoneCall, Star } from 'lucide-react';
+import { CalendarDays, Check, Clock, ExternalLink, PhoneCall, Sparkles, Star } from 'lucide-react';
+import { siTelegram, siWhatsapp } from 'simple-icons';
 import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
+import { WHATSAPP_HREF, TELEGRAM_HREF } from '../constants/contactLinks';
+import { openNikolChatFromUi } from './NikolChatWidget';
 import { GOOGLE_BUSINESS_REVIEWS_URL } from '../constants/googleBusiness';
 import { getGoogleReviewsStats } from '../data/googleReviews';
 
@@ -65,18 +68,18 @@ export default function Hero({ t }) {
           className="h-full w-full object-cover"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/65 to-black/82" />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 pb-12 pt-10 md:flex-row md:items-center md:pb-20 md:pt-16 sm:px-6">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-10 md:flex-row md:items-center md:gap-10 md:pb-20 md:pt-16 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="flex-1 space-y-6 px-0 sm:px-0"
+          className="flex-1 space-y-5 px-0 sm:space-y-6 sm:px-0"
         >
           {/* USP — jedyny czynny serwis w niedzielę w okolicy */}
-          <div className="inline-flex max-w-xl items-start gap-3 rounded-2xl border-2 border-amber-400/55 bg-gradient-to-br from-amber-500/25 via-amber-600/15 to-orange-600/10 px-4 py-3 shadow-lg shadow-amber-900/30 sm:gap-3.5 sm:px-5 sm:py-3.5">
+          <div className="inline-flex max-w-xl items-start gap-3 rounded-2xl border border-amber-400/45 bg-gradient-to-br from-amber-500/20 via-amber-600/12 to-orange-600/10 px-4 py-3 shadow-lg shadow-amber-900/25 backdrop-blur-md sm:gap-3.5 sm:px-5 sm:py-3.5">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/35 ring-2 ring-amber-400/40">
               <Clock className="h-6 w-6 text-amber-200" aria-hidden />
             </span>
@@ -98,21 +101,59 @@ export default function Hero({ t }) {
             {hero.subtitle}
           </p>
 
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+          <div className="flex w-full flex-col gap-3">
             <button
               type="button"
               onClick={handleBookClick}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/40 ring-2 ring-orange-400/40 transition hover:scale-[1.03] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/50 active:scale-100"
+              className="inline-flex w-full min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 px-7 py-4 text-[15px] font-bold text-white shadow-xl shadow-orange-500/35 ring-2 ring-orange-400/35 transition hover:scale-[1.02] hover:from-orange-400 hover:to-amber-400 hover:shadow-orange-500/45 active:scale-[0.99] sm:w-auto sm:py-3.5"
             >
-              <CalendarDays className="h-4 w-4" />
+              <CalendarDays className="h-5 w-5 shrink-0" />
               <span>{hero.ctaPrimary}</span>
             </button>
+            <div className="grid w-full grid-cols-2 gap-2.5 sm:max-w-lg">
+              <a
+                href={PHONE_TEL_HREF}
+                className="flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-white/35 bg-white/10 px-3 py-3 text-sm font-semibold text-white shadow-md backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.99]"
+              >
+                <PhoneCall className="h-5 w-5 shrink-0 text-orange-200" aria-hidden />
+                <span className="text-center leading-tight">{hero.ctaSecondary}</span>
+              </a>
+              <button
+                type="button"
+                onClick={openNikolChatFromUi}
+                className="flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-orange-400/40 bg-gradient-to-br from-orange-500/25 to-amber-500/15 px-3 py-3 text-sm font-semibold text-white shadow-md backdrop-blur-sm transition hover:from-orange-500/35 hover:to-amber-500/25 active:scale-[0.99]"
+              >
+                <Sparkles className="h-5 w-5 shrink-0 text-amber-200" aria-hidden />
+                <span className="text-center leading-tight">{hero.ctaChat ?? 'Czat z Nikol'}</span>
+              </button>
+              <a
+                href={WHATSAPP_HREF}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-500/25 active:scale-[0.99]"
+              >
+                <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="#25D366" aria-hidden>
+                  <path d={siWhatsapp.path} />
+                </svg>
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={TELEGRAM_HREF}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-sky-500/35 bg-sky-500/15 px-3 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-sky-500/25 active:scale-[0.99]"
+              >
+                <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="#229ED9" aria-hidden>
+                  <path d={siTelegram.path} />
+                </svg>
+                <span>Telegram</span>
+              </a>
+            </div>
             <Link
               href={`/${lang}/contact`}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/50 bg-transparent px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="text-center text-sm font-medium text-orange-200/90 underline decoration-orange-400/50 underline-offset-4 transition hover:text-white"
             >
-              <PhoneCall className="h-4 w-4" />
-              <span>{hero.ctaSecondary}</span>
+              {lang === 'ru' ? 'Страница контакта и карта →' : 'Kontakt, adres i mapa →'}
             </Link>
           </div>
 
@@ -175,9 +216,9 @@ export default function Hero({ t }) {
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-          className="relative mt-2 flex-1 md:mt-0"
+          className="relative mt-4 flex-1 md:mt-0"
         >
-          <div className="rounded-2xl border border-white/15 bg-white/5 p-4 shadow-2xl backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-4 shadow-2xl backdrop-blur-xl md:bg-white/5">
             <div className="mb-3 flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-200">

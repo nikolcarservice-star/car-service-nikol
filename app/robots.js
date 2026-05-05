@@ -10,6 +10,11 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
+        disallow: [
+          '/api/',       // Закрываем внутренние запросы
+          '/_next/',     // Закрываем служебные файлы Next.js
+          '/admin/',     // Если есть админка
+        ],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

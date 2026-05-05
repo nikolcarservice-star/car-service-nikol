@@ -3,9 +3,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Send, Sparkles, X } from 'lucide-react';
+import { siTelegram } from 'simple-icons';
 import { getTranslations, LANGUAGES } from '../constants/translations';
+import { WHATSAPP_HREF, TELEGRAM_HREF } from '../constants/contactLinks';
 import { NikolAssistantMessageBody } from '../utils/nikolMessageLinks';
 import { nikolErrorCopyForUserMessage } from '../utils/nikolChatErrorCopy';
+
+const NIKOL_CHAT_OPEN_EVENT = 'nikol-chat-open';
+
+export function openNikolChatFromUi() {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new CustomEvent(NIKOL_CHAT_OPEN_EVENT));
+}
+
+const messengerFabClass =
+  'flex h-12 w-12 shrink-0 touch-manipulation items-center justify-center rounded-full text-white shadow-lg transition hover:scale-105 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 active:scale-95';
 
 const NUDGE_DELAY_MS = 20_000;
 const NUDGE_AUTOHIDE_MS = 50_000;
@@ -69,6 +81,12 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
       /* ignore */
     }
   }, [open]);
+
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(NIKOL_CHAT_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(NIKOL_CHAT_OPEN_EVENT, onOpen);
+  }, []);
 
   const dismissNudge = useCallback(() => {
     setShowNudge(false);
@@ -156,9 +174,12 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
 
   if (!copy) return null;
 
+  const waLabel = t?.location?.whatsapp ?? 'WhatsApp';
+  const tgLabel = t?.location?.telegram ?? 'Telegram';
+
   return (
     <div
-      className="fixed bottom-5 right-4 z-[55] hidden flex-col items-end pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6 md:flex"
+      className="fixed bottom-5 right-4 z-[60] flex flex-col items-end gap-2 pb-[env(safe-area-inset-bottom,0)] sm:bottom-6 sm:right-6"
       aria-live="polite"
     >
       <AnimatePresence>
@@ -367,36 +388,68 @@ export default function NikolChatWidget({ lang = LANGUAGES.PL }) {
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className={`${fabBase} h-14 w-14 shrink-0 animate-cta-glow sm:h-16 sm:w-16`}
-        aria-expanded={open}
-        aria-label={open ? copy.close : copy.fabAria}
-        title={open ? copy.close : copy.fabAria}
-      >
-        {open ? (
-          <>
-            <span className="absolute inset-0 rounded-full bg-slate-950/90" aria-hidden />
-            <X
-              className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8"
-              strokeWidth={2.25}
+      <div className="flex flex-row items-end gap-2">
+        <div
+          className="flex flex-row items-end gap-2 md:hidden"
+          role="group"
+          aria-label={lang === 'ru' ? 'Мессенджеры' : 'Szybki kontakt — komunikatory'}
+        >
+          <a
+            href={WHATSAPP_HREF}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label={waLabel}
+            title={waLabel}
+            className={`${messengerFabClass} bg-[#25D366] focus-visible:ring-[#25D366]`}
+          >
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.865 9.865 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </a>
+          <a
+            href={TELEGRAM_HREF}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label={tgLabel}
+            title={tgLabel}
+            className={`${messengerFabClass} bg-[#229ED9] focus-visible:ring-[#229ED9]`}
+          >
+            <svg className="h-5 w-5" fill="currentColor" role="img" viewBox="0 0 24 24" aria-hidden>
+              <path d={siTelegram.path} />
+            </svg>
+          </a>
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className={`${fabBase} h-14 w-14 shrink-0 animate-cta-glow sm:h-16 sm:w-16`}
+          aria-expanded={open}
+          aria-label={open ? copy.close : copy.fabAria}
+          title={open ? copy.close : copy.fabAria}
+        >
+          {open ? (
+            <>
+              <span className="absolute inset-0 rounded-full bg-slate-950/90" aria-hidden />
+              <X
+                className="relative z-10 h-7 w-7 text-white drop-shadow sm:h-8 sm:w-8"
+                strokeWidth={2.25}
+                aria-hidden
+              />
+            </>
+          ) : (
+            <img
+              src={AVATAR_SRC}
+              alt={avatarAlt}
+              width={64}
+              height={64}
+              className="absolute inset-0 h-full w-full rounded-full object-cover"
               aria-hidden
+              loading="eager"
+              decoding="async"
             />
-          </>
-        ) : (
-          <img
-            src={AVATAR_SRC}
-            alt={avatarAlt}
-            width={64}
-            height={64}
-            className="absolute inset-0 h-full w-full rounded-full object-cover"
-            aria-hidden
-            loading="eager"
-            decoding="async"
-          />
-        )}
-      </button>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

@@ -51,6 +51,7 @@ export const translations = {
         'Serwis samochodowy Jastrowo i Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców i wymiana oleju – Twój zaufany mechanik.',
       ctaPrimary: 'Skontaktuj się',
       ctaSecondary: 'Zadzwoń teraz',
+      ctaChat: 'Czat z Nikol',
       sundayBadge: 'Otwarte w niedziele!',
       sundayUniqueBadge:
         'Jedyny serwis w okolicy otwarty w niedziele',
@@ -315,6 +316,7 @@ export const translations = {
         'Ваш надёжный автосервис в Ястрове. Специализируемся на быстрой диагностике и ремонтах в выходные дни.',
       ctaPrimary: 'Связаться с нами',
       ctaSecondary: 'Позвонить сейчас',
+      ctaChat: 'Чат с Nikol',
       sundayBadge: 'Работаем по воскресеньям!',
       sundayUniqueBadge:
         'Единственный работающий сервис в округе по воскресеньям',

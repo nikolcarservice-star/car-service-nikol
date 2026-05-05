@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import BookingForm from '../../../components/BookingForm';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../../../constants/googleBusiness';
 import { WHATSAPP_HREF } from '../../../constants/contactLinks';
 import {
@@ -70,10 +69,6 @@ export default function ContactPage({ params }) {
   const lang = normalizeLang(params.lang);
   const t = getTranslations(lang);
   const basePath = `/${lang}`;
-  const serviceOptions = (t.services?.list ?? []).map((s) => ({
-    value: s.key,
-    label: lang === 'ru' ? s.nameRu || s.name : s.name,
-  }));
 
   return (
     <>
@@ -190,10 +185,6 @@ export default function ContactPage({ params }) {
                   </span>
                   <span>{t.location.whatsapp}</span>
                 </a>
-              </div>
-
-              <div id="zapis-online" className="mt-8 scroll-mt-24">
-                <BookingForm lang={lang} copy={t.bookingForm} serviceOptions={serviceOptions} />
               </div>
             </div>
 

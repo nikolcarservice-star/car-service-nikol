@@ -197,7 +197,7 @@ export default function LangHomePage({ params }) {
               населённых пунктов — адрес: ul. Wernisażowa 21, 64-500 Jastrowo.
             </p>
             <p className="text-sm leading-relaxed text-gray-400">
-              Позвоните или напишите в WhatsApp и Telegram — подберём время визита и ответим на вопросы по
+              Позвоните или напишите в WhatsApp — подберём время визита и ответим на вопросы по
               ремонту, ориентировочной цене и запчастям. Car Service Nikol — ваш автосервис в Jastrowo для
               жителей gminy Szamotuły и окрестностей.
             </p>

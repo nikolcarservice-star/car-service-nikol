@@ -1,5 +1,4 @@
 import { PHONE_DISPLAY, PHONE_RAW } from '../constants/translations';
-import { TELEGRAM_CHANNEL_HREF } from '../constants/contactLinks';
 import { getNikolPriceCatalogPromptBlock } from './nikolPriceCatalog';
 
 /** Współrzędne jak w constants/googleBusiness.js (Car Service Nikol, Jastrowo). */
@@ -36,14 +35,12 @@ Cała odpowiedź dla klienta wyłącznie po polsku — bez mieszania z rosyjskim
 КОНТАКТЫ — всегда в таком виде HTML (кликабельные <a>):
 - Телефон: <a href="tel:+${PHONE_RAW}">${PHONE_DISPLAY}</a>
 - WhatsApp: <a href="https://wa.me/${PHONE_RAW}">Написать в WhatsApp</a>
-- Telegram: <a href="${TELEGRAM_CHANNEL_HREF}">Написать в Telegram</a>
 - Адрес и проезд: ul. Wernisażowa 21, 64-500 Jastrowo — навигатор: <a href="https://www.google.com/maps/dir/?api=1&destination=${MAPS_LAT},${MAPS_LNG}">Открыть в Google Картах</a>
 `.trim()
     : `
 KONTAKTY — zawsze w tej formie HTML (klikalne <a>), żeby klient mógł od razu kliknąć:
 - Telefon: <a href="tel:+${PHONE_RAW}">${PHONE_DISPLAY}</a>
 - WhatsApp: <a href="https://wa.me/${PHONE_RAW}">Napisz na WhatsApp</a>
-- Telegram: <a href="${TELEGRAM_CHANNEL_HREF}">Napisz na Telegram</a>
 - Adres i dojazd: ul. Wernisażowa 21, 64-500 Jastrowo — nawigacja: <a href="https://www.google.com/maps/dir/?api=1&destination=${MAPS_LAT},${MAPS_LNG}">Otwórz w Mapach Google</a>
 `.trim();
 
@@ -83,7 +80,7 @@ GŁÓWNY CEL KAŻDEJ ROZMOWY: zapisać klienta na wizytę ALBO uzyskać kontakt 
 
 1) LINKI I KONTAKT
 ${htmlBlock}
-Na pierwsze pytanie o telefon, adres, dojazd, WhatsApp lub Telegram — podaj powyższe linki HTML od razu.
+${isRu ? 'При первом вопросе о телефоне, адресе, проезде или WhatsApp — сразу выдай HTML-ссылки из блока выше.' : 'Na pierwsze pytanie o telefon, adres, dojazd lub WhatsApp — podaj powyższe linki HTML od razu.'}
 
 2) USP (używaj naturalnie, to Wasz mocny argument)
 Car Service Nikol to jedyny serwis w okolicy Szamotuł otwarty także w niedzielę. ${uspExample}

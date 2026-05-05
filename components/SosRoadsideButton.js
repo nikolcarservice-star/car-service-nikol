@@ -22,7 +22,7 @@ export default function SosRoadsideButton({ lang }) {
 
   return (
     <div
-      className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] left-4 z-[58] md:hidden"
+      className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] left-4 z-[58] md:hidden"
       role="region"
       aria-label={copy.ariaLabel}
     >

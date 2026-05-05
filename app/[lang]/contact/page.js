@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { CalendarDays, MapPin, Phone, Send } from 'lucide-react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../../../constants/googleBusiness';
-import { TELEGRAM_HREF, WHATSAPP_HREF } from '../../../constants/contactLinks';
+import { WHATSAPP_HREF } from '../../../constants/contactLinks';
 import {
   getTranslations,
   normalizeLang,
@@ -23,7 +23,7 @@ export function generateMetadata({ params }) {
   if (lang === 'ru') {
     const title = 'Контакты — Jastrowo, в Шамотулах | Car Service Nikol | Адрес и запись';
     const description =
-      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21, Jastrowo, телефон, WhatsApp и Telegram. Обслуживаем клиентов из Jastrowo, Шамотул и окрестностей. Работаем в воскресенье.';
+      'Контакт с Car Service Nikol: адрес ул. Wernisażowa 21, Jastrowo, телефон и WhatsApp. Обслуживаем клиентов из Jastrowo, Шамотул и окрестностей. Работаем в воскресенье.';
     return {
       title,
       description,
@@ -45,7 +45,7 @@ export function generateMetadata({ params }) {
 
   const title = 'Kontakt — Jastrowo, w Szamotułach | Car Service Nikol | Adres i wizyta';
   const description =
-    'Skontaktuj się z Car Service Nikol: Jastrowo (ul. Wernisażowa 21), obsługa kierowców z Szamotuł i okolic. Telefon, WhatsApp i Telegram. Otwarte w niedziele.';
+    'Skontaktuj się z Car Service Nikol: Jastrowo (ul. Wernisażowa 21), obsługa kierowców z Szamotuł i okolic. Telefon i WhatsApp. Otwarte w niedziele.';
   return {
     title,
     description,
@@ -184,17 +184,6 @@ export default function ContactPage({ params }) {
                     <Send className="h-5 w-5" />
                   </span>
                   <span>{t.location.whatsapp}</span>
-                </a>
-                <a
-                  href={TELEGRAM_HREF}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex min-h-[52px] min-w-[52px] items-center justify-center gap-3 rounded-2xl border-2 border-slate-600 bg-slate-800/80 px-6 py-4 text-base font-bold text-gray-100 shadow-lg transition hover:scale-[1.02] hover:border-orange-500/60 hover:bg-slate-700/80 hover:text-orange-300 hover:shadow-orange-500/10"
-                >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/20">
-                    <Send className="h-5 w-5 text-sky-400" />
-                  </span>
-                  <span>{t.location.telegram}</span>
                 </a>
               </div>
             </div>

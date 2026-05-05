@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CalendarDays, Check, Clock, ExternalLink, PhoneCall, Sparkles, Star } from 'lucide-react';
-import { siTelegram, siWhatsapp } from 'simple-icons';
+import { siWhatsapp } from 'simple-icons';
 import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
-import { WHATSAPP_HREF, TELEGRAM_HREF } from '../constants/contactLinks';
+import { WHATSAPP_HREF } from '../constants/contactLinks';
 import { openNikolChatFromUi } from './NikolChatWidget';
 import { GOOGLE_BUSINESS_REVIEWS_URL } from '../constants/googleBusiness';
 import { getGoogleReviewsStats } from '../data/googleReviews';
@@ -71,7 +71,7 @@ export default function Hero({ t }) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/65 to-black/82" />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-10 max-md:pb-[min(9.5rem,42svh)] md:flex-row md:items-center md:gap-10 md:pb-20 md:pt-16 sm:px-6">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-10 max-md:pb-[min(7.5rem,36svh)] md:flex-row md:items-center md:gap-10 md:pb-20 md:pt-16 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -130,23 +130,12 @@ export default function Hero({ t }) {
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-500/25 active:scale-[0.99]"
+                className="col-span-2 flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-500/25 active:scale-[0.99]"
               >
                 <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="#25D366" aria-hidden>
                   <path d={siWhatsapp.path} />
                 </svg>
                 <span>WhatsApp</span>
-              </a>
-              <a
-                href={TELEGRAM_HREF}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="flex min-h-[52px] touch-manipulation items-center justify-center gap-2 rounded-xl border border-sky-500/35 bg-sky-500/15 px-3 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-sky-500/25 active:scale-[0.99]"
-              >
-                <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="#229ED9" aria-hidden>
-                  <path d={siTelegram.path} />
-                </svg>
-                <span>Telegram</span>
               </a>
             </div>
             <Link
@@ -241,7 +230,7 @@ export default function Hero({ t }) {
                 className="block rounded-xl border border-white/10 bg-black/20 p-3 touch-manipulation transition hover:border-orange-400/30 hover:bg-black/30 active:scale-[0.99]"
               >
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gray-300">
-                  WhatsApp / Telegram
+                  WhatsApp
                 </p>
                 <p className="mt-2 min-h-[44px] text-sm font-semibold leading-snug text-orange-200 sm:min-h-0">
                   {PHONE_DISPLAY}

@@ -1,6 +1,6 @@
 import { Phone, Send } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
-import { TELEGRAM_HREF, WHATSAPP_HREF } from '../constants/contactLinks';
+import { WHATSAPP_HREF } from '../constants/contactLinks';
 
 export default function ContactCtaSection({ lang, t, id }) {
   const title = lang === 'ru' ? 'Связаться с нами' : 'Skontaktuj się z nami';
@@ -43,18 +43,6 @@ export default function ContactCtaSection({ lang, t, id }) {
                 <Send className="h-5 w-5" />
               </span>
               <span>{lang === 'ru' ? 'Написать в WhatsApp' : 'Napisz na WhatsApp'}</span>
-            </a>
-
-            <a
-              href={TELEGRAM_HREF}
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex min-h-[54px] items-center justify-center gap-3 rounded-2xl border-2 border-slate-600 bg-slate-800/80 px-6 py-4 text-base font-bold text-gray-100 shadow-lg transition hover:scale-[1.02] hover:border-orange-500/60 hover:bg-slate-700/80 hover:text-orange-300 hover:shadow-orange-500/10"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/20">
-                <Send className="h-5 w-5 text-sky-400" />
-              </span>
-              <span>{lang === 'ru' ? 'Написать в Telegram' : 'Napisz na Telegram'}</span>
             </a>
           </div>
         </div>

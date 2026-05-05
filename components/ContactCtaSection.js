@@ -1,6 +1,7 @@
 import { Phone, Send } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
 import { WHATSAPP_HREF } from '../constants/contactLinks';
+import BookingForm from './BookingForm';
 
 export default function ContactCtaSection({ lang, t, id }) {
   const bc = t?.bookingContact;
@@ -49,6 +50,12 @@ export default function ContactCtaSection({ lang, t, id }) {
             </a>
           </div>
         </div>
+
+        {bc?.form ? (
+          <div className="mt-10 max-w-2xl lg:max-w-none">
+            <BookingForm lang={lang} strings={bc.form} />
+          </div>
+        ) : null}
       </div>
     </section>
   );

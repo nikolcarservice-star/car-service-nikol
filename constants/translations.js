@@ -39,7 +39,7 @@ export const translations = {
       gallery: 'Galeria',
       faq: 'FAQ',
       phoneCta: 'Zadzwoń',
-      bookCta: 'Kontakt',
+      bookCta: 'Umów wizytę',
       languageToggleLabel: 'Wybierz język',
       openMenu: 'Otwórz menu',
       closeMenu: 'Zamknij menu',
@@ -49,7 +49,7 @@ export const translations = {
       title: 'Autoserwis Jastrowo, w Szamotułach — mechanik | Weekendy',
       subtitle:
         'Serwis samochodowy Jastrowo i Szamotuły. Weekendowy serwis, szybka diagnostyka, naprawa hamulców i wymiana oleju – Twój zaufany mechanik.',
-      ctaPrimary: 'Skontaktuj się',
+      ctaPrimary: 'Umów wizytę',
       ctaSecondary: 'Zadzwoń teraz',
       ctaChat: 'Czat z Nikol',
       sundayBadge: 'Otwarte w niedziele!',
@@ -231,8 +231,15 @@ export const translations = {
       title: 'Potrzebujesz pomocy z autem?',
       text: 'Zadzwoń lub napisz – pomożemy w Jastrowo i okolicach. Pracujemy też w weekendy.',
       ctaCall: 'Zadzwoń',
-      ctaBook: 'Kontakt',
+      ctaBook: 'Umów wizytę',
       close: 'Zamknij',
+    },
+    /** Sekcja #booking — telefon + WhatsApp (fizyczna wizyta tylko weekend). */
+    bookingContact: {
+      badge: 'Zapis na wizytę',
+      title: 'Umów wizytę w weekend',
+      subtitle:
+        'Zadzwoń lub napisz na WhatsApp — podpowiemy w sprawie usługi i ustalimy dogodny termin wizyty (sobota / niedziela).',
     },
     galleryPage: {
       intro:
@@ -304,7 +311,7 @@ export const translations = {
       gallery: 'Галерея',
       faq: 'Вопросы и ответы',
       phoneCta: 'Позвонить',
-      bookCta: 'Контакт',
+      bookCta: 'Запись',
       languageToggleLabel: 'Выбор языка',
       openMenu: 'Открыть меню',
       closeMenu: 'Закрыть меню',
@@ -314,7 +321,7 @@ export const translations = {
       title: 'Автосервис Jastrowo, в Шамотулах — механик | Выходные',
       subtitle:
         'Ваш надёжный автосервис в Ястрове. Специализируемся на быстрой диагностике и ремонтах в выходные дни.',
-      ctaPrimary: 'Связаться с нами',
+      ctaPrimary: 'Записаться',
       ctaSecondary: 'Позвонить сейчас',
       ctaChat: 'Чат с Nikol',
       sundayBadge: 'Работаем по воскресеньям!',
@@ -496,8 +503,14 @@ export const translations = {
       title: 'Нужна помощь с авто?',
       text: 'Позвоните или напишите – поможем в Jastrowo и окрестностях. Работаем и в выходные.',
       ctaCall: 'Позвонить',
-      ctaBook: 'Контакт',
+      ctaBook: 'Записаться',
       close: 'Закрыть',
+    },
+    bookingContact: {
+      badge: 'Запись в сервис',
+      title: 'Запишитесь на выходные',
+      subtitle:
+        'Позвоните или напишите в WhatsApp — подскажем по услуге и согласуем удобное время визита (суббота / воскресенье).',
     },
     galleryPage: {
       intro:

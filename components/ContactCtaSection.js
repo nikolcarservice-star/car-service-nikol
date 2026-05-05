@@ -3,11 +3,14 @@ import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
 import { WHATSAPP_HREF } from '../constants/contactLinks';
 
 export default function ContactCtaSection({ lang, t, id }) {
-  const title = lang === 'ru' ? 'Связаться с нами' : 'Skontaktuj się z nami';
+  const bc = t?.bookingContact;
+  const title = bc?.title ?? (lang === 'ru' ? 'Записаться в сервис' : 'Umów wizytę');
   const subtitle =
-    lang === 'ru'
-      ? 'Позвоните или напишите в мессенджеры — подскажем по услуге и согласуем удобное время визита.'
-      : 'Zadzwoń lub napisz na komunikator — podpowiemy w sprawie usługi i ustalimy dogodny termin wizyty.';
+    bc?.subtitle ??
+    (lang === 'ru'
+      ? 'Позвоните или напишите в WhatsApp — подскажем по услуге и согласуем удобное время визита.'
+      : 'Zadzwoń lub napisz na WhatsApp — podpowiemy w sprawie usługi i ustalimy dogodny termin wizyty.');
+  const badge = bc?.badge ?? (lang === 'ru' ? 'Запись' : 'Zapis');
 
   return (
     <section id={id} className="border-b border-slate-800 bg-slate-950" aria-label={title}>
@@ -15,7 +18,7 @@ export default function ContactCtaSection({ lang, t, id }) {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center">
           <div>
             <span className="inline-block rounded-full border border-orange-500/40 bg-orange-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400">
-              {t?.navigation?.contact || (lang === 'ru' ? 'Контакт' : 'Kontakt')}
+              {badge}
             </span>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">{title}</h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">{subtitle}</p>

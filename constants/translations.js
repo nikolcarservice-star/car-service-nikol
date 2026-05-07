@@ -240,21 +240,6 @@ export const translations = {
       title: 'Umów wizytę w weekend',
       subtitle:
         'Zadzwoń lub napisz na WhatsApp — podpowiemy w sprawie usługi i ustalimy dogodny termin wizyty (sobota / niedziela).',
-      form: {
-        formTitle: 'Możesz też zostawić dane — oddzwonimy lub napiszemy e-mail.',
-        firstNameLabel: 'Imię',
-        emailLabel: 'E-mail',
-        phoneLabel: 'Telefon',
-        carModelLabel: 'Marka i model auta',
-        carModelPlaceholder: 'np. VW Golf VII',
-        submit: 'Wyślij zgłoszenie',
-        sending: 'Wysyłanie…',
-        success: 'Dziękujemy! Skontaktujemy się z Tobą możliwie szybko.',
-        error: 'Nie udało się wysłać. Spróbuj ponownie lub zadzwoń.',
-        privacyLead: 'Wysyłając formularz akceptujesz',
-        privacyLink: 'politykę prywatności',
-        privacySuffix: '— zgodnie z RODO.',
-      },
     },
     galleryPage: {
       intro:
@@ -526,21 +511,6 @@ export const translations = {
       title: 'Запишитесь на выходные',
       subtitle:
         'Позвоните или напишите в WhatsApp — подскажем по услуге и согласуем удобное время визита (суббота / воскресенье).',
-      form: {
-        formTitle: 'Или оставьте контакты — перезвоним или напишем.',
-        firstNameLabel: 'Имя',
-        emailLabel: 'E-mail',
-        phoneLabel: 'Телефон',
-        carModelLabel: 'Марка и модель авто',
-        carModelPlaceholder: 'напр. VW Golf VII',
-        submit: 'Отправить заявку',
-        sending: 'Отправка…',
-        success: 'Спасибо! Мы свяжемся с вами как можно скорее.',
-        error: 'Не удалось отправить. Попробуйте снова или позвоните.',
-        privacyLead: 'Отправляя форму, вы принимаете',
-        privacyLink: 'политику конфиденциальности',
-        privacySuffix: '— в соответствии с RODO.',
-      },
     },
     galleryPage: {
       intro:

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CalendarDays, Phone, Stethoscope } from 'lucide-react';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
+import ContactCtaSection from '../../../../components/ContactCtaSection';
 import {
   getAllServicePageSlugs,
   getServiceBySlug,
@@ -64,32 +65,70 @@ export default function ServiceDetailPage({ params }) {
       : null;
   const symptoms = Array.isArray(service.symptoms) ? service.symptoms : [];
 
+  const weekendHoursTitle = t.hero?.scheduleTitle;
+  const saturdayHours = t.hero?.saturday;
+  const sundayHours = t.hero?.sunday;
+
   return (
-    <section className="border-b border-slate-800 bg-slate-950">
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
-        <Breadcrumbs
-          items={[
-            {
-              label: lang === 'ru' ? 'Главная' : 'Strona główna',
-              href: basePath,
-            },
-            {
-              label: lang === 'ru' ? 'Услуги' : 'Usługi',
-              href: `${basePath}/services`,
-            },
-            { label: service.name },
-          ]}
-        />
+    <>
+      <section className="border-b border-slate-800 bg-slate-950">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+          <Breadcrumbs
+            items={[
+              {
+                label: lang === 'ru' ? 'Главная' : 'Strona główna',
+                href: basePath,
+              },
+              {
+                label: lang === 'ru' ? 'Услуги' : 'Usługi',
+                href: `${basePath}/services`,
+              },
+              { label: service.name },
+            ]}
+          />
 
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">{service.h1}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-50 sm:text-3xl">{service.h1}</h1>
 
-        {service.sectionH2 ? (
-          <h2 className="mt-4 text-lg font-semibold tracking-tight text-orange-100/95 sm:text-xl">
-            {service.sectionH2}
-          </h2>
-        ) : null}
+          {service.weekendEmphasis && saturdayHours && sundayHours && (
+            <div
+              className="mt-5 rounded-2xl border-2 border-emerald-500/50 bg-gradient-to-br from-emerald-500/15 via-slate-900/90 to-slate-900/70 p-4 sm:p-6"
+              role="region"
+              aria-label={weekendHoursTitle || (lang === 'ru' ? 'График в выходные' : 'Godziny weekendowe')}
+            >
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300 sm:text-[11px]">
+                {lang === 'ru' ? 'Только выходные — суббота и воскресенье' : 'Tylko weekend — sobota i niedziela'}
+              </p>
+              {weekendHoursTitle && (
+                <p className="mt-2 text-sm font-semibold text-gray-100 sm:text-base">{weekendHoursTitle}</p>
+              )}
+              <ul className="mt-3 space-y-2 text-sm font-semibold text-emerald-50 sm:text-base">
+                <li className="flex items-center gap-2">
+                  <CalendarDays className="h-5 w-5 shrink-0 text-emerald-400" aria-hidden />
+                  <span>{saturdayHours}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CalendarDays className="h-5 w-5 shrink-0 text-emerald-400" aria-hidden />
+                  <span>{sundayHours}</span>
+                </li>
+              </ul>
+              {service.weekendLead && (
+                <p className="mt-3 text-sm leading-relaxed text-gray-300 sm:text-base">{service.weekendLead}</p>
+              )}
+              <p className="mt-3 text-xs text-gray-400 sm:text-sm">
+                {lang === 'ru'
+                  ? 'Пн–пт стационарный приём не ведём — запись только на субботу или воскресенье.'
+                  : 'Od poniedziałku do piątku nie przyjmujemy aut na miejscu — wizyty umawiamy na sobotę lub niedzielę.'}
+              </p>
+            </div>
+          )}
 
-        <p className="mt-3 max-w-3xl text-sm text-gray-300 sm:text-base">{service.intro}</p>
+          {service.sectionH2 ? (
+            <h2 className="mt-4 text-lg font-semibold tracking-tight text-orange-100/95 sm:text-xl">
+              {service.sectionH2}
+            </h2>
+          ) : null}
+
+          <p className="mt-3 max-w-3xl text-sm text-gray-300 sm:text-base">{service.intro}</p>
 
         {fromBandText && (
           <p className="mt-4 inline-flex max-w-3xl items-center rounded-xl border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-semibold text-orange-100">
@@ -133,7 +172,13 @@ export default function ServiceDetailPage({ params }) {
           <div className="space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 text-xs text-gray-200 shadow-lg sm:p-5 sm:text-sm">
               <h2 className="text-sm font-semibold text-gray-100 sm:text-base">
-                {lang === 'ru' ? 'Примерные цены (PLN)' : 'Przykładowe ceny (PLN)'}
+                {service.weekendEmphasis
+                  ? lang === 'ru'
+                    ? 'Цены (PLN)'
+                    : 'Cennik (PLN)'
+                  : lang === 'ru'
+                    ? 'Примерные цены (PLN)'
+                    : 'Przykładowe ceny (PLN)'}
               </h2>
               <p className="mt-1 text-xs text-gray-400 sm:text-sm">{service.pricesIntro}</p>
               {sd.pricesDisclaimer && (
@@ -182,7 +227,18 @@ export default function ServiceDetailPage({ params }) {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {service.embedBooking && (
+        <ContactCtaSection
+          lang={lang}
+          t={t}
+          id={bookingId}
+          title={service.bookingTitle}
+          subtitle={service.bookingSubtitle}
+        />
+      )}
+    </>
   );
 }

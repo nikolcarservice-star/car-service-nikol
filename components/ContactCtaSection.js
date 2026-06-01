@@ -2,15 +2,16 @@ import { Phone, Send } from 'lucide-react';
 import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
 import { WHATSAPP_HREF } from '../constants/contactLinks';
 
-export default function ContactCtaSection({ lang, t, id }) {
+export default function ContactCtaSection({ lang, t, id, title: titleOverride, subtitle: subtitleOverride, badge: badgeOverride }) {
   const bc = t?.bookingContact;
-  const title = bc?.title ?? (lang === 'ru' ? 'Записаться в сервис' : 'Umów wizytę');
+  const title = titleOverride ?? bc?.title ?? (lang === 'ru' ? 'Записаться в сервис' : 'Umów wizytę');
   const subtitle =
+    subtitleOverride ??
     bc?.subtitle ??
     (lang === 'ru'
       ? 'Позвоните или напишите в WhatsApp — подскажем по услуге и согласуем удобное время визита.'
       : 'Zadzwoń lub napisz na WhatsApp — podpowiemy w sprawie usługi i ustalimy dogodny termin wizyty.');
-  const badge = bc?.badge ?? (lang === 'ru' ? 'Запись' : 'Zapis');
+  const badge = badgeOverride ?? bc?.badge ?? (lang === 'ru' ? 'Запись' : 'Zapis');
 
   return (
     <section id={id} className="border-b border-slate-800 bg-slate-950" aria-label={title}>

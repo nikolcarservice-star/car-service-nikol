@@ -1,5 +1,9 @@
 import { normalizeLang } from '../constants/translations';
 import {
+  getAllServiceSeoLandingSlugs,
+  getServiceSeoLanding,
+} from './serviceSeoLandings';
+import {
   buildCityLandingCopy,
   buildCityServiceSlug,
   parseCityServiceSlug,
@@ -489,7 +493,7 @@ export function getAllServices(lang) {
 }
 
 export function getAllServicePageSlugs() {
-  const slugs = [];
+  const slugs = [...getAllServiceSeoLandingSlugs()];
   for (const key of SERVICE_KEYS) {
     if (SERVICE_CITY_LANDING_KEYS.includes(key)) {
       for (const city of SERVICE_LANDING_CITIES) {
@@ -505,6 +509,11 @@ export function getAllServicePageSlugs() {
 
 export function getServiceBySlug(slug, lang) {
   const code = normalizeLang(lang);
+  const seoLanding = getServiceSeoLanding(slug, code);
+  if (seoLanding) {
+    return { ...seoLanding };
+  }
+
   const cityParsed = parseCityServiceSlug(slug);
   if (cityParsed) {
     const { serviceKey, city } = cityParsed;

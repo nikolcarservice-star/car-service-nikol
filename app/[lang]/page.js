@@ -104,7 +104,7 @@ export default function LangHomePage({ params }) {
       {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": "Saturday",
-        "opens": "08:00",
+        "opens": "10:00",
         "closes": "18:00"
       },
       {

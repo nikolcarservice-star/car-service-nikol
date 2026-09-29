@@ -13,14 +13,14 @@ export const blogPosts = [
       'Автосервис в воскресенье Шамотулы — куда поехать, если большинство мастерских закрыто? Jastrowo (~10 минут), Car Service Nikol: ремонт и диагностика по воскресеньям 10:00–16:00.',
     bodyPl: [
       'Wpisujesz w Google „gdzie naprawić auto w niedzielę w Szamotułach” i odkrywasz, że większość stacjonarnych warsztatów jest zamknięta – to normalne w Polsce. Przy życiu zawodowym i obowiązkach rodzinnych naprawa w weekend często jest jedyną realną opcją.',
-      'Z Szamotuł do Jastrowa masz krótki, wygodny dojazd (w praktyce ok. 10 minut samochodem). W Car Service Nikol przyjmujemy klientów w niedziele w godz. 10:00–16:00 oraz w soboty 08:00–18:00. Możesz umówić się na diagnostykę komputerową, wymianę oleju i filtrów, serwis hamulców i zawieszenia, wymianę opon czy pilniejsze sprawy – np. pomoc przy rozładowanym akumulatorze, jeśli wcześniej to ustalimy.',
+      'Z Szamotuł do Jastrowa masz krótki, wygodny dojazd (w praktyce ok. 10 minut samochodem). W Car Service Nikol przyjmujemy klientów w niedziele w godz. 10:00–16:00 oraz w soboty 10:00–18:00. Możesz umówić się na diagnostykę komputerową, wymianę oleju i filtrów, serwis hamulców i zawieszenia, wymianę opon czy pilniejsze sprawy – np. pomoc przy rozładowanym akumulatorze, jeśli wcześniej to ustalimy.',
       'Warto przyjechać z krótkim opisem objawów i historią serwisową; przy naprawach chętnie tłumaczymy, co jest konieczne, a co może poczekać – bez narzucania zbędnych kosztów.',
       'Z punktu widzenia SEO i zaufania klienta najcenniejsze są materiały pokazujące realną pracę warsztatu: zdjęcia stanu „przed” i „po” naprawie (np. zużyte klocki vs nowy zestaw, stary amortyzator vs montaż nowego) oraz krótki opis wykonanych czynności. Taki content świetnie uzupełnia artykuły i wizytówkę w Google – jeśli wykonamy u Ciebie naprawę i wyrazisz zgodę na publikację, chętnie pokażemy efekt bez danych osobowych, np. tylko z marką modelu auta.',
       'Zanim wyruszysz – zadzwoń lub napisz (np. WhatsApp): potwierdzimy termin i powiemy, czy w niedzielę zdążymy przygotować typowe części pod Twój model.',
     ],
     bodyRu: [
       'Запрос вроде «где отремонтировать машину в воскресенье в Шамотулах» часто упирается в то, что стационарные сервисы в выходной закрыты – это обычная картина. А поломка не ждёт понедельника.',
-      'Из Шамотул до Jastrowo удобно доехать примерно за 10 минут. В Car Service Nikol мы работаем по воскресеньям с 10:00 до 16:00 и по субботам с 08:00 до 18:00. Можно записаться на компьютерную диагностику, замену масла и фильтров, обслуживание тормозов и подвески, шиномонтаж или срочные вопросы – например помощь с аккумулятором, если заранее договоримся.',
+      'Из Шамотул до Jastrowo удобно доехать примерно за 10 минут. В Car Service Nikol мы работаем по воскресеньям с 10:00 до 16:00 и по субботам с 10:00 до 18:00. Можно записаться на компьютерную диагностику, замену масла и фильтров, обслуживание тормозов и подвески, шиномонтаж или срочные вопросы – например помощь с аккумулятором, если заранее договоримся.',
       'Приезжайте с кратким описанием симптомов и историей ТО; мы честно объясняем, что срочно, а что может подождать.',
       'Для сайта и Google особенно ценен контент с доказательством экспертизы: фото «до и после» (изношенные колодки и новый комплект, старый амортизатор и установленный), плюс короткий перечень работ. Если после ремонта вы согласны на анонимную публикацию — с удовольствием покажем результат без личных данных.',
       'Перед выездом позвоните или напишите: подтвердим время и скажем, успеем ли подготовить типовые запчасти под вашу модель.',
@@ -76,13 +76,13 @@ export const blogPosts = [
     excerptRu: 'Автосервис Шамотулы в субботу и воскресенье. Ремонт, диагностика, замена масла – Car Service Nikol работает в выходные.',
     bodyPl: [
       'Większość warsztatów w Szamotułach i okolicy zamyka drzwi w sobotę po południu i w niedzielę. Tymczasem awaria auta często zdarza się właśnie w weekend – przed wyjazdem lub po powrocie.',
-      'Car Service Nikol działa w soboty w godz. 08:00–18:00 oraz w niedziele 10:00–16:00. Możesz przyjechać na diagnostykę, wymianę oleju, naprawę hamulców czy zawieszenia bez rezygnacji z planów na weekend.',
+      'Car Service Nikol działa w soboty w godz. 10:00–18:00 oraz w niedziele 10:00–16:00. Możesz przyjechać na diagnostykę, wymianę oleju, naprawę hamulców czy zawieszenia bez rezygnacji z planów na weekend.',
       'Dla osób pracujących w tygodniu wizyta w sobotę lub niedzielę to często jedyna wygodna opcja. Nie trzeba brać urlopu ani zwalniać się z pracy – po prostu umawiasz się na dogodny dzień.',
       'Zadzwoń lub napisz do nas – dopasujemy termin i poinformujemy, czy warto przyjechać od razu z częściami, czy wszystko załatwimy u nas.',
     ],
     bodyRu: [
       'Большинство сервисов в Шамотулах и округе не работают в воскресенье и часто в субботу. Поломка же нередко случается как раз в выходные – перед поездкой или после неё.',
-      'Car Service Nikol открыт по субботам 08:00–18:00 и по воскресеньям 10:00–16:00. Можно приехать на диагностику, замену масла, ремонт тормозов или подвески, не меняя планов на выходные.',
+      'Car Service Nikol открыт по субботам 10:00–18:00 и по воскресеньям 10:00–16:00. Можно приехать на диагностику, замену масла, ремонт тормозов или подвески, не меняя планов на выходные.',
       'Для тех, кто в будни на работе, визит в субботу или воскресенье часто единственный удобный вариант. Не нужно брать отгул – просто выбираете подходящий день.',
       'Позвоните или напишите – подберём время и подскажем, стоит ли приезжать со своими запчастями или всё сделаем у нас.',
     ],

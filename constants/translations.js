@@ -57,7 +57,7 @@ export const translations = {
         'Jedyny serwis w okolicy otwarty w niedziele',
       googleRatingLead: 'Ocena klientów w Google',
       scheduleTitle: 'Weekendowe godziny otwarcia',
-      saturday: 'SOBOTA: 08:00 – 18:00',
+      saturday: 'SOBOTA: 10:00 – 18:00',
       sunday: 'NIEDZIELA: 10:00 – 16:00',
       trustSignals: [
         'Gwarancja na części',
@@ -214,7 +214,7 @@ export const translations = {
     footer: {
       scheduleTitle: 'Weekendowe godziny otwarcia',
       monFri: '',
-      saturday: 'SOBOTA: 08:00 – 18:00',
+      saturday: 'SOBOTA: 10:00 – 18:00',
       sunday: 'NIEDZIELA: 10:00 – 16:00 (warsztat czynny w niedzielę)',
       nipLabel: 'NIP',
       nipValue: '[placeholder]',
@@ -265,7 +265,7 @@ export const translations = {
       nudgeDismissAria: 'Zamknij powiadomienie',
       title: 'Nikol — recepcja online',
       welcome:
-        'Cześć! Tu Nikol z Car Service Nikol w Jastrowo. Przyjmujemy w warsztacie tylko w weekend: sobota 8:00–18:00, niedziela 10:00–16:00. Jak mogę pomóc — wycena, termin na weekend albo pytanie o auto? Napisz krótko.',
+        'Cześć! Tu Nikol z Car Service Nikol w Jastrowo. Przyjmujemy w warsztacie tylko w weekend: sobota 10:00–18:00, niedziela 10:00–16:00. Jak mogę pomóc — wycena, termin na weekend albo pytanie o auto? Napisz krótko.',
       placeholder: 'Napisz wiadomość…',
       send: 'Wyślij',
       close: 'Zamknij czat',
@@ -329,7 +329,7 @@ export const translations = {
         'Единственный работающий сервис в округе по воскресеньям',
       googleRatingLead: 'Оценка клиентов в Google',
       scheduleTitle: 'График работы по выходным',
-      saturday: 'СУББОТА: 08:00 – 18:00',
+      saturday: 'СУББОТА: 10:00 – 18:00',
       sunday: 'ВОСКРЕСЕНЬЕ: 10:00 – 16:00',
       trustSignals: [
         'Гарантия на запчасти',
@@ -486,7 +486,7 @@ export const translations = {
     footer: {
       scheduleTitle: 'График работы по выходным',
       monFri: '',
-      saturday: 'СУББОТА: 08:00 – 18:00',
+      saturday: 'СУББОТА: 10:00 – 18:00',
       sunday: 'ВОСКРЕСЕНЬЕ: 10:00 – 16:00 (работаем по воскресеньям)',
       nipLabel: 'NIP',
       nipValue: '[placeholder]',
@@ -536,7 +536,7 @@ export const translations = {
       nudgeDismissAria: 'Закрыть уведомление',
       title: 'Nikol — онлайн-приёмная',
       welcome:
-        'Привет! Это Nikol из Car Service Nikol в Jastrowo. В сервисе принимаем только в выходные: суббота 8:00–18:00, воскресенье 10:00–16:00. Чем помочь — цена, запись на выходные или вопрос по авто? Напишите коротко.',
+        'Привет! Это Nikol из Car Service Nikol в Jastrowo. В сервисе принимаем только в выходные: суббота 10:00–18:00, воскресенье 10:00–16:00. Чем помочь — цена, запись на выходные или вопрос по авто? Напишите коротко.',
       placeholder: 'Ваше сообщение…',
       send: 'Отправить',
       close: 'Закрыть чат',

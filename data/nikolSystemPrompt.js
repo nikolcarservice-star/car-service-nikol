@@ -45,27 +45,27 @@ KONTAKTY — zawsze w tej formie HTML (klikalne <a>), żeby klient mógł od raz
 `.trim();
 
   const uspExample = isRu
-    ? 'Пример смысла (перефразируй, не копируй дословно): «Поломка в выходные? Без проблем! Car Service Nikol в Ястрово работает суббота 8:00–18:00 и воскресенье 10:00–16:00. Удобно записаться?»'
-    : 'Możesz użyć wariantu (dopasuj język rozmowy):\n„Awaria w weekend? Nie ma problemu! Car Service Nikol w Jastrowo pracuje w sobotę 8:00–18:00 i w niedzielę 10:00–16:00. Masz dziś chwilę?”';
+    ? 'Пример смысла (перефразируй, не копируй дословно): «Поломка в выходные? Без проблем! Car Service Nikol в Ястрово работает суббота 10:00–18:00 и воскресенье 10:00–16:00. Удобно записаться?»'
+    : 'Możesz użyć wariantu (dopasuj język rozmowy):\n„Awaria w weekend? Nie ma problemu! Car Service Nikol w Jastrowo pracuje w sobotę 10:00–18:00 i w niedzielę 10:00–16:00. Masz dziś chwilę?”';
 
   const scheduleAndBookingRules = isRu
     ? `ГРАФИК МАСТЕРСКОЙ (ОБЯЗАТЕЛЬНО — БЕЗ ИСКЛЮЧЕНИЙ)
-- Приём машин в сервисе ТОЛЬКО в СУББОТУ 8:00–18:00 и ВОСКРЕСЕНЬЕ 10:00–16:00.
+- Приём машин в сервисе ТОЛЬКО в СУББОТУ 10:00–18:00 и ВОСКРЕСЕНЬЕ 10:00–16:00.
 - С понедельника по пятницу мастерская НЕ принимает клиентов на ремонт на месте — никогда не говори, что «в будни», «в дни недели» можно приехать или что пн–пт — обычный рабочий график. Если спрашивают про пн–пт, коротко: принимаем только в выходные по графику выше, и предложи связаться.
 - Онлайн-чат и телефон не равны «двери сервиса»: физический визит и работа в боксах — только суббота и воскресенье в указанные часы.
 
 ЗАПИСЬ (сроки — критично)
 - Не придумывай конкретные даты календаря.
-- Ориентиры по времени только СУББОТА 8:00–18:00 или ВОСКРЕСЕНЬЕ 10:00–16:00. Не предлагай пн–пт.
+- Ориентиры по времени только СУББОТА 10:00–18:00 или ВОСКРЕСЕНЬЕ 10:00–16:00. Не предлагай пн–пт.
 - Точный слот подтверждаем по телефону / WhatsApp — используй ссылки из раздела 1.`
     : `GRAFIK WARSZTATU (OBOWIĄZKOWE — BEZ WYJĄTKÓW)
-- Przyjęcie klientów w warsztacie jest WYŁĄCZNIE w SOBOTĘ 8:00–18:00 oraz w NIEDZIELĘ 10:00–16:00.
+- Przyjęcie klientów w warsztacie jest WYŁĄCZNIE w SOBOTĘ 10:00–18:00 oraz w NIEDZIELĘ 10:00–16:00.
 - OD PONIEDZIAŁKU DO PIĄTKU warsztat NIE PRZYJMUJE klientów na miejscu — nigdy nie pisz, że „w tygodniu”, „w dni robocze” lub pon.–pt. jest normalny dzień pracy ani że można umówić wizytę w te dni. Jeśli ktoś pyta o pon.–pt., krótko wyjaśnij: pracujemy tylko w weekend (sobota i niedziela wg powyższego grafiku) i zaproś do kontaktu pod ten harmonogram.
 - Czat online / telefon mogą być dostępne inaczej niż drzwi warsztatu — ale fizyczna wizyta i naprawa na miejscu = tylko sobota i niedziela w podanych godzinach.
 
 ZAPIS NA WIZYTĘ (terminy — krytyczne)
 - Nie wymyślaj konkretnych dat z kalendarza (np. „25 czerwca”, „w środę 26 czerwca”) — nie znasz wolnych slotów; klient może to odebrać jako realną rezerwację.
-- Gdy podajesz ORIENTACYJNE przykłady (bez rezerwacji): wyłącznie SOBOTA 8:00–18:00 albo NIEDZIELA 10:00–16:00 — np. „która sobota pasuje?”, „niedziela między 10 a 16”. Nie sugeruj terminów pon.–pt.
+- Gdy podajesz ORIENTACYJNE przykłady (bez rezerwacji): wyłącznie SOBOTA 10:00–18:00 albo NIEDZIELA 10:00–16:00 — np. „która sobota pasuje?”, „niedziela między 10 a 16”. Nie sugeruj terminów pon.–pt.
 - Zawsze domykaj: dokładny slot potwierdzamy telefonem / WhatsApp — użyj linków z sekcji 1.`;
 
   return `${languageGateEn}

@@ -15,10 +15,10 @@ const LANDING_PL = {
   h1: 'Wymiana filtrów Poznań — Serwis w weekendy',
   seoTitle: 'Wymiana filtrów Poznań — sobota i niedziela | Car Service Nikol',
   seoDescription:
-    'Wymiana filtrów powietrza, kabinowego i oleju dla kierowców z Poznania. Warsztat w Jastrowo — przyjmujemy w SOBOTĘ 8:00–18:00 i NIEDZIELĘ 10:00–16:00. Filtr od 50 zł, serwis olejowy od 350 zł. Zadzwoń lub umów wizytę.',
+    'Wymiana filtrów powietrza, kabinowego i oleju dla kierowców z Poznania. Warsztat w Jastrowo — przyjmujemy w SOBOTĘ 10:00–18:00 i NIEDZIELĘ 10:00–16:00. Filtr od 50 zł, serwis olejowy od 350 zł. Zadzwoń lub umów wizytę.',
   sectionH2: 'Pracujemy w sobotę i niedzielę — dla kierowców z Poznania',
   intro:
-    'Szukasz wymiany filtrów w Poznaniu, ale w tygodniu nie możesz oddać auta na serwis? Car Service Nikol w Jastrowo (ok. 25 km od Poznania) przyjmuje klientów wyłącznie w weekend: w sobotę od 8:00 do 18:00 oraz w niedzielę od 10:00 do 16:00. Wymieniamy filtr oleju, filtr powietrza i kabinowy — możesz przywieźć własne części lub dobierzemy filtry u nas. Przed wizytą podamy dokładną kwotę dla Twojego modelu.',
+    'Szukasz wymiany filtrów w Poznaniu, ale w tygodniu nie możesz oddać auta na serwis? Car Service Nikol w Jastrowo (ok. 25 km od Poznania) przyjmuje klientów wyłącznie w weekend: w sobotę od 10:00 do 18:00 oraz w niedzielę od 10:00 do 16:00. Wymieniamy filtr oleju, filtr powietrza i kabinowy — możesz przywieźć własne części lub dobierzemy filtry u nas. Przed wizytą podamy dokładną kwotę dla Twojego modelu.',
   weekendLead:
     'Warsztat stacjonarny jest czynny tylko w weekend — to nasza przewaga dla kierowców z Poznania i aglomeracji, którzy w poniedziałek–piątek potrzebują auta do pracy.',
   pricesIntro: 'Aktualny cennik (PLN, brutto) — wymiana filtrów i serwis olejowy:',
@@ -54,10 +54,10 @@ const LANDING_RU = {
   h1: 'Замена фильтров Познань — сервис в выходные',
   seoTitle: 'Замена фильтров Познань — суббота и воскресенье | Car Service Nikol',
   seoDescription:
-    'Замена воздушного, салонного и масляного фильтра для водителей из Познани. Мастерская в Jastrowo — приём в СУББОТУ 8:00–18:00 и ВОСКРЕСЕНЬЕ 10:00–16:00. Фильтр от 50 zł, сервис с маслом от 350 zł.',
+    'Замена воздушного, салонного и масляного фильтра для водителей из Познани. Мастерская в Jastrowo — приём в СУББОТУ 10:00–18:00 и ВОСКРЕСЕНЬЕ 10:00–16:00. Фильтр от 50 zł, сервис с маслом от 350 zł.',
   sectionH2: 'Работаем в субботу и воскресенье — для клиентов из Познани',
   intro:
-    'Нужна замена фильтров в Познани, но в будни нельзя оставить машину? Car Service Nikol в Jastrowo (около 25 км от Познани) принимает на месте только в выходные: суббота 8:00–18:00, воскресенье 10:00–16:00. Меняем масляный, воздушный и салонный фильтры — можно со своими запчастями или подберём у нас. Точную сумму назовём до визита.',
+    'Нужна замена фильтров в Познани, но в будни нельзя оставить машину? Car Service Nikol в Jastrowo (около 25 км от Познани) принимает на месте только в выходные: суббота 10:00–18:00, воскресенье 10:00–16:00. Меняем масляный, воздушный и салонный фильтры — можно со своими запчастями или подберём у нас. Точную сумму назовём до визита.',
   weekendLead:
     'Стационарная мастерская открыта только в выходные — удобно для тех, кому в понедельник–пятницу нужна машина на работу.',
   pricesIntro: 'Актуальные цены (PLN) — фильтры и маслообслуживание:',

@@ -1,6 +1,9 @@
 import './globals.css';
 import Script from 'next/script';
 import { headers } from 'next/headers';
+import { FACEBOOK_URL, INSTAGRAM_URL } from '../constants/contactLinks';
+import { GOOGLE_BUSINESS_PROFILE_URL } from '../constants/googleBusiness';
+import { getGoogleReviewsStats } from '../data/googleReviews';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-1N7H9RJBMX';
@@ -39,6 +42,11 @@ function buildJsonLd(lang) {
       { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '10:00', closes: '18:00' },
       { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Sunday', opens: '10:00', closes: '16:00' },
     ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: getGoogleReviewsStats().average.toFixed(1),
+      reviewCount: String(getGoogleReviewsStats().count),
+    },
     areaServed: [{ '@type': 'City', name: 'Jastrowo' }, { '@type': 'City', name: 'Szamotuły' }],
   };
 }
@@ -60,6 +68,7 @@ function buildJsonLdOrganization(lang) {
       addressCountry: 'PL',
     },
     telephone: '+48 794 935 734',
+    sameAs: [FACEBOOK_URL, INSTAGRAM_URL, GOOGLE_BUSINESS_PROFILE_URL],
   };
 }
 

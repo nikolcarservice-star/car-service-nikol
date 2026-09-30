@@ -6,7 +6,7 @@ import AboutBlock from '../../components/AboutBlock';
 import ContactCtaSection from '../../components/ContactCtaSection';
 import LocationSection from '../../components/LocationSection';
 import Reviews from '../../components/Reviews';
-import { getTranslations, normalizeLang, PHONE_DISPLAY } from '../../constants/translations';
+import { getTranslations, normalizeLang } from '../../constants/translations';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoserwis-nikol.pl';
 
@@ -80,55 +80,8 @@ export default function LangHomePage({ params }) {
   const lang = normalizeLang(params.lang);
   const t = getTranslations(lang);
 
-  // Schema.org JSON-LD для Google
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "AutoRepair",
-    "name": "Car Service Nikol",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Wernisażowa 21",
-      "addressLocality": "Jastrowo",
-      "addressRegion": "Wielkopolskie",
-      "postalCode": "64-500",
-      "addressCountry": "PL"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "52.6288", // Проверь координаты в Google Maps
-      "longitude": "16.5933"
-    },
-    "url": SITE_URL,
-    "telephone": PHONE_DISPLAY,
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": "Saturday",
-        "opens": "10:00",
-        "closes": "18:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": "Sunday",
-        "opens": "10:00",
-        "closes": "16:00"
-      }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "reviewCount": "11"
-    }
-  };
-
   return (
     <>
-      {/* Вставляем JSON-LD в голову страницы */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      
       <Hero t={t} />
       
       <section id="features" className="border-b border-slate-800 bg-slate-950" aria-labelledby="features-heading">

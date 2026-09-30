@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { GOOGLE_BUSINESS_PROFILE_URL } from '../constants/googleBusiness';
+import { SOCIAL_LINKS } from '../constants/contactLinks';
 import { getTranslations } from '../constants/translations';
 
 export default function Footer({ lang }) {
@@ -28,6 +29,22 @@ export default function Footer({ lang }) {
                   {t.mapLinkLabel}
                 </a>
               </p>
+            )}
+            {SOCIAL_LINKS.length > 0 && (
+              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1" aria-label="Media społecznościowe">
+                {SOCIAL_LINKS.map((social) => (
+                  <li key={social.href}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="text-[11px] text-orange-300 hover:text-orange-200"
+                    >
+                      {social.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             )}
             {t.seoKeywordsLine && (
               <p className="mt-3 max-w-xl text-[10px] text-gray-500 sm:text-[11px]">

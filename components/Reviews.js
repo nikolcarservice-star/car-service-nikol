@@ -35,6 +35,11 @@ export default function Reviews({ lang = 'pl' }) {
   }, [total]);
 
   const current = total ? reviews[currentIndex] : null;
+  const relativeTime = current
+    ? (lang === 'ru'
+        ? current.relative_time_description
+        : current.relative_time_description_pl || current.relative_time_description)
+    : null;
 
   return (
     <section className="relative border-t border-slate-800 bg-slate-950 overflow-hidden">
@@ -116,9 +121,9 @@ export default function Reviews({ lang = 'pl' }) {
                       <p className="text-base font-semibold text-gray-100">
                         {current.author_name || 'Klient Google'}
                       </p>
-                      {current.relative_time_description && (
+                      {relativeTime && (
                         <p className="mt-0.5 text-xs text-gray-500">
-                          {current.relative_time_description}
+                          {relativeTime}
                         </p>
                       )}
                     </div>
@@ -154,7 +159,7 @@ export default function Reviews({ lang = 'pl' }) {
                       rel="noopener noreferrer"
                       className="mt-4 inline-flex text-xs font-medium text-amber-300 underline-offset-2 hover:underline"
                     >
-                      Zobacz opinię w Google →
+                      {lang === 'ru' ? 'Смотреть отзыв в Google →' : 'Zobacz opinię w Google →'}
                     </a>
                   )}
                 </motion.article>

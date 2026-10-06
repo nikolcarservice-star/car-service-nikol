@@ -8,6 +8,11 @@ import {
   getServiceBySlug,
   getLowestFromPricePln,
 } from '../../../../data/services';
+import {
+  buildCityServiceSlug,
+  parseCityServiceSlug,
+  SERVICE_LANDING_CITIES,
+} from '../../../../data/serviceCityLandings';
 import { getPhoneContactPageHref, getTranslations, normalizeLang } from '../../../../constants/translations';
 import { getSitemapLangs } from '../../../../constants/localeConfig';
 
@@ -64,6 +69,21 @@ export default function ServiceDetailPage({ params }) {
       ? sd.fromPriceBand.replace('{amount}', String(lowest))
       : null;
   const symptoms = Array.isArray(service.symptoms) ? service.symptoms : [];
+
+  const cityParsed = parseCityServiceSlug(service.slug);
+  const relatedLinks = cityParsed
+    ? SERVICE_LANDING_CITIES.filter((city) => city.slug !== cityParsed.city.slug).map((city) => ({
+        href: `/${lang}/services/${buildCityServiceSlug(cityParsed.serviceKey, city.slug)}`,
+        label: `${service.name} ${lang === 'ru' ? city.wRu : city.wPl}`,
+      }))
+    : [];
+
+  if (cityParsed?.serviceKey === 'oil' && cityParsed.city.slug === 'poznan') {
+    relatedLinks.push({
+      href: `/${lang}/services/wymiana-filtrow-poznan`,
+      label: lang === 'ru' ? 'Замена фильтров в Познани' : 'Wymiana filtrów w Poznaniu',
+    });
+  }
 
   const weekendHoursTitle = t.hero?.scheduleTitle;
   const saturdayHours = t.hero?.saturday;
@@ -227,6 +247,38 @@ export default function ServiceDetailPage({ params }) {
             </div>
           </div>
         </div>
+
+        {relatedLinks.length > 0 && (
+          <nav
+            className="mt-8 border-t border-slate-800 pt-6"
+            aria-label={
+              lang === 'ru' ? 'Услуга в других городах региона' : 'Usługa w innych miejscowościach'
+            }
+          >
+            <h2 className="text-sm font-semibold text-gray-100 sm:text-base">
+              {lang === 'ru'
+                ? 'Также обслуживаем водителей из других городов региона'
+                : 'Obsługujemy również kierowców z innych miejscowości regionu'}
+            </h2>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {relatedLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-flex rounded-full border border-slate-700 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-gray-200 transition hover:border-orange-500/60 hover:text-orange-200 sm:text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-xs text-gray-400 sm:text-sm">
+              {lang === 'ru'
+                ? 'Мастерская Car Service Nikol находится в Jastrowo (ul. Wernisażowa 21) — приём только в субботу и воскресенье.'
+                : 'Warsztat Car Service Nikol znajduje się w Jastrowo (ul. Wernisażowa 21) — przyjmujemy wyłącznie w sobotę i niedzielę.'}
+            </p>
+          </nav>
+        )}
         </div>
       </section>
 

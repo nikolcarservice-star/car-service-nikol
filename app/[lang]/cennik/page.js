@@ -125,7 +125,18 @@ export default function CennikPage({ params }) {
                     key={item.name}
                     className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/5 py-2 last:border-0"
                   >
-                    <span className="text-sm text-gray-200 sm:text-base">{item.name}</span>
+                    <span className="text-sm text-gray-200 sm:text-base">
+                      {item.slug ? (
+                        <Link
+                          href={`/${lang}/services/${item.slug}`}
+                          className="underline decoration-orange-500/40 underline-offset-4 transition hover:text-orange-300"
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        item.name
+                      )}
+                    </span>
                     <span className="shrink-0 font-semibold text-orange-400">
                       {item.price}
                       {item.note && (

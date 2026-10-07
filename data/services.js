@@ -20,6 +20,7 @@ export const SERVICE_KEYS = [
   'tires',
   'mobileService',
   'keys',
+  'geometry',
 ];
 
 export const servicesData = {
@@ -475,6 +476,57 @@ export const servicesData = {
         'Не работает брелок / центральный замок при исправной батарейке.',
         'Иммобилайзер не даёт завести, индикатор ключа мигает.',
         'Сломанный ключ в замке зажигания.',
+      ],
+    },
+  },
+  geometry: {
+    slug: 'geometria-kol-jastrowo',
+    pl: {
+      name: 'Geometria kół',
+      shortName: 'Geometria',
+      h1: 'Geometria kół i ustawienie zbieżności Jastrowo, w Szamotułach | Car Service Nikol',
+      seoTitle: 'Geometria kół Jastrowo, w Szamotułach – ustawienie zbieżności | Car Service Nikol',
+      seoDescription:
+        'Geometria kół i ustawienie zbieżności w Jastrowo i okolicach Szamotuł. Auto ściąga na bok, opony zużywają się nierównomiernie? Sprawdzimy i wyregulujemy ustawienia. Geometria 200 zł.',
+      intro:
+        'Prawidłowa geometria kół odpowiada za to, czy auto prowadzi się prosto i czy opony zużywają się równomiernie. W Car Service Nikol w Jastrowo sprawdzamy ustawienia kół i korygujemy zbieżność. Pracujemy w soboty i niedziele: sob. 10:00–18:00, niedz. 10:00–16:00.',
+      process: [
+        'Przed korektą sprawdzamy stan opon, zawieszenia i układu kierowniczego — sama geometria nie rozwiąże problemu, gdy te elementy są zużyte.',
+        'Sprawdzamy aktualne ustawienia kół i korygujemy zbieżność oraz geometrię odpowiednio do modelu auta.',
+        'Po korekcie weryfikujemy wynik i doradzamy dalsze kroki — np. wyważenie kół, jeśli wibracje tego wymagają.',
+      ],
+      pricesIntro: 'Aktualna cena usługi (PLN):',
+      prices: [{ label: 'Geometria / ustawienie zbieżności', value: '200 zł' }],
+      symptoms: [
+        'Auto ściąga na bok albo kierownica nie trzyma środka podczas prostej jazdy.',
+        'Opony zużywają się nierównomiernie mimo prawidłowego ciśnienia.',
+        'Kierownica chodzi ciężko, luźno lub po naprawie zawieszenia nie wraca na środek.',
+        'Po wymianie opon, naprawie zawieszenia lub stłuczce warto sprawdzić ustawienia kół.',
+        'Samochód gorzej trzyma się toru na wyższych prędkościach niż dotychczas.',
+      ],
+    },
+    ru: {
+      name: 'Развал-схождение',
+      shortName: 'Развал',
+      h1: 'Развал-схождение и геометрия колёс Jastrowo, в Шамотулах | Car Service Nikol',
+      seoTitle: 'Геометрия колёс Jastrowo, в Шамотулах – развал-схождение | Car Service Nikol',
+      seoDescription:
+        'Развал-схождение в Jastrowo и для клиентов из Шамотул. Машину уводит в сторону, покрышки изнашиваются неравномерно? Проверим и отрегулируем настройки колёс. Геометрия 200 zł.',
+      intro:
+        'От правильной геометрии колёс зависит, едет ли машина прямо и насколько равномерно изнашивается резина. В Car Service Nikol в Jastrowo проверяем и корректируем установки колёс. Работаем в субботу и воскресенье: сб 10:00–18:00, вс 10:00–16:00.',
+      process: [
+        'До регулировки проверяем состояние шин, подвески и рулевого управления — одна геометрия не решит проблему изношенных деталей.',
+        'Проверяем текущие установки колёс и корректируем схождение и углы под модель автомобиля.',
+        'После регулировки проверяем результат и подсказываем следующий шаг — например, балансировку колёс, если нужно.',
+      ],
+      pricesIntro: 'Актуальная цена услуги (PLN):',
+      prices: [{ label: 'Развал-схождение / регулировка схождения', value: '200 zł' }],
+      symptoms: [
+        'Машину уводит в сторону или руль не держит центр на прямой.',
+        'Покрышки изнашиваются неравномерно при нормальном давлении.',
+        'Руль стал тугим, люфтит или после ремонта подвески не возвращается в центр.',
+        'После замены шин, ремонта подвески или лёгкого удара стоит проверить углы.',
+        'На скорости машина хуже держит траекторию, чем раньше.',
       ],
     },
   },

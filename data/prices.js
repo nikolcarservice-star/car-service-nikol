@@ -50,7 +50,7 @@ export const priceListPl = [
       { name: 'Diagnostyka zawieszenia', price: '100 zł', note: '' },
       { name: 'Wymiana amortyzatora (1 szt.)', price: 'od 200 zł', note: 'robocizna' },
       { name: 'Wymiana wahacza (komplet)', price: 'od 200 zł', note: 'robocizna' },
-      { name: 'Geometria / ustawienie zbieżności', price: '200 zł', note: '' },
+      { name: 'Geometria / ustawienie zbieżności', price: '200 zł', note: '', slug: 'geometria-kol-jastrowo' },
     ],
   },
   {
@@ -124,7 +124,7 @@ export const priceListRu = [
       { name: 'Диагностика подвески', price: '100 zł', note: '' },
       { name: 'Замена амортизатора (1 шт.)', price: 'от 200 zł', note: 'работа' },
       { name: 'Замена рычага (комплект)', price: 'от 200 zł', note: 'работа' },
-      { name: 'Сход-развал / установка схождения', price: '200 zł', note: '' },
+      { name: 'Сход-развал / установка схождения', price: '200 zł', note: '', slug: 'geometria-kol-jastrowo' },
     ],
   },
   {

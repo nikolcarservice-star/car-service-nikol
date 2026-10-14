@@ -69,6 +69,18 @@ export default function ServiceDetailPage({ params }) {
       ? sd.fromPriceBand.replace('{amount}', String(lowest))
       : null;
   const symptoms = Array.isArray(service.symptoms) ? service.symptoms : [];
+  const faq = Array.isArray(service.faq) ? service.faq : [];
+  const faqJsonLd = faq.length
+    ? JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: item.answer },
+        })),
+      })
+    : null;
 
   const cityParsed = parseCityServiceSlug(service.slug);
   const relatedLinks = cityParsed
@@ -91,6 +103,9 @@ export default function ServiceDetailPage({ params }) {
 
   return (
     <>
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLd }} />
+      )}
       <section className="border-b border-slate-800 bg-slate-950">
         <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
           <Breadcrumbs
@@ -247,6 +262,45 @@ export default function ServiceDetailPage({ params }) {
             </div>
           </div>
         </div>
+
+        {faq.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-base font-semibold tracking-tight text-gray-50 sm:text-lg">
+              {lang === 'ru' ? 'Частые вопросы' : 'Najczęstsze pytania'}
+            </h2>
+            <div className="mt-3 space-y-3">
+              {faq.map((item) => (
+                <details
+                  key={item.question}
+                  className="group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 text-left ring-1 ring-white/[0.04] open:border-orange-500/25 open:ring-orange-500/10"
+                >
+                  <summary className="cursor-pointer list-none px-4 py-4 text-sm font-semibold text-gray-100 outline-none transition hover:bg-white/[0.03] sm:px-5 sm:text-base [&::-webkit-details-marker]:hidden">
+                    <span className="flex items-center justify-between gap-3">
+                      <span>{item.question}</span>
+                      <span className="shrink-0 text-orange-400 transition group-open:rotate-180" aria-hidden>
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </span>
+                    </span>
+                  </summary>
+                  <div className="border-t border-slate-800/80 px-4 py-4 text-sm leading-relaxed text-gray-400 sm:px-5 sm:text-base">
+                    {item.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-gray-400 sm:text-sm">
+              {lang === 'ru'
+                ? 'Другие цены и услуги — на странице '
+                : 'Pozostałe ceny i usługi znajdziesz na stronie '}
+              <Link href={`/${lang}/cennik`} className="font-medium text-orange-300 hover:text-orange-200">
+                {lang === 'ru' ? 'прайс-лист' : 'cennik'}
+              </Link>
+              .
+            </p>
+          </div>
+        )}
 
         {relatedLinks.length > 0 && (
           <nav

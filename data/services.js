@@ -504,6 +504,33 @@ export const servicesData = {
         'Po wymianie opon, naprawie zawieszenia lub stłuczce warto sprawdzić ustawienia kół.',
         'Samochód gorzej trzyma się toru na wyższych prędkościach niż dotychczas.',
       ],
+      faq: [
+        {
+          question: 'Ile kosztuje geometria kół?',
+          answer:
+            'Ustawienie zbieżności i geometrii kół w Car Service Nikol kosztuje 200 zł. Przed korektą sprawdzamy stan opon, zawieszenia i układu kierowniczego — sama geometria nie rozwiąże problemu, gdy te elementy są zużyte.',
+        },
+        {
+          question: 'Kiedy warto sprawdzić geometrię kół?',
+          answer:
+            'Gdy auto ściąga na bok, kierownica nie trzyma środka na prostej, opony zużywają się nierównomiernie mimo prawidłowego ciśnienia, albo po wymianie opon, naprawie zawieszenia czy stłuczce.',
+        },
+        {
+          question: 'Czy po wymianie opon trzeba robić geometrię?',
+          answer:
+            'Nie zawsze, ale warto wtedy sprawdzić ustawienia kół — zwłaszcza gdy opony zużywają się nierównomiernie lub auto zaczęło ściągać. Przed korektą kontrolujemy też zawieszenie i układ kierowniczy.',
+        },
+        {
+          question: 'Co sprawdzacie przed ustawieniem zbieżności?',
+          answer:
+            'Stan opon, zawieszenia i układu kierowniczego oraz aktualne ustawienia kół. Dopiero potem korygujemy zbieżność i geometrię odpowiednio do modelu auta, a na koniec weryfikujemy wynik.',
+        },
+        {
+          question: 'W jakich dniach wykonujecie geometrię i gdzie jesteście?',
+          answer:
+            'Pracujemy w soboty 10:00–18:00 i w niedziele 10:00–16:00 w Jastrowo, ul. Wernisażowa 21 (okolice Szamotuł). Termin najlepiej uzgodnić telefonicznie: +48 794 935 734.',
+        },
+      ],
     },
     ru: {
       name: 'Развал-схождение',
@@ -527,6 +554,33 @@ export const servicesData = {
         'Руль стал тугим, люфтит или после ремонта подвески не возвращается в центр.',
         'После замены шин, ремонта подвески или лёгкого удара стоит проверить углы.',
         'На скорости машина хуже держит траекторию, чем раньше.',
+      ],
+      faq: [
+        {
+          question: 'Сколько стоит развал-схождение?',
+          answer:
+            'Регулировка схождения и геометрии колёс в Car Service Nikol стоит 200 zł. Перед регулировкой проверяем состояние шин, подвески и рулевого управления — одна геометрия не решит проблему изношенных деталей.',
+        },
+        {
+          question: 'Когда стоит проверить геометрию колёс?',
+          answer:
+            'Когда машину уводит в сторону, руль не держит центр на прямой, покрышки изнашиваются неравномерно при нормальном давлении — а также после замены шин, ремонта подвески или лёгкого удара.',
+        },
+        {
+          question: 'Нужна ли геометрия после замены шин?',
+          answer:
+            'Не всегда, но проверить установки колёс стоит — особенно если резина изнашивается неравномерно или авто начало уводить в сторону. Перед регулировкой проверяем также подвеску и рулевое управление.',
+        },
+        {
+          question: 'Что вы проверяете перед регулировкой схождения?',
+          answer:
+            'Состояние шин, подвески и рулевого управления, а также текущие установки колёс. После этого корректируем схождение и углы под модель автомобиля и проверяем результат.',
+        },
+        {
+          question: 'В какие дни вы работаете и где находитесь?',
+          answer:
+            'Работаем в субботу 10:00–18:00 и в воскресенье 10:00–16:00 в Jastrowo, ul. Wernisażowa 21 (окрестности Шамотул). Лучше согласовать запись по телефону: +48 794 935 734.',
+        },
       ],
     },
   },

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CalendarDays, Phone, Stethoscope } from 'lucide-react';
+import { CalendarDays, MapPin, Phone, Stethoscope } from 'lucide-react';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import ContactCtaSection from '../../../../components/ContactCtaSection';
 import {
@@ -13,7 +13,13 @@ import {
   parseCityServiceSlug,
   SERVICE_LANDING_CITIES,
 } from '../../../../data/serviceCityLandings';
-import { getPhoneContactPageHref, getTranslations, normalizeLang } from '../../../../constants/translations';
+import {
+  getPhoneContactPageHref,
+  getTranslations,
+  normalizeLang,
+  PHONE_DISPLAY,
+  PHONE_TEL_HREF,
+} from '../../../../constants/translations';
 import { getSitemapLangs } from '../../../../constants/localeConfig';
 
 function displayPriceInPln(value) {
@@ -299,6 +305,53 @@ export default function ServiceDetailPage({ params }) {
               </Link>
               .
             </p>
+          </div>
+        )}
+
+        {service.slug === 'serwis-opon-jastrowo' && (
+          <div className="mt-8 rounded-2xl border border-sky-500/35 bg-gradient-to-br from-sky-500/10 via-slate-900/80 to-slate-900/60 p-4 sm:p-6">
+            <div className="flex items-center gap-2 text-sky-200">
+              <MapPin className="h-5 w-5 shrink-0" aria-hidden />
+              <h2 className="text-base font-bold tracking-tight text-gray-50 sm:text-lg">
+                {lang === 'ru' ? 'Как добраться до сервиса' : 'Jak dojechać do serwisu'}
+              </h2>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-gray-200 sm:text-base">
+              {t.location?.addressValue} {t.location?.trustPhrase}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-300 sm:text-base">
+              {lang === 'ru'
+                ? 'Пн–пт стационарный приём не ведём — запись только на субботу или воскресенье.'
+                : 'Od poniedziałku do piątku nie przyjmujemy aut na miejscu — wizyty umawiamy na sobotę lub niedzielę.'}
+            </p>
+            {(saturdayHours || sundayHours) && (
+              <ul className="mt-3 space-y-1.5 text-sm font-semibold text-gray-100 sm:text-base">
+                {saturdayHours && <li>{saturdayHours}</li>}
+                {sundayHours && <li>{sundayHours}</li>}
+              </ul>
+            )}
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=52.5908375,16.5384497"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400"
+              >
+                <MapPin className="h-4 w-4 shrink-0" aria-hidden />
+                <span>
+                  {lang === 'ru' ? 'Показать маршрут в Google Картах' : 'Pokaż trasę w Mapach Google'}
+                </span>
+              </a>
+              <a
+                href={PHONE_TEL_HREF}
+                className="inline-flex items-center gap-2 rounded-full border border-sky-400/60 px-4 py-2.5 text-sm font-semibold text-sky-100 transition hover:border-sky-300 hover:text-white"
+              >
+                <Phone className="h-4 w-4 shrink-0" aria-hidden />
+                <span>
+                  {lang === 'ru' ? 'Позвонить' : 'Zadzwoń'} · {PHONE_DISPLAY}
+                </span>
+              </a>
+            </div>
           </div>
         )}
 

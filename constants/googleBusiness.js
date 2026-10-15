@@ -16,3 +16,10 @@ export const GOOGLE_BUSINESS_REVIEWS_URL = GOOGLE_BUSINESS_PROFILE_URL;
  */
 export const GOOGLE_MAPS_EMBED_URL =
   'https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s52.5908375%2C16.5384497!6i17!3m1!1spl!5m1!1spl';
+
+/**
+ * Wyznaczanie trasy do warsztatu — ten sam punkt co GOOGLE_MAPS_EMBED_URL.
+ * Używane przyciskiem „Wyznacz trasę” (sezonowa liczba próśb o trasę rośnie).
+ */
+export const GOOGLE_MAPS_DIRECTIONS_URL =
+  'https://www.google.com/maps/dir/?api=1&destination=52.5908375,16.5384497';

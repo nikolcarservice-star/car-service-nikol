@@ -21,6 +21,7 @@ import {
   PHONE_TEL_HREF,
 } from '../../../../constants/translations';
 import { getSitemapLangs } from '../../../../constants/localeConfig';
+import { GOOGLE_MAPS_DIRECTIONS_URL } from '../../../../constants/googleBusiness';
 
 function displayPriceInPln(value) {
   if (value == null || value === '') return '';
@@ -332,7 +333,7 @@ export default function ServiceDetailPage({ params }) {
             )}
             <div className="mt-4 flex flex-wrap gap-3">
               <a
-                href="https://www.google.com/maps/dir/?api=1&destination=52.5908375,16.5384497"
+                href={GOOGLE_MAPS_DIRECTIONS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400"

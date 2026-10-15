@@ -2,7 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Send } from 'lucide-react';
-import { GOOGLE_BUSINESS_PROFILE_URL, GOOGLE_MAPS_EMBED_URL } from '../constants/googleBusiness';
+import {
+  GOOGLE_BUSINESS_PROFILE_URL,
+  GOOGLE_MAPS_DIRECTIONS_URL,
+  GOOGLE_MAPS_EMBED_URL,
+} from '../constants/googleBusiness';
 import { WHATSAPP_HREF } from '../constants/contactLinks';
 import { translations, PHONE_DISPLAY, PHONE_TEL_HREF } from '../constants/translations';
 
@@ -111,6 +115,15 @@ export default function LocationSection({ lang }) {
               >
                 <Send className="h-4 w-4" />
                 <span>{t.whatsapp}</span>
+              </a>
+              <a
+                href={GOOGLE_MAPS_DIRECTIONS_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-sky-400/60 bg-slate-900 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:border-sky-300 hover:text-white"
+              >
+                <MapPin className="h-4 w-4" />
+                <span>{lang === 'ru' ? 'Показать маршрут' : 'Wyznacz trasę'}</span>
               </a>
             </div>
           </motion.div>
